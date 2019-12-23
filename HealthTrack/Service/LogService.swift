@@ -9,10 +9,9 @@ import FirebaseFirestore
 import Combine
 
 protocol LogService {
-    func save(log: Loggable) -> AnyPublisher<Void, ServiceError>
+    func save(log: Loggable, for user: User) -> ServicePublisher<Void>
     func delete(id: String)
-    func update(id: String, newLog: Loggable)
-    func search(with query: String) -> AnyPublisher<[Medication], ServiceError>
+    func search(with query: String) -> ServicePublisher<[Medication]>
 }
 
 class LogServiceImpl: LogService {
@@ -22,19 +21,15 @@ class LogServiceImpl: LogService {
         self.db = db
     }
 
-    func save(log: Loggable) -> AnyPublisher<Void, ServiceError> {
-        
+    func save(log: Loggable, for user: User) -> ServicePublisher<Void> {
+        return self.db.save(log: log, for: user)
     }
 
     func delete(id: String) {
 
     }
 
-    func update(id: String, newLog: Loggable) {
-
-    }
-
-    func search(with query: String) -> AnyPublisher<[Medication], ServiceError> {
+    func search(with query: String) -> ServicePublisher<[Medication]> {
         return self.db.search(query: query)
     }
 

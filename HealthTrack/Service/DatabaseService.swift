@@ -7,13 +7,9 @@ import Foundation
 import Combine
 import FirebaseFirestore
 
-typealias ServiceCallback<SuccessType> = (Result<SuccessType, ServiceError>) -> ()
-typealias ServicePublisher<SuccessType> = AnyPublisher<SuccessType, ServiceError>
-typealias ServiceFuture<SuccessType> = Future<SuccessType, ServiceError>
-
 protocol DatabaseService {
     // User functions
-    func save(user: User) -> ServicePublisher<User>
+    func save(user: User) -> ServicePublisher<Void>
     func get(userId: String) -> ServicePublisher<User>
 
     // Search functions
@@ -63,11 +59,11 @@ class FirebaseService: DatabaseService {
         }
     }
 
-    func save(user: User) -> ServicePublisher<User> {
+    func save(user: User) -> ServicePublisher<Void> {
         guard !user.id.isEmpty else {
             return Fail(error: ServiceError(message: "User ID is empty")).eraseToAnyPublisher()
         }
-        let future = ServiceFuture<User> { promise in
+        let future = ServiceFuture<Void> { promise in
             self.save(user: user) { result in
                 promise(result)
             }
@@ -75,7 +71,7 @@ class FirebaseService: DatabaseService {
         return AnyPublisher(future)
     }
 
-    private func save(user: User, onComplete: @escaping ServiceCallback<User>) {
+    private func save(user: User, onComplete: @escaping ServiceCallback<Void>) {
         self.db.collection(FirebaseConstants.User.Collection)
                 .document(user.id)
                 .setData(user.encode()) { err in
@@ -84,7 +80,7 @@ class FirebaseService: DatabaseService {
                         onComplete(.failure(ServiceError(message: "Error creating user", wrappedError: err)))
                     } else {
                         AppLogging.debug("User \(user.id) saved successfully")
-                        onComplete(.success(user))
+                        onComplete(.success(()))
                     }
                 }
     }
