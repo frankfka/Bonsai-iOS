@@ -9,7 +9,7 @@ import FirebaseFirestore
 import Combine
 
 protocol LogService {
-    func save(log: Loggable)
+    func save(log: Loggable) -> AnyPublisher<Void, ServiceError>
     func delete(id: String)
     func update(id: String, newLog: Loggable)
     func search(with query: String) -> AnyPublisher<[Medication], ServiceError>
@@ -22,7 +22,7 @@ class LogServiceImpl: LogService {
         self.db = db
     }
 
-    func save(log: Loggable) {
+    func save(log: Loggable) -> AnyPublisher<Void, ServiceError> {
         
     }
 
