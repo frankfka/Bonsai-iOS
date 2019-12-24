@@ -10,7 +10,16 @@ func createLogSearchMiddleware(logService: LogService) -> Middleware<AppState> {
     return { state, action, cancellables, send in
         switch action {
         case let .createLog(action: .searchQueryDidChange(newQuery)):
-            search(logService: logService, query: newQuery)
+            // Check user exists
+            guard let user = state.global.user else {
+                fatalError("No user initialized when searching")
+            }
+            // Check query is not empty
+            if newQuery.isEmptyWithoutWhitespace() {
+                return
+            }
+            // Perform search
+            search(logService: logService, with: newQuery, for: user)
                     .sink(receiveValue: { newAction in
                         send(newAction)
                     })
@@ -21,10 +30,9 @@ func createLogSearchMiddleware(logService: LogService) -> Middleware<AppState> {
     }
 }
 
-private func search(logService: LogService, query: String) -> AnyPublisher<AppAction, Never> {
-    return logService.search(with: query)
+private func search(logService: LogService, with query: String, for user: User) -> AnyPublisher<AppAction, Never> {
+    return logService.search(with: query, by: user)
             .map { results in
-                AppLogging.info("Query \(query) produced \(results.count) results")
                 return AppAction.createLog(action: .searchResultsDidChange(results: results))
             }.catch { (err) -> Just<AppAction> in
                 return Just(AppAction.createLog(action: .searchResultsDidChange(results: [])))

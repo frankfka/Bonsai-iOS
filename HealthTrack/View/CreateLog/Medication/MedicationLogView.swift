@@ -40,7 +40,7 @@ struct MedicationLogView: View {
                 )
             }
             Divider()
-            AddLogTextField(viewModel: getDosageViewModel())
+            CreateLogTextField(viewModel: getDosageViewModel())
         }
                 .background(Color.Theme.backgroundSecondary)
     }
@@ -62,8 +62,8 @@ struct MedicationLogView: View {
         )
     }
 
-    func getDosageViewModel() -> AddLogTextField.ViewModel {
-        return AddLogTextField.ViewModel(label: "Dosage", input: viewModel.$dosage)
+    func getDosageViewModel() -> CreateLogTextField.ViewModel {
+        return CreateLogTextField.ViewModel(label: "Dosage", input: viewModel.$dosage)
     }
 
 }

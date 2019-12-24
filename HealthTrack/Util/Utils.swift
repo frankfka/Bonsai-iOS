@@ -9,4 +9,8 @@ extension String {
     func capitalizeFirstLetter() -> String {
         return prefix(1).uppercased() + self.lowercased().dropFirst()
     }
+
+    func isEmptyWithoutWhitespace() -> Bool {
+        return self.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
 }

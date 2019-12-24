@@ -12,11 +12,11 @@ struct TabBarView: View {
     
     struct ViewModel {
         @Binding var tabIndex: Int
-        @Binding var showAddLogModal: Bool
+        @Binding var showCreateLogModal: Bool
         
-        init(tabIndex: Binding<Int>, showAddLogModal: Binding<Bool>) {
+        init(tabIndex: Binding<Int>, showCreateLogModal: Binding<Bool>) {
             self._tabIndex = tabIndex
-            self._showAddLogModal = showAddLogModal
+            self._showCreateLogModal = showCreateLogModal
         }
     }
     let viewModel: ViewModel
@@ -42,7 +42,7 @@ struct TabBarView: View {
                     .frame(height: CGFloat.Theme.Layout.tabItemHeight)
                     .foregroundColor(Color.Theme.primary)
                     .onTapGesture {
-                        self.viewModel.showAddLogModal.toggle()
+                        self.viewModel.showCreateLogModal.toggle()
                 }
                 Spacer()
                 Image(systemName: viewModel.tabIndex == 1 ? "chart.bar.fill" : "chart.bar")
@@ -67,7 +67,7 @@ struct TabBarView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             Spacer()
-            TabBarView(viewModel: TabBarView.ViewModel(tabIndex: .constant(0), showAddLogModal: .constant(true)))
+            TabBarView(viewModel: TabBarView.ViewModel(tabIndex: .constant(0), showCreateLogModal: .constant(true)))
         }
     }
 }

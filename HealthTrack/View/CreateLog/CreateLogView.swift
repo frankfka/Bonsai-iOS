@@ -1,5 +1,5 @@
 //
-//  AddLogView.swift
+//  CreateLogView.swift
 //  HealthTrack
 //
 //  Created by Frank Jia on 2019-12-10.
@@ -8,23 +8,25 @@
 
 import SwiftUI
 
-struct AddLogContainerView: View {
+struct CreateLogView: View {
     @EnvironmentObject var store: AppStore
 
     struct ViewModel {
         @Binding var showModal: Bool
+        let isSaveButtonDisabled: Bool
 
-        init(showModal: Binding<Bool>) {
+        init(showModal: Binding<Bool>, isSaveButtonDisabled: Bool) {
             self._showModal = showModal
+            self.isSaveButtonDisabled = isSaveButtonDisabled
         }
     }
     @State(initialValue: false) private var showPicker
     private var viewModel: ViewModel
 
-    init(showModal: Binding<Bool>) {
+    init(viewModel: ViewModel) {
         // TODO: Using unmonitored UIColor here
         UINavigationBar.appearance().backgroundColor = .secondarySystemGroupedBackground
-        self.viewModel = ViewModel(showModal: showModal)
+        self.viewModel = viewModel
     }
 
     var body: some View {
@@ -33,7 +35,7 @@ struct AddLogContainerView: View {
                 LogCategoryView(viewModel: getCategoryPickerViewModel())
                         .padding(.top, CGFloat.Theme.Layout.normal)
                 getCategorySpecificView().environmentObject(self.store)
-                AddLogTextField(viewModel: getNotesViewModel())
+                CreateLogTextField(viewModel: getNotesViewModel())
                 Spacer()
             }
             .background(Color.Theme.backgroundPrimary)
@@ -51,8 +53,9 @@ struct AddLogContainerView: View {
                     }, label: {
                         Text("Save")
                                 .font(Font.Theme.boldNormalText)
-                                .foregroundColor(Color.Theme.primary)
+                                .foregroundColor(viewModel.isSaveButtonDisabled ? Color.Theme.grayscalePrimary : Color.Theme.primary)
                     })
+                    .disabled(viewModel.isSaveButtonDisabled)
             )
         }
         .onAppear() {
@@ -76,7 +79,6 @@ struct AddLogContainerView: View {
     private func notesDidChange(note: String) {
         self.store.send(.createLog(action: .noteDidUpdate(note: note)))
     }
-
 
     func getCategorySpecificView() -> AnyView {
 
@@ -108,8 +110,8 @@ struct AddLogContainerView: View {
         )
     }
 
-    private func getNotesViewModel() -> AddLogTextField.ViewModel {
-        return AddLogTextField.ViewModel(label: "Notes", input: Binding(get: {
+    private func getNotesViewModel() -> CreateLogTextField.ViewModel {
+        return CreateLogTextField.ViewModel(label: "Notes", input: Binding(get: {
             return self.store.state.createLog.notes
         }) { (newNote) in
             self.notesDidChange(note: newNote)
@@ -118,13 +120,13 @@ struct AddLogContainerView: View {
 
 }
 
-struct AddLogView_Previews: PreviewProvider {
+struct CreateLogView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            AddLogContainerView(showModal: .constant(true))
+            CreateLogView(viewModel: CreateLogView.ViewModel(showModal: .constant(true), isSaveButtonDisabled: false))
                     .environmentObject(AppStore(initialState: AppState(), reducer: appReducer))
 
-            AddLogContainerView(showModal: .constant(true))
+            CreateLogView(viewModel: CreateLogView.ViewModel(showModal: .constant(true), isSaveButtonDisabled: true))
                     .environmentObject(AppStore(initialState: AppState(), reducer: appReducer))
                     .environment(\.colorScheme, .dark)
         }

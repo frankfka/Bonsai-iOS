@@ -1,5 +1,5 @@
 //
-//  AddLogTextField.swift
+//  CreateLogTextField.swift
 //  HealthTrack
 //
 //  Created by Frank Jia on 2019-12-21.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct AddLogTextField: View {
+struct CreateLogTextField: View {
 
     struct ViewModel {
         let label: String
@@ -30,15 +30,14 @@ struct AddLogTextField: View {
     var body: some View {
         TextField(viewModel.label, text: viewModel.$input)
                 .textFieldStyle(DefaultTextFieldStyle())
-                .foregroundColor(Color.Theme.primary)
                 .font(Font.Theme.normalText)
                 .padding(CGFloat.Theme.Layout.normal)
                 .background(Color.Theme.backgroundSecondary)
     }
 }
 
-struct AddLogTextField_Previews: PreviewProvider {
+struct CreateLogTextField_Previews: PreviewProvider {
     static var previews: some View {
-        AddLogTextField(viewModel: AddLogTextField.ViewModel(label: "Notes", input: .constant("")))
+        CreateLogTextField(viewModel: CreateLogTextField.ViewModel(label: "Notes", input: .constant("")))
     }
 }

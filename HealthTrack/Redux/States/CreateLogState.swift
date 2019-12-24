@@ -6,39 +6,60 @@
 import Foundation
 
 struct CreateLogState {
+
+    struct MoodLogState {
+        var selectedMoodIds: [String] = []
+    }
+    struct MedicationLogState {
+        var selectedMedication: Medication? = nil
+        var dosage: String = ""
+    }
+
     let allCategories: [LogCategory] = LogCategory.allCases
     var selectedCategoryIndex: Int = 0
     var selectedCategory: LogCategory {
         return allCategories[selectedCategoryIndex]
     }
-    var notes: String = ""
 
+    // Search
     var searchQuery: String = ""
     var isSearching: Bool = false
     var searchResults: [LogSearchable] = []
-
-    // Category specific
-    var mood: MoodLogState = MoodLogState()
-    var medication: MedicationLogState = MedicationLogState()
 
     // On submit states
     var loading: Bool = false
     var error: Error? = nil
     var success: Bool = false
 
-    struct MoodLogState {
-        var selectedMoodIds: [String] = []
+    // Category-specific states
+    var isValidated: Bool {
+        // Indicates whether all required fields are filled out
+        isFormValid()
     }
+    var notes: String = ""
+    var mood: MoodLogState = MoodLogState()
+    var medication: MedicationLogState = MedicationLogState()
+}
 
-    struct MedicationLogState {
-        var selectedMedication: Medication? = nil
-        var dosage: String = ""
+// Helper functions
+extension CreateLogState {
+    func isFormValid() -> Bool {
+        switch selectedCategory {
+        case .note:
+            return !notes.isEmptyWithoutWhitespace()
+        case .medication:
+            return medication.selectedMedication != nil && !medication.dosage.isEmptyWithoutWhitespace()
+        default:
+            return false
+        }
     }
+}
 
+// Helper functions for modifying state
+extension CreateLogState {
     mutating func resetSearch() {
         self.searchQuery = ""
         self.searchResults = []
         self.isSearching = false
     }
-
 }

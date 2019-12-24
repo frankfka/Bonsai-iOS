@@ -11,7 +11,7 @@ import Combine
 protocol LogService {
     func save(log: Loggable, for user: User) -> ServicePublisher<Void>
     func delete(id: String)
-    func search(with query: String) -> ServicePublisher<[Medication]>
+    func search(with query: String, by user: User) -> ServicePublisher<[Medication]>
 }
 
 class LogServiceImpl: LogService {
@@ -29,8 +29,8 @@ class LogServiceImpl: LogService {
 
     }
 
-    func search(with query: String) -> ServicePublisher<[Medication]> {
-        return self.db.search(query: query)
+    func search(with query: String, by user: User) -> ServicePublisher<[Medication]> {
+        return self.db.search(query: query, by: user)
     }
 
 }

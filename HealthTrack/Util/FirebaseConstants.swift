@@ -7,13 +7,13 @@ import Foundation
 
 struct FirebaseConstants {
 
-    // TODO: Sub-structs
-
     // Characteristics of searchable items (ex. medications, moods, etc.)
     struct Searchable {
         // Generic
         static let ItemNameField = "name"
         static let SearchTermsField = "searchTerms"
+        static let CreatedByField = "createdBy"
+        static let CreatedByMaster = "master"
         // Medication
         static let MedicationCollection = "medications"
         static let MedicationIdField = "medicationId"

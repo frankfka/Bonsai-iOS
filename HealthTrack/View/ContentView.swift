@@ -14,7 +14,7 @@ struct ContentViewContainer: View {
     @EnvironmentObject var store: AppStore
     
     struct ViewModel {
-        var showAddLogModal: Bool = false
+        var showCreateLogModal: Bool = false
         var tabIndex: Int = 0
     }
     @State(initialValue: ViewModel()) private var viewModel: ViewModel
@@ -23,20 +23,20 @@ struct ContentViewContainer: View {
         ContentView(viewModel: getContentViewModel()).environmentObject(self.store)
     }
     
-    func onAddLogModalDismiss() {
+    func onCreateLogModalDismiss() {
         self.store.send(.createLog(action: .screenDidDismiss))
     }
     
     func getContentViewModel() -> ContentView.ViewModel {
         return ContentView.ViewModel(
-            showAddLogModal: $viewModel.showAddLogModal,
+            showCreateLogModal: $viewModel.showCreateLogModal,
             tabIndex: $viewModel.tabIndex,
             tabBarViewModel: getTabBarViewModel(),
-            onAddLogModalDismiss: onAddLogModalDismiss)
+            onCreateLogModalDismiss: onCreateLogModalDismiss)
     }
     
     func getTabBarViewModel() -> TabBarView.ViewModel {
-        return TabBarView.ViewModel(tabIndex: $viewModel.tabIndex, showAddLogModal: $viewModel.showAddLogModal)
+        return TabBarView.ViewModel(tabIndex: $viewModel.tabIndex, showCreateLogModal: $viewModel.showCreateLogModal)
     }
 }
 
@@ -44,16 +44,16 @@ struct ContentView: View {
     
     @EnvironmentObject var store: AppStore
     struct ViewModel {
-        @Binding var showAddLogModal: Bool
+        @Binding var showCreateLogModal: Bool
         @Binding var tabIndex: Int
         let tabBarViewModel: TabBarView.ViewModel
-        let onAddLogModalDismiss: VoidCallback
+        let onCreateLogModalDismiss: VoidCallback
         
-        init(showAddLogModal: Binding<Bool>, tabIndex: Binding<Int>, tabBarViewModel: TabBarView.ViewModel, onAddLogModalDismiss: @escaping VoidCallback) {
-            self._showAddLogModal = showAddLogModal
+        init(showCreateLogModal: Binding<Bool>, tabIndex: Binding<Int>, tabBarViewModel: TabBarView.ViewModel, onCreateLogModalDismiss: @escaping VoidCallback) {
+            self._showCreateLogModal = showCreateLogModal
             self._tabIndex = tabIndex
             self.tabBarViewModel = tabBarViewModel
-            self.onAddLogModalDismiss = onAddLogModalDismiss
+            self.onCreateLogModalDismiss = onCreateLogModalDismiss
         }
     }
     private var viewModel: ViewModel
@@ -76,16 +76,24 @@ struct ContentView: View {
         }
         .edgesIgnoringSafeArea(.bottom)
         .sheet(
-            isPresented: viewModel.$showAddLogModal,
+            isPresented: viewModel.$showCreateLogModal,
             onDismiss: {
-                self.viewModel.onAddLogModalDismiss()
+                self.viewModel.onCreateLogModalDismiss()
         }) {
-            AddLogContainerView(
-                showModal: self.viewModel.$showAddLogModal
+            CreateLogView(
+                viewModel: self.getCreateLogViewModel()
             ).environmentObject(self.store)
         }
     }
-    
+
+    // TODO: Complete and use this, cahnge add log to create log
+    private func getCreateLogViewModel() -> CreateLogView.ViewModel {
+        return CreateLogView.ViewModel(
+                showModal: viewModel.$showCreateLogModal,
+                isSaveButtonDisabled: !store.state.createLog.isFormValid()
+        )
+    }
+
 }
 
 struct ContentView_Previews: PreviewProvider {

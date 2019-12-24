@@ -18,12 +18,8 @@ struct SearchResultsView: View {
 
     var body: some View {
         VStack {
-            ForEach(0..<viewModel.items.count) { index in
-                ListItemRow(viewModel: self.viewModel.items[index])
-                if index < self.viewModel.items.count - 1 {
-                    // Show a divider
-                    Divider()
-                }
+            ForEach(viewModel.items, id: \.name) { itemViewModel in
+                ListItemRow(viewModel: itemViewModel)
             }
         }
     }

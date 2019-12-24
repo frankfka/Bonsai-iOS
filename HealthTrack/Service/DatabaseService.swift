@@ -13,7 +13,7 @@ protocol DatabaseService {
     func get(userId: String) -> ServicePublisher<User>
 
     // Search functions
-    func search(query: String) -> ServicePublisher<[Medication]>
+    func search(query: String, by user: User) -> ServicePublisher<[Medication]>
 
     // Log CRUD functions
     func save(log: Loggable, for user: User) -> ServicePublisher<Void>
@@ -85,20 +85,27 @@ class FirebaseService: DatabaseService {
                 }
     }
 
-    func search(query: String) -> ServicePublisher<[Medication]> {
+    func search(query: String, by user: User) -> ServicePublisher<[Medication]> {
         let future = Future<[Medication], ServiceError> { promise in
-            self.search(query: query) { result in
+            self.search(query: query, by: user) { result in
                 promise(result)
             }
         }
         return AnyPublisher(future)
     }
 
-    private func search(query: String, onComplete: @escaping ServiceCallback<[Medication]>) {
+    private func search(query: String, by user: User, onComplete: @escaping ServiceCallback<[Medication]>) {
         let searchQuery = query.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         self.db.collection(FirebaseConstants.Searchable.MedicationCollection)
+                // Search the searchTerms array for match
                 .whereField(FirebaseConstants.Searchable.SearchTermsField, arrayContains: searchQuery)
+                // Limit to commonly available items + items created by user
+                .whereField(
+                        FirebaseConstants.Searchable.CreatedByField,
+                        in: [FirebaseConstants.Searchable.CreatedByMaster, user.id])
+                // Order by name
                 .order(by: FirebaseConstants.Searchable.ItemNameField)
+                // Limit results
                 .limit(to: queryLimit)
                 .getDocuments() { (querySnapshot, err) in
                     if let err = err {
