@@ -12,6 +12,8 @@ import Foundation
 protocol LogSearchable {
     var id: String { get }
     var name: String { get }
+    var parentCategory: LogCategory { get }
+    var createdBy: String { get }
 }
 
 // Protocol that each log type conforms to

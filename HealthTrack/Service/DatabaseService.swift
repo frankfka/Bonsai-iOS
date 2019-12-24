@@ -7,13 +7,14 @@ import Foundation
 import Combine
 import FirebaseFirestore
 
+// TODO: Conform to protocol
 protocol DatabaseService {
     // User functions
     func save(user: User) -> ServicePublisher<Void>
     func get(userId: String) -> ServicePublisher<User>
 
     // Search functions
-    func search(query: String, by user: User) -> ServicePublisher<[Medication]>
+    func search(query: String, by user: User, in category: LogCategory) -> ServicePublisher<[LogSearchable]>
 
     // Log CRUD functions
     func save(log: Loggable, for user: User) -> ServicePublisher<Void>
@@ -134,7 +135,6 @@ class FirebaseService: DatabaseService {
     }
 
     private func save(log: Loggable, for user: User, onComplete: @escaping ServiceCallback<Void>) {
-        // TODO: Check user exists?
         self.db.collection(FirebaseConstants.User.Collection)
                 .document(user.id)
                 .collection(FirebaseConstants.Logs.Collection)
@@ -179,8 +179,28 @@ extension Medication {
     static func decode(data: [String: Any]) -> Medication? {
         let id = data[FirebaseConstants.Searchable.MedicationIdField] as? String
         let name = data[FirebaseConstants.Searchable.ItemNameField] as? String
-        if let name = name, let id = id {
-            return Medication(id: id, name: name)
+        let createdBy = data[FirebaseConstants.Searchable.CreatedByField] as? String
+        if let name = name, let id = id, let createdBy = createdBy {
+            return Medication(id: id, name: name, createdBy: createdBy)
+        }
+        return nil
+    }
+
+}
+
+extension LogSearchable {
+
+    static func decode(data: [String: Any], parentCategory: LogCategory) -> LogSearchable? {
+        switch parentCategory {
+        case .medication:
+            let id = data[FirebaseConstants.Searchable.MedicationIdField] as? String
+            let name = data[FirebaseConstants.Searchable.ItemNameField] as? String
+            let createdBy = data[FirebaseConstants.Searchable.CreatedByField] as? String
+            if let name = name, let id = id, let createdBy = createdBy {
+                return Medication(id: id, name: name, createdBy: createdBy)
+            }
+        default:
+            break
         }
         return nil
     }

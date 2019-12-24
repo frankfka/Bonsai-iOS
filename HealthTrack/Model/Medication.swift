@@ -11,4 +11,6 @@ import Foundation
 struct Medication: LogSearchable {
     let id: String
     let name: String
+    let parentCategory: LogCategory = .medication
+    let createdBy: String
 }

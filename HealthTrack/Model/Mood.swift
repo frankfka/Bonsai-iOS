@@ -17,4 +17,6 @@ enum MoodRank: CaseIterable {
 struct Mood: LogSearchable {
     let id: String
     let name: String
+    let parentCategory: LogCategory = .mood
+    let createdBy: String
 }

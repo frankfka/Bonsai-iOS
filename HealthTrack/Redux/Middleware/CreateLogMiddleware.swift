@@ -19,7 +19,7 @@ func createLogSearchMiddleware(logService: LogService) -> Middleware<AppState> {
                 return
             }
             // Perform search
-            search(logService: logService, with: newQuery, for: user)
+            search(logService: logService, with: newQuery, for: user, in: state.createLog.selectedCategory)
                     .sink(receiveValue: { newAction in
                         send(newAction)
                     })
@@ -30,8 +30,8 @@ func createLogSearchMiddleware(logService: LogService) -> Middleware<AppState> {
     }
 }
 
-private func search(logService: LogService, with query: String, for user: User) -> AnyPublisher<AppAction, Never> {
-    return logService.search(with: query, by: user)
+private func search(logService: LogService, with query: String, for user: User, in category: LogCategory) -> AnyPublisher<AppAction, Never> {
+    return logService.search(with: query, by: user, in: category)
             .map { results in
                 return AppAction.createLog(action: .searchResultsDidChange(results: results))
             }.catch { (err) -> Just<AppAction> in
