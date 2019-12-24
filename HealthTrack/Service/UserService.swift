@@ -8,8 +8,8 @@ import Foundation
 
 protocol UserService {
     func createUser() -> User
-    func save(user: User) -> AnyPublisher<User, ServiceError>
-    func get(userId: String) -> AnyPublisher<User, ServiceError>
+    func save(user: User) -> ServicePublisher<Void>
+    func get(userId: String) -> ServicePublisher<User>
 }
 
 class UserServiceImpl: UserService {
@@ -24,11 +24,11 @@ class UserServiceImpl: UserService {
         return User(id: id, dateCreated: Date())
     }
 
-    func save(user: User) -> AnyPublisher<User, ServiceError> {
+    func save(user: User) -> ServicePublisher<Void> {
         return self.db.save(user: user)
     }
 
-    func get(userId: String) -> AnyPublisher<User, ServiceError> {
+    func get(userId: String) -> ServicePublisher<User> {
         return self.db.get(userId: userId)
     }
 }

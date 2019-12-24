@@ -16,29 +16,44 @@ protocol LogSearchable {
 
 // Protocol that each log type conforms to
 protocol Loggable {
+    var id: String { get }
+    var dateCreated: Date { get }
     var category: LogCategory { get }
     var notes: String { get }
 }
 
 struct NoteLog: Loggable {
     let category: LogCategory = .note
+    let id: String
+    let dateCreated: Date
     let notes: String
 }
 
 struct MoodLog: Loggable {
     let category: LogCategory = .mood
+    let id: String
+    let dateCreated: Date
     let notes: String
     let moodRank: MoodRank
     let moods: [Mood]
 }
 
-enum LogCategory: CaseIterable {
-    case note
-    case symptom
-    case nutrition
-    case activity
-    case mood
-    case medication
+struct MedicationLog: Loggable {
+    let category: LogCategory = .mood
+    let id: String
+    let dateCreated: Date
+    let notes: String
+    let medicationId: String
+    let dosage: String
+}
+
+enum LogCategory: String, CaseIterable {
+    case note = "note"
+    case symptom = "symptom"
+    case nutrition = "nutrition"
+    case activity = "activity"
+    case mood = "mood"
+    case medication = "medication"
     
     func displayValue(plural: Bool = false) -> String {
         switch self {

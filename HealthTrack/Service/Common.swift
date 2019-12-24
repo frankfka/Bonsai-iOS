@@ -4,6 +4,11 @@
 //
 
 import Foundation
+import Combine
+
+typealias ServiceCallback<SuccessType> = (Result<SuccessType, ServiceError>) -> ()
+typealias ServicePublisher<SuccessType> = AnyPublisher<SuccessType, ServiceError>
+typealias ServiceFuture<SuccessType> = Future<SuccessType, ServiceError>
 
 struct ServiceError: Error {
     let message: String

@@ -35,11 +35,12 @@ private func initUser(userService: UserService) -> AnyPublisher<AppAction, Never
                 }).eraseToAnyPublisher()
     } else {
         AppLogging.info("No user ID saved locally, creating a new user")
-        return userService.save(user: userService.createUser())
-                .map { user in
-                    AppLogging.info("Created user \(user.id). Adding to user defaults")
-                    UserDefaults.standard.set(user.id, forKey: UserConstants.UserDefaultsUserIdKey)
-                    return AppAction.global(action: GlobalAction.initSuccess(user: user))
+        let newUser = userService.createUser()
+        return userService.save(user: newUser)
+                .map {
+                    AppLogging.info("Created user \(newUser.id). Adding to user defaults")
+                    UserDefaults.standard.set(newUser.id, forKey: UserConstants.UserDefaultsUserIdKey)
+                    return AppAction.global(action: GlobalAction.initSuccess(user: newUser))
                 }.catch({ (err) -> Just<AppAction> in
                     AppLogging.info("Failed to create user: \(err)")
                     return Just(AppAction.global(action: GlobalAction.initFailure(error: err)))

@@ -7,17 +7,37 @@ import Foundation
 
 struct FirebaseConstants {
 
-    // Generic
-    static let ItemNameField = "name"
-    static let SearchTermsField = "searchTerms"
+    // TODO: Sub-structs
 
-    // User
-    static let UserCollection = "users"
-    static let UserIdField = "userId"
-    static let UserDateCreatedField = "dateCreated"
+    // Characteristics of searchable items (ex. medications, moods, etc.)
+    struct Searchable {
+        // Generic
+        static let ItemNameField = "name"
+        static let SearchTermsField = "searchTerms"
+        // Medication
+        static let MedicationCollection = "medications"
+        static let MedicationIdField = "medicationId"
+    }
 
-    // Medication
-    static let MedicationCollection = "medications"
-    static let MedicationIdField = "medicationId"
+    // Characteristics for user documents
+    struct User {
+        static let Collection = "users"
+        static let IdField = "userId"
+        static let DateCreatedField = "dateCreated"
+    }
 
+    struct Logs {
+        // Logs
+        static let Collection = "logs"
+        static let CategoryField = "category"
+        static let IdField = "logId"
+        static let DateCreatedField = "dateCreated"
+        static let NotesField = "notes"
+
+        // Logs - Medication
+        struct Medication {
+            static let UserLogsMedicationIdField = "medicationId"
+            static let DosageField = "dosage"
+        }
+    }
 }
