@@ -31,13 +31,15 @@ struct AppState {
     }
 }
 
-func appReducer(state: inout AppState, action: AppAction) {
+func appReducer(state: AppState, action: AppAction) -> AppState {
+    let newState: AppState
     switch action {
     case let .global(action):
-        GlobalReducer.reduce(state: &state, action: action)
+        newState = GlobalReducer.reduce(state: state, action: action)
     case let .createLog(action):
-        CreateLogReducer.reduce(state: &state, action: action)
+        newState = CreateLogReducer.reduce(state: state, action: action)
     }
+    return newState
 }
 
 // Global services wrapper

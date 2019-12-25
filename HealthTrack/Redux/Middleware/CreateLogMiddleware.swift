@@ -29,7 +29,8 @@ func createLogSearchMiddleware(logService: LogService) -> Middleware<AppState> {
 private func search(logService: LogService, with query: String, for user: User, in category: LogCategory) -> AnyPublisher<AppAction, Never> {
     if query.isEmptyWithoutWhitespace() {
         // Don't perform a query, just return empty results
-        return Just(AppAction.createLog(action: .searchDidComplete(results: []))).eraseToAnyPublisher()
+        // TODO: Figure out thread access
+//        return Just(AppAction.createLog(action: .searchDidComplete(results: []))).eraseToAnyPublisher()
     }
     return logService.search(with: query, by: user, in: category)
             .map { results in

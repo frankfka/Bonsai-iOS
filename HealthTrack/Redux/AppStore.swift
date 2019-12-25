@@ -9,9 +9,9 @@
 import Combine
 import Foundation
 
-typealias Reducer<State, Action> = (inout State, AppAction) -> Void
+typealias Reducer<State, Action> = (State, AppAction) -> State
 typealias Dispatch = (AppAction) -> Void
-typealias Middleware<State> = (inout State, AppAction, inout Set<AnyCancellable>, @escaping Dispatch) -> Void
+typealias Middleware<State> = (State, AppAction, inout Set<AnyCancellable>, @escaping Dispatch) -> Void
 
 final class AppStore: ObservableObject {
     @Published private(set) var state: AppState
@@ -25,19 +25,11 @@ final class AppStore: ObservableObject {
         self.middleware = middleware
     }
     
-    // Async actions - sink published values to synchronous send
-    func send(_ publishedAction: AnyPublisher<AppAction, Never>) {
-        publishedAction
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: send)
-            .store(in: &cancellables)
-    }
-    
     // Sync actions
     func send(_ action: AppAction) {
-        self.reducer(&state, action)
+        state = self.reducer(state, action)
         self.middleware.forEach { m in
-            m(&state, action, &cancellables, send)
+            m(state, action, &cancellables, send)
         }
     }
 }

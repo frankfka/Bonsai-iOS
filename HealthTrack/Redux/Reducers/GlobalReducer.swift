@@ -6,16 +6,18 @@
 import Foundation
 
 struct GlobalReducer {
-    static func reduce(state: inout AppState, action: GlobalAction) {
+    static func reduce(state: AppState, action: GlobalAction) -> AppState {
+        var newState = state
         switch action {
         case .appDidLaunch:
-            state.global.isInitializing = true
+            newState.global.isInitializing = true
         case let .initSuccess(user):
-            state.global.isInitializing = false
-            state.global.user = user
+            newState.global.isInitializing = false
+            newState.global.user = user
         case let .initFailure(error):
-            state.global.isInitializing = false
-            state.global.initError = error
+            newState.global.isInitializing = false
+            newState.global.initError = error
         }
+        return newState
     }
 }
