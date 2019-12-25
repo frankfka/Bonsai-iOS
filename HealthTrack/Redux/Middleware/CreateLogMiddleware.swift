@@ -14,10 +14,6 @@ func createLogSearchMiddleware(logService: LogService) -> Middleware<AppState> {
             guard let user = state.global.user else {
                 fatalError("No user initialized when searching")
             }
-            // Check query is not empty
-            if newQuery.isEmptyWithoutWhitespace() {
-                return
-            }
             // Perform search
             search(logService: logService, with: newQuery, for: user, in: state.createLog.selectedCategory)
                     .sink(receiveValue: { newAction in
@@ -31,11 +27,15 @@ func createLogSearchMiddleware(logService: LogService) -> Middleware<AppState> {
 }
 
 private func search(logService: LogService, with query: String, for user: User, in category: LogCategory) -> AnyPublisher<AppAction, Never> {
+    if query.isEmptyWithoutWhitespace() {
+        // Don't perform a query, just return empty results
+        return Just(AppAction.createLog(action: .searchDidComplete(results: []))).eraseToAnyPublisher()
+    }
     return logService.search(with: query, by: user, in: category)
             .map { results in
-                return AppAction.createLog(action: .searchResultsDidChange(results: results))
+                return AppAction.createLog(action: .searchDidComplete(results: results))
             }.catch { (err) -> Just<AppAction> in
-                return Just(AppAction.createLog(action: .searchResultsDidChange(results: [])))
+                return Just(AppAction.createLog(action: .searchDidComplete(results: [])))
             }
             .eraseToAnyPublisher()
 }

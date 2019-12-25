@@ -14,7 +14,7 @@ protocol LogService {
     func delete(id: String)
     // CRUD on log items (medications, nutrition, etc.)
     func search(with query: String, by user: User, in category: LogCategory) -> ServicePublisher<[LogSearchable]>
-    func save(searchable: LogSearchable, for user: User, in category: LogCategory)
+//    func save(searchable: LogSearchable, for user: User, in category: LogCategory)
 }
 
 class LogServiceImpl: LogService {

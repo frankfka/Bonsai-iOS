@@ -29,7 +29,7 @@ enum CreateLogAction {
 
     // Search
     case searchQueryDidChange(query: String)
-    case searchResultsDidChange(results: [LogSearchable])
+    case searchDidComplete(results: [LogSearchable])
     case searchItemDidSelect(selectedIndex: Int)
 
     // Medications

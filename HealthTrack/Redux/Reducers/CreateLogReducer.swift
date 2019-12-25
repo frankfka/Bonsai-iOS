@@ -21,7 +21,7 @@ struct CreateLogReducer {
         case .searchQueryDidChange(let query):
             state.createLog.searchQuery = query
             state.createLog.isSearching = true
-        case .searchResultsDidChange(let results):
+        case .searchDidComplete(let results):
             state.createLog.isSearching = false
             state.createLog.searchResults = results
         case .searchItemDidSelect(let index):

@@ -155,8 +155,8 @@ struct SearchListView: View {
 struct SearchListView_Previews: PreviewProvider {
     
     static let results: [LogSearchable] = [
-        Medication(id: "1", name: "One"),
-        Medication(id: "2", name: "Two")
+        Medication(id: "1", name: "One", createdBy: ""),
+        Medication(id: "2", name: "Two", createdBy: "")
     ]
     static let emptyResults: [LogSearchable] = []
     

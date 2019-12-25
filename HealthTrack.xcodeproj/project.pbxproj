@@ -45,6 +45,7 @@
 		9E04B1DC07699EBE5C684C53 /* MedicationLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BC42FA01AF3C727FA0A7 /* MedicationLogView.swift */; };
 		9E04B513CC19B5E2DB63CED9 /* SearchTextObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B763E5A55C21C9EF3E57 /* SearchTextObservable.swift */; };
 		9E04B5AFF3ADE20F1639D10D /* SearchListItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BA6E51A6CDACF7C60F88 /* SearchListItemRow.swift */; };
+		9E04B5BB7DC27D9DA0B6AAD9 /* FirebaseHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B7E1E4E86978635840E1 /* FirebaseHelpers.swift */; };
 		9E04B5ECE8A4C858E0D30AB7 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BC18297FF062E82106AC /* Utils.swift */; };
 		9E04B642138C647CA21FCBE5 /* AppInitMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B8C59601E362C76DAABD /* AppInitMiddleware.swift */; };
 		9E04B6BD53BC62CFB6CE2E1F /* CreateLogMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B5548FA5FE0689E72183 /* CreateLogMiddleware.swift */; };
@@ -58,6 +59,7 @@
 		9E04BA1947FAB76C5C1F6314 /* CommonModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B5EBE003AAA8575B4267 /* CommonModels.swift */; };
 		9E04BAB33DC97B591A4C4192 /* GlobalReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B17C034FABD17AEC4BFB /* GlobalReducer.swift */; };
 		9E04BB30BD8E25713D8572AA /* CreateLogState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B2DF23C563EDE7C0BBEE /* CreateLogState.swift */; };
+		9E04BC228D55A2BFEEDF93F7 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B116097027786675FBE7 /* FirebaseService.swift */; };
 		9E04BC93C6BC7E379AC5D5A7 /* Medication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B5D9DCFF8D0157D8B57A /* Medication.swift */; };
 		9E04BCEE0FB8ABB6A61D121E /* MedicationSearchListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B55BF291F8A1B7E4615A /* MedicationSearchListView.swift */; };
 		9E04BD31DF1944F44048BFA2 /* DatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B80ECAC1F22023914602 /* DatabaseService.swift */; };
@@ -106,6 +108,7 @@
 		11F445F1239A08D400B501CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4A8DC45F5FAA609AD2AB514E /* Pods_HealthTrack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HealthTrack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5224D148B81081E7444187A6 /* Pods-HealthTrack.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthTrack.release.xcconfig"; path = "Target Support Files/Pods-HealthTrack/Pods-HealthTrack.release.xcconfig"; sourceTree = "<group>"; };
+		9E04B116097027786675FBE7 /* FirebaseService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
 		9E04B17C034FABD17AEC4BFB /* GlobalReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalReducer.swift; sourceTree = "<group>"; };
 		9E04B2DF23C563EDE7C0BBEE /* CreateLogState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogState.swift; sourceTree = "<group>"; };
 		9E04B315B5D54A72FC7B7D71 /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
@@ -117,6 +120,7 @@
 		9E04B6C42CD67CF8BEF300C2 /* LogService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogService.swift; sourceTree = "<group>"; };
 		9E04B6C450860BE65AF311A7 /* UserConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserConstants.swift; sourceTree = "<group>"; };
 		9E04B763E5A55C21C9EF3E57 /* SearchTextObservable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTextObservable.swift; sourceTree = "<group>"; };
+		9E04B7E1E4E86978635840E1 /* FirebaseHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseHelpers.swift; sourceTree = "<group>"; };
 		9E04B80416B6B7E5CB269041 /* SearchListResultsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchListResultsView.swift; sourceTree = "<group>"; };
 		9E04B80ECAC1F22023914602 /* DatabaseService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseService.swift; sourceTree = "<group>"; };
 		9E04B8C59601E362C76DAABD /* AppInitMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInitMiddleware.swift; sourceTree = "<group>"; };
@@ -332,6 +336,15 @@
 			path = Reducers;
 			sourceTree = "<group>";
 		};
+		9E04B62749DC92BF7454FC72 /* FirebaseDatabase */ = {
+			isa = PBXGroup;
+			children = (
+				9E04B116097027786675FBE7 /* FirebaseService.swift */,
+				9E04B7E1E4E86978635840E1 /* FirebaseHelpers.swift */,
+			);
+			path = FirebaseDatabase;
+			sourceTree = "<group>";
+		};
 		9E04B657CE63672A2AF402BF /* Search */ = {
 			isa = PBXGroup;
 			children = (
@@ -368,6 +381,7 @@
 				9E04B315B5D54A72FC7B7D71 /* Common.swift */,
 				9E04B80ECAC1F22023914602 /* DatabaseService.swift */,
 				9E04BD4E8ECB33163CBA699C /* UserService.swift */,
+				9E04B62749DC92BF7454FC72 /* FirebaseDatabase */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -541,6 +555,8 @@
 				9E04B5AFF3ADE20F1639D10D /* SearchListItemRow.swift in Sources */,
 				9E04B755EF3C338636399E89 /* GlobalState.swift in Sources */,
 				9E04BB30BD8E25713D8572AA /* CreateLogState.swift in Sources */,
+				9E04BC228D55A2BFEEDF93F7 /* FirebaseService.swift in Sources */,
+				9E04B5BB7DC27D9DA0B6AAD9 /* FirebaseHelpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

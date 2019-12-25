@@ -37,9 +37,9 @@ class SearchTextObservable: ObservableObject {
     init(onUpdateText: StringCallback? = nil, onUpdateTextDebounced: StringCallback? = nil) {
         searchCancellable = searchSubject.eraseToAnyPublisher()
                 .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
-                .removeDuplicates()
+                // Remove duplicates that are just whitespace
                 .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-                .filter { !$0.isEmpty }
+                .removeDuplicates()
                 .sink(receiveValue: { (searchText) in
                     onUpdateTextDebounced?(searchText)
                 })
