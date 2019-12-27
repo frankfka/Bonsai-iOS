@@ -13,11 +13,23 @@ struct CreateLogView: View {
 
     struct ViewModel {
         @Binding var showModal: Bool
-        let isSaveButtonDisabled: Bool
+        private let isFormValid: Bool
+        let isLoading: Bool
+        var showSuccessDialog: Bool
+        let showErrorDialog: Bool
+        var isSaveButtonDisabled: Bool {
+            !isFormValid || isFormDisabled
+        }
+        var isFormDisabled: Bool {
+            isLoading || showSuccessDialog || showErrorDialog
+        }
 
-        init(showModal: Binding<Bool>, isSaveButtonDisabled: Bool) {
+        init(showModal: Binding<Bool>, isFormValid: Bool, isLoading: Bool, createSuccess: Bool, createError: Bool) {
             self._showModal = showModal
-            self.isSaveButtonDisabled = isSaveButtonDisabled
+            self.isFormValid = isFormValid
+            self.showSuccessDialog = createSuccess
+            self.showErrorDialog = createError
+            self.isLoading = isLoading
         }
     }
     @State(initialValue: false) private var showPicker
@@ -30,42 +42,68 @@ struct CreateLogView: View {
     }
 
     var body: some View {
-        NavigationView {
-            VStack(spacing: CGFloat.Theme.Layout.normal) {
-                LogCategoryView(viewModel: getCategoryPickerViewModel())
-                        .padding(.top, CGFloat.Theme.Layout.normal)
-                getCategorySpecificView().environmentObject(self.store)
-                CreateLogTextField(viewModel: getNotesViewModel())
-                Spacer()
+        ZStack {
+            ScrollView {
+                VStack(spacing: CGFloat.Theme.Layout.normal) {
+                    LogCategoryView(viewModel: getCategoryPickerViewModel())
+                            .padding(.top, CGFloat.Theme.Layout.normal)
+                    getCategorySpecificView().environmentObject(self.store)
+                    CreateLogTextField(viewModel: getNotesViewModel())
+                    Spacer()
+                }
             }
-            .background(Color.Theme.backgroundPrimary)
-            .navigationBarTitle("Add Log")
-            .navigationBarItems(
-                    leading: Button(action: {
-                        self.onCancel()
-                    }, label: {
-                        Text("Cancel")
-                                .font(Font.Theme.normalText)
-                                .foregroundColor(Color.Theme.primary)
-                    }),
-                    trailing: Button(action: {
-                        self.onSave()
-                    }, label: {
-                        Text("Save")
-                                .font(Font.Theme.boldNormalText)
-                                .foregroundColor(viewModel.isSaveButtonDisabled ? Color.Theme.grayscalePrimary : Color.Theme.primary)
-                    })
-                    .disabled(viewModel.isSaveButtonDisabled)
-            )
+            if self.viewModel.isFormDisabled {
+                // TODO: This is a hack, but we get AttributeGraph weirdness if we just use `.disabled()`
+                Rectangle()
+                    .allowsHitTesting(true)
+                    .foregroundColor(Color.Theme.backgroundPrimary)
+                        .opacity(0.05)
+            }
         }
+        .background(Color.Theme.backgroundPrimary)
+        .navigationBarTitle("Add Log")
+        .navigationBarItems(
+                leading: Button(action: {
+                    self.onCancel()
+                }, label: {
+                    Text("Cancel")
+                            .font(Font.Theme.normalText)
+                            .foregroundColor(Color.Theme.primary)
+                }),
+                trailing: Button(action: {
+                    self.onSave()
+                }, label: {
+                    Text("Save")
+                            .font(Font.Theme.boldNormalText)
+                            .foregroundColor(viewModel.isSaveButtonDisabled ? Color.Theme.grayscalePrimary : Color.Theme.primary)
+                })
+                .disabled(viewModel.isSaveButtonDisabled)
+        )
+        .embedInNavigationView()
         .onAppear() {
             self.store.send(.createLog(action: .screenDidShow))
+        }
+        .withLoadingPopup(show: .constant(self.viewModel.isLoading), text: "Saving")
+        .withStandardPopup(show: .constant(self.viewModel.showSuccessDialog), type: .success, text: "Saved Successfully") {
+            self.onSaveSuccessPopupDismiss()
+        }
+        .withStandardPopup(show: .constant(self.viewModel.showErrorDialog), type: .failure, text: "Something Went Wrong") {
+            self.onSaveErrorPopupDismiss()
         }
     }
 
     private func onSave() {
-        // Some async save job, need to show loading
-        print("Show loading")
+        // Hide the keyboard
+        UIApplication.shared.hideKeyboard()
+        self.store.send(.createLog(action: .onCreateLogPressed))
+    }
+
+    private func onSaveSuccessPopupDismiss() {
+        self.viewModel.$showModal.wrappedValue.toggle()
+    }
+
+    private func onSaveErrorPopupDismiss() {
+        self.store.send(.createLog(action: .createErrorShown))
     }
 
     private func onCancel() {
@@ -121,12 +159,21 @@ struct CreateLogView: View {
 }
 
 struct CreateLogView_Previews: PreviewProvider {
+
+    static let viewModel = CreateLogView.ViewModel(
+            showModal: .constant(true),
+            isFormValid: true,
+            isLoading: false,
+            createSuccess: true,
+            createError: false
+    )
+
     static var previews: some View {
         Group {
-            CreateLogView(viewModel: CreateLogView.ViewModel(showModal: .constant(true), isSaveButtonDisabled: false))
+            CreateLogView(viewModel: viewModel)
                     .environmentObject(AppStore(initialState: AppState(), reducer: appReducer))
 
-            CreateLogView(viewModel: CreateLogView.ViewModel(showModal: .constant(true), isSaveButtonDisabled: true))
+            CreateLogView(viewModel: viewModel)
                     .environmentObject(AppStore(initialState: AppState(), reducer: appReducer))
                     .environment(\.colorScheme, .dark)
         }

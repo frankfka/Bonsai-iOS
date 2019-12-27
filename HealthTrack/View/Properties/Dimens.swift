@@ -11,7 +11,8 @@ struct AppDimensions {
         let small: CGFloat!
         let normal: CGFloat!
         let large: CGFloat!
-        
+
+        let popupIcon: CGFloat!
         let largeIcon: CGFloat!
         let normalIcon: CGFloat!
         let smallIcon: CGFloat!
@@ -20,7 +21,8 @@ struct AppDimensions {
             small = 12
             normal = 16
             large = 20
-            
+
+            popupIcon = 48
             largeIcon = 24
             normalIcon = 16
             smallIcon = 12
@@ -35,6 +37,7 @@ struct AppDimensions {
         let cornerRadius: CGFloat!
         
         let tabItemHeight: CGFloat!
+        let popupFrameSize: CGFloat!
         
         init() {
             normal = 16
@@ -43,6 +46,7 @@ struct AppDimensions {
             cornerRadius = 24
             
             tabItemHeight = 60
+            popupFrameSize = 96
         }
     }
     

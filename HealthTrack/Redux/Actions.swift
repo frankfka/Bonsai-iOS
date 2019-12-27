@@ -25,7 +25,6 @@ enum CreateLogAction {
     case screenDidDismiss
     case logCategoryDidChange(newIndex: Int)
     case noteDidUpdate(note: String)
-    case save
 
     // Search
     case searchQueryDidChange(query: String)
@@ -34,4 +33,10 @@ enum CreateLogAction {
 
     // Medications
     case dosageDidChange(newDosage: String)
+
+    // Save
+    case onCreateLogPressed
+    case onCreateLogSuccess
+    case onCreateLogFailure(error: Error?)
+    case createErrorShown
 }

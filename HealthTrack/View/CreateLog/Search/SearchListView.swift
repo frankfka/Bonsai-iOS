@@ -30,31 +30,36 @@ struct SearchListView: View {
         var showAddNew: Bool {
             !queryIsEmpty
         }
-
+        
         let searchDescriptor: String // Medication, Nutrition, etc.
         var navigationBarTitle: String {
             "Search \(searchDescriptor)"
         }
-
+        
         // Search
         @Binding var query: String
+        var addNewItemName: String {
+            query.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
         var queryIsEmpty: Bool {
             query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         }
         let isSearching: Bool
         let results: [LogSearchable]
-
+        
         // Callbacks
         let onCancel: VoidCallback? // Cancel in nav bar pressed
         let onItemSelect: IntCallback? // Search result item pressed
-
+        let onAddNewSelect: StringCallback? // Add new item pressed
+        
         init(
             searchDescriptor: String,
             query: Binding<String>,
             isSearching: Bool,
             results: [LogSearchable],
             onCancel: VoidCallback? = nil,
-            onItemSelect: IntCallback? = nil
+            onItemSelect: IntCallback? = nil,
+            onAddNewSelect: StringCallback? = nil
         ) {
             self.searchDescriptor = searchDescriptor.capitalizeFirstLetter()
             self.isSearching = isSearching
@@ -62,10 +67,12 @@ struct SearchListView: View {
             self.results = results
             self.onCancel = onCancel
             self.onItemSelect = onItemSelect
+            self.onAddNewSelect = onAddNewSelect
         }
     }
     
     private let viewModel: ViewModel
+    @State private var showAddNewConfirmation: Bool = false
     
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -83,9 +90,9 @@ struct SearchListView: View {
             VStack {
                 HStack {
                     Text("Search Results")
-                            .font(Font.Theme.heading)
-                            .foregroundColor(Color.Theme.textDark)
-                            .padding(.bottom, CGFloat.Theme.Layout.small)
+                        .font(Font.Theme.heading)
+                        .foregroundColor(Color.Theme.textDark)
+                        .padding(.bottom, CGFloat.Theme.Layout.small)
                     Spacer()
                 }
                 getResultView()
@@ -105,6 +112,22 @@ struct SearchListView: View {
             .navigationBarTitle(viewModel.navigationBarTitle)
             .edgesIgnoringSafeArea(.bottom)
             .background(Color.Theme.backgroundPrimary)
+            .alert(isPresented: self.$showAddNewConfirmation) {
+                Alert(
+                    title: Text("Add Custom Item"),
+                    message: Text("Are you sure you want to add \(self.viewModel.addNewItemName) and select it from the list?"),
+                    primaryButton: .default(
+                        Text("Confirm")
+                            .foregroundColor(Color.Theme.primary)
+                    ) {
+                        self.viewModel.onAddNewSelect?(self.viewModel.addNewItemName)
+                    },
+                    secondaryButton: .cancel(
+                        Text("Cancel")
+                            .foregroundColor(Color.Theme.primary)
+                    )
+                )
+        }
     }
     
     private func getResultView() -> AnyView {
@@ -126,15 +149,20 @@ struct SearchListView: View {
     }
     
     private func getAddNewListItemViewModel() -> AddNewListItemView.ViewModel {
-        return AddNewListItemView.ViewModel(text: viewModel.$query, onTap: nil)
+        return AddNewListItemView.ViewModel(
+            text: viewModel.addNewItemName,
+            onTap: {
+                self.$showAddNewConfirmation.wrappedValue.toggle()
+            }
+        )
     }
     
     private func getSearchResultsViewModel() -> SearchResultsView.ViewModel {
         return SearchResultsView.ViewModel(
             items: viewModel.results.enumerated().map { (index, item) in
                 ListItemRow.ViewModel(
-                        name: item.name,
-                        onTap: { self.viewModel.onItemSelect?(index) }
+                    name: item.name,
+                    onTap: { self.viewModel.onItemSelect?(index) }
                 )
             }
         )

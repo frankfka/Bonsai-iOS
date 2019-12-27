@@ -40,7 +40,7 @@ struct AppColors {
         
         backgroundPrimary = Color.init(.systemGroupedBackground)
         backgroundSecondary = Color.init(.secondarySystemGroupedBackground)
-        overlay = Color.init(.systemBackground).opacity(0.5)
+        overlay = grayscaleSecondary.opacity(0.5)
     }
 }
 

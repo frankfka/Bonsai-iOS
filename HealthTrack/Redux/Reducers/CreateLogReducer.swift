@@ -17,10 +17,7 @@ struct CreateLogReducer {
             newState = logCategoryDidChange(state: state, newIndex: newIndex)
         case let .noteDidUpdate(note):
             newState.createLog.notes = note
-        case .save:
-            print("save")
-        case .searchQueryDidChange(let query):
-            newState.createLog.searchQuery = query
+        case .searchQueryDidChange:
             newState.createLog.isSearching = true
         case .searchDidComplete(let results):
             newState.createLog.isSearching = false
@@ -31,6 +28,18 @@ struct CreateLogReducer {
         // Medication
         case .dosageDidChange(let newDosage):
             newState.createLog.medication.dosage = newDosage
+
+        // Save
+        case .onCreateLogPressed:
+            newState.createLog.isCreating = true
+        case .onCreateLogSuccess:
+            newState.createLog.isCreating = false
+            newState.createLog.createSuccess = true
+        case let .onCreateLogFailure(error):
+            newState.createLog.isCreating = false
+            newState.createLog.createError = error
+        case .createErrorShown:
+            newState.createLog.createError = nil
         }
         return newState
     }

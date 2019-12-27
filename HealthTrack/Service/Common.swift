@@ -27,6 +27,9 @@ struct AppLogging {
     static func info(_ msg: String) {
         print("INFO: \(msg)")
     }
+    static func warn(_ msg: String) {
+        print("WARN: \(msg)")
+    }
     static func error(_ msg: String) {
         print("ERR: \(msg)")
     }

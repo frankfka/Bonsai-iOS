@@ -37,6 +37,10 @@ struct MedicationSearchListView: View {
                 onItemSelect: { selectedIndex in
                     self.store.send(.createLog(action: .searchItemDidSelect(selectedIndex: selectedIndex)))
                     self.presentationMode.wrappedValue.dismiss()
+                },
+                onAddNewSelect: { addNewItemName in
+                    // TODO
+                    print(addNewItemName)
                 }
         )
     }

@@ -22,14 +22,13 @@ struct CreateLogState {
     }
 
     // Search
-    var searchQuery: String = ""
     var isSearching: Bool = false
     var searchResults: [LogSearchable] = []
 
     // On submit states
-    var loading: Bool = false
-    var error: Error? = nil
-    var success: Bool = false
+    var isCreating: Bool = false
+    var createError: Error? = nil
+    var createSuccess: Bool = false
 
     // Category-specific states
     var isValidated: Bool {
@@ -58,7 +57,6 @@ extension CreateLogState {
 // Helper functions for modifying state
 extension CreateLogState {
     mutating func resetSearch() {
-        self.searchQuery = ""
         self.searchResults = []
         self.isSearching = false
     }

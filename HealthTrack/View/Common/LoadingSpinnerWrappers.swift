@@ -8,13 +8,29 @@
 
 import SwiftUI
 
+extension View {
+    func withLoadingPopup(show: Binding<Bool>, text: String? = nil) -> some View {
+        return self.withPopup(show: show) {
+            VStack {
+                LoadingSpinner(size: .small)
+                        .padding(.bottom, CGFloat.Theme.Layout.small)
+                if text != nil {
+                    Text(text!)
+                            .font(Font.Theme.normalText)
+                            .foregroundColor(Color.Theme.text)
+                }
+            }.eraseToAnyView()
+        }
+    }
+}
+
 struct FullScreenLoadingSpinner: View {
     private let size: LoadingSpinner.Size
-
+    
     init(size: LoadingSpinner.Size = .normal) {
         self.size = size
     }
-
+    
     var body: some View {
         GeometryReader { geometry in
             VStack(alignment: .center) {
@@ -31,11 +47,11 @@ struct FullScreenLoadingSpinner: View {
 
 struct FullWidthLoadingSpinner: View {
     private let size: LoadingSpinner.Size
-
+    
     init(size: LoadingSpinner.Size = .normal) {
         self.size = size
     }
-
+    
     var body: some View {
         HStack() {
             Spacer()

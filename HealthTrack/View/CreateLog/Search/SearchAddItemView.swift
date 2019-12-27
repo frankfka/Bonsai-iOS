@@ -11,12 +11,10 @@ struct AddNewListItemView: View {
         @Binding var text: String
         let onTap: VoidCallback?
 
-        init(text: Binding<String>, onTap: VoidCallback?) {
+        init(text: String, onTap: VoidCallback?) {
             self._text = Binding<String>(get: {
-                return "Add \(text.wrappedValue)"
-            }, set: { newVal in
-                text.wrappedValue = newVal
-            })
+                return "Add \(text)"
+            }, set: { _ in })
             self.onTap = onTap
         }
     }
@@ -39,6 +37,7 @@ struct AddNewListItemView: View {
             Spacer()
         }
                 .padding(.all, CGFloat.Theme.Layout.small)
+                .contentShape(Rectangle())
                 .onTapGesture {
                     self.viewModel.onTap?()
                 }

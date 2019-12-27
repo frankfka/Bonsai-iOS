@@ -85,15 +85,20 @@ struct ContentView: View {
             ).environmentObject(self.store)
         }
     }
-
-    // TODO: Complete and use this, cahnge add log to create log
+    
     private func getCreateLogViewModel() -> CreateLogView.ViewModel {
+        let isLoading = store.state.createLog.isCreating
+        let createSuccess = store.state.createLog.createSuccess
+        let createError = store.state.createLog.createError != nil
         return CreateLogView.ViewModel(
-                showModal: viewModel.$showCreateLogModal,
-                isSaveButtonDisabled: !store.state.createLog.isFormValid()
+            showModal: viewModel.$showCreateLogModal,
+            isFormValid: store.state.createLog.isFormValid(),
+            isLoading: isLoading,
+            createSuccess: createSuccess,
+            createError: createError
         )
     }
-
+    
 }
 
 struct ContentView_Previews: PreviewProvider {

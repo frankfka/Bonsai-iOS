@@ -20,7 +20,24 @@ struct ViewHelpers {
             binding.wrappedValue.toggle()
         }
     }
+
+    static func toggleAfterDelay(delay: Double, binding: Binding<Bool>, onToggle: @escaping VoidCallback) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            binding.wrappedValue.toggle()
+            onToggle()
+        }
+    }
     
+}
+
+extension View {
+    // https://swiftwithmajid.com/2019/12/04/must-have-swiftui-extensions/
+    func eraseToAnyView() -> AnyView {
+        AnyView(self)
+    }
+    func embedInNavigationView() -> some View {
+        NavigationView { self }
+    }
 }
 
 struct RoundedBorderSection: ViewModifier {
@@ -31,5 +48,12 @@ struct RoundedBorderSection: ViewModifier {
                 RoundedRectangle(cornerRadius: CGFloat.Theme.Layout.cornerRadius)
                     .foregroundColor(Color.Theme.backgroundSecondary)
         )
+    }
+}
+
+extension UIApplication {
+    // https://inneka.com/programming/swift/how-to-hide-keyboard-when-using-swiftui/
+    func hideKeyboard() {
+        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }

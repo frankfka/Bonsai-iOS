@@ -16,6 +16,7 @@ struct SearchResultsView: View {
         self.viewModel = viewModel
     }
 
+    // TODO: Use indexed collection: https://swiftwithmajid.com/2019/12/04/must-have-swiftui-extensions/
     var body: some View {
         VStack {
             ForEach(viewModel.items, id: \.name) { itemViewModel in

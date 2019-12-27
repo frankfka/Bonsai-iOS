@@ -9,6 +9,16 @@
 import Foundation
 import Combine
 
+struct AppError: Error {
+    let message: String
+    let wrappedError: Error?
+
+    init(message: String, wrappedError: Error? = nil) {
+        self.message = message
+        self.wrappedError = wrappedError
+    }
+}
+
 class Services {
     let userService: UserService
     let logService: LogService
@@ -44,7 +54,15 @@ func appReducer(state: AppState, action: AppAction) -> AppState {
 
 // Global services wrapper
 private let services = Services()
+// Somewhat hacky way to send actions in our naive redux implementation
+func doInMiddleware(_ action: @escaping VoidCallback) {
+    DispatchQueue.main.asyncAfter(deadline: .now()) {
+        action()
+    }
+}
 let appMiddleware: [Middleware<AppState>] = [
     appInitMiddleware(userService: services.userService),
-    createLogSearchMiddleware(logService: services.logService)
+    // Create log
+    createLogSearchMiddleware(logService: services.logService),
+    createLogOnSaveMiddleware(logService: services.logService)
 ]
