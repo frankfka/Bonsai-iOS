@@ -7,6 +7,7 @@ import Foundation
 
 struct CreateLogReducer {
     static func reduce(state: AppState, action: CreateLogAction) -> AppState {
+        // TODO Refactor into individual functions
         var newState = state
         switch action {
         case .screenDidShow:
@@ -17,13 +18,32 @@ struct CreateLogReducer {
             newState = logCategoryDidChange(state: state, newIndex: newIndex)
         case let .noteDidUpdate(note):
             newState.createLog.notes = note
+
+        // Search
         case .searchQueryDidChange:
             newState.createLog.isSearching = true
         case .searchDidComplete(let results):
             newState.createLog.isSearching = false
             newState.createLog.searchResults = results
         case .searchItemDidSelect(let index):
-            newState = searchItemDidSelect(state: state, selectedIndex: index)
+            let selected = newState.createLog.searchResults[index]
+            newState = searchItemDidSelect(state: state, selected: selected)
+        case .onAddSearchItemPressed:
+            newState.createLog.isCreatingLogItem = true
+        case let .onAddSearchItemSuccess(addedItem):
+            newState = searchItemDidSelect(state: newState, selected: addedItem)
+            // Add to search results
+            newState.createLog.searchResults.insert(addedItem, at: 0)
+            newState.createLog.createLogItemSuccess = true
+            newState.createLog.isCreatingLogItem = false
+        case let .onAddSearchItemFailure(error):
+            newState.createLog.createLogItemError = error
+            newState.createLog.isCreatingLogItem = false
+        case .onAddSearchResultPopupShown:
+            // Reset the success/error state
+            newState.createLog.isCreatingLogItem = false
+            newState.createLog.createLogItemError = nil
+            newState.createLog.createLogItemSuccess = false
 
         // Medication
         case .dosageDidChange(let newDosage):
@@ -31,12 +51,12 @@ struct CreateLogReducer {
 
         // Save
         case .onCreateLogPressed:
-            newState.createLog.isCreating = true
+            newState.createLog.isCreatingLog = true
         case .onCreateLogSuccess:
-            newState.createLog.isCreating = false
+            newState.createLog.isCreatingLog = false
             newState.createLog.createSuccess = true
         case let .onCreateLogFailure(error):
-            newState.createLog.isCreating = false
+            newState.createLog.isCreatingLog = false
             newState.createLog.createError = error
         case .createErrorShown:
             newState.createLog.createError = nil
@@ -51,11 +71,11 @@ struct CreateLogReducer {
         return newState
     }
 
-    private static func searchItemDidSelect(state: AppState, selectedIndex: Int) -> AppState {
+    private static func searchItemDidSelect(state: AppState, selected: LogSearchable) -> AppState {
         var newState = state
         switch state.createLog.selectedCategory {
         case .medication:
-            guard let selectedMedication = state.createLog.searchResults[selectedIndex] as? Medication else {
+            guard let selectedMedication = selected as? Medication else {
                 fatalError("Search result is not a medication but the selected category is medication")
             }
             newState.createLog.medication.selectedMedication = selectedMedication

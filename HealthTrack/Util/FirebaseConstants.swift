@@ -14,9 +14,12 @@ struct FirebaseConstants {
         static let SearchTermsField = "searchTerms"
         static let CreatedByField = "createdBy"
         static let CreatedByMaster = "master"
+
         // Medication
-        static let MedicationCollection = "medications"
-        static let MedicationIdField = "medicationId"
+        struct Medication {
+            static let Collection = "medications"
+            static let IdField = "medicationId"
+        }
     }
 
     // Characteristics for user documents

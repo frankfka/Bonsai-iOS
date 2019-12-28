@@ -21,12 +21,15 @@ struct CreateLogState {
         return allCategories[selectedCategoryIndex]
     }
 
-    // Search
+    // Search states
     var isSearching: Bool = false
     var searchResults: [LogSearchable] = []
+    var isCreatingLogItem: Bool = false
+    var createLogItemError: Error? = nil
+    var createLogItemSuccess: Bool = false
 
     // On submit states
-    var isCreating: Bool = false
+    var isCreatingLog: Bool = false
     var createError: Error? = nil
     var createSuccess: Bool = false
 

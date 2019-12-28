@@ -87,7 +87,7 @@ struct ContentView: View {
     }
     
     private func getCreateLogViewModel() -> CreateLogView.ViewModel {
-        let isLoading = store.state.createLog.isCreating
+        let isLoading = store.state.createLog.isCreatingLog
         let createSuccess = store.state.createLog.createSuccess
         let createError = store.state.createLog.createError != nil
         return CreateLogView.ViewModel(

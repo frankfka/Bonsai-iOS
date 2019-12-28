@@ -12,7 +12,7 @@ extension FirebaseService {
     func decode(data: [String: Any], parentCategory: LogCategory) -> LogSearchable? {
         switch parentCategory {
         case .medication:
-            let id = data[FirebaseConstants.Searchable.MedicationIdField] as? String
+            let id = data[FirebaseConstants.Searchable.Medication.IdField] as? String
             let name = data[FirebaseConstants.Searchable.ItemNameField] as? String
             let createdBy = data[FirebaseConstants.Searchable.CreatedByField] as? String
             if let name = name, let id = id, let createdBy = createdBy {
@@ -45,6 +45,37 @@ extension User {
     }
 }
 
+extension LogSearchable {
+    func encodeCommonFields() -> [String: Any] {
+        return [
+            FirebaseConstants.Searchable.CreatedByField: self.createdBy,
+            FirebaseConstants.Searchable.ItemNameField: self.name,
+            FirebaseConstants.Searchable.SearchTermsField: getSearchTerms(),
+        ]
+    }
+
+    private func getSearchTerms() -> [String] {
+        let normalizedName = name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        var terms: [String] = []
+        for i in 0..<normalizedName.count {
+            let endIndex = normalizedName.index(normalizedName.startIndex, offsetBy: i)
+            terms.append(String(normalizedName.prefix(through: endIndex)))
+        }
+        return terms
+    }
+
+    func encode() -> [String: Any] {
+        var data = encodeCommonFields()
+        switch self.parentCategory {
+        case .medication:
+            data[FirebaseConstants.Searchable.Medication.IdField] = self.id
+        default:
+            break
+        }
+        return data
+    }
+}
+
 extension Loggable {
     func encodeCommonFields() -> [String: Any] {
         return [
@@ -56,20 +87,18 @@ extension Loggable {
     }
 
     func encode() -> [String: Any] {
-        let commonFieldsData = self.encodeCommonFields()
-        var categoryFields: [String: Any] = [:]
+        var data = self.encodeCommonFields()
         switch self.category {
         case .medication:
             guard let medicationLog = self as? MedicationLog else {
                 fatalError("Not a medication log but category was medication")
             }
-            categoryFields[FirebaseConstants.Logs.Medication.UserLogsMedicationIdField] = medicationLog.medicationId
-            categoryFields[FirebaseConstants.Logs.Medication.DosageField] = medicationLog.dosage
+            data[FirebaseConstants.Logs.Medication.UserLogsMedicationIdField] = medicationLog.medicationId
+            data[FirebaseConstants.Logs.Medication.DosageField] = medicationLog.dosage
         default:
             break
         }
-        // Merge common + specific fields, keeping new field values if they conflict (they shouldn't)
-        return commonFieldsData.merging(categoryFields, uniquingKeysWith: { (_, new) in new })
+        return data
     }
 }
 
@@ -77,7 +106,7 @@ extension LogCategory {
     func firebaseCollectionName() -> String {
         switch self {
         case .medication:
-            return FirebaseConstants.Searchable.MedicationCollection
+            return FirebaseConstants.Searchable.Medication.Collection
         default:
             return ""
         }

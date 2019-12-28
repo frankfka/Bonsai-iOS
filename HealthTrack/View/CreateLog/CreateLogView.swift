@@ -10,7 +10,7 @@ import SwiftUI
 
 struct CreateLogView: View {
     @EnvironmentObject var store: AppStore
-
+    
     struct ViewModel {
         @Binding var showModal: Bool
         private let isFormValid: Bool
@@ -23,7 +23,7 @@ struct CreateLogView: View {
         var isFormDisabled: Bool {
             isLoading || showSuccessDialog || showErrorDialog
         }
-
+        
         init(showModal: Binding<Bool>, isFormValid: Bool, isLoading: Bool, createSuccess: Bool, createError: Bool) {
             self._showModal = showModal
             self.isFormValid = isFormValid
@@ -34,54 +34,46 @@ struct CreateLogView: View {
     }
     @State(initialValue: false) private var showPicker
     private var viewModel: ViewModel
-
+    
     init(viewModel: ViewModel) {
         // TODO: Using unmonitored UIColor here
         UINavigationBar.appearance().backgroundColor = .secondarySystemGroupedBackground
         self.viewModel = viewModel
     }
-
+    
     var body: some View {
-        ZStack {
-            ScrollView {
-                VStack(spacing: CGFloat.Theme.Layout.normal) {
-                    LogCategoryView(viewModel: getCategoryPickerViewModel())
-                            .padding(.top, CGFloat.Theme.Layout.normal)
-                    getCategorySpecificView().environmentObject(self.store)
-                    CreateLogTextField(viewModel: getNotesViewModel())
-                    Spacer()
-                }
-            }
-            if self.viewModel.isFormDisabled {
-                // TODO: This is a hack, but we get AttributeGraph weirdness if we just use `.disabled()`
-                Rectangle()
-                    .allowsHitTesting(true)
-                    .foregroundColor(Color.Theme.backgroundPrimary)
-                        .opacity(0.05)
+        ScrollView {
+            VStack(spacing: CGFloat.Theme.Layout.normal) {
+                LogCategoryView(viewModel: getCategoryPickerViewModel())
+                    .padding(.top, CGFloat.Theme.Layout.normal)
+                getCategorySpecificView().environmentObject(self.store)
+                CreateLogTextField(viewModel: getNotesViewModel())
+                Spacer()
             }
         }
+        .disableInteraction(isDisabled: .constant(self.viewModel.isFormDisabled))
         .background(Color.Theme.backgroundPrimary)
         .navigationBarTitle("Add Log")
         .navigationBarItems(
-                leading: Button(action: {
-                    self.onCancel()
-                }, label: {
-                    Text("Cancel")
-                            .font(Font.Theme.normalText)
-                            .foregroundColor(Color.Theme.primary)
-                }),
-                trailing: Button(action: {
-                    self.onSave()
-                }, label: {
-                    Text("Save")
-                            .font(Font.Theme.boldNormalText)
-                            .foregroundColor(viewModel.isSaveButtonDisabled ? Color.Theme.grayscalePrimary : Color.Theme.primary)
-                })
+            leading: Button(action: {
+                self.onCancel()
+            }, label: {
+                Text("Cancel")
+                    .font(Font.Theme.normalText)
+                    .foregroundColor(Color.Theme.primary)
+            }),
+            trailing: Button(action: {
+                self.onSave()
+            }, label: {
+                Text("Save")
+                    .font(Font.Theme.boldNormalText)
+                    .foregroundColor(viewModel.isSaveButtonDisabled ? Color.Theme.grayscalePrimary : Color.Theme.primary)
+            })
                 .disabled(viewModel.isSaveButtonDisabled)
         )
-        .embedInNavigationView()
-        .onAppear() {
-            self.store.send(.createLog(action: .screenDidShow))
+            .embedInNavigationView()
+            .onAppear() {
+                self.store.send(.createLog(action: .screenDidShow))
         }
         .withLoadingPopup(show: .constant(self.viewModel.isLoading), text: "Saving")
         .withStandardPopup(show: .constant(self.viewModel.showSuccessDialog), type: .success, text: "Saved Successfully") {
@@ -91,37 +83,37 @@ struct CreateLogView: View {
             self.onSaveErrorPopupDismiss()
         }
     }
-
+    
     private func onSave() {
         // Hide the keyboard
         UIApplication.shared.hideKeyboard()
         self.store.send(.createLog(action: .onCreateLogPressed))
     }
-
+    
     private func onSaveSuccessPopupDismiss() {
         self.viewModel.$showModal.wrappedValue.toggle()
     }
-
+    
     private func onSaveErrorPopupDismiss() {
         self.store.send(.createLog(action: .createErrorShown))
     }
-
+    
     private func onCancel() {
         viewModel.showModal.toggle()
     }
-
+    
     private func onSelectedCategoryChange(newVal: Int) {
         self.store.send(.createLog(action: CreateLogAction.logCategoryDidChange(newIndex: newVal)))
     }
-
+    
     private func notesDidChange(note: String) {
         self.store.send(.createLog(action: .noteDidUpdate(note: note)))
     }
-
+    
     func getCategorySpecificView() -> AnyView {
-
+        
         switch store.state.createLog.selectedCategory {
-
+            
         case .note:
             return AnyView(EmptyView())
         case .symptom:
@@ -136,18 +128,18 @@ struct CreateLogView: View {
             return AnyView(MedicationLogView())
         }
     }
-
+    
     private func getCategoryPickerViewModel() -> LogCategoryView.ViewModel {
         return LogCategoryView.ViewModel(
-                categories: store.state.createLog.allCategories.map {
-                    $0.displayValue()
-                },
-                selectedCategory: store.state.createLog.selectedCategoryIndex,
-                selectedCategoryDidChange: onSelectedCategoryChange,
-                showPicker: $showPicker
+            categories: store.state.createLog.allCategories.map {
+                $0.displayValue()
+            },
+            selectedCategory: store.state.createLog.selectedCategoryIndex,
+            selectedCategoryDidChange: onSelectedCategoryChange,
+            showPicker: $showPicker
         )
     }
-
+    
     private func getNotesViewModel() -> CreateLogTextField.ViewModel {
         return CreateLogTextField.ViewModel(label: "Notes", input: Binding(get: {
             return self.store.state.createLog.notes
@@ -155,27 +147,27 @@ struct CreateLogView: View {
             self.notesDidChange(note: newNote)
         })
     }
-
+    
 }
 
 struct CreateLogView_Previews: PreviewProvider {
-
+    
     static let viewModel = CreateLogView.ViewModel(
-            showModal: .constant(true),
-            isFormValid: true,
-            isLoading: false,
-            createSuccess: true,
-            createError: false
+        showModal: .constant(true),
+        isFormValid: true,
+        isLoading: false,
+        createSuccess: true,
+        createError: false
     )
-
+    
     static var previews: some View {
         Group {
             CreateLogView(viewModel: viewModel)
-                    .environmentObject(AppStore(initialState: AppState(), reducer: appReducer))
-
+                .environmentObject(AppStore(initialState: AppState(), reducer: appReducer))
+            
             CreateLogView(viewModel: viewModel)
-                    .environmentObject(AppStore(initialState: AppState(), reducer: appReducer))
-                    .environment(\.colorScheme, .dark)
+                .environmentObject(AppStore(initialState: AppState(), reducer: appReducer))
+                .environment(\.colorScheme, .dark)
         }
     }
 }

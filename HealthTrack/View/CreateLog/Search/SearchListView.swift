@@ -10,7 +10,9 @@ import SwiftUI
 import Combine
 
 struct SearchListView: View {
-    
+
+    // TODO: Need to test this after exiting page (buggy xcode)
+
     struct ViewModel {
         // Represents the type of view to show within the search results container
         enum ResultViewType {
@@ -47,27 +49,47 @@ struct SearchListView: View {
         let isSearching: Bool
         let results: [LogSearchable]
         
+        // Create new log item
+        let isCreatingNewLogItem: Bool
+        let createNewLogItemSuccess: Bool
+        let createNewLogItemError: Bool
+        var viewDisabled: Bool {
+            isCreatingNewLogItem || createNewLogItemError || createNewLogItemSuccess
+        }
+        
         // Callbacks
         let onCancel: VoidCallback? // Cancel in nav bar pressed
         let onItemSelect: IntCallback? // Search result item pressed
         let onAddNewSelect: StringCallback? // Add new item pressed
+        let onAddNewSuccessShown: VoidCallback? // Finished adding new item
+        let onAddNewErrorShown: VoidCallback? // Finished adding new item
         
         init(
             searchDescriptor: String,
             query: Binding<String>,
             isSearching: Bool,
             results: [LogSearchable],
+            isCreatingNewLogItem: Bool,
+            createNewLogItemSuccess: Bool,
+            createNewLogItemError: Bool,
             onCancel: VoidCallback? = nil,
             onItemSelect: IntCallback? = nil,
-            onAddNewSelect: StringCallback? = nil
+            onAddNewSelect: StringCallback? = nil,
+            onAddNewSuccessShown: VoidCallback? = nil,
+            onAddNewErrorShown: VoidCallback? = nil
         ) {
             self.searchDescriptor = searchDescriptor.capitalizeFirstLetter()
             self.isSearching = isSearching
             self._query = query
             self.results = results
+            self.isCreatingNewLogItem = isCreatingNewLogItem
+            self.createNewLogItemSuccess = createNewLogItemSuccess
+            self.createNewLogItemError = createNewLogItemError
             self.onCancel = onCancel
             self.onItemSelect = onItemSelect
             self.onAddNewSelect = onAddNewSelect
+            self.onAddNewSuccessShown = onAddNewSuccessShown
+            self.onAddNewErrorShown = onAddNewErrorShown
         }
     }
     
@@ -101,17 +123,17 @@ struct SearchListView: View {
             .padding(.horizontal, CGFloat.Theme.Layout.normal)
             Spacer()
         }
-        .navigationBarItems(leading: Button(action: {
-            self.viewModel.onCancel?()
-        }, label: {
-            Text("Cancel")
-                .font(Font.Theme.normalText)
-                .foregroundColor(Color.Theme.primary)
-        }))
-            .navigationBarBackButtonHidden(true)
-            .navigationBarTitle(viewModel.navigationBarTitle)
-            .edgesIgnoringSafeArea(.bottom)
-            .background(Color.Theme.backgroundPrimary)
+            // Disable/Enable interaction
+            .disableInteraction(isDisabled: .constant(self.viewModel.viewDisabled))
+            // Loading/Success/Failure States
+            .withLoadingPopup(show: .constant(self.viewModel.isCreatingNewLogItem), text: "Saving New Item")
+            .withStandardPopup(show: .constant(self.viewModel.createNewLogItemSuccess), type: .success, text: "Saved Successfully") {
+                self.viewModel.onAddNewSuccessShown?()
+        }
+        .withStandardPopup(show: .constant(self.viewModel.createNewLogItemError), type: .failure, text: "Something Went Wrong") {
+            self.viewModel.onAddNewErrorShown?()
+        }
+            // Alert
             .alert(isPresented: self.$showAddNewConfirmation) {
                 Alert(
                     title: Text("Add Custom Item"),
@@ -128,6 +150,19 @@ struct SearchListView: View {
                     )
                 )
         }
+            // Navigation Bar
+            .navigationBarBackButtonHidden(true)
+            .navigationBarItems(leading: Button(action: {
+                self.viewModel.onCancel?()
+            }, label: {
+                Text("Cancel")
+                    .font(Font.Theme.normalText)
+                    .foregroundColor(Color.Theme.primary)
+            }))
+            .navigationBarTitle(viewModel.navigationBarTitle)
+            // Background
+            .edgesIgnoringSafeArea(.bottom)
+            .background(Color.Theme.backgroundPrimary)
     }
     
     private func getResultView() -> AnyView {
@@ -153,7 +188,7 @@ struct SearchListView: View {
             text: viewModel.addNewItemName,
             onTap: {
                 self.$showAddNewConfirmation.wrappedValue.toggle()
-            }
+        }
         )
     }
     
@@ -193,7 +228,10 @@ struct SearchListView_Previews: PreviewProvider {
             searchDescriptor: "Medications",
             query: .constant("Dela"),
             isSearching: false,
-            results: results
+            results: results,
+            isCreatingNewLogItem: false,
+            createNewLogItemSuccess: false,
+            createNewLogItemError: false
         )
     }
     
@@ -202,7 +240,10 @@ struct SearchListView_Previews: PreviewProvider {
             searchDescriptor: "Medications",
             query: .constant("Dela"),
             isSearching: true,
-            results: emptyResults
+            results: emptyResults,
+            isCreatingNewLogItem: false,
+            createNewLogItemSuccess: false,
+            createNewLogItemError: false
         )
     }
     
@@ -211,7 +252,10 @@ struct SearchListView_Previews: PreviewProvider {
             searchDescriptor: "Medications",
             query: .constant("Dela"),
             isSearching: false,
-            results: emptyResults
+            results: emptyResults,
+            isCreatingNewLogItem: false,
+            createNewLogItemSuccess: false,
+            createNewLogItemError: false
         )
     }
     
@@ -220,7 +264,10 @@ struct SearchListView_Previews: PreviewProvider {
             searchDescriptor: "Medications",
             query: .constant(""),
             isSearching: false,
-            results: emptyResults
+            results: emptyResults,
+            isCreatingNewLogItem: false,
+            createNewLogItemSuccess: false,
+            createNewLogItemError: false
         )
     }
     

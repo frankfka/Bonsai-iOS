@@ -112,6 +112,31 @@ class FirebaseService: DatabaseService {
                 }
     }
 
+    func save(logItem: LogSearchable, for user: User) -> ServicePublisher<Void> {
+        let future = ServiceFuture<Void> { promise in
+            self.save(logItem: logItem, for: user) { result in
+                promise(result)
+            }
+        }
+        return AnyPublisher(future)
+    }
+
+    private func save(logItem: LogSearchable, for user: User, onComplete: @escaping ServiceCallback<Void>) {
+        self.db.collection(logItem.parentCategory.firebaseCollectionName())
+        .document(logItem.id)
+        .setData(logItem.encode()) { err in
+            if let err = err {
+                AppLogging.error("Error adding log item \(logItem.id) with parent user \(user.id): \(err)")
+                onComplete(.failure(ServiceError(message: "Error saving log item", wrappedError: err)))
+                return
+            } else {
+                AppLogging.debug("Log item saved successfully")
+                onComplete(.success(()))
+                return
+            }
+        }
+    }
+
     func save(log: Loggable, for user: User) -> ServicePublisher<Void> {
         let future = ServiceFuture<Void> { promise in
             self.save(log: log, for: user) { result in

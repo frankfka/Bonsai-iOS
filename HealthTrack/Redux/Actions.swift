@@ -30,6 +30,10 @@ enum CreateLogAction {
     case searchQueryDidChange(query: String)
     case searchDidComplete(results: [LogSearchable])
     case searchItemDidSelect(selectedIndex: Int)
+    case onAddSearchItemPressed(name: String)
+    case onAddSearchItemSuccess(addedItem: LogSearchable)
+    case onAddSearchItemFailure(error: Error)
+    case onAddSearchResultPopupShown
 
     // Medications
     case dosageDidChange(newDosage: String)
@@ -37,6 +41,6 @@ enum CreateLogAction {
     // Save
     case onCreateLogPressed
     case onCreateLogSuccess
-    case onCreateLogFailure(error: Error?)
+    case onCreateLogFailure(error: Error)
     case createErrorShown
 }

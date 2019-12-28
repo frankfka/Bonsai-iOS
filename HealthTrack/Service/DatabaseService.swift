@@ -15,5 +15,6 @@ protocol DatabaseService {
     func search(query: String, by user: User, in category: LogCategory) -> ServicePublisher<[LogSearchable]>
 
     // Log CRUD functions
+    func save(logItem: LogSearchable, for user: User) -> ServicePublisher<Void>
     func save(log: Loggable, for user: User) -> ServicePublisher<Void>
 }

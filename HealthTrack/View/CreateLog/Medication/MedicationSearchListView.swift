@@ -33,14 +33,24 @@ struct MedicationSearchListView: View {
                 }),
                 isSearching: store.state.createLog.isSearching,
                 results: store.state.createLog.searchResults,
+                isCreatingNewLogItem: store.state.createLog.isCreatingLogItem,
+                createNewLogItemSuccess: store.state.createLog.createLogItemSuccess,
+                createNewLogItemError: store.state.createLog.createLogItemError != nil,
                 onCancel: { self.presentationMode.wrappedValue.dismiss() },
                 onItemSelect: { selectedIndex in
                     self.store.send(.createLog(action: .searchItemDidSelect(selectedIndex: selectedIndex)))
                     self.presentationMode.wrappedValue.dismiss()
                 },
                 onAddNewSelect: { addNewItemName in
-                    // TODO
-                    print(addNewItemName)
+                    self.store.send(.createLog(action: .onAddSearchItemPressed(name: addNewItemName)))
+                },
+                onAddNewSuccessShown: {
+                    // Reducer currently selects this item, so just dismiss the view
+                    self.presentationMode.wrappedValue.dismiss()
+                    self.store.send(.createLog(action: .onAddSearchResultPopupShown))
+                },
+                onAddNewErrorShown: {
+                    self.store.send(.createLog(action: .onAddSearchResultPopupShown))
                 }
         )
     }

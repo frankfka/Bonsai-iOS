@@ -14,6 +14,13 @@ func createLogSearchMiddleware(logService: LogService) -> Middleware<AppState> {
             guard let user = state.global.user else {
                 fatalError("No user initialized when searching")
             }
+            // Check new query is not empty
+            guard !newQuery.isEmptyWithoutWhitespace() else {
+                doInMiddleware {
+                    send(AppAction.createLog(action: .searchDidComplete(results: [])))
+                }
+                return
+            }
             // Perform search
             search(logService: logService, with: newQuery, for: user, in: state.createLog.selectedCategory)
                     .sink(receiveValue: { newAction in
@@ -27,11 +34,6 @@ func createLogSearchMiddleware(logService: LogService) -> Middleware<AppState> {
 }
 
 private func search(logService: LogService, with query: String, for user: User, in category: LogCategory) -> AnyPublisher<AppAction, Never> {
-    if query.isEmptyWithoutWhitespace() {
-        // Don't perform a query, just return empty results
-        // TODO: Figure out thread access
-//        return Just(AppAction.createLog(action: .searchDidComplete(results: []))).eraseToAnyPublisher()
-    }
     return logService.search(with: query, by: user, in: category)
             .map { results in
                 return AppAction.createLog(action: .searchDidComplete(results: results))
@@ -41,10 +43,61 @@ private func search(logService: LogService, with query: String, for user: User, 
             .eraseToAnyPublisher()
 }
 
-// TODO: Add these to app middleware
-//func createLogAddNewItemMiddleware() -> Middleware<AppState> {
-//
-//}
+func createLogAddNewItemMiddleware(logService: LogService) -> Middleware<AppState> {
+    return { state, action, cancellables, send in
+        switch action {
+        case let .createLog(action: .onAddSearchItemPressed(name)):
+            // Check user exists
+            guard let user = state.global.user else {
+                fatalError("No user initialized when searching")
+            }
+            // Check new item is not empty
+            guard !name.isEmptyWithoutWhitespace() else {
+                doInMiddleware {
+                    send(AppAction.createLog(action: .onAddSearchItemFailure(error: AppError(message: "New item name is empty"))))
+                }
+                return
+            }
+            guard let newSearchItem = createSearchItemFromState(state: state.createLog, newItemName: name, user: user) else {
+                doInMiddleware {
+                    send(.createLog(action: .onAddSearchItemFailure(error: AppError(message: "Could not make new search item"))))
+                }
+                return
+            }
+            // Perform save
+            save(logService: logService, logItem: newSearchItem, for: user)
+                    .sink(receiveValue: { newAction in
+                        send(newAction)
+                    })
+                    .store(in: &cancellables)
+        default:
+            break
+        }
+    }
+}
+
+private func save(logService: LogService, logItem: LogSearchable, for user: User) -> AnyPublisher<AppAction, Never> {
+    return logService.save(logItem: logItem, for: user)
+            .map {
+                return AppAction.createLog(action: .onAddSearchItemSuccess(addedItem: logItem))
+            }.catch { (err) -> Just<AppAction> in
+                return Just(AppAction.createLog(action: .onAddSearchItemFailure(error: err)))
+            }
+            .eraseToAnyPublisher()
+}
+
+private func createSearchItemFromState(state: CreateLogState, newItemName: String, user: User) -> LogSearchable? {
+    let itemId = UUID().uuidString
+    let createdBy = user.id
+    let itemName = newItemName.trimmingCharacters(in: .whitespacesAndNewlines)
+    switch state.selectedCategory {
+    case .medication:
+        return Medication(id: itemId, name: itemName, createdBy: createdBy)
+    default:
+        break
+    }
+    return nil
+}
 
 func createLogOnSaveMiddleware(logService: LogService) -> Middleware<AppState> {
     return { state, action, cancellables, send in

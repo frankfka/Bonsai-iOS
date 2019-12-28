@@ -61,8 +61,10 @@ func doInMiddleware(_ action: @escaping VoidCallback) {
     }
 }
 let appMiddleware: [Middleware<AppState>] = [
+    loggingMiddleware(),
     appInitMiddleware(userService: services.userService),
     // Create log
+    createLogAddNewItemMiddleware(logService: services.logService),
     createLogSearchMiddleware(logService: services.logService),
     createLogOnSaveMiddleware(logService: services.logService)
 ]
