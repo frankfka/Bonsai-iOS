@@ -11,12 +11,19 @@ import SwiftUI
 struct RecentLogRow: View {
     
     struct ViewModel: Identifiable {
-        let name: String
-        let category: String
+        internal let id: String
+        let categoryName: String
         let categoryColor: Color
-        let time: String
-        
-        internal let id = UUID()
+        let logName: String
+        let timeString: String
+
+        init(id: String, categoryName: String, categoryColor: Color, logName: String, timeString: String) {
+            self.id = id
+            self.categoryName = categoryName
+            self.categoryColor = categoryColor
+            self.logName = logName
+            self.timeString = timeString
+        }
     }
     
     let viewModel: ViewModel
@@ -28,27 +35,19 @@ struct RecentLogRow: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text(viewModel.name)
+                Text(viewModel.logName)
                     .font(Font.Theme.normalText)
                     .foregroundColor(Color.Theme.textDark)
-                Text(viewModel.category)
+                Text(viewModel.categoryName)
                     .font(Font.Theme.subtext)
                     .foregroundColor(viewModel.categoryColor)
             }
             Spacer()
-            Text(viewModel.time)
+            Text(viewModel.timeString)
                 .font(Font.Theme.subtext)
                 .foregroundColor(Color.Theme.primary)
         }
         .padding(.vertical, CGFloat.Theme.Layout.small)
         .padding(.horizontal, CGFloat.Theme.Layout.normal)
-    }
-}
-
-struct RecentLogRow_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            RecentLogRow(viewModel: RecentLogRow.ViewModel(name: "Vitamin D", category: "Nutrition", categoryColor: Color.Theme.negative, time: "9:00AM"))
-        }.previewLayout(.sizeThatFits)
     }
 }

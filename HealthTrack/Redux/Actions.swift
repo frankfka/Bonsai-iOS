@@ -10,6 +10,7 @@ import Foundation
 
 enum AppAction {
     case global(action: GlobalAction)
+    case homeScreen(action: HomeScreenAction)
     case createLog(action: CreateLogAction)
 }
 
@@ -18,6 +19,13 @@ enum GlobalAction {
     case appDidLaunch
     case initSuccess(user: User)
     case initFailure(error: Error)
+}
+
+enum HomeScreenAction {
+    case screenDidShow
+    case initializeData
+    case dataLoadSuccess(recentLogs: [Loggable])
+    case dataLoadError(error: Error)
 }
 
 enum CreateLogAction {

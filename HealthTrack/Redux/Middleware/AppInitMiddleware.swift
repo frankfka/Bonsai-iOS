@@ -6,7 +6,7 @@
 import Foundation
 import Combine
 
-func appInitMiddleware(userService: UserService) -> Middleware<AppState> {
+func appInitUserMiddleware(userService: UserService) -> Middleware<AppState> {
     return { state, action, cancellables, send in
         switch action {
         case .global(action: .appDidLaunch):

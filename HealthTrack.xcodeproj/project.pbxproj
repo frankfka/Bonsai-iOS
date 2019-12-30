@@ -42,8 +42,10 @@
 		11F445ED239A08D400B501CD /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11F445EC239A08D400B501CD /* Preview Assets.xcassets */; };
 		11F445F0239A08D400B501CD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11F445EE239A08D400B501CD /* LaunchScreen.storyboard */; };
 		953C5DF1E8234D5DB94165DF /* Pods_HealthTrack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A8DC45F5FAA609AD2AB514E /* Pods_HealthTrack.framework */; };
+		9E04B066551BCEEF58E9DB5B /* HomeScreenMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B329C5305296C0C18D78 /* HomeScreenMiddleware.swift */; };
 		9E04B1DC07699EBE5C684C53 /* MedicationLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BC42FA01AF3C727FA0A7 /* MedicationLogView.swift */; };
 		9E04B513CC19B5E2DB63CED9 /* SearchTextObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B763E5A55C21C9EF3E57 /* SearchTextObservable.swift */; };
+		9E04B5451F43ADCBD5CC72FA /* HomeScreenReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BF971048F9F4765391DA /* HomeScreenReducer.swift */; };
 		9E04B5AFF3ADE20F1639D10D /* SearchListItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BA6E51A6CDACF7C60F88 /* SearchListItemRow.swift */; };
 		9E04B5BB7DC27D9DA0B6AAD9 /* FirebaseHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B7E1E4E86978635840E1 /* FirebaseHelpers.swift */; };
 		9E04B5ECE8A4C858E0D30AB7 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BC18297FF062E82106AC /* Utils.swift */; };
@@ -55,8 +57,8 @@
 		9E04B7D8552FA405AEC1E868 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B315B5D54A72FC7B7D71 /* Common.swift */; };
 		9E04B821E25A6B57FABBFC74 /* SearchListResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B80416B6B7E5CB269041 /* SearchListResultsView.swift */; };
 		9E04B83524FD1C31EBE1A9AE /* SearchListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BA6AAC00E25E507C5764 /* SearchListView.swift */; };
+		9E04B869A894D06C1A0F2BDA /* HomeScreenState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B2034124C63454F0CEDC /* HomeScreenState.swift */; };
 		9E04B885AE24CF4A17D9A873 /* LogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B6C42CD67CF8BEF300C2 /* LogService.swift */; };
-		9E04BA1947FAB76C5C1F6314 /* CommonModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B5EBE003AAA8575B4267 /* CommonModels.swift */; };
 		9E04BAB33DC97B591A4C4192 /* GlobalReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B17C034FABD17AEC4BFB /* GlobalReducer.swift */; };
 		9E04BB30BD8E25713D8572AA /* CreateLogState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B2DF23C563EDE7C0BBEE /* CreateLogState.swift */; };
 		9E04BB66ECCD13C94DFBC8B1 /* Popup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BFB9FC87753455D68DDA /* Popup.swift */; };
@@ -114,13 +116,14 @@
 		5224D148B81081E7444187A6 /* Pods-HealthTrack.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthTrack.release.xcconfig"; path = "Target Support Files/Pods-HealthTrack/Pods-HealthTrack.release.xcconfig"; sourceTree = "<group>"; };
 		9E04B116097027786675FBE7 /* FirebaseService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
 		9E04B17C034FABD17AEC4BFB /* GlobalReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalReducer.swift; sourceTree = "<group>"; };
+		9E04B2034124C63454F0CEDC /* HomeScreenState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeScreenState.swift; sourceTree = "<group>"; };
 		9E04B2DF23C563EDE7C0BBEE /* CreateLogState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogState.swift; sourceTree = "<group>"; };
 		9E04B315B5D54A72FC7B7D71 /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
+		9E04B329C5305296C0C18D78 /* HomeScreenMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeScreenMiddleware.swift; sourceTree = "<group>"; };
 		9E04B4A50B14B9F44D696289 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		9E04B5548FA5FE0689E72183 /* CreateLogMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogMiddleware.swift; sourceTree = "<group>"; };
 		9E04B55BF291F8A1B7E4615A /* MedicationSearchListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MedicationSearchListView.swift; sourceTree = "<group>"; };
 		9E04B5D9DCFF8D0157D8B57A /* Medication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Medication.swift; sourceTree = "<group>"; };
-		9E04B5EBE003AAA8575B4267 /* CommonModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonModels.swift; sourceTree = "<group>"; };
 		9E04B6C42CD67CF8BEF300C2 /* LogService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogService.swift; sourceTree = "<group>"; };
 		9E04B6C450860BE65AF311A7 /* UserConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserConstants.swift; sourceTree = "<group>"; };
 		9E04B763E5A55C21C9EF3E57 /* SearchTextObservable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTextObservable.swift; sourceTree = "<group>"; };
@@ -140,6 +143,7 @@
 		9E04BD4984DDBAEC66B08A34 /* DisableInteraction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisableInteraction.swift; sourceTree = "<group>"; };
 		9E04BD4E8ECB33163CBA699C /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		9E04BE18499AF88003242B88 /* StandardPopups.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardPopups.swift; sourceTree = "<group>"; };
+		9E04BF971048F9F4765391DA /* HomeScreenReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeScreenReducer.swift; sourceTree = "<group>"; };
 		9E04BFB9FC87753455D68DDA /* Popup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Popup.swift; sourceTree = "<group>"; };
 		FBC3618C0413FD0172D8BDA1 /* Pods-HealthTrack.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthTrack.debug.xcconfig"; path = "Target Support Files/Pods-HealthTrack/Pods-HealthTrack.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -228,7 +232,6 @@
 				11B4311723A5BBB700909D47 /* Mood.swift */,
 				9E04B4A50B14B9F44D696289 /* User.swift */,
 				9E04B5D9DCFF8D0157D8B57A /* Medication.swift */,
-				9E04B5EBE003AAA8575B4267 /* CommonModels.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -325,6 +328,7 @@
 				9E04B5548FA5FE0689E72183 /* CreateLogMiddleware.swift */,
 				9E04B8C59601E362C76DAABD /* AppInitMiddleware.swift */,
 				9E04BB465D817C71E35F45EF /* LoggingMiddleware.swift */,
+				9E04B329C5305296C0C18D78 /* HomeScreenMiddleware.swift */,
 			);
 			path = Middleware;
 			sourceTree = "<group>";
@@ -344,6 +348,7 @@
 			children = (
 				9E04B9C253490FDA124E251A /* CreateLogReducer.swift */,
 				9E04B17C034FABD17AEC4BFB /* GlobalReducer.swift */,
+				9E04BF971048F9F4765391DA /* HomeScreenReducer.swift */,
 			);
 			path = Reducers;
 			sourceTree = "<group>";
@@ -382,6 +387,7 @@
 			children = (
 				9E04BC484C03DA14EC33586F /* GlobalState.swift */,
 				9E04B2DF23C563EDE7C0BBEE /* CreateLogState.swift */,
+				9E04B2034124C63454F0CEDC /* HomeScreenState.swift */,
 			);
 			path = States;
 			sourceTree = "<group>";
@@ -552,7 +558,6 @@
 				11B4313023AB211B00909D47 /* SearchBar.swift in Sources */,
 				9E04B6DD94E5A95F4D9DCA11 /* FirebaseConstants.swift in Sources */,
 				9E04BC93C6BC7E379AC5D5A7 /* Medication.swift in Sources */,
-				9E04BA1947FAB76C5C1F6314 /* CommonModels.swift in Sources */,
 				9E04B1DC07699EBE5C684C53 /* MedicationLogView.swift in Sources */,
 				9E04B513CC19B5E2DB63CED9 /* SearchTextObservable.swift in Sources */,
 				9E04B6BD53BC62CFB6CE2E1F /* CreateLogMiddleware.swift in Sources */,
@@ -573,6 +578,9 @@
 				9E04BF009A3FCEC39D6F0D59 /* StandardPopups.swift in Sources */,
 				9E04BBC70F549E1E51568666 /* DisableInteraction.swift in Sources */,
 				9E04BE1242E1E56CB9BD4DF4 /* LoggingMiddleware.swift in Sources */,
+				9E04B5451F43ADCBD5CC72FA /* HomeScreenReducer.swift in Sources */,
+				9E04B869A894D06C1A0F2BDA /* HomeScreenState.swift in Sources */,
+				9E04B066551BCEEF58E9DB5B /* HomeScreenMiddleware.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

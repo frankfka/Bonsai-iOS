@@ -39,7 +39,8 @@ struct FirebaseConstants {
 
         // Logs - Medication
         struct Medication {
-            static let UserLogsMedicationIdField = "medicationId"
+            static let CategoryName = "medication"
+            static let IdField = "medicationId"
             static let DosageField = "dosage"
         }
     }

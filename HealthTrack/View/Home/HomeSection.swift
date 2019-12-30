@@ -8,19 +8,20 @@
 
 import SwiftUI
 
-// TODO: Create a viewbuilder from these
-struct HomeSectionWrapper: View {
+struct HomeSectionWrapper<Content>: View where Content: View {
+
     let sectionTitle: String
-    let sectionView: AnyView
-    init(sectionView: AnyView, sectionTitle: String) {
-        self.sectionTitle = sectionTitle
+    let sectionView: () -> Content
+
+    init(sectionTitle: String, sectionView: @escaping () -> Content) {
         self.sectionView = sectionView
+        self.sectionTitle = sectionTitle
     }
-    
+
     var body: some View {
         Section(header: HomeSectionTitle(text: sectionTitle)) {
-            sectionView
-                .modifier(RoundedBorderSection())
+            sectionView()
+                    .modifier(RoundedBorderSection())
         }
     }
 }

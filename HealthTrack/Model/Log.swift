@@ -31,17 +31,17 @@ struct NoteLog: Loggable {
     let notes: String
 }
 
-struct MoodLog: Loggable {
-    let category: LogCategory = .mood
-    let id: String
-    let dateCreated: Date
-    let notes: String
-    let moodRank: MoodRank
-    let moods: [Mood]
-}
+//struct MoodLog: Loggable {
+//    let category: LogCategory = .mood
+//    let id: String
+//    let dateCreated: Date
+//    let notes: String
+//    let moodRank: MoodRank
+//    let moods: [Mood]
+//}
 
 struct MedicationLog: Loggable {
-    let category: LogCategory = .mood
+    let category: LogCategory = .medication
     let id: String
     let dateCreated: Date
     let notes: String

@@ -23,6 +23,35 @@ extension FirebaseService {
         }
         return nil
     }
+
+    func decode(data: [String: Any]) -> Loggable? {
+        guard let logCategoryName = data[FirebaseConstants.Logs.CategoryField] as? String,
+              let logCategory = LogCategory.fromFirebaseLogCategoryName(logCategoryName) else {
+            AppLogging.warn("No log category found in log data: \(data)")
+            return nil
+        }
+        switch logCategory {
+        case .medication:
+            guard let id = data[FirebaseConstants.Logs.IdField] as? String,
+                  let dateCreated = Date.fromFirebaseTimestamp(data[FirebaseConstants.Logs.DateCreatedField]),
+                  let notes = data[FirebaseConstants.Logs.NotesField] as? String,
+                  let medicationId = data[FirebaseConstants.Logs.Medication.IdField] as? String,
+                  let dosage = data[FirebaseConstants.Logs.Medication.DosageField] as? String else {
+                AppLogging.warn("Unable to parse log with data \(data)")
+                return nil
+            }
+            return MedicationLog(
+                    id: id,
+                    dateCreated: dateCreated,
+                    notes: notes,
+                    medicationId: medicationId,
+                    dosage: dosage
+            )
+        default:
+            break
+        }
+        return nil
+    }
 }
 
 // Model extensions for encode/decode
@@ -37,11 +66,18 @@ extension User {
 
     static func decode(data: [String: Any]) -> User? {
         let userId = data[FirebaseConstants.User.IdField] as? String
-        let dateCreated = (data[FirebaseConstants.User.DateCreatedField] as? Timestamp)?.dateValue()
+        let dateCreated = Date.fromFirebaseTimestamp(data[FirebaseConstants.User.DateCreatedField])
         if let userId = userId, let dateCreated = dateCreated {
             return User(id: userId, dateCreated: dateCreated)
         }
         return nil
+    }
+}
+
+// Convert timestamp to date
+extension Date {
+    static func fromFirebaseTimestamp(_ timestamp: Any?) -> Date? {
+        return (timestamp as? Timestamp)?.dateValue()
     }
 }
 
@@ -81,7 +117,7 @@ extension Loggable {
         return [
             FirebaseConstants.Logs.IdField: self.id,
             FirebaseConstants.Logs.DateCreatedField: self.dateCreated,
-            FirebaseConstants.Logs.CategoryField: self.category.rawValue,
+            FirebaseConstants.Logs.CategoryField: self.category.firebaseLogCategoryName(),
             FirebaseConstants.Logs.NotesField: self.notes
         ]
     }
@@ -93,7 +129,7 @@ extension Loggable {
             guard let medicationLog = self as? MedicationLog else {
                 fatalError("Not a medication log but category was medication")
             }
-            data[FirebaseConstants.Logs.Medication.UserLogsMedicationIdField] = medicationLog.medicationId
+            data[FirebaseConstants.Logs.Medication.IdField] = medicationLog.medicationId
             data[FirebaseConstants.Logs.Medication.DosageField] = medicationLog.dosage
         default:
             break
@@ -111,4 +147,32 @@ extension LogCategory {
             return ""
         }
     }
+    func firebaseLogCategoryName() -> String {
+        switch self {
+        case .medication:
+            return FirebaseConstants.Logs.Medication.CategoryName
+        default:
+            return ""
+        }
+    }
+
+    static func fromFirebaseCollectionName(_ name: String) -> LogCategory? {
+        switch name {
+        case FirebaseConstants.Searchable.Medication.Collection:
+            return .medication
+        default:
+            break
+        }
+        return nil
+    }
+    static func fromFirebaseLogCategoryName(_ name: String) -> LogCategory? {
+        switch name {
+        case FirebaseConstants.Logs.Medication.CategoryName:
+            return .medication
+        default:
+            break
+        }
+        return nil
+    }
+
 }

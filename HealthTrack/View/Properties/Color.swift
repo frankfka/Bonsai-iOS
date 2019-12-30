@@ -47,3 +47,19 @@ struct AppColors {
 extension Color {
     static let Theme = AppColors()
 }
+
+struct CategoryColors {
+    static let Medication = Color.init(.systemBlue)
+}
+
+extension LogCategory {
+    func displayColor() -> Color {
+        switch self {
+        case .medication:
+            return CategoryColors.Medication
+        default:
+            break
+        }
+        return Color.black
+    }
+}

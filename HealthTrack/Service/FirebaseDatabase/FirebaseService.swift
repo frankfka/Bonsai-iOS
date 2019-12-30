@@ -9,7 +9,8 @@ import FirebaseFirestore
 
 class FirebaseService: DatabaseService {
 
-    private let queryLimit = 10  // Number of results to return when a user searches
+    private let logQueryLimit = 10 // Number of results to return when user sees logs
+    private let logSearchableQueryLimit = 10  // Number of results to return when a user searches
     private let db: Firestore
 
     init() {
@@ -94,7 +95,7 @@ class FirebaseService: DatabaseService {
                 // Order by name
                 .order(by: FirebaseConstants.Searchable.ItemNameField)
                 // Limit results
-                .limit(to: queryLimit)
+                .limit(to: logSearchableQueryLimit)
                 .getDocuments() { [weak self] (querySnapshot, err) in
                     if let err = err {
                         AppLogging.error("Error in searching \(searchQuery): \(err)")
@@ -123,18 +124,18 @@ class FirebaseService: DatabaseService {
 
     private func save(logItem: LogSearchable, for user: User, onComplete: @escaping ServiceCallback<Void>) {
         self.db.collection(logItem.parentCategory.firebaseCollectionName())
-        .document(logItem.id)
-        .setData(logItem.encode()) { err in
-            if let err = err {
-                AppLogging.error("Error adding log item \(logItem.id) with parent user \(user.id): \(err)")
-                onComplete(.failure(ServiceError(message: "Error saving log item", wrappedError: err)))
-                return
-            } else {
-                AppLogging.debug("Log item saved successfully")
-                onComplete(.success(()))
-                return
-            }
-        }
+                .document(logItem.id)
+                .setData(logItem.encode()) { err in
+                    if let err = err {
+                        AppLogging.error("Error adding log item \(logItem.id) with parent user \(user.id): \(err)")
+                        onComplete(.failure(ServiceError(message: "Error saving log item", wrappedError: err)))
+                        return
+                    } else {
+                        AppLogging.debug("Log item saved successfully")
+                        onComplete(.success(()))
+                        return
+                    }
+                }
     }
 
     func save(log: Loggable, for user: User) -> ServicePublisher<Void> {
@@ -160,6 +161,47 @@ class FirebaseService: DatabaseService {
                         AppLogging.debug("Log saved successfully")
                         onComplete(.success(()))
                         return
+                    }
+                }
+    }
+
+    func get(for user: User, in category: LogCategory?, since date: Date?) -> ServicePublisher<[Loggable]> {
+        let future = ServiceFuture<[Loggable]> { promise in
+            self.get(for: user, in: category, since: date) { result in
+                promise(result)
+            }
+        }
+        return AnyPublisher(future)
+    }
+
+    private func get(for user: User, in category: LogCategory?, since date: Date?, onComplete: @escaping ServiceCallback<[Loggable]>) {
+        self.db.collection(FirebaseConstants.User.Collection)
+                .document(user.id)
+                .collection(FirebaseConstants.Logs.Collection)
+                .order(by: FirebaseConstants.Logs.DateCreatedField, descending: true)
+                .limit(to: logQueryLimit)
+                .getDocuments() { [weak self] (querySnapshot, err) in
+                    if let err = err {
+                        AppLogging.error("Error in fetching logs for user \(user.id): \(err)")
+                        onComplete(
+                                .failure(
+                                        ServiceError(
+                                                message: "Error in fetching logs for user \(user.id): \(err)",
+                                                wrappedError: err
+                                        )
+                                )
+                        )
+                    } else {
+                        var fetchedLogs: [Loggable] = []
+                        for document in querySnapshot!.documents {
+                            if let logResult: Loggable = self?.decode(data: document.data()) {
+                                fetchedLogs.append(logResult)
+                            } else {
+                                AppLogging.warn("Could not decode log")
+                            }
+                        }
+                        AppLogging.debug("Fetched logs successfully for user \(user.id) with \(fetchedLogs.count) items")
+                        onComplete(.success(fetchedLogs))
                     }
                 }
     }

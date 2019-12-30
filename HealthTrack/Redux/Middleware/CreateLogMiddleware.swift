@@ -148,13 +148,24 @@ private func createLogFromState(state: CreateLogState) -> Loggable? {
             AppLogging.warn("Attempted to create medication log with no dosage.")
             break
         }
-        return MedicationLog(id: logId, dateCreated: logDate, notes: state.notes, medicationId: selectedMedication.id, dosage: state.medication.dosage)
+        return MedicationLog(
+                id: logId,
+                dateCreated: logDate,
+                notes: state.notes,
+                medicationId: selectedMedication.id,
+                dosage: state.medication.dosage
+        )
     case .note:
         guard !state.notes.isEmptyWithoutWhitespace() else {
             AppLogging.warn("Attempted to create note log with empty notes.")
             break
         }
-        return NoteLog(id: logId, dateCreated: logDate, notes: state.notes)
+        return NoteLog(
+                id: logId,
+                dateCreated:
+                logDate,
+                notes: state.notes
+        )
     default:
         break
     }

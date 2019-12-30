@@ -10,6 +10,7 @@ import Combine
 
 protocol LogService {
     // CRUD on logs
+    func get(for user: User, in category: LogCategory?, since date: Date?) -> ServicePublisher<[Loggable]>
     func save(log: Loggable, for user: User) -> ServicePublisher<Void>
     func delete(id: String)
     // CRUD on log items (medications, nutrition, etc.)
@@ -24,11 +25,16 @@ class LogServiceImpl: LogService {
         self.db = db
     }
 
+    func get(for user: User, in category: LogCategory? = nil, since date: Date? = nil) -> ServicePublisher<[Loggable]> {
+        return self.db.get(for: user, in: category, since: date)
+    }
+
     func save(logItem: LogSearchable, for user: User) -> ServicePublisher<Void> {
         return self.db.save(logItem: logItem, for: user)
     }
 
     func save(log: Loggable, for user: User) -> ServicePublisher<Void> {
+        AppLogging.debug("Saving log \(log)")
         return self.db.save(log: log, for: user)
     }
 

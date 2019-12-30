@@ -17,6 +17,8 @@ extension AppAction {
         switch self {
         case let .global(action):
             return "Global: \(action.actionName)"
+        case let.homeScreen(action):
+            return "Home Screen: \(action.actionName)"
         case let.createLog(action):
             return "Create Log: \(action.actionName)"
         }
@@ -24,7 +26,7 @@ extension AppAction {
 }
 
 // https://stackoverflow.com/questions/35374588/get-enumeration-name-when-using-associated-values
-extension CreateLogAction {
+extension GlobalAction {
     var actionName: String {
         let mirror = Mirror(reflecting: self)
         if let label = mirror.children.first?.label {
@@ -34,7 +36,17 @@ extension CreateLogAction {
         }
     }
 }
-extension GlobalAction {
+extension HomeScreenAction {
+    var actionName: String {
+        let mirror = Mirror(reflecting: self)
+        if let label = mirror.children.first?.label {
+            return label
+        } else {
+            return String(describing: self)
+        }
+    }
+}
+extension CreateLogAction {
     var actionName: String {
         let mirror = Mirror(reflecting: self)
         if let label = mirror.children.first?.label {

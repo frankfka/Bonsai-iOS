@@ -23,16 +23,17 @@ struct ContentViewContainer: View {
         ContentView(viewModel: getContentViewModel()).environmentObject(self.store)
     }
     
-    func onCreateLogModalDismiss() {
-        self.store.send(.createLog(action: .screenDidDismiss))
-    }
-    
     func getContentViewModel() -> ContentView.ViewModel {
         return ContentView.ViewModel(
             showCreateLogModal: $viewModel.showCreateLogModal,
             tabIndex: $viewModel.tabIndex,
             tabBarViewModel: getTabBarViewModel(),
-            onCreateLogModalDismiss: onCreateLogModalDismiss)
+            onCreateLogModalDismiss: onCreateLogModalDismiss
+        )
+    }
+    
+    func onCreateLogModalDismiss() {
+        self.store.send(.createLog(action: .screenDidDismiss))
     }
     
     func getTabBarViewModel() -> TabBarView.ViewModel {
@@ -47,9 +48,10 @@ struct ContentView: View {
         @Binding var showCreateLogModal: Bool
         @Binding var tabIndex: Int
         let tabBarViewModel: TabBarView.ViewModel
-        let onCreateLogModalDismiss: VoidCallback
+        let onCreateLogModalDismiss: VoidCallback?
         
-        init(showCreateLogModal: Binding<Bool>, tabIndex: Binding<Int>, tabBarViewModel: TabBarView.ViewModel, onCreateLogModalDismiss: @escaping VoidCallback) {
+        init(showCreateLogModal: Binding<Bool>, tabIndex: Binding<Int>, tabBarViewModel: TabBarView.ViewModel,
+             onCreateLogModalDismiss: VoidCallback? = nil) {
             self._showCreateLogModal = showCreateLogModal
             self._tabIndex = tabIndex
             self.tabBarViewModel = tabBarViewModel
@@ -66,7 +68,7 @@ struct ContentView: View {
         
         VStack(spacing: 0) {
             if viewModel.tabIndex == 0 {
-                HomeTab()
+                HomeTabContainer(viewModel: getHomeTabViewModel())
                     .environmentObject(self.store)
             } else {
                 Text("Second tab")
@@ -78,7 +80,7 @@ struct ContentView: View {
         .sheet(
             isPresented: viewModel.$showCreateLogModal,
             onDismiss: {
-                self.viewModel.onCreateLogModalDismiss()
+                self.viewModel.onCreateLogModalDismiss?()
         }) {
             CreateLogView(
                 viewModel: self.getCreateLogViewModel()
@@ -97,6 +99,20 @@ struct ContentView: View {
             createSuccess: createSuccess,
             createError: createError
         )
+    }
+
+    private func getHomeTabViewModel() -> HomeTabContainer.ViewModel {
+        let isLoading = store.state.homeScreen.isLoading
+        let loadError = store.state.homeScreen.initFailure != nil
+        return HomeTabContainer.ViewModel(
+                isLoading: isLoading,
+                loadError: loadError,
+                homeTabDidAppear: onShowHomeTab
+        )
+    }
+
+    private func onShowHomeTab() {
+        self.store.send(.homeScreen(action: .screenDidShow))
     }
     
 }

@@ -26,9 +26,11 @@ extension View {
 
 struct FullScreenLoadingSpinner: View {
     private let size: LoadingSpinner.Size
+    private let isOverlay: Bool
     
-    init(size: LoadingSpinner.Size = .normal) {
+    init(size: LoadingSpinner.Size = .normal, isOverlay: Bool = true) {
         self.size = size
+        self.isOverlay = isOverlay
     }
     
     var body: some View {
@@ -39,7 +41,7 @@ struct FullScreenLoadingSpinner: View {
                 Spacer()
             }
             .frame(width: UIScreen.main.bounds.width, alignment: .center)
-            .background(Color.Theme.overlay)
+            .background(self.isOverlay ? Color.Theme.overlay : Color.Theme.backgroundPrimary)
             .edgesIgnoringSafeArea(.all)
         }
     }

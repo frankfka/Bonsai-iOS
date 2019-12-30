@@ -33,23 +33,25 @@ class Services {
 
 struct AppState {
     var global: GlobalState
+    var homeScreen: HomeScreenState
     var createLog: CreateLogState
 
     init() {
-        createLog = CreateLogState()
         global = GlobalState()
+        homeScreen = HomeScreenState()
+        createLog = CreateLogState()
     }
 }
 
 func appReducer(state: AppState, action: AppAction) -> AppState {
-    let newState: AppState
     switch action {
     case let .global(action):
-        newState = GlobalReducer.reduce(state: state, action: action)
+        return GlobalReducer.reduce(state: state, action: action)
+    case let .homeScreen(action):
+        return HomeScreenReducer.reduce(state: state, action: action)
     case let .createLog(action):
-        newState = CreateLogReducer.reduce(state: state, action: action)
+        return CreateLogReducer.reduce(state: state, action: action)
     }
-    return newState
 }
 
 // Global services wrapper
@@ -62,7 +64,11 @@ func doInMiddleware(_ action: @escaping VoidCallback) {
 }
 let appMiddleware: [Middleware<AppState>] = [
     loggingMiddleware(),
-    appInitMiddleware(userService: services.userService),
+    // App Init
+    appInitUserMiddleware(userService: services.userService),
+    // Home Screen
+    homeScreenDidShowMiddleware(),
+    homeScreenInitMiddleware(logService: services.logService),
     // Create log
     createLogAddNewItemMiddleware(logService: services.logService),
     createLogSearchMiddleware(logService: services.logService),

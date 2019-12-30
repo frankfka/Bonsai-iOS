@@ -8,31 +8,88 @@
 
 import SwiftUI
 
-struct HomeTab: View {
+struct HomeTabContainer: View {
     @EnvironmentObject var store: AppStore
-    
-    init() {
+
+    struct ViewModel {
+        let isLoading: Bool
+        let loadError: Bool
+        let homeTabDidAppear: VoidCallback?
+    }
+    private let viewModel: ViewModel
+
+    init(viewModel: ViewModel) {
+        self.viewModel = viewModel
         // TODO: Using unmonitored UIColor here
         UINavigationBar.appearance().backgroundColor = .secondarySystemGroupedBackground
     }
-    
+
     var body: some View {
-        NavigationView {
-            // TODO: this scrollview goes under status bar
-            ScrollView {
-                VStack(alignment: .leading) {
-                    HomeSectionWrapper(sectionView: AnyView(RecentLogSection()), sectionTitle: "Recent")
-                }
-                .padding(.all, CGFloat.Theme.Layout.normal)
+        VStack {
+            if self.viewModel.isLoading {
+                FullScreenLoadingSpinner(isOverlay: false)
+            } else if self.viewModel.loadError {
+                // TODO: Retry
+                Text("Error")
+            } else {
+                HomeTab(viewModel: self.getHomeTabViewModel())
             }
-            .background(Color.Theme.backgroundPrimary)
-            .navigationBarTitle("Home")
         }
+        .onAppear {
+            self.viewModel.homeTabDidAppear?()
+        }
+        .background(Color.Theme.backgroundPrimary)
+        .navigationBarTitle("Home")
+        .embedInNavigationView()
+        .padding(.top) // Temporary - bug where scrollview goes under the status bar
+    }
+
+    func getHomeTabViewModel() -> HomeTab.ViewModel {
+        return HomeTab.ViewModel()
     }
 }
 
-struct HomeTab_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeTab().environmentObject(AppStore(initialState: AppState(), reducer: appReducer))
+struct HomeTab: View {
+    @EnvironmentObject var store: AppStore
+
+    struct ViewModel {
+
+    }
+    private let viewModel: ViewModel
+    
+    init(viewModel: ViewModel) {
+        self.viewModel = viewModel
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading) {
+                HomeSectionWrapper(sectionTitle: "Recent") {
+                    RecentLogSection(viewModel: self.getRecentLogSectionViewModel())
+                }
+            }
+            .padding(.all, CGFloat.Theme.Layout.normal)
+        }
+        // Use flex frame so it always fills width
+        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: Alignment.topLeading)
+    }
+
+    private func getRecentLogSectionViewModel() -> RecentLogSection.ViewModel {
+        let logViewModels = store.state.homeScreen.recentLogs.map { loggable -> RecentLogRow.ViewModel in
+            RecentLogRow.ViewModel(
+                    id: loggable.id,
+                    categoryName: loggable.category.displayValue(),
+                    categoryColor: loggable.category.displayColor(),
+                    logName: "Temp",
+                    timeString: loggable.dateCreated.description
+            )
+        }
+        return RecentLogSection.ViewModel(recentLogs: logViewModels)
     }
 }
+
+//struct HomeTab_Previews: PreviewProvider {
+//    static var previews: some View {
+//        HomeTab().environmentObject(AppStore(initialState: AppState(), reducer: appReducer))
+//    }
+//}
