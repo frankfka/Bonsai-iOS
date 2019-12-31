@@ -30,7 +30,8 @@ struct SearchListView: View {
             }
         }
         var showAddNew: Bool {
-            !queryIsEmpty
+            !queryIsEmpty &&
+                    results.firstIndex(where: { searchable in searchable.name.lowercased() == query.lowercased()}) == nil
         }
         
         let searchDescriptor: String // Medication, Nutrition, etc.
@@ -101,28 +102,31 @@ struct SearchListView: View {
     }
     
     var body: some View {
-        VStack(spacing: CGFloat.Theme.Layout.normal) {
+        VStack(spacing: 0) {
             SearchBar(searchText: viewModel.$query)
-            if viewModel.showAddNew {
-                AddNewListItemView(viewModel: getAddNewListItemViewModel())
-                    .modifier(RoundedBorderSection())
-                    .padding(.horizontal, CGFloat.Theme.Layout.normal)
-                    .padding(.vertical, CGFloat.Theme.Layout.small)
-            }
-            VStack {
-                HStack {
-                    Text("Search Results")
-                        .font(Font.Theme.heading)
-                        .foregroundColor(Color.Theme.textDark)
-                        .padding(.bottom, CGFloat.Theme.Layout.small)
-                    Spacer()
+            ScrollView {
+                if viewModel.showAddNew {
+                    AddNewListItemView(viewModel: getAddNewListItemViewModel())
+                            .modifier(RoundedBorderSection())
+                            .padding(.horizontal, CGFloat.Theme.Layout.normal)
+                            .padding(.top, CGFloat.Theme.Layout.normal)
                 }
-                getResultView()
-                    .modifier(RoundedBorderSection())
+                VStack {
+                    HStack {
+                        Text("Search Results")
+                                .font(Font.Theme.heading)
+                                .foregroundColor(Color.Theme.textDark)
+                                .padding(.bottom, CGFloat.Theme.Layout.small)
+                        Spacer()
+                    }
+                    getResultView()
+                            .modifier(RoundedBorderSection())
+                }
+                        .padding(.all, CGFloat.Theme.Layout.normal)
             }
-            .padding(.horizontal, CGFloat.Theme.Layout.normal)
-            Spacer()
         }
+                // TODO: Temporary soln to fix bug in swiftui where scrollview scrolls under bottom bar
+                .padding(.bottom, 1.0)
             // Disable/Enable interaction
             .disableInteraction(isDisabled: .constant(self.viewModel.viewDisabled))
             // Loading/Success/Failure States
@@ -160,8 +164,6 @@ struct SearchListView: View {
                     .foregroundColor(Color.Theme.primary)
             }))
             .navigationBarTitle(viewModel.navigationBarTitle)
-            // Background
-            .edgesIgnoringSafeArea(.bottom)
             .background(Color.Theme.backgroundPrimary)
     }
     

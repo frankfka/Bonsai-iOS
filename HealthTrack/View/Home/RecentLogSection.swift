@@ -29,11 +29,25 @@ struct RecentLogSection: View {
                 NoRecentLogsView()
             } else {
                 ForEach(viewModel.recentLogs) { log in
-                    RecentLogRow(viewModel: log)
+                    Group {
+                        RecentLogRow(viewModel: log)
+                        if self.showDivider(after: log) {
+                            Divider()
+                        }
+                    }
                 }
             }
         }
     }
+
+    private func showDivider(after vm: RecentLogRow.ViewModel) -> Bool {
+        if let index = viewModel.recentLogs.firstIndex(where: { log in log.id == vm.id }),
+           index < self.viewModel.recentLogs.count - 1 {
+            return true
+        }
+        return false
+    }
+
 }
 
 struct NoRecentLogsView: View {

@@ -16,14 +16,27 @@ struct SearchResultsView: View {
         self.viewModel = viewModel
     }
     
-    // TODO: Use indexed collection: https://swiftwithmajid.com/2019/12/04/must-have-swiftui-extensions/
     var body: some View {
         VStack {
             ForEach(viewModel.items, id: \.name) { itemViewModel in
-                ListItemRow(viewModel: itemViewModel)
+                Group {
+                    ListItemRow(viewModel: itemViewModel)
+                    if self.showDivider(after: itemViewModel) {
+                        Divider()
+                    }
+                }
             }
         }
     }
+    
+    private func showDivider(after vm: ListItemRow.ViewModel) -> Bool {
+        let index = viewModel.items.firstIndex { item in vm.name == item.name }
+        if let index = index, index < viewModel.items.count - 1 {
+            return true
+        }
+        return false
+    }
+    
 }
 
 struct SearchInfoView: View {
