@@ -124,6 +124,6 @@ struct ContentView_Previews: PreviewProvider {
                 .environment(\.colorScheme, .dark)
             ContentViewContainer()
         }
-        .environmentObject(AppStore(initialState: AppState(), reducer: appReducer))
+        .environmentObject(AppStore(initialState: AppState(), reducer: AppReducer.reduce))
     }
 }

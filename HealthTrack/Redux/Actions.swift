@@ -48,7 +48,7 @@ enum CreateLogAction {
 
     // Save
     case onCreateLogPressed
-    case onCreateLogSuccess
+    case onCreateLogSuccess(newLog: Loggable)
     case onCreateLogFailure(error: Error)
     case createErrorShown
 }

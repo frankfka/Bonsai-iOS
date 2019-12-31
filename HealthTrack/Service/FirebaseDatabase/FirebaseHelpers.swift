@@ -25,28 +25,37 @@ extension FirebaseService {
     }
 
     func decode(data: [String: Any]) -> Loggable? {
+        // Get Category
         guard let logCategoryName = data[FirebaseConstants.Logs.CategoryField] as? String,
               let logCategory = LogCategory.fromFirebaseLogCategoryName(logCategoryName) else {
             AppLogging.warn("No log category found in log data: \(data)")
             return nil
         }
+        // Get common fields
+        guard let id = data[FirebaseConstants.Logs.IdField] as? String,
+              let dateCreated = Date.fromFirebaseTimestamp(data[FirebaseConstants.Logs.DateCreatedField]),
+              let title = data[FirebaseConstants.Logs.TitleField] as? String,
+              let notes = data[FirebaseConstants.Logs.NotesField] as? String else {
+            AppLogging.warn("Could not decode common fields in log data: \(data)")
+            return nil
+        }
         switch logCategory {
         case .medication:
-            guard let id = data[FirebaseConstants.Logs.IdField] as? String,
-                  let dateCreated = Date.fromFirebaseTimestamp(data[FirebaseConstants.Logs.DateCreatedField]),
-                  let notes = data[FirebaseConstants.Logs.NotesField] as? String,
-                  let medicationId = data[FirebaseConstants.Logs.Medication.IdField] as? String,
+            guard let medicationId = data[FirebaseConstants.Logs.Medication.IdField] as? String,
                   let dosage = data[FirebaseConstants.Logs.Medication.DosageField] as? String else {
-                AppLogging.warn("Unable to parse log with data \(data)")
+                AppLogging.warn("Unable to decode medication log with data \(data)")
                 return nil
             }
             return MedicationLog(
                     id: id,
+                    title: title,
                     dateCreated: dateCreated,
                     notes: notes,
                     medicationId: medicationId,
                     dosage: dosage
             )
+        case .note:
+            return NoteLog(id: id, title: title, dateCreated: dateCreated, notes: notes)
         default:
             break
         }
@@ -116,6 +125,7 @@ extension Loggable {
     func encodeCommonFields() -> [String: Any] {
         return [
             FirebaseConstants.Logs.IdField: self.id,
+            FirebaseConstants.Logs.TitleField: self.title,
             FirebaseConstants.Logs.DateCreatedField: self.dateCreated,
             FirebaseConstants.Logs.CategoryField: self.category.firebaseLogCategoryName(),
             FirebaseConstants.Logs.NotesField: self.notes
@@ -131,6 +141,9 @@ extension Loggable {
             }
             data[FirebaseConstants.Logs.Medication.IdField] = medicationLog.medicationId
             data[FirebaseConstants.Logs.Medication.DosageField] = medicationLog.dosage
+        case .note:
+            // No additional fields
+            break
         default:
             break
         }

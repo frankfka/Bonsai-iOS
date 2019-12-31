@@ -163,10 +163,10 @@ struct CreateLogView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             CreateLogView(viewModel: viewModel)
-                .environmentObject(AppStore(initialState: AppState(), reducer: appReducer))
+                .environmentObject(AppStore(initialState: AppState(), reducer: AppReducer.reduce))
             
             CreateLogView(viewModel: viewModel)
-                .environmentObject(AppStore(initialState: AppState(), reducer: appReducer))
+                .environmentObject(AppStore(initialState: AppState(), reducer: AppReducer.reduce))
                 .environment(\.colorScheme, .dark)
         }
     }

@@ -80,7 +80,7 @@ struct HomeTab: View {
                     id: loggable.id,
                     categoryName: loggable.category.displayValue(),
                     categoryColor: loggable.category.displayColor(),
-                    logName: "Temp",
+                    logName: loggable.title,
                     timeString: loggable.dateCreated.description
             )
         }
@@ -90,6 +90,6 @@ struct HomeTab: View {
 
 //struct HomeTab_Previews: PreviewProvider {
 //    static var previews: some View {
-//        HomeTab().environmentObject(AppStore(initialState: AppState(), reducer: appReducer))
+//        HomeTab().environmentObject(AppStore(initialState: AppState(), reducer: AppReducer.reduce))
 //    }
 //}

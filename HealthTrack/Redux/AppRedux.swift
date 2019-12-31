@@ -43,17 +43,6 @@ struct AppState {
     }
 }
 
-func appReducer(state: AppState, action: AppAction) -> AppState {
-    switch action {
-    case let .global(action):
-        return GlobalReducer.reduce(state: state, action: action)
-    case let .homeScreen(action):
-        return HomeScreenReducer.reduce(state: state, action: action)
-    case let .createLog(action):
-        return CreateLogReducer.reduce(state: state, action: action)
-    }
-}
-
 // Global services wrapper
 private let services = Services()
 // Somewhat hacky way to send actions in our naive redux implementation
@@ -62,15 +51,18 @@ func doInMiddleware(_ action: @escaping VoidCallback) {
         action()
     }
 }
-let appMiddleware: [Middleware<AppState>] = [
-    loggingMiddleware(),
-    // App Init
-    appInitUserMiddleware(userService: services.userService),
-    // Home Screen
-    homeScreenDidShowMiddleware(),
-    homeScreenInitMiddleware(logService: services.logService),
-    // Create log
-    createLogAddNewItemMiddleware(logService: services.logService),
-    createLogSearchMiddleware(logService: services.logService),
-    createLogOnSaveMiddleware(logService: services.logService)
-]
+struct AppMiddleware {
+    static func middleware(services: Services) -> [Middleware<AppState>] {
+        var middleware: [Middleware<AppState>] = []
+        // Action Logging
+        middleware.append(loggingMiddleware())
+        // App init
+        middleware.append(contentsOf: AppInitMiddleware.middleware(services: services))
+        // Home screen
+        middleware.append(contentsOf: HomeScreenMiddleware.middleware(services: services))
+        // Create log
+        middleware.append(contentsOf: CreateLogMiddleware.middleware(services: services))
+        
+        return middleware
+    }
+}

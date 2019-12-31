@@ -27,6 +27,6 @@ struct RootView: View {
 
 struct RootView_Previews: PreviewProvider {
     static var previews: some View {
-        RootView().environmentObject(AppStore(initialState: AppState(), reducer: appReducer))
+        RootView().environmentObject(AppStore(initialState: AppState(), reducer: AppReducer.reduce))
     }
 }

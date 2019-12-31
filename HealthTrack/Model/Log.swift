@@ -19,6 +19,8 @@ protocol LogSearchable {
 // Protocol that each log type conforms to
 protocol Loggable {
     var id: String { get }
+    // Add redundant title property to facilitate nosql structure, this way we save a lot of lookups
+    var title: String { get }
     var dateCreated: Date { get }
     var category: LogCategory { get }
     var notes: String { get }
@@ -27,6 +29,7 @@ protocol Loggable {
 struct NoteLog: Loggable {
     let category: LogCategory = .note
     let id: String
+    let title: String
     let dateCreated: Date
     let notes: String
 }
@@ -43,6 +46,7 @@ struct NoteLog: Loggable {
 struct MedicationLog: Loggable {
     let category: LogCategory = .medication
     let id: String
+    let title: String
     let dateCreated: Date
     let notes: String
     let medicationId: String

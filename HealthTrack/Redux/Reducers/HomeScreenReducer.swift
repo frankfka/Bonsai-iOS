@@ -9,7 +9,7 @@ struct HomeScreenReducer {
     static func reduce(state: AppState, action: HomeScreenAction) -> AppState {
         switch action {
         case .screenDidShow:
-            break
+            return state
         case .initializeData:
             return initializeData(state: state)
         case .dataLoadSuccess(let recentLogs):
@@ -17,7 +17,6 @@ struct HomeScreenReducer {
         case .dataLoadError(let error):
             return dataLoadError(state: state, error: error)
         }
-        return state
     }
 
     static private func initializeData(state: AppState) -> AppState {

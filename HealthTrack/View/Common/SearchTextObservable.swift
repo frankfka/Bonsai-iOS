@@ -21,21 +21,20 @@ class SearchTextObservable: ObservableObject {
         }
     }
     let searchSubject = PassthroughSubject<String, Never>()
-    private var searchCancellable: Cancellable? {
+    private var searchDebounceCancellable: Cancellable? {
         didSet {
             oldValue?.cancel()
         }
     }
 
     private let onUpdateText: StringCallback?
-    private let onUpdateTextDebounced: StringCallback?
 
     deinit {
-        searchCancellable?.cancel()
+        searchDebounceCancellable?.cancel()
     }
 
     init(onUpdateText: StringCallback? = nil, onUpdateTextDebounced: StringCallback? = nil) {
-        searchCancellable = searchSubject.eraseToAnyPublisher()
+        searchDebounceCancellable = searchSubject.eraseToAnyPublisher()
                 .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
                 // Remove duplicates that are just whitespace
                 .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
@@ -43,8 +42,6 @@ class SearchTextObservable: ObservableObject {
                 .sink(receiveValue: { (searchText) in
                     onUpdateTextDebounced?(searchText)
                 })
-        // TODO: just use this like in the cancellable above?
         self.onUpdateText = onUpdateText
-        self.onUpdateTextDebounced = onUpdateTextDebounced
     }
 }

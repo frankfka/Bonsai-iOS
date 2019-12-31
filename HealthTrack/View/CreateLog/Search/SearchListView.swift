@@ -10,9 +10,9 @@ import SwiftUI
 import Combine
 
 struct SearchListView: View {
-
+    
     // TODO: Need to test this after exiting page (buggy xcode)
-
+    
     struct ViewModel {
         // Represents the type of view to show within the search results container
         enum ResultViewType {

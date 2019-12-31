@@ -34,6 +34,7 @@ struct FirebaseConstants {
         static let Collection = "logs"
         static let CategoryField = "category"
         static let IdField = "logId"
+        static let TitleField = "title"
         static let DateCreatedField = "dateCreated"
         static let NotesField = "notes"
 
@@ -42,6 +43,11 @@ struct FirebaseConstants {
             static let CategoryName = "medication"
             static let IdField = "medicationId"
             static let DosageField = "dosage"
+        }
+
+        // Logs - Notes
+        struct Note {
+            // Nothing as of yet
         }
     }
 }
