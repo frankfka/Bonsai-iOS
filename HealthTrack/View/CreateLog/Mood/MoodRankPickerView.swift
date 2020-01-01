@@ -11,19 +11,34 @@ import SwiftUI
 struct MoodRankPickerView: View {
     
     struct ViewModel {
-        let moods: [MoodRank]
-        @Binding var selectedMoodRank: Int
+        let moodRanks: [MoodRank]
+        let selectedMoodRankIndex: Int?
+        let onMoodRankTap: IntCallback?
+
+        init(moodRanks: [MoodRank], selectedMoodRankIndex: Int? = nil, onMoodRankTap: IntCallback? = nil) {
+            self.moodRanks = moodRanks
+            self.selectedMoodRankIndex = selectedMoodRankIndex
+            self.onMoodRankTap = onMoodRankTap
+        }
     }
     let viewModel: ViewModel
     
     var body: some View {
         HStack(spacing: CGFloat.Theme.Layout.normal) {
             Spacer()
-            ForEach(0..<self.viewModel.moods.count) { index in
-                Image(systemName: self.getImageNameForMood(for: self.viewModel.moods[index], isSelected: self.viewModel.selectedMoodRank == index))
+            ForEach(0..<self.viewModel.moodRanks.count) { index in
+                Image(
+                        systemName: self.getImageNameForMood(
+                                for: self.viewModel.moodRanks[index],
+                                isSelected: self.viewModel.selectedMoodRankIndex == index
+                        )
+                )
                     .resizable()
-                    .foregroundColor(self.viewModel.selectedMoodRank == index ? self.getSelectedIconColor(for: self.viewModel.moods[index]) : Color.Theme.grayscalePrimary)
+                    .foregroundColor(self.getIconColor(for: index))
                     .frame(width: CGFloat.Theme.Font.largeIcon, height: CGFloat.Theme.Font.largeIcon)
+                    .onTapGesture {
+                        self.viewModel.onMoodRankTap?(index)
+                    }
                     .padding(CGFloat.Theme.Layout.normal)
             }
             Spacer()
@@ -39,6 +54,11 @@ struct MoodRankPickerView: View {
         case .positive:
             return isSelected ? "3.circle.fill" : "3.circle"
         }
+    }
+
+    private func getIconColor(for index: Int) -> Color {
+        return viewModel.selectedMoodRankIndex == index ?
+                getSelectedIconColor(for: viewModel.moodRanks[index]) : Color.Theme.grayscalePrimary
     }
     
     private func getSelectedIconColor(for moodRank: MoodRank) -> Color {
@@ -58,17 +78,17 @@ struct MoodRankPickerView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             MoodRankPickerView(viewModel: MoodRankPickerView.ViewModel(
-                moods: MoodRank.allCases,
-                selectedMoodRank: .constant(0)
+                moodRanks: MoodRank.allCases,
+                selectedMoodRankIndex: 0
             ))
             MoodRankPickerView(viewModel: MoodRankPickerView.ViewModel(
-                moods: MoodRank.allCases,
-                selectedMoodRank: .constant(2)
+                moodRanks: MoodRank.allCases,
+                selectedMoodRankIndex: 2
             ))
             
             MoodRankPickerView(viewModel: MoodRankPickerView.ViewModel(
-                moods: MoodRank.allCases,
-                selectedMoodRank: .constant(1)
+                moodRanks: MoodRank.allCases,
+                selectedMoodRankIndex: 1
                 )).environment(\.colorScheme, .dark)
         }
         .previewLayout(.sizeThatFits)

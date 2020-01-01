@@ -8,10 +8,11 @@
 
 import Foundation
 
-enum MoodRank: CaseIterable {
-    case negative
-    case neutral
-    case positive
+// Int values are used for encoding/decoding
+enum MoodRank: Int, CaseIterable {
+    case negative = -10
+    case neutral = 0
+    case positive = 10
 }
 
 struct Mood: LogSearchable {

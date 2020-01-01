@@ -123,9 +123,9 @@ struct CreateLogView: View {
         case .activity:
             return AnyView(EmptyView())
         case .mood:
-            return AnyView(EmptyView())
+            return MoodLogView().eraseToAnyView()
         case .medication:
-            return AnyView(MedicationLogView())
+            return MedicationLogView().eraseToAnyView()
         }
     }
     

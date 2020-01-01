@@ -145,10 +145,26 @@ struct CreateLogMiddleware {
                 .eraseToAnyPublisher()
     }
 
+    // Fetches state and creates the corresponding Loggable struct to save
     private static func createLogFromState(state: CreateLogState) -> Loggable? {
         let logId = UUID().uuidString
         let logDate = Date()
+        let logNotes = state.notes
         switch state.selectedCategory {
+        case .mood:
+            guard let selectedMoodRankIndex = state.mood.selectedMoodRankIndex,
+                  selectedMoodRankIndex < state.mood.allMoodRanks.count else {
+                AppLogging.warn("Invalid mood rank selection to create a log.")
+                break
+            }
+            let selectedMoodRank = state.mood.allMoodRanks[selectedMoodRankIndex]
+            return MoodLog(
+                    id: logId,
+                    title: selectedMoodRank.description,
+                    dateCreated: logDate,
+                    notes: logNotes,
+                    moodRank: selectedMoodRank
+            )
         case .medication:
             guard let selectedMedication = state.medication.selectedMedication else {
                 AppLogging.warn("Attempted to create medication log with no selected medication.")
@@ -162,24 +178,39 @@ struct CreateLogMiddleware {
                     id: logId,
                     title: selectedMedication.name,
                     dateCreated: logDate,
-                    notes: state.notes,
+                    notes: logNotes,
                     medicationId: selectedMedication.id,
                     dosage: state.medication.dosage
             )
         case .note:
-            guard !state.notes.isEmptyWithoutWhitespace() else {
+            guard !logNotes.isEmptyWithoutWhitespace() else {
                 AppLogging.warn("Attempted to create note log with empty notes.")
                 break
             }
             return NoteLog(
                     id: logId,
-                    title: state.notes,
+                    title: logNotes,
                     dateCreated: logDate,
-                    notes: state.notes
+                    notes: logNotes
             )
         default:
             break
         }
         return nil
+    }
+}
+
+// Helper extensions
+extension MoodRank {
+    // TODO: Probably don't need this. We can parse selected mood rank ID or something to get a display value?
+     var description: String {
+        switch self {
+        case .negative:
+            return "Bad Mood"
+        case .neutral:
+            return "Neutral Mood"
+        case .positive:
+            return "Good Mood"
+        }
     }
 }

@@ -45,9 +45,15 @@ struct FirebaseConstants {
             static let DosageField = "dosage"
         }
 
+        // Logs - Mood
+        struct Mood {
+            static let CategoryName = "mood"
+            static let MoodRankField = "moodRank"
+        }
+
         // Logs - Notes
         struct Note {
-            // Nothing as of yet
+            static let CategoryName = "note"
         }
     }
 }

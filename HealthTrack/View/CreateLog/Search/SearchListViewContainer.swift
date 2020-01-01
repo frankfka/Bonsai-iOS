@@ -6,7 +6,7 @@
 import SwiftUI
 
 // Wrapper around search list view for medications
-struct MedicationSearchListView: View {
+struct SearchListViewContainer: View {
     @EnvironmentObject var store: AppStore
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State var searchTextObservable: SearchTextObservable
@@ -25,7 +25,7 @@ struct MedicationSearchListView: View {
 
     func getSearchListViewModel() -> SearchListView.ViewModel {
         return SearchListView.ViewModel(
-                searchDescriptor: LogCategory.medication.displayValue(plural: true),
+                searchDescriptor: store.state.createLog.selectedCategory.displayValue(plural: true),
                 query: Binding<String>(get: {
                     return self.searchTextObservable.searchText
                 }, set: { newVal in

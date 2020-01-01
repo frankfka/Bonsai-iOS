@@ -27,7 +27,7 @@ struct MedicationLogView: View {
     var body: some View {
         VStack(spacing: 0) {
             NavigationLink(
-                    destination: MedicationSearchListView(
+                    destination: SearchListViewContainer(
                             onUpdateQueryDebounced: onUpdateQueryDebounced
                     )
                             .environmentObject(store)

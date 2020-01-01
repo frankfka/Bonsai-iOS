@@ -8,7 +8,9 @@ import Foundation
 struct CreateLogState {
 
     struct MoodLogState {
-        var selectedMoodIds: [String] = []
+        let allMoodRanks: [MoodRank] = MoodRank.allCases
+        var selectedMoodRankIndex: Int? = nil
+        var selectedMoods: [Mood] = []  // TODO: not implemented
     }
     struct MedicationLogState {
         var selectedMedication: Medication? = nil
@@ -49,6 +51,8 @@ extension CreateLogState {
         switch selectedCategory {
         case .note:
             return !notes.isEmptyWithoutWhitespace()
+        case .mood:
+            return mood.selectedMoodRankIndex != nil
         case .medication:
             return medication.selectedMedication != nil && !medication.dosage.isEmptyWithoutWhitespace()
         default:

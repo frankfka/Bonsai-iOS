@@ -40,6 +40,13 @@ extension FirebaseService {
             return nil
         }
         switch logCategory {
+        case .mood:
+            guard let moodRankEncoded = data[FirebaseConstants.Logs.Mood.MoodRankField] as? Int,
+                  let moodRank = MoodRank(rawValue: moodRankEncoded) else {
+                AppLogging.warn("Unable to decode mood rank with data \(data)")
+                return nil
+            }
+            return MoodLog(id: id, title: title, dateCreated: dateCreated, notes: notes, moodRank: moodRank)
         case .medication:
             guard let medicationId = data[FirebaseConstants.Logs.Medication.IdField] as? String,
                   let dosage = data[FirebaseConstants.Logs.Medication.DosageField] as? String else {
@@ -135,6 +142,11 @@ extension Loggable {
     func encode() -> [String: Any] {
         var data = self.encodeCommonFields()
         switch self.category {
+        case .mood:
+            guard let moodLog = self as? MoodLog else {
+                fatalError("Not a mood log but category was mood")
+            }
+            data[FirebaseConstants.Logs.Mood.MoodRankField] = moodLog.moodRank.rawValue
         case .medication:
             guard let medicationLog = self as? MedicationLog else {
                 fatalError("Not a medication log but category was medication")
@@ -151,6 +163,7 @@ extension Loggable {
     }
 }
 
+// Extension for log category lookup names
 extension LogCategory {
     func firebaseCollectionName() -> String {
         switch self {
@@ -162,8 +175,12 @@ extension LogCategory {
     }
     func firebaseLogCategoryName() -> String {
         switch self {
+        case .mood:
+            return FirebaseConstants.Logs.Mood.CategoryName
         case .medication:
             return FirebaseConstants.Logs.Medication.CategoryName
+        case .note:
+            return FirebaseConstants.Logs.Note.CategoryName
         default:
             return ""
         }
@@ -182,10 +199,13 @@ extension LogCategory {
         switch name {
         case FirebaseConstants.Logs.Medication.CategoryName:
             return .medication
+        case FirebaseConstants.Logs.Mood.CategoryName:
+            return .mood
+        case FirebaseConstants.Logs.Note.CategoryName:
+            return .note
         default:
             break
         }
         return nil
     }
-
 }

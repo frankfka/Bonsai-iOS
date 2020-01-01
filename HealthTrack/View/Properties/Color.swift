@@ -49,14 +49,20 @@ extension Color {
 }
 
 struct CategoryColors {
+    static let Mood = Color.init(.systemRed)
+    static let Note = Color.init(.systemPurple)
     static let Medication = Color.init(.systemBlue)
 }
 
 extension LogCategory {
     func displayColor() -> Color {
         switch self {
+        case .mood:
+            return CategoryColors.Mood
         case .medication:
             return CategoryColors.Medication
+        case .note:
+            return CategoryColors.Note
         default:
             break
         }

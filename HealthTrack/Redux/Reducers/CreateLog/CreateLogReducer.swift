@@ -34,6 +34,10 @@ struct CreateLogReducer {
         case .onAddSearchResultPopupShown:
             return onAddSearchResultPopupShown(state: state)
 
+        // Mood
+        case .moodRankSelected(let selectedIndex):
+            return moodRankSelected(state: state, selectedIndex: selectedIndex)
+
         // Medication
         case .dosageDidChange(let newDosage):
             return medicationDosageDidChange(state: state, newDosage: newDosage)
@@ -50,6 +54,7 @@ struct CreateLogReducer {
         }
     }
 
+    // MARK: General
     private static func resetCreateLogState(state: AppState) -> AppState {
         var newState = state
         newState.createLog = CreateLogState()
@@ -69,6 +74,7 @@ struct CreateLogReducer {
         return newState
     }
 
+    // MARK: Search
     private static func searchQueryDidChange(state: AppState) -> AppState {
         var newState = state
         newState.createLog.isSearching = true
@@ -133,12 +139,26 @@ struct CreateLogReducer {
         return newState
     }
 
+    // MARK: Mood
+    private static func moodRankSelected(state: AppState, selectedIndex: Int) -> AppState {
+        var newState = state
+        if newState.createLog.mood.selectedMoodRankIndex == selectedIndex {
+            // Tapping on already selected item - deselect
+            newState.createLog.mood.selectedMoodRankIndex = nil
+        } else {
+            newState.createLog.mood.selectedMoodRankIndex = selectedIndex
+        }
+        return newState
+    }
+
+    // MARK: Medication
     private static func medicationDosageDidChange(state: AppState, newDosage: String) -> AppState {
         var newState = state
         newState.createLog.medication.dosage = newDosage
         return newState
     }
 
+    // MARK: Create
     private static func onCreateLogPressed(state: AppState) -> AppState {
         var newState = state
         newState.createLog.isCreatingLog = true

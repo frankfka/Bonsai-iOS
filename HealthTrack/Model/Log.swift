@@ -34,14 +34,14 @@ struct NoteLog: Loggable {
     let notes: String
 }
 
-//struct MoodLog: Loggable {
-//    let category: LogCategory = .mood
-//    let id: String
-//    let dateCreated: Date
-//    let notes: String
-//    let moodRank: MoodRank
-//    let moods: [Mood]
-//}
+struct MoodLog: Loggable {
+    let category: LogCategory = .mood
+    let id: String
+    let title: String
+    let dateCreated: Date
+    let notes: String
+    let moodRank: MoodRank
+}
 
 struct MedicationLog: Loggable {
     let category: LogCategory = .medication
@@ -53,13 +53,13 @@ struct MedicationLog: Loggable {
     let dosage: String
 }
 
-enum LogCategory: String, CaseIterable {
-    case note = "note"
-    case symptom = "symptom"
-    case nutrition = "nutrition"
-    case activity = "activity"
-    case mood = "mood"
-    case medication = "medication"
+enum LogCategory: CaseIterable {
+    case note
+    case symptom
+    case nutrition
+    case activity
+    case mood
+    case medication
     
     func displayValue(plural: Bool = false) -> String {
         switch self {

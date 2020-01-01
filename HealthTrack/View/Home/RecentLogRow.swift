@@ -33,17 +33,24 @@ struct RecentLogRow: View {
     }
     
     var body: some View {
+        // TODO: Preview to play with frames
+        // TODO: String formatting for time
         HStack {
             VStack(alignment: .leading) {
                 Text(viewModel.logName)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
                     .font(Font.Theme.normalText)
                     .foregroundColor(Color.Theme.textDark)
                 Text(viewModel.categoryName)
+                    .lineLimit(1)
                     .font(Font.Theme.subtext)
                     .foregroundColor(viewModel.categoryColor)
             }
-            Spacer()
+            // TODO: Put this in the other places
+            Spacer(minLength: CGFloat.Theme.Layout.small)
             Text(viewModel.timeString)
+                .lineLimit(1)
                 .font(Font.Theme.subtext)
                 .foregroundColor(Color.Theme.primary)
         }

@@ -43,6 +43,9 @@ enum CreateLogAction {
     case onAddSearchItemFailure(error: Error)
     case onAddSearchResultPopupShown
 
+    // Mood
+    case moodRankSelected(selectedIndex: Int)
+
     // Medications
     case dosageDidChange(newDosage: String)
 
