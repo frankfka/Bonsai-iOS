@@ -30,10 +30,10 @@ struct TappableRowView: View {
     var body: some View {
         HStack {
             Text(viewModel.primaryText)
+                .lineLimit(1)
                 .font(Font.Theme.boldNormalText)
                 .foregroundColor(Color.Theme.textDark)
-            Spacer()
-                .frame(minWidth: CGFloat.Theme.Layout.normal)
+            Spacer(minLength: CGFloat.Theme.Layout.rowSeparator)
             Text(viewModel.secondaryText)
                 .lineLimit(1)
                 .truncationMode(.tail)

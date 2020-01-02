@@ -33,6 +33,7 @@ struct AppDimensions {
         // Padding
         let normal: CGFloat!
         let small: CGFloat!
+        let rowSeparator: CGFloat! // Padding between elements aligned on left and right of the row
         
         let cornerRadius: CGFloat!
         
@@ -42,6 +43,7 @@ struct AppDimensions {
         init() {
             normal = 16
             small = 8
+            rowSeparator = 64
             
             cornerRadius = 24
             

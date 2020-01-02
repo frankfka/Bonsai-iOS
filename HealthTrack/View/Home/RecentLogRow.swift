@@ -33,28 +33,52 @@ struct RecentLogRow: View {
     }
     
     var body: some View {
-        // TODO: Preview to play with frames
-        // TODO: String formatting for time
         HStack {
             VStack(alignment: .leading) {
-                Text(viewModel.logName)
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-                    .font(Font.Theme.normalText)
-                    .foregroundColor(Color.Theme.textDark)
-                Text(viewModel.categoryName)
+                Text(self.viewModel.logName)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                        .font(Font.Theme.normalText)
+                        .foregroundColor(Color.Theme.textDark)
+                Text(self.viewModel.categoryName)
+                        .lineLimit(1)
+                        .font(Font.Theme.subtext)
+                        .foregroundColor(self.viewModel.categoryColor)
+            }
+            Spacer(minLength: CGFloat.Theme.Layout.rowSeparator)
+            Text(self.viewModel.timeString)
                     .lineLimit(1)
                     .font(Font.Theme.subtext)
-                    .foregroundColor(viewModel.categoryColor)
-            }
-            // TODO: Put this in the other places
-            Spacer(minLength: CGFloat.Theme.Layout.small)
-            Text(viewModel.timeString)
-                .lineLimit(1)
-                .font(Font.Theme.subtext)
-                .foregroundColor(Color.Theme.primary)
+                    .foregroundColor(Color.Theme.primary)
         }
         .padding(.vertical, CGFloat.Theme.Layout.small)
         .padding(.horizontal, CGFloat.Theme.Layout.normal)
+        .contentShape(Rectangle())
+    }
+}
+
+struct RecentLogRow_Previews: PreviewProvider {
+
+    private static var medicationLogVm: RecentLogRow.ViewModel = RecentLogRow.ViewModel(
+            id: "",
+            categoryName: LogCategory.medication.displayValue(),
+            categoryColor: LogCategory.medication.displayColor(),
+            logName: "Advil",
+            timeString: "Jan 1, 2020"
+    )
+    
+    private static var noteLogVm: RecentLogRow.ViewModel = RecentLogRow.ViewModel(
+            id: "",
+            categoryName: LogCategory.note.displayValue(),
+            categoryColor: LogCategory.note.displayColor(),
+            logName: "This is a Long Testing Note Testing Testing Test",
+            timeString: "Jan 1, 2020"
+    )
+
+    static var previews: some View {
+        Group {
+            RecentLogRow(viewModel: medicationLogVm)
+            RecentLogRow(viewModel: noteLogVm)
+        }.previewLayout(.sizeThatFits)
     }
 }
