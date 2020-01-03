@@ -165,6 +165,24 @@ struct CreateLogMiddleware {
                     notes: logNotes,
                     moodRank: selectedMoodRank
             )
+        case .nutrition:
+            // TODO: Text field for amount, then test & commit
+            guard let selectedNutrition = state.nutrition.selectedItem else {
+                AppLogging.warn("Attempted to create a nutrition log with no selected nutrition item.")
+                break
+            }
+            guard !state.nutrition.amount.isEmptyWithoutWhitespace() else {
+                AppLogging.warn("Attempted to create a nutrition log with no amount.")
+                break
+            }
+            return NutritionLog(
+                    id: logId,
+                    title: selectedNutrition.name,
+                    dateCreated: logDate,
+                    notes: logNotes,
+                    nutritionItemId: selectedNutrition.id,
+                    amount: state.nutrition.amount
+            )
         case .medication:
             guard let selectedMedication = state.medication.selectedMedication else {
                 AppLogging.warn("Attempted to create medication log with no selected medication.")

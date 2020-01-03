@@ -39,8 +39,12 @@ struct CreateLogReducer {
             return moodRankSelected(state: state, selectedIndex: selectedIndex)
 
         // Medication
-        case .dosageDidChange(let newDosage):
+        case .medicationDosageDidChange(let newDosage):
             return medicationDosageDidChange(state: state, newDosage: newDosage)
+
+        // Nutrition
+        case .nutritionAmountDidChange(let newAmount):
+            return nutritionAmountDidChange(state: state, newAmount: newAmount)
 
         // Save
         case .onCreateLogPressed:
@@ -133,6 +137,11 @@ struct CreateLogReducer {
                 fatalError("Search result is not a medication but the selected category is medication")
             }
             newState.createLog.medication.selectedMedication = selectedMedication
+        case .nutrition:
+            guard let selectedNutrition = selected as? NutritionItem else {
+                fatalError("Search result is not a nutrition item but the selected category is nutrition")
+            }
+            newState.createLog.nutrition.selectedItem = selectedNutrition
         default:
             break
         }
@@ -155,6 +164,13 @@ struct CreateLogReducer {
     private static func medicationDosageDidChange(state: AppState, newDosage: String) -> AppState {
         var newState = state
         newState.createLog.medication.dosage = newDosage
+        return newState
+    }
+
+    // MARK: Nutrition
+    private static func nutritionAmountDidChange(state: AppState, newAmount: String) -> AppState {
+        var newState = state
+        newState.createLog.nutrition.amount = newAmount
         return newState
     }
 

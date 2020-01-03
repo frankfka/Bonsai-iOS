@@ -85,7 +85,11 @@ class FirebaseService: DatabaseService {
 
     private func search(query: String, by user: User, in category: LogCategory, onComplete: @escaping ServiceCallback<[LogSearchable]>) {
         let searchQuery = query.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
-        self.db.collection(category.firebaseCollectionName())
+        guard let collectionName = category.firebaseLogSearchableCollectionName() else {
+            onComplete(.failure(ServiceError(message: "Not a searchable category")))
+            return
+        }
+        self.db.collection(collectionName)
                 // Search the searchTerms array for match
                 .whereField(FirebaseConstants.Searchable.SearchTermsField, arrayContains: searchQuery)
                 // Limit to commonly available items + items created by user
@@ -123,7 +127,11 @@ class FirebaseService: DatabaseService {
     }
 
     private func save(logItem: LogSearchable, for user: User, onComplete: @escaping ServiceCallback<Void>) {
-        self.db.collection(logItem.parentCategory.firebaseCollectionName())
+        guard let collectionName = logItem.parentCategory.firebaseLogSearchableCollectionName() else {
+            onComplete(.failure(ServiceError(message: "Not a searchable category")))
+            return
+        }
+        self.db.collection(collectionName)
                 .document(logItem.id)
                 .setData(logItem.encode()) { err in
                     if let err = err {

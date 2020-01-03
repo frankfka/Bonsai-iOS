@@ -57,7 +57,7 @@ struct MedicationLogView: View {
                 dosage: Binding<String>(get: {
                     medicationLogState.dosage
                 }, set: { newDosage in
-                    self.store.send(.createLog(action: .dosageDidChange(newDosage: newDosage)))
+                    self.store.send(.createLog(action: .medicationDosageDidChange(newDosage: newDosage)))
                 })
         )
     }

@@ -52,6 +52,9 @@ struct CategoryColors {
     static let Mood = Color.init(.systemRed)
     static let Note = Color.init(.systemPurple)
     static let Medication = Color.init(.systemBlue)
+    static let Nutrition = Color.init(.systemGreen)
+    static let Activity = Color.init(.systemYellow)
+    static let Symptom = Color.init(.systemOrange)
 }
 
 extension LogCategory {
@@ -63,9 +66,12 @@ extension LogCategory {
             return CategoryColors.Medication
         case .note:
             return CategoryColors.Note
-        default:
-            break
+        case .nutrition:
+            return CategoryColors.Nutrition
+        case .activity:
+            return CategoryColors.Activity
+        case .symptom:
+            return CategoryColors.Symptom
         }
-        return Color.black
     }
 }

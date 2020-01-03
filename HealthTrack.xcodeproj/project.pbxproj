@@ -44,6 +44,7 @@
 		953C5DF1E8234D5DB94165DF /* Pods_HealthTrack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A8DC45F5FAA609AD2AB514E /* Pods_HealthTrack.framework */; };
 		9E04B066551BCEEF58E9DB5B /* HomeScreenMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B329C5305296C0C18D78 /* HomeScreenMiddleware.swift */; };
 		9E04B1DC07699EBE5C684C53 /* MedicationLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BC42FA01AF3C727FA0A7 /* MedicationLogView.swift */; };
+		9E04B1F285BD40EB2E48688C /* SymptomLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B359724D8C94ED1CFA37 /* SymptomLogView.swift */; };
 		9E04B513CC19B5E2DB63CED9 /* SearchTextObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B763E5A55C21C9EF3E57 /* SearchTextObservable.swift */; };
 		9E04B5451F43ADCBD5CC72FA /* HomeScreenReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BF971048F9F4765391DA /* HomeScreenReducer.swift */; };
 		9E04B5AFF3ADE20F1639D10D /* SearchListItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BA6E51A6CDACF7C60F88 /* SearchListItemRow.swift */; };
@@ -52,6 +53,7 @@
 		9E04B642138C647CA21FCBE5 /* AppInitMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B8C59601E362C76DAABD /* AppInitMiddleware.swift */; };
 		9E04B6BD53BC62CFB6CE2E1F /* CreateLogMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B5548FA5FE0689E72183 /* CreateLogMiddleware.swift */; };
 		9E04B6DD94E5A95F4D9DCA11 /* FirebaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B9C8FD3C64EAA23028B0 /* FirebaseConstants.swift */; };
+		9E04B7090408200D01C3F015 /* Nutrition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B0FA059903598F57AE95 /* Nutrition.swift */; };
 		9E04B755EF3C338636399E89 /* GlobalState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BC484C03DA14EC33586F /* GlobalState.swift */; };
 		9E04B7C8274F27A34D900D11 /* SearchAddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BA16DE33AF23CFDC1835 /* SearchAddItemView.swift */; };
 		9E04B7D8552FA405AEC1E868 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B315B5D54A72FC7B7D71 /* Common.swift */; };
@@ -61,6 +63,7 @@
 		9E04B885AE24CF4A17D9A873 /* LogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B6C42CD67CF8BEF300C2 /* LogService.swift */; };
 		9E04B8EC811016356918B8F3 /* SearchListViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B66DB477D3F118D5DA41 /* SearchListViewContainer.swift */; };
 		9E04B9D7A2C47A6811AD6B68 /* CreateLogReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B9E047AF6360BBDE7F04 /* CreateLogReducer.swift */; };
+		9E04B9DD062519A86C6F3CD9 /* NutritionLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BC48C0B7BB0F4682BE68 /* NutritionLogView.swift */; };
 		9E04BAB33DC97B591A4C4192 /* GlobalReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B17C034FABD17AEC4BFB /* GlobalReducer.swift */; };
 		9E04BB1C25373057C19F19B9 /* AppReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B11F0B3A84BA18DFF035 /* AppReducer.swift */; };
 		9E04BB30BD8E25713D8572AA /* CreateLogState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B2DF23C563EDE7C0BBEE /* CreateLogState.swift */; };
@@ -115,6 +118,7 @@
 		11F445F1239A08D400B501CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4A8DC45F5FAA609AD2AB514E /* Pods_HealthTrack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HealthTrack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5224D148B81081E7444187A6 /* Pods-HealthTrack.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthTrack.release.xcconfig"; path = "Target Support Files/Pods-HealthTrack/Pods-HealthTrack.release.xcconfig"; sourceTree = "<group>"; };
+		9E04B0FA059903598F57AE95 /* Nutrition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Nutrition.swift; sourceTree = "<group>"; };
 		9E04B116097027786675FBE7 /* FirebaseService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
 		9E04B11F0B3A84BA18DFF035 /* AppReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppReducer.swift; sourceTree = "<group>"; };
 		9E04B17C034FABD17AEC4BFB /* GlobalReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalReducer.swift; sourceTree = "<group>"; };
@@ -122,6 +126,7 @@
 		9E04B2DF23C563EDE7C0BBEE /* CreateLogState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogState.swift; sourceTree = "<group>"; };
 		9E04B315B5D54A72FC7B7D71 /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		9E04B329C5305296C0C18D78 /* HomeScreenMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeScreenMiddleware.swift; sourceTree = "<group>"; };
+		9E04B359724D8C94ED1CFA37 /* SymptomLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SymptomLogView.swift; sourceTree = "<group>"; };
 		9E04B4A50B14B9F44D696289 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		9E04B5548FA5FE0689E72183 /* CreateLogMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogMiddleware.swift; sourceTree = "<group>"; };
 		9E04B5D9DCFF8D0157D8B57A /* Medication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Medication.swift; sourceTree = "<group>"; };
@@ -142,6 +147,7 @@
 		9E04BC18297FF062E82106AC /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		9E04BC42FA01AF3C727FA0A7 /* MedicationLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MedicationLogView.swift; sourceTree = "<group>"; };
 		9E04BC484C03DA14EC33586F /* GlobalState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalState.swift; sourceTree = "<group>"; };
+		9E04BC48C0B7BB0F4682BE68 /* NutritionLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NutritionLogView.swift; sourceTree = "<group>"; };
 		9E04BD4984DDBAEC66B08A34 /* DisableInteraction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisableInteraction.swift; sourceTree = "<group>"; };
 		9E04BD4E8ECB33163CBA699C /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		9E04BE18499AF88003242B88 /* StandardPopups.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardPopups.swift; sourceTree = "<group>"; };
@@ -210,6 +216,8 @@
 				114B742E23A1E3D40095D44B /* LogCategoryView.swift */,
 				11B4312823A8A12C00909D47 /* TappableRowView.swift */,
 				11B4313123AE919B00909D47 /* CreateLogTextField.swift */,
+				9E04B05F86D13F8DFC4D8D71 /* Nutrition */,
+				9E04BEF2F4F338929AA338D9 /* Symptom */,
 			);
 			path = CreateLog;
 			sourceTree = "<group>";
@@ -234,6 +242,7 @@
 				11B4311723A5BBB700909D47 /* Mood.swift */,
 				9E04B4A50B14B9F44D696289 /* User.swift */,
 				9E04B5D9DCFF8D0157D8B57A /* Medication.swift */,
+				9E04B0FA059903598F57AE95 /* Nutrition.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -322,6 +331,14 @@
 				4A8DC45F5FAA609AD2AB514E /* Pods_HealthTrack.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9E04B05F86D13F8DFC4D8D71 /* Nutrition */ = {
+			isa = PBXGroup;
+			children = (
+				9E04BC48C0B7BB0F4682BE68 /* NutritionLogView.swift */,
+			);
+			path = Nutrition;
 			sourceTree = "<group>";
 		};
 		9E04B14B7D6624B5C4342B28 /* Middleware */ = {
@@ -413,6 +430,14 @@
 				9E04B62749DC92BF7454FC72 /* FirebaseDatabase */,
 			);
 			path = Service;
+			sourceTree = "<group>";
+		};
+		9E04BEF2F4F338929AA338D9 /* Symptom */ = {
+			isa = PBXGroup;
+			children = (
+				9E04B359724D8C94ED1CFA37 /* SymptomLogView.swift */,
+			);
+			path = Symptom;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -593,6 +618,9 @@
 				9E04B9D7A2C47A6811AD6B68 /* CreateLogReducer.swift in Sources */,
 				9E04BB1C25373057C19F19B9 /* AppReducer.swift in Sources */,
 				9E04B8EC811016356918B8F3 /* SearchListViewContainer.swift in Sources */,
+				9E04B9DD062519A86C6F3CD9 /* NutritionLogView.swift in Sources */,
+				9E04B7090408200D01C3F015 /* Nutrition.swift in Sources */,
+				9E04B1F285BD40EB2E48688C /* SymptomLogView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

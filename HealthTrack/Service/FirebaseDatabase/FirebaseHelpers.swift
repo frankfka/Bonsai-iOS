@@ -18,6 +18,13 @@ extension FirebaseService {
             if let name = name, let id = id, let createdBy = createdBy {
                 return Medication(id: id, name: name, createdBy: createdBy)
             }
+        case .nutrition:
+            let id = data[FirebaseConstants.Searchable.Nutrition.IdField] as? String
+            let name = data[FirebaseConstants.Searchable.ItemNameField] as? String
+            let createdBy = data[FirebaseConstants.Searchable.CreatedByField] as? String
+            if let name = name, let id = id, let createdBy = createdBy {
+                return NutritionItem(id: id, name: name, createdBy: createdBy)
+            }
         default:
             break
         }
@@ -47,20 +54,22 @@ extension FirebaseService {
                 return nil
             }
             return MoodLog(id: id, title: title, dateCreated: dateCreated, notes: notes, moodRank: moodRank)
+        case .nutrition:
+            guard let nutritionItemId = data[FirebaseConstants.Logs.Nutrition.SelectedNutritionIdField] as? String,
+                  let amount = data[FirebaseConstants.Logs.Nutrition.AmountField] as? String else {
+                AppLogging.warn("Unable to decode nutrition log details with data \(data)")
+                return nil
+            }
+            return NutritionLog(id: id, title: title, dateCreated: dateCreated, notes: notes,
+                    nutritionItemId: nutritionItemId, amount: amount)
         case .medication:
-            guard let medicationId = data[FirebaseConstants.Logs.Medication.IdField] as? String,
+            guard let medicationId = data[FirebaseConstants.Logs.Medication.SelectedMedicationIdField] as? String,
                   let dosage = data[FirebaseConstants.Logs.Medication.DosageField] as? String else {
                 AppLogging.warn("Unable to decode medication log with data \(data)")
                 return nil
             }
-            return MedicationLog(
-                    id: id,
-                    title: title,
-                    dateCreated: dateCreated,
-                    notes: notes,
-                    medicationId: medicationId,
-                    dosage: dosage
-            )
+            return MedicationLog(id: id, title: title, dateCreated: dateCreated, notes: notes,
+                    medicationId: medicationId, dosage: dosage)
         case .note:
             return NoteLog(id: id, title: title, dateCreated: dateCreated, notes: notes)
         default:
@@ -121,6 +130,8 @@ extension LogSearchable {
         switch self.parentCategory {
         case .medication:
             data[FirebaseConstants.Searchable.Medication.IdField] = self.id
+        case .nutrition:
+            data[FirebaseConstants.Searchable.Nutrition.IdField] = self.id
         default:
             break
         }
@@ -151,8 +162,14 @@ extension Loggable {
             guard let medicationLog = self as? MedicationLog else {
                 fatalError("Not a medication log but category was medication")
             }
-            data[FirebaseConstants.Logs.Medication.IdField] = medicationLog.medicationId
+            data[FirebaseConstants.Logs.Medication.SelectedMedicationIdField] = medicationLog.medicationId
             data[FirebaseConstants.Logs.Medication.DosageField] = medicationLog.dosage
+        case .nutrition:
+            guard let nutritionLog = self as? NutritionLog else {
+                fatalError("Not a nutrition log but category was nutrition")
+            }
+            data[FirebaseConstants.Logs.Nutrition.SelectedNutritionIdField] = nutritionLog.nutritionItemId
+            data[FirebaseConstants.Logs.Nutrition.AmountField] = nutritionLog.amount
         case .note:
             // No additional fields
             break
@@ -165,10 +182,12 @@ extension Loggable {
 
 // Extension for log category lookup names
 extension LogCategory {
-    func firebaseCollectionName() -> String {
+    func firebaseLogSearchableCollectionName() -> String? {
         switch self {
         case .medication:
             return FirebaseConstants.Searchable.Medication.Collection
+        case .nutrition:
+            return FirebaseConstants.Searchable.Nutrition.Collection
         default:
             return ""
         }
@@ -179,6 +198,8 @@ extension LogCategory {
             return FirebaseConstants.Logs.Mood.CategoryName
         case .medication:
             return FirebaseConstants.Logs.Medication.CategoryName
+        case .nutrition:
+            return FirebaseConstants.Logs.Nutrition.CategoryName
         case .note:
             return FirebaseConstants.Logs.Note.CategoryName
         default:
@@ -190,6 +211,8 @@ extension LogCategory {
         switch name {
         case FirebaseConstants.Searchable.Medication.Collection:
             return .medication
+        case FirebaseConstants.Searchable.Nutrition.Collection:
+            return .nutrition
         default:
             break
         }
@@ -201,6 +224,8 @@ extension LogCategory {
             return .medication
         case FirebaseConstants.Logs.Mood.CategoryName:
             return .mood
+        case FirebaseConstants.Logs.Nutrition.CategoryName:
+            return .nutrition
         case FirebaseConstants.Logs.Note.CategoryName:
             return .note
         default:

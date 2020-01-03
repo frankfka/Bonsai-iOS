@@ -115,11 +115,11 @@ struct CreateLogView: View {
         switch store.state.createLog.selectedCategory {
             
         case .note:
-            return AnyView(EmptyView())
+            return EmptyView().eraseToAnyView()
         case .symptom:
             return AnyView(EmptyView())
         case .nutrition:
-            return AnyView(EmptyView())
+            return NutritionLogView().eraseToAnyView()
         case .activity:
             return AnyView(EmptyView())
         case .mood:

@@ -47,7 +47,10 @@ enum CreateLogAction {
     case moodRankSelected(selectedIndex: Int)
 
     // Medications
-    case dosageDidChange(newDosage: String)
+    case medicationDosageDidChange(newDosage: String)
+
+    // Nutrition
+    case nutritionAmountDidChange(newAmount: String)
 
     // Save
     case onCreateLogPressed

@@ -53,6 +53,16 @@ struct MedicationLog: Loggable {
     let dosage: String
 }
 
+struct NutritionLog: Loggable {
+    let category: LogCategory = .nutrition
+    let id: String
+    let title: String
+    let dateCreated: Date
+    let notes: String
+    let nutritionItemId: String
+    let amount: String
+}
+
 enum LogCategory: CaseIterable {
     case note
     case symptom
@@ -68,7 +78,7 @@ enum LogCategory: CaseIterable {
         case .symptom:
             return "Symptom" + (plural ? "s" : "")
         case .nutrition:
-            return "Nutrition" + (plural ? "s" : "")
+            return "Nutrition"
         case .activity:
             return "Activity" + (plural ? "s" : "")
         case .mood:
