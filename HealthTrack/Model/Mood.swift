@@ -21,3 +21,12 @@ struct Mood: LogSearchable {
     let parentCategory: LogCategory = .mood
     let createdBy: String
 }
+
+struct MoodLog: Loggable {
+    let category: LogCategory = .mood
+    let id: String
+    let title: String
+    let dateCreated: Date
+    let notes: String
+    let moodRank: MoodRank
+}

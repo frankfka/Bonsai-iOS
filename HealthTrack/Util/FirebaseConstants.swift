@@ -26,6 +26,19 @@ struct FirebaseConstants {
             static let Collection = "nutrition"
             static let IdField = "nutritionId"
         }
+
+        // Symptoms
+        struct Symptom {
+            static let Collection = "symptoms"
+            static let IdField = "symptomId"
+        }
+
+        // Activities
+        struct Activity {
+            static let Collection = "activities"
+            static let IdField = "activityId"
+        }
+
     }
 
     // Characteristics for user documents
@@ -62,6 +75,20 @@ struct FirebaseConstants {
             static let CategoryName = "nutrition"
             static let SelectedNutritionIdField = "nutritionId"
             static let AmountField = "amount"
+        }
+
+        // Logs - Symptoms
+        struct Symptom {
+            static let CategoryName = "symptom"
+            static let SelectedSymptomIdField = "symptomId"
+            static let SeverityField = "severity"
+        }
+
+        // Logs - Activity
+        struct Activity {
+            static let CategoryName = "activity"
+            static let SelectedActivityIdField = "activityId"
+            static let DurationField = "duration"
         }
 
         // Logs - Notes

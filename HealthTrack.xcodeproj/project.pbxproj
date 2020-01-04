@@ -45,6 +45,9 @@
 		9E04B066551BCEEF58E9DB5B /* HomeScreenMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B329C5305296C0C18D78 /* HomeScreenMiddleware.swift */; };
 		9E04B1DC07699EBE5C684C53 /* MedicationLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BC42FA01AF3C727FA0A7 /* MedicationLogView.swift */; };
 		9E04B1F285BD40EB2E48688C /* SymptomLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B359724D8C94ED1CFA37 /* SymptomLogView.swift */; };
+		9E04B20DF75F4ECBB16C6DBC /* Symptom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B658D36CC2F8B5F120B2 /* Symptom.swift */; };
+		9E04B43BF70AF74B23CE5CA1 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BE25078C4D1D66F8E42F /* Note.swift */; };
+		9E04B50598E3E5F85D218185 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BCFAAF7B3D5C2A36CCA7 /* Activity.swift */; };
 		9E04B513CC19B5E2DB63CED9 /* SearchTextObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B763E5A55C21C9EF3E57 /* SearchTextObservable.swift */; };
 		9E04B5451F43ADCBD5CC72FA /* HomeScreenReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BF971048F9F4765391DA /* HomeScreenReducer.swift */; };
 		9E04B5AFF3ADE20F1639D10D /* SearchListItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BA6E51A6CDACF7C60F88 /* SearchListItemRow.swift */; };
@@ -130,6 +133,7 @@
 		9E04B4A50B14B9F44D696289 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		9E04B5548FA5FE0689E72183 /* CreateLogMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogMiddleware.swift; sourceTree = "<group>"; };
 		9E04B5D9DCFF8D0157D8B57A /* Medication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Medication.swift; sourceTree = "<group>"; };
+		9E04B658D36CC2F8B5F120B2 /* Symptom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Symptom.swift; sourceTree = "<group>"; };
 		9E04B66DB477D3F118D5DA41 /* SearchListViewContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchListViewContainer.swift; sourceTree = "<group>"; };
 		9E04B6C42CD67CF8BEF300C2 /* LogService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogService.swift; sourceTree = "<group>"; };
 		9E04B6C450860BE65AF311A7 /* UserConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserConstants.swift; sourceTree = "<group>"; };
@@ -148,9 +152,11 @@
 		9E04BC42FA01AF3C727FA0A7 /* MedicationLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MedicationLogView.swift; sourceTree = "<group>"; };
 		9E04BC484C03DA14EC33586F /* GlobalState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalState.swift; sourceTree = "<group>"; };
 		9E04BC48C0B7BB0F4682BE68 /* NutritionLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NutritionLogView.swift; sourceTree = "<group>"; };
+		9E04BCFAAF7B3D5C2A36CCA7 /* Activity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
 		9E04BD4984DDBAEC66B08A34 /* DisableInteraction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisableInteraction.swift; sourceTree = "<group>"; };
 		9E04BD4E8ECB33163CBA699C /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		9E04BE18499AF88003242B88 /* StandardPopups.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardPopups.swift; sourceTree = "<group>"; };
+		9E04BE25078C4D1D66F8E42F /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		9E04BF971048F9F4765391DA /* HomeScreenReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeScreenReducer.swift; sourceTree = "<group>"; };
 		9E04BFB9FC87753455D68DDA /* Popup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Popup.swift; sourceTree = "<group>"; };
 		FBC3618C0413FD0172D8BDA1 /* Pods-HealthTrack.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthTrack.debug.xcconfig"; path = "Target Support Files/Pods-HealthTrack/Pods-HealthTrack.debug.xcconfig"; sourceTree = "<group>"; };
@@ -243,6 +249,9 @@
 				9E04B4A50B14B9F44D696289 /* User.swift */,
 				9E04B5D9DCFF8D0157D8B57A /* Medication.swift */,
 				9E04B0FA059903598F57AE95 /* Nutrition.swift */,
+				9E04B658D36CC2F8B5F120B2 /* Symptom.swift */,
+				9E04BCFAAF7B3D5C2A36CCA7 /* Activity.swift */,
+				9E04BE25078C4D1D66F8E42F /* Note.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -621,6 +630,9 @@
 				9E04B9DD062519A86C6F3CD9 /* NutritionLogView.swift in Sources */,
 				9E04B7090408200D01C3F015 /* Nutrition.swift in Sources */,
 				9E04B1F285BD40EB2E48688C /* SymptomLogView.swift in Sources */,
+				9E04B20DF75F4ECBB16C6DBC /* Symptom.swift in Sources */,
+				9E04B50598E3E5F85D218185 /* Activity.swift in Sources */,
+				9E04B43BF70AF74B23CE5CA1 /* Note.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

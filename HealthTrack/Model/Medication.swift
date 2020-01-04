@@ -14,3 +14,13 @@ struct Medication: LogSearchable {
     let parentCategory: LogCategory = .medication
     let createdBy: String
 }
+
+struct MedicationLog: Loggable {
+    let category: LogCategory = .medication
+    let id: String
+    let title: String
+    let dateCreated: Date
+    let notes: String
+    let medicationId: String
+    let dosage: String
+}

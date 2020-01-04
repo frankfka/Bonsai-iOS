@@ -26,43 +26,6 @@ protocol Loggable {
     var notes: String { get }
 }
 
-struct NoteLog: Loggable {
-    let category: LogCategory = .note
-    let id: String
-    let title: String
-    let dateCreated: Date
-    let notes: String
-}
-
-struct MoodLog: Loggable {
-    let category: LogCategory = .mood
-    let id: String
-    let title: String
-    let dateCreated: Date
-    let notes: String
-    let moodRank: MoodRank
-}
-
-struct MedicationLog: Loggable {
-    let category: LogCategory = .medication
-    let id: String
-    let title: String
-    let dateCreated: Date
-    let notes: String
-    let medicationId: String
-    let dosage: String
-}
-
-struct NutritionLog: Loggable {
-    let category: LogCategory = .nutrition
-    let id: String
-    let title: String
-    let dateCreated: Date
-    let notes: String
-    let nutritionItemId: String
-    let amount: String
-}
-
 enum LogCategory: CaseIterable {
     case note
     case symptom

@@ -10,21 +10,37 @@ import FirebaseFirestore
 // Service extension to decode data - this is hacky but it's the only way that works with the protocol implementation
 extension FirebaseService {
     func decode(data: [String: Any], parentCategory: LogCategory) -> LogSearchable? {
+        // Common fields
+        guard let name = data[FirebaseConstants.Searchable.ItemNameField] as? String,
+              let createdBy = data[FirebaseConstants.Searchable.CreatedByField] as? String else {
+            AppLogging.warn("Common log searchable fields not found")
+            return nil
+        }
         switch parentCategory {
         case .medication:
-            let id = data[FirebaseConstants.Searchable.Medication.IdField] as? String
-            let name = data[FirebaseConstants.Searchable.ItemNameField] as? String
-            let createdBy = data[FirebaseConstants.Searchable.CreatedByField] as? String
-            if let name = name, let id = id, let createdBy = createdBy {
-                return Medication(id: id, name: name, createdBy: createdBy)
+            guard let id = data[FirebaseConstants.Searchable.Medication.IdField] as? String else {
+                AppLogging.warn("ID field not found")
+                return nil
             }
+            return Medication(id: id, name: name, createdBy: createdBy)
         case .nutrition:
-            let id = data[FirebaseConstants.Searchable.Nutrition.IdField] as? String
-            let name = data[FirebaseConstants.Searchable.ItemNameField] as? String
-            let createdBy = data[FirebaseConstants.Searchable.CreatedByField] as? String
-            if let name = name, let id = id, let createdBy = createdBy {
-                return NutritionItem(id: id, name: name, createdBy: createdBy)
+            guard let id = data[FirebaseConstants.Searchable.Nutrition.IdField] as? String else {
+                AppLogging.warn("ID field not found")
+                return nil
             }
+            return NutritionItem(id: id, name: name, createdBy: createdBy)
+        case .symptom:
+            guard let id = data[FirebaseConstants.Searchable.Symptom.IdField] as? String else {
+                AppLogging.warn("ID field not found")
+                return nil
+            }
+            return Symptom(id: id, name: name, createdBy: createdBy)
+        case .activity:
+            guard let id = data[FirebaseConstants.Searchable.Activity.IdField] as? String else {
+                AppLogging.warn("ID field not found")
+                return nil
+            }
+            return Activity(id: id, name: name, createdBy: createdBy)
         default:
             break
         }
@@ -70,12 +86,26 @@ extension FirebaseService {
             }
             return MedicationLog(id: id, title: title, dateCreated: dateCreated, notes: notes,
                     medicationId: medicationId, dosage: dosage)
+        case .symptom:
+            guard let symptomId = data[FirebaseConstants.Logs.Symptom.SelectedSymptomIdField] as? String,
+                  let encodedSeverity = data[FirebaseConstants.Logs.Symptom.SeverityField] as? Int,
+                  let severity = SymptomLog.Severity(rawValue: encodedSeverity) else {
+                AppLogging.warn("Unable to decode symptom log with data \(data)")
+                return nil
+            }
+            return SymptomLog(id: id, title: title, dateCreated: dateCreated, notes: notes,
+                    symptomId: symptomId, severity: severity)
+        case .activity:
+            guard let activityId = data[FirebaseConstants.Logs.Activity.SelectedActivityIdField] as? String,
+                  let intervalInSeconds = data[FirebaseConstants.Logs.Activity.DurationField] as? Double else {
+                AppLogging.warn("Unable to decode activity log with data \(data)")
+                return nil
+            }
+            return ActivityLog(id: id, title: title, dateCreated: dateCreated, notes: notes,
+                    activityId: activityId, duration: TimeInterval(intervalInSeconds))
         case .note:
             return NoteLog(id: id, title: title, dateCreated: dateCreated, notes: notes)
-        default:
-            break
         }
-        return nil
     }
 }
 
@@ -132,6 +162,10 @@ extension LogSearchable {
             data[FirebaseConstants.Searchable.Medication.IdField] = self.id
         case .nutrition:
             data[FirebaseConstants.Searchable.Nutrition.IdField] = self.id
+        case .activity:
+            data[FirebaseConstants.Searchable.Activity.IdField] = self.id
+        case .symptom:
+            data[FirebaseConstants.Searchable.Symptom.IdField] = self.id
         default:
             break
         }
@@ -170,10 +204,20 @@ extension Loggable {
             }
             data[FirebaseConstants.Logs.Nutrition.SelectedNutritionIdField] = nutritionLog.nutritionItemId
             data[FirebaseConstants.Logs.Nutrition.AmountField] = nutritionLog.amount
+        case .activity:
+            guard let activityLog = self as? ActivityLog else {
+                fatalError("Not an activity log but category was activity")
+            }
+            data[FirebaseConstants.Logs.Activity.SelectedActivityIdField] = activityLog.activityId
+            data[FirebaseConstants.Logs.Activity.DurationField] = abs(activityLog.duration.magnitude)
+        case .symptom:
+            guard let symptomLog = self as? SymptomLog else {
+                fatalError("Not a symptom log but category was symptom")
+            }
+            data[FirebaseConstants.Logs.Symptom.SelectedSymptomIdField] = symptomLog.symptomId
+            data[FirebaseConstants.Logs.Symptom.SeverityField] = symptomLog.severity.rawValue
         case .note:
             // No additional fields
-            break
-        default:
             break
         }
         return data
@@ -188,9 +232,15 @@ extension LogCategory {
             return FirebaseConstants.Searchable.Medication.Collection
         case .nutrition:
             return FirebaseConstants.Searchable.Nutrition.Collection
+        case .symptom:
+            return FirebaseConstants.Searchable.Symptom.Collection
+        case .activity:
+            return FirebaseConstants.Searchable.Activity.Collection
         default:
-            return ""
+            break
         }
+        AppLogging.warn("Attempted to retrieve non searchable collection \(self.displayValue())")
+        return nil
     }
     func firebaseLogCategoryName() -> String {
         switch self {
@@ -200,10 +250,12 @@ extension LogCategory {
             return FirebaseConstants.Logs.Medication.CategoryName
         case .nutrition:
             return FirebaseConstants.Logs.Nutrition.CategoryName
+        case .activity:
+            return FirebaseConstants.Logs.Activity.CategoryName
+        case .symptom:
+            return FirebaseConstants.Logs.Symptom.CategoryName
         case .note:
             return FirebaseConstants.Logs.Note.CategoryName
-        default:
-            return ""
         }
     }
 
@@ -213,9 +265,14 @@ extension LogCategory {
             return .medication
         case FirebaseConstants.Searchable.Nutrition.Collection:
             return .nutrition
+        case FirebaseConstants.Searchable.Activity.Collection:
+            return .activity
+        case FirebaseConstants.Searchable.Symptom.Collection:
+            return .symptom
         default:
             break
         }
+        AppLogging.warn("Attempt to retrieve Firebase collection name for non-searchable category")
         return nil
     }
     static func fromFirebaseLogCategoryName(_ name: String) -> LogCategory? {
@@ -226,11 +283,16 @@ extension LogCategory {
             return .mood
         case FirebaseConstants.Logs.Nutrition.CategoryName:
             return .nutrition
+        case FirebaseConstants.Logs.Activity.CategoryName:
+            return .activity
+        case FirebaseConstants.Logs.Symptom.CategoryName:
+            return .symptom
         case FirebaseConstants.Logs.Note.CategoryName:
             return .note
         default:
             break
         }
+        AppLogging.warn("Invalid firebase log category \(name)")
         return nil
     }
 }
