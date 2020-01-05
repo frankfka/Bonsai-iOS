@@ -43,7 +43,7 @@ enum LogCategory: CaseIterable {
         case .nutrition:
             return "Nutrition"
         case .activity:
-            return "Activity" + (plural ? "s" : "")
+            return "Activit" + (plural ? "ies" : "y")
         case .mood:
             return "Mood" + (plural ? "s" : "")
         case .medication:

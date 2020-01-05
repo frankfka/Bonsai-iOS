@@ -46,6 +46,10 @@ struct CreateLogReducer {
         case .nutritionAmountDidChange(let newAmount):
             return nutritionAmountDidChange(state: state, newAmount: newAmount)
 
+        // Symptom
+        case .symptomSeverityDidChange(let encodedValue):
+            return symptomSeverityDidChange(state: state, encodedValue: encodedValue)
+
         // Save
         case .onCreateLogPressed:
             return onCreateLogPressed(state: state)
@@ -114,6 +118,7 @@ struct CreateLogReducer {
     }
 
     private static func onAddSearchItemFailure(state: AppState, error: Error) -> AppState {
+        AppLogging.error("Failure Action: \(error)")
         var newState = state
         newState.createLog.createLogItemError = error
         newState.createLog.isCreatingLogItem = false
@@ -142,6 +147,16 @@ struct CreateLogReducer {
                 fatalError("Search result is not a nutrition item but the selected category is nutrition")
             }
             newState.createLog.nutrition.selectedItem = selectedNutrition
+        case .activity:
+            guard let selectedActivity = selected as? Activity else {
+                fatalError("Search result is not an activity but the selected category is activity")
+            }
+            newState.createLog.activity.selectedActivity = selectedActivity
+        case .symptom:
+            guard let selectedSymptom = selected as? Symptom else {
+                fatalError("Search result is not a symptom but the selected category is symptom")
+            }
+            newState.createLog.symptom.selectedSymptom = selectedSymptom
         default:
             break
         }
@@ -174,6 +189,18 @@ struct CreateLogReducer {
         return newState
     }
 
+    // MARK: Symptom
+    private static func symptomSeverityDidChange(state: AppState, encodedValue: Double) -> AppState {
+        if let newSeverity = SymptomLog.Severity(rawValue: encodedValue) {
+            var newState = state
+            newState.createLog.symptom.severity = newSeverity
+            return newState
+        } else {
+            AppLogging.warn("Could not decode new severity value \(encodedValue)")
+            return state
+        }
+    }
+
     // MARK: Create
     private static func onCreateLogPressed(state: AppState) -> AppState {
         var newState = state
@@ -190,6 +217,7 @@ struct CreateLogReducer {
     }
 
     private static func onCreateLogFailure(state: AppState, error: Error) -> AppState {
+        AppLogging.error("Failure Action: \(error)")
         var newState = state
         newState.createLog.isCreatingLog = false
         newState.createLog.createError = error

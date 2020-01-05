@@ -43,7 +43,7 @@ struct NutritionLogView: View {
 
     func getViewModel() -> NutritionLogView.ViewModel {
         let nutritionLogState = store.state.createLog.nutrition
-        let titleText = nutritionLogState.selectedItem?.name ?? "Select a Supplement/Nutrition Item"
+        let titleText = nutritionLogState.selectedItem?.name ?? "Select a \(LogCategory.nutrition.displayValue()) Item"
         return ViewModel(selectNutritionRowTitle: .constant(titleText))
     }
 

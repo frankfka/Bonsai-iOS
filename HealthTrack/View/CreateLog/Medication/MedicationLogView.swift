@@ -51,7 +51,7 @@ struct MedicationLogView: View {
 
     func getViewModel() -> MedicationLogView.ViewModel {
         let medicationLogState = store.state.createLog.medication
-        let titleText = medicationLogState.selectedMedication?.name ?? "Select a Medication"
+        let titleText = medicationLogState.selectedMedication?.name ?? "Select a \(LogCategory.medication.displayValue())"
         return ViewModel(
                 selectMedicationRowTitle: .constant(titleText),
                 dosage: Binding<String>(get: {

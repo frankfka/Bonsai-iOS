@@ -31,6 +31,7 @@ struct GlobalReducer {
     }
 
     static private func initFailure(state: AppState, error: Error) -> AppState {
+        AppLogging.error("Failure Action: \(error)")
         var newState = state
         newState.global.isInitializing = false
         newState.global.initError = error

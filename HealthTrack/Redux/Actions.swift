@@ -52,6 +52,9 @@ enum CreateLogAction {
     // Nutrition
     case nutritionAmountDidChange(newAmount: String)
 
+    // Symptom
+    case symptomSeverityDidChange(encodedValue: Double)
+
     // Save
     case onCreateLogPressed
     case onCreateLogSuccess(newLog: Loggable)

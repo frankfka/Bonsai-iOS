@@ -11,6 +11,7 @@ import SwiftUI
 
 typealias VoidCallback = () -> ()
 typealias IntCallback = (Int) -> ()
+typealias DoubleCallback = (Double) -> ()
 typealias StringCallback = (String) -> ()
 
 struct ViewHelpers {

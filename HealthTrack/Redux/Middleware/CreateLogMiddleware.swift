@@ -166,7 +166,6 @@ struct CreateLogMiddleware {
                     moodRank: selectedMoodRank
             )
         case .nutrition:
-            // TODO: Text field for amount, then test & commit
             guard let selectedNutrition = state.nutrition.selectedItem else {
                 AppLogging.warn("Attempted to create a nutrition log with no selected nutrition item.")
                 break
@@ -200,6 +199,36 @@ struct CreateLogMiddleware {
                     medicationId: selectedMedication.id,
                     dosage: state.medication.dosage
             )
+        case .symptom:
+            guard let selectedSymptom = state.symptom.selectedSymptom else {
+                AppLogging.warn("Attempted to create symptom log with no selected symptom")
+                break
+            }
+            return SymptomLog(
+                    id: logId,
+                    title: selectedSymptom.name,
+                    dateCreated: logDate,
+                    notes: logNotes,
+                    symptomId: selectedSymptom.id,
+                    severity: state.symptom.severity
+            )
+        case .activity:
+            guard let selectedActivity = state.activity.selectedActivity else {
+                AppLogging.warn("Attempted to create activity log with no selected activity")
+                break
+            }
+            guard let activityDuration = state.activity.duration else {
+                AppLogging.warn("Attempted to create activity log with no duration")
+                break
+            }
+            return ActivityLog(
+                    id: logId,
+                    title: selectedActivity.name,
+                    dateCreated: logDate,
+                    notes: logNotes,
+                    activityId: selectedActivity.id,
+                    duration: activityDuration
+            )
         case .note:
             guard !logNotes.isEmptyWithoutWhitespace() else {
                 AppLogging.warn("Attempted to create note log with empty notes.")
@@ -211,8 +240,6 @@ struct CreateLogMiddleware {
                     dateCreated: logDate,
                     notes: logNotes
             )
-        default:
-            break
         }
         return nil
     }

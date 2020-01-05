@@ -88,7 +88,7 @@ extension FirebaseService {
                     medicationId: medicationId, dosage: dosage)
         case .symptom:
             guard let symptomId = data[FirebaseConstants.Logs.Symptom.SelectedSymptomIdField] as? String,
-                  let encodedSeverity = data[FirebaseConstants.Logs.Symptom.SeverityField] as? Int,
+                  let encodedSeverity = data[FirebaseConstants.Logs.Symptom.SeverityField] as? Double,
                   let severity = SymptomLog.Severity(rawValue: encodedSeverity) else {
                 AppLogging.warn("Unable to decode symptom log with data \(data)")
                 return nil

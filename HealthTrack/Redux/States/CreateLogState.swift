@@ -20,6 +20,14 @@ struct CreateLogState {
         var selectedItem: NutritionItem? = nil
         var amount: String = ""
     }
+    struct SymptomLogState {
+        var selectedSymptom: Symptom? = nil
+        var severity: SymptomLog.Severity = .none
+    }
+    struct ActivityLogState {
+        var selectedActivity: Activity? = nil
+        var duration: TimeInterval?
+    }
 
     let allCategories: [LogCategory] = LogCategory.allCases
     var selectedCategoryIndex: Int = 0
@@ -48,6 +56,8 @@ struct CreateLogState {
     var mood: MoodLogState = MoodLogState()
     var medication: MedicationLogState = MedicationLogState()
     var nutrition: NutritionLogState = NutritionLogState()
+    var symptom: SymptomLogState = SymptomLogState()
+    var activity: ActivityLogState = ActivityLogState()
 }
 
 // Helper functions
@@ -62,8 +72,10 @@ extension CreateLogState {
             return nutrition.selectedItem != nil && !nutrition.amount.isEmptyWithoutWhitespace()
         case .medication:
             return medication.selectedMedication != nil && !medication.dosage.isEmptyWithoutWhitespace()
-        default:
-            return false
+        case .symptom:
+            return symptom.selectedSymptom != nil
+        case .activity:
+            return activity.selectedActivity != nil && activity.duration != nil
         }
     }
 }
