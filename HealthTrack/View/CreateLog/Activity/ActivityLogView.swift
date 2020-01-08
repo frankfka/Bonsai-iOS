@@ -13,6 +13,7 @@ struct ActivityLogView: View {
     private var viewModel: ViewModel {
         getViewModel()
     }
+    @State(initialValue: false) private var showDurationPicker
 
     var body: some View {
         VStack(spacing: 0) {
@@ -30,19 +31,31 @@ struct ActivityLogView: View {
                         )
                 )
             }
+            Divider()
+            ActivityLogDurationRowView(viewModel: getActivityDurationRowViewModel())
         }
         .background(Color.Theme.backgroundSecondary)
     }
 
-    // TODO: See if we can bundle this with the container view
-    func onUpdateQueryDebounced(query: String) {
+    private func onUpdateQueryDebounced(query: String) {
         store.send(.createLog(action: .searchQueryDidChange(query: query)))
     }
 
-    func getViewModel() -> ActivityLogView.ViewModel {
+    private func getViewModel() -> ActivityLogView.ViewModel {
         let activityLogState = store.state.createLog.activity
         let titleText = activityLogState.selectedActivity?.name ?? "Select an \(LogCategory.activity.displayValue())"
         return ViewModel(selectActivityRowTitle: .constant(titleText))
     }
 
+    private func getActivityDurationRowViewModel() -> ActivityLogDurationRowView.ViewModel {
+        return ActivityLogDurationRowView.ViewModel(
+                selectedDuration: store.state.createLog.activity.duration,
+                showPicker: self.$showDurationPicker,
+                onDurationChange: onDurationChange
+        )
+    }
+
+    private func onDurationChange(newDuration: TimeInterval) {
+        store.send(.createLog(action: .activityDurationDidChange(newDuration: newDuration)))
+    }
 }

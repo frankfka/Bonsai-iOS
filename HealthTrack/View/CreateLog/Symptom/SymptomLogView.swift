@@ -37,7 +37,6 @@ struct SymptomLogView: View {
         .background(Color.Theme.backgroundSecondary)
     }
 
-    // TODO: See if we can bundle this with the container view
     func onUpdateQueryDebounced(query: String) {
         store.send(.createLog(action: .searchQueryDidChange(query: query)))
     }

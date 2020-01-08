@@ -244,18 +244,3 @@ struct CreateLogMiddleware {
         return nil
     }
 }
-
-// Helper extensions
-extension MoodRank {
-    // TODO: Probably don't need this. We can parse selected mood rank ID or something to get a display value?
-     var description: String {
-        switch self {
-        case .negative:
-            return "Bad Mood"
-        case .neutral:
-            return "Neutral Mood"
-        case .positive:
-            return "Good Mood"
-        }
-    }
-}

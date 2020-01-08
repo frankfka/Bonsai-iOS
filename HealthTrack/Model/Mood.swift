@@ -13,6 +13,17 @@ enum MoodRank: Int, CaseIterable {
     case negative = -10
     case neutral = 0
     case positive = 10
+
+    var description: String {
+        switch self {
+        case .negative:
+            return "Bad Mood"
+        case .neutral:
+            return "Neutral Mood"
+        case .positive:
+            return "Good Mood"
+        }
+    }
 }
 
 struct Mood: LogSearchable {

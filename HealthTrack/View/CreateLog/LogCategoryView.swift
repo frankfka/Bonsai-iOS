@@ -51,7 +51,7 @@ struct LogCategoryView: View {
             TappableRowView(viewModel: TappableRowView.ViewModel(
                 primaryText: .constant("Log Category"),
                 secondaryText: viewModel.$selectedCategoryString,
-                hasDisclosureIndicator: true)
+                hasDisclosureIndicator: false)
             )
                 .onTapGesture {
                     self.onRowTapped()

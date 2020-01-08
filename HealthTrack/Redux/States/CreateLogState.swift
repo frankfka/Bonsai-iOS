@@ -26,7 +26,7 @@ struct CreateLogState {
     }
     struct ActivityLogState {
         var selectedActivity: Activity? = nil
-        var duration: TimeInterval?
+        var duration: TimeInterval? = nil
     }
 
     let allCategories: [LogCategory] = LogCategory.allCases

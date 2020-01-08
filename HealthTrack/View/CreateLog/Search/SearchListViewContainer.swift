@@ -11,6 +11,7 @@ struct SearchListViewContainer: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State var searchTextObservable: SearchTextObservable
 
+    // TODO: Very hard to not have this in the constructor, so keeping for now
     init(onUpdateQueryDebounced: @escaping StringCallback) {
         self._searchTextObservable = State(
                 initialValue: SearchTextObservable(onUpdateTextDebounced: { q in

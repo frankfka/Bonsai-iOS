@@ -50,6 +50,10 @@ struct CreateLogReducer {
         case .symptomSeverityDidChange(let encodedValue):
             return symptomSeverityDidChange(state: state, encodedValue: encodedValue)
 
+        // Activity
+        case .activityDurationDidChange(let newDuration):
+            return activityDurationDidChange(state: state, newDuration: newDuration)
+
         // Save
         case .onCreateLogPressed:
             return onCreateLogPressed(state: state)
@@ -199,6 +203,13 @@ struct CreateLogReducer {
             AppLogging.warn("Could not decode new severity value \(encodedValue)")
             return state
         }
+    }
+
+    // MARK: Activity
+    private static func activityDurationDidChange(state: AppState, newDuration: TimeInterval) -> AppState {
+        var newState = state
+        newState.createLog.activity.duration = newDuration
+        return newState
     }
 
     // MARK: Create

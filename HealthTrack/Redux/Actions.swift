@@ -55,6 +55,9 @@ enum CreateLogAction {
     // Symptom
     case symptomSeverityDidChange(encodedValue: Double)
 
+    // Activity
+    case activityDurationDidChange(newDuration: TimeInterval)
+
     // Save
     case onCreateLogPressed
     case onCreateLogSuccess(newLog: Loggable)
