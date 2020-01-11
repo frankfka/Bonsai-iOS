@@ -173,45 +173,54 @@ class FirebaseService: DatabaseService {
                 }
     }
 
-    func get(for user: User, in category: LogCategory?, since date: Date?) -> ServicePublisher<[Loggable]> {
+    func get(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?) -> ServicePublisher<[Loggable]> {
         let future = ServiceFuture<[Loggable]> { promise in
-            self.get(for: user, in: category, since: date) { result in
+            self.get(for: user, in: category, since: beginDate, toAndIncluding: endDate) { result in
                 promise(result)
             }
         }
         return AnyPublisher(future)
     }
 
-    private func get(for user: User, in category: LogCategory?, since date: Date?, onComplete: @escaping ServiceCallback<[Loggable]>) {
-        self.db.collection(FirebaseConstants.User.Collection)
+    private func get(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?,
+                     onComplete: @escaping ServiceCallback<[Loggable]>) {
+        var q = self.db.collection(FirebaseConstants.User.Collection)
                 .document(user.id)
                 .collection(FirebaseConstants.Logs.Collection)
                 .order(by: FirebaseConstants.Logs.DateCreatedField, descending: true)
                 .limit(to: logQueryLimit)
-                .getDocuments() { [weak self] (querySnapshot, err) in
-                    if let err = err {
-                        AppLogging.error("Error in fetching logs for user \(user.id): \(err)")
-                        onComplete(
-                                .failure(
-                                        ServiceError(
-                                                message: "Error in fetching logs for user \(user.id): \(err)",
-                                                wrappedError: err
-                                        )
+        // Query by date if specified
+        if let beginDate = beginDate {
+            q = q.whereField(FirebaseConstants.Logs.DateCreatedField, isGreaterThanOrEqualTo: beginDate)
+        }
+        if let endDate = endDate {
+            q = q.whereField(FirebaseConstants.Logs.DateCreatedField, isLessThanOrEqualTo: endDate)
+        }
+        // Perform query
+        q.getDocuments() { [weak self] (querySnapshot, err) in
+            if let err = err {
+                AppLogging.error("Error in fetching logs for user \(user.id): \(err)")
+                onComplete(
+                        .failure(
+                                ServiceError(
+                                        message: "Error in fetching logs for user \(user.id): \(err)",
+                                        wrappedError: err
                                 )
                         )
+                )
+            } else {
+                var fetchedLogs: [Loggable] = []
+                for document in querySnapshot!.documents {
+                    if let logResult: Loggable = self?.decode(data: document.data()) {
+                        fetchedLogs.append(logResult)
                     } else {
-                        var fetchedLogs: [Loggable] = []
-                        for document in querySnapshot!.documents {
-                            if let logResult: Loggable = self?.decode(data: document.data()) {
-                                fetchedLogs.append(logResult)
-                            } else {
-                                AppLogging.warn("Could not decode log")
-                            }
-                        }
-                        AppLogging.debug("Fetched logs successfully for user \(user.id) with \(fetchedLogs.count) items")
-                        onComplete(.success(fetchedLogs))
+                        AppLogging.warn("Could not decode log")
                     }
                 }
+                AppLogging.debug("Fetched logs successfully for user \(user.id) with \(fetchedLogs.count) items")
+                onComplete(.success(fetchedLogs))
+            }
+        }
     }
 
 }

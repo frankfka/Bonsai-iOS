@@ -5,7 +5,6 @@
 
 import Foundation
 
-// TODO: split into separate files
 struct CreateLogReducer {
     static func reduce(state: AppState, action: CreateLogAction) -> AppState {
         switch action {

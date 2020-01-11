@@ -13,6 +13,7 @@ typealias VoidCallback = () -> ()
 typealias IntCallback = (Int) -> ()
 typealias DoubleCallback = (Double) -> ()
 typealias StringCallback = (String) -> ()
+typealias DateCallback = (Date) -> ()
 
 struct ViewHelpers {
     

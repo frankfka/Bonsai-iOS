@@ -11,6 +11,7 @@ import Foundation
 enum AppAction {
     case global(action: GlobalAction)
     case homeScreen(action: HomeScreenAction)
+    case viewLog(action: ViewLogsAction)
     case createLog(action: CreateLogAction)
 }
 
@@ -25,6 +26,13 @@ enum HomeScreenAction {
     case screenDidShow
     case initializeData
     case dataLoadSuccess(recentLogs: [Loggable])
+    case dataLoadError(error: Error)
+}
+
+enum ViewLogsAction {
+    case screenDidShow
+    case selectedDateChanged(date: Date) // Only support 1 day for now
+    case dataLoadSuccess(logs: [Loggable])
     case dataLoadError(error: Error)
 }
 

@@ -41,7 +41,7 @@ struct HomeScreenMiddleware {
                 guard let user = state.global.user else {
                     fatalError("No user initialized when searching")
                 }
-                initHomeScreen(logService: logService, for: user, in: nil, since: nil)
+                initHomeScreen(logService: logService, for: user, in: nil, since: nil, toAndIncluding: nil)
                         .sink(receiveValue: { newAction in
                             send(newAction)
                         })
@@ -52,8 +52,9 @@ struct HomeScreenMiddleware {
         }
     }
 
-    private static func initHomeScreen(logService: LogService, for user: User, in category: LogCategory?, since date: Date?) -> AnyPublisher<AppAction, Never> {
-        return logService.get(for: user, in: category, since: date)
+    private static func initHomeScreen(logService: LogService, for user: User, in category: LogCategory?,
+                                       since beginDate: Date?, toAndIncluding endDate: Date?) -> AnyPublisher<AppAction, Never> {
+        return logService.get(for: user, in: category, since: beginDate, toAndIncluding: endDate)
                 .map { result in
                     return AppAction.homeScreen(action: .dataLoadSuccess(recentLogs: result))
                 }.catch { (err) -> Just<AppAction> in

@@ -32,13 +32,19 @@ class Services {
 }
 
 struct AppState {
+    // General app related stuff
     var global: GlobalState
+    // Home tab
     var homeScreen: HomeScreenState
+    // View logs tab
+    var viewLogs: ViewLogsState
+    // Create log
     var createLog: CreateLogState
 
     init() {
         global = GlobalState()
         homeScreen = HomeScreenState()
+        viewLogs = ViewLogsState()
         createLog = CreateLogState()
     }
 }

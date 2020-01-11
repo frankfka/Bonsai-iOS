@@ -72,6 +72,7 @@ struct ContentView: View {
                     .environmentObject(self.store)
             } else {
                 Text("Second tab")
+                ViewLogsDateHeaderView(viewModel: ViewLogsDateHeaderView.ViewModel(initialDate: Date()))
                 Spacer()
             }
             TabBarView(viewModel: viewModel.tabBarViewModel)

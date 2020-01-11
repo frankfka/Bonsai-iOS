@@ -38,6 +38,8 @@
 		11B4312B23A9213400909D47 /* MoodRankPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B4312A23A9213400909D47 /* MoodRankPickerView.swift */; };
 		11B4313023AB211B00909D47 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B4312F23AB211B00909D47 /* SearchBar.swift */; };
 		11B4313223AE919B00909D47 /* CreateLogTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B4313123AE919B00909D47 /* CreateLogTextField.swift */; };
+		11EDE0E823C6D17A00A54673 /* ViewLogsDateHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EDE0E723C6D17A00A54673 /* ViewLogsDateHeaderView.swift */; };
+		11EDE0EE23C6EE2E00A54673 /* DatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EDE0ED23C6EE2E00A54673 /* DatePickerView.swift */; };
 		11F445E4239A08CB00B501CD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F445E3239A08CB00B501CD /* AppDelegate.swift */; };
 		11F445E6239A08CB00B501CD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F445E5239A08CB00B501CD /* SceneDelegate.swift */; };
 		11F445EA239A08D400B501CD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11F445E9239A08D400B501CD /* Assets.xcassets */; };
@@ -48,6 +50,7 @@
 		9E04B1DC07699EBE5C684C53 /* MedicationLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BC42FA01AF3C727FA0A7 /* MedicationLogView.swift */; };
 		9E04B1F285BD40EB2E48688C /* SymptomLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B359724D8C94ED1CFA37 /* SymptomLogView.swift */; };
 		9E04B20DF75F4ECBB16C6DBC /* Symptom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B658D36CC2F8B5F120B2 /* Symptom.swift */; };
+		9E04B2AB822789B9206A8765 /* CreateLogReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B5273996AD629A11C11A /* CreateLogReducer.swift */; };
 		9E04B43BF70AF74B23CE5CA1 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BE25078C4D1D66F8E42F /* Note.swift */; };
 		9E04B50598E3E5F85D218185 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BCFAAF7B3D5C2A36CCA7 /* Activity.swift */; };
 		9E04B513CC19B5E2DB63CED9 /* SearchTextObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B763E5A55C21C9EF3E57 /* SearchTextObservable.swift */; };
@@ -68,17 +71,19 @@
 		9E04B869A894D06C1A0F2BDA /* HomeScreenState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B2034124C63454F0CEDC /* HomeScreenState.swift */; };
 		9E04B885AE24CF4A17D9A873 /* LogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B6C42CD67CF8BEF300C2 /* LogService.swift */; };
 		9E04B8EC811016356918B8F3 /* SearchListViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B66DB477D3F118D5DA41 /* SearchListViewContainer.swift */; };
-		9E04B9D7A2C47A6811AD6B68 /* CreateLogReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B9E047AF6360BBDE7F04 /* CreateLogReducer.swift */; };
 		9E04B9DD062519A86C6F3CD9 /* NutritionLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BC48C0B7BB0F4682BE68 /* NutritionLogView.swift */; };
 		9E04BAB33DC97B591A4C4192 /* GlobalReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B17C034FABD17AEC4BFB /* GlobalReducer.swift */; };
 		9E04BB1C25373057C19F19B9 /* AppReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B11F0B3A84BA18DFF035 /* AppReducer.swift */; };
 		9E04BB30BD8E25713D8572AA /* CreateLogState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B2DF23C563EDE7C0BBEE /* CreateLogState.swift */; };
 		9E04BB66ECCD13C94DFBC8B1 /* Popup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BFB9FC87753455D68DDA /* Popup.swift */; };
+		9E04BBC2B2FF6C3F91B2FC86 /* ViewLogsReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B4F958CBB6E0E7260A21 /* ViewLogsReducer.swift */; };
 		9E04BBC70F549E1E51568666 /* DisableInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BD4984DDBAEC66B08A34 /* DisableInteraction.swift */; };
 		9E04BC228D55A2BFEEDF93F7 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B116097027786675FBE7 /* FirebaseService.swift */; };
 		9E04BC93C6BC7E379AC5D5A7 /* Medication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B5D9DCFF8D0157D8B57A /* Medication.swift */; };
 		9E04BD31DF1944F44048BFA2 /* DatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B80ECAC1F22023914602 /* DatabaseService.swift */; };
+		9E04BD64D0B8E18A2071FD45 /* ViewLogsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B345F9A5313B154DC745 /* ViewLogsTab.swift */; };
 		9E04BE1242E1E56CB9BD4DF4 /* LoggingMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BB465D817C71E35F45EF /* LoggingMiddleware.swift */; };
+		9E04BEAB2820AE84A00779F5 /* ViewLogsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B3D87A2D9D0DC0EFC30B /* ViewLogsState.swift */; };
 		9E04BEB7D91AD8C615C84D77 /* ActivityLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B158D38EBC0BEC5C2A77 /* ActivityLogView.swift */; };
 		9E04BF009A3FCEC39D6F0D59 /* StandardPopups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BE18499AF88003242B88 /* StandardPopups.swift */; };
 		9E04BF17E5C0A7F47F98403A /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BD4E8ECB33163CBA699C /* UserService.swift */; };
@@ -118,6 +123,8 @@
 		11B4312A23A9213400909D47 /* MoodRankPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodRankPickerView.swift; sourceTree = "<group>"; };
 		11B4312F23AB211B00909D47 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		11B4313123AE919B00909D47 /* CreateLogTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateLogTextField.swift; sourceTree = "<group>"; };
+		11EDE0E723C6D17A00A54673 /* ViewLogsDateHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewLogsDateHeaderView.swift; sourceTree = "<group>"; };
+		11EDE0ED23C6EE2E00A54673 /* DatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerView.swift; sourceTree = "<group>"; };
 		11F445E0239A08CB00B501CD /* HealthTrack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HealthTrack.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		11F445E3239A08CB00B501CD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		11F445E5239A08CB00B501CD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -137,8 +144,12 @@
 		9E04B2DF23C563EDE7C0BBEE /* CreateLogState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogState.swift; sourceTree = "<group>"; };
 		9E04B315B5D54A72FC7B7D71 /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		9E04B329C5305296C0C18D78 /* HomeScreenMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeScreenMiddleware.swift; sourceTree = "<group>"; };
+		9E04B345F9A5313B154DC745 /* ViewLogsTab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewLogsTab.swift; sourceTree = "<group>"; };
 		9E04B359724D8C94ED1CFA37 /* SymptomLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SymptomLogView.swift; sourceTree = "<group>"; };
+		9E04B3D87A2D9D0DC0EFC30B /* ViewLogsState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewLogsState.swift; sourceTree = "<group>"; };
 		9E04B4A50B14B9F44D696289 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		9E04B4F958CBB6E0E7260A21 /* ViewLogsReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewLogsReducer.swift; sourceTree = "<group>"; };
+		9E04B5273996AD629A11C11A /* CreateLogReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogReducer.swift; sourceTree = "<group>"; };
 		9E04B5548FA5FE0689E72183 /* CreateLogMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogMiddleware.swift; sourceTree = "<group>"; };
 		9E04B5D9DCFF8D0157D8B57A /* Medication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Medication.swift; sourceTree = "<group>"; };
 		9E04B658D36CC2F8B5F120B2 /* Symptom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Symptom.swift; sourceTree = "<group>"; };
@@ -151,7 +162,6 @@
 		9E04B80ECAC1F22023914602 /* DatabaseService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseService.swift; sourceTree = "<group>"; };
 		9E04B8C59601E362C76DAABD /* AppInitMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInitMiddleware.swift; sourceTree = "<group>"; };
 		9E04B9C8FD3C64EAA23028B0 /* FirebaseConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseConstants.swift; sourceTree = "<group>"; };
-		9E04B9E047AF6360BBDE7F04 /* CreateLogReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogReducer.swift; sourceTree = "<group>"; };
 		9E04BA16DE33AF23CFDC1835 /* SearchAddItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchAddItemView.swift; sourceTree = "<group>"; };
 		9E04BA6AAC00E25E507C5764 /* SearchListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchListView.swift; sourceTree = "<group>"; };
 		9E04BA6E51A6CDACF7C60F88 /* SearchListItemRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchListItemRow.swift; sourceTree = "<group>"; };
@@ -185,6 +195,7 @@
 		110C63A9239D5DBB00D904DE /* View */ = {
 			isa = PBXGroup;
 			children = (
+				11EDE0E623C6D13900A54673 /* ViewLogs */,
 				11B4311B23A6965500909D47 /* Common */,
 				110C63AF239D6CE000D904DE /* Home */,
 				114B742D23A1E3C20095D44B /* CreateLog */,
@@ -268,6 +279,7 @@
 		11B4311B23A6965500909D47 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				11EDE0ED23C6EE2E00A54673 /* DatePickerView.swift */,
 				11B4311923A6960500909D47 /* LoadingSpinner.swift */,
 				11B4311C23A6974C00909D47 /* LoadingSpinnerWrappers.swift */,
 				11B4312223A6D71B00909D47 /* Helpers.swift */,
@@ -287,6 +299,15 @@
 				11B4312A23A9213400909D47 /* MoodRankPickerView.swift */,
 			);
 			path = Mood;
+			sourceTree = "<group>";
+		};
+		11EDE0E623C6D13900A54673 /* ViewLogs */ = {
+			isa = PBXGroup;
+			children = (
+				11EDE0E723C6D17A00A54673 /* ViewLogsDateHeaderView.swift */,
+				9E04B345F9A5313B154DC745 /* ViewLogsTab.swift */,
+			);
+			path = ViewLogs;
 			sourceTree = "<group>";
 		};
 		11F445D7239A08CB00B501CD = {
@@ -385,8 +406,9 @@
 			children = (
 				9E04B17C034FABD17AEC4BFB /* GlobalReducer.swift */,
 				9E04BF971048F9F4765391DA /* HomeScreenReducer.swift */,
-				9E04BDC635DD326390EE44D0 /* CreateLog */,
 				9E04B11F0B3A84BA18DFF035 /* AppReducer.swift */,
+				9E04B5273996AD629A11C11A /* CreateLogReducer.swift */,
+				9E04B4F958CBB6E0E7260A21 /* ViewLogsReducer.swift */,
 			);
 			path = Reducers;
 			sourceTree = "<group>";
@@ -436,16 +458,9 @@
 				9E04BC484C03DA14EC33586F /* GlobalState.swift */,
 				9E04B2DF23C563EDE7C0BBEE /* CreateLogState.swift */,
 				9E04B2034124C63454F0CEDC /* HomeScreenState.swift */,
+				9E04B3D87A2D9D0DC0EFC30B /* ViewLogsState.swift */,
 			);
 			path = States;
-			sourceTree = "<group>";
-		};
-		9E04BDC635DD326390EE44D0 /* CreateLog */ = {
-			isa = PBXGroup;
-			children = (
-				9E04B9E047AF6360BBDE7F04 /* CreateLogReducer.swift */,
-			);
-			path = CreateLog;
 			sourceTree = "<group>";
 		};
 		9E04BEE589238655F7534763 /* Service */ = {
@@ -602,6 +617,7 @@
 				114B7421239F4A700095D44B /* RecentLogRow.swift in Sources */,
 				11B4311F23A69AC300909D47 /* ContentView.swift in Sources */,
 				114B7428239F549D0095D44B /* RecentLogSection.swift in Sources */,
+				11EDE0E823C6D17A00A54673 /* ViewLogsDateHeaderView.swift in Sources */,
 				11B4312723A8A03D00909D47 /* MoodLogView.swift in Sources */,
 				11F445E6239A08CB00B501CD /* SceneDelegate.swift in Sources */,
 				110C63B1239D6E3800D904DE /* LogReminderRow.swift in Sources */,
@@ -637,6 +653,7 @@
 				9E04B755EF3C338636399E89 /* GlobalState.swift in Sources */,
 				9E04BB30BD8E25713D8572AA /* CreateLogState.swift in Sources */,
 				9E04BC228D55A2BFEEDF93F7 /* FirebaseService.swift in Sources */,
+				11EDE0EE23C6EE2E00A54673 /* DatePickerView.swift in Sources */,
 				9E04B5BB7DC27D9DA0B6AAD9 /* FirebaseHelpers.swift in Sources */,
 				9E04BB66ECCD13C94DFBC8B1 /* Popup.swift in Sources */,
 				9E04BF009A3FCEC39D6F0D59 /* StandardPopups.swift in Sources */,
@@ -645,7 +662,6 @@
 				9E04B5451F43ADCBD5CC72FA /* HomeScreenReducer.swift in Sources */,
 				9E04B869A894D06C1A0F2BDA /* HomeScreenState.swift in Sources */,
 				9E04B066551BCEEF58E9DB5B /* HomeScreenMiddleware.swift in Sources */,
-				9E04B9D7A2C47A6811AD6B68 /* CreateLogReducer.swift in Sources */,
 				9E04BB1C25373057C19F19B9 /* AppReducer.swift in Sources */,
 				9E04B8EC811016356918B8F3 /* SearchListViewContainer.swift in Sources */,
 				9E04B9DD062519A86C6F3CD9 /* NutritionLogView.swift in Sources */,
@@ -657,6 +673,10 @@
 				9E04B43BF70AF74B23CE5CA1 /* Note.swift in Sources */,
 				9E04BEB7D91AD8C615C84D77 /* ActivityLogView.swift in Sources */,
 				9E04B548CF6C4197ED8E871C /* ActivityLogDurationRowView.swift in Sources */,
+				9E04BEAB2820AE84A00779F5 /* ViewLogsState.swift in Sources */,
+				9E04B2AB822789B9206A8765 /* CreateLogReducer.swift in Sources */,
+				9E04BBC2B2FF6C3F91B2FC86 /* ViewLogsReducer.swift in Sources */,
+				9E04BD64D0B8E18A2071FD45 /* ViewLogsTab.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

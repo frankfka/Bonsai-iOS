@@ -19,5 +19,5 @@ protocol DatabaseService {
     func save(log: Loggable, for user: User) -> ServicePublisher<Void>
 
     // Log Get functions
-    func get(for user: User, in category: LogCategory?, since date: Date?) -> ServicePublisher<[Loggable]>
+    func get(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?) -> ServicePublisher<[Loggable]>
 }
