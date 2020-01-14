@@ -29,8 +29,7 @@ struct HomeTabContainer: View {
             if self.viewModel.isLoading {
                 FullScreenLoadingSpinner(isOverlay: false)
             } else if self.viewModel.loadError {
-                // TODO: Retry
-                Text("Error")
+                ErrorView()
             } else {
                 HomeTab(viewModel: self.getHomeTabViewModel())
             }

@@ -82,9 +82,6 @@ struct ViewLogsDateHeaderView: View {
                         .aspectRatio(contentMode: .fit)
                         .frame(width: CGFloat.Theme.Font.smallIcon, height: CGFloat.Theme.Font.smallIcon).foregroundColor(Color.Theme.textDark)
                 }
-                .onTapGesture {
-                    self.onDateViewTapped()
-                }
                 Spacer()
                 // Right confirmation button - show only when date picker is shown
                 if showDatePicker {
@@ -98,6 +95,10 @@ struct ViewLogsDateHeaderView: View {
                 }
             }
             .padding(.all, CGFloat.Theme.Layout.normal)
+            .contentShape(Rectangle())
+            .onTapGesture {
+                self.onDateViewTapped()
+            }
             Divider()
             // Calendar Picker View
             if showDatePicker {

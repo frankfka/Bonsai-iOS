@@ -51,13 +51,20 @@ struct RecentLogSection: View {
 }
 
 struct NoRecentLogsView: View {
-    // TODO: Formatting
     var body: some View {
         VStack(alignment: .center) {
+            Spacer()
             Text("No recent logs found")
+                    .font(Font.Theme.heading)
+                    .foregroundColor(Color.Theme.textDark)
             Text("Begin by adding a log using the \"+\" icon below")
+                    .font(Font.Theme.normalText)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Color.Theme.text)
+            Spacer()
         }
         .padding(CGFloat.Theme.Layout.normal)
+        .frame(minWidth: 0, maxWidth: .infinity)
     }
 }
 

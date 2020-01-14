@@ -52,12 +52,12 @@ struct SearchInfoView: View {
     
     var body: some View {
         HStack(alignment: .center) {
-            Spacer()
             Text(viewModel.text)
                 .font(Font.Theme.normalText)
+                .multilineTextAlignment(.center)
                 .foregroundColor(Color.Theme.text)
                 .padding(CGFloat.Theme.Layout.normal)
-            Spacer()
         }
+        .frame(minWidth: 0, maxWidth: .infinity)
     }
 }

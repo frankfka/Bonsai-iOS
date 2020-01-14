@@ -25,17 +25,17 @@ struct TabBarView: View {
         VStack {
             Divider()
             HStack {
-                Spacer()
                 Image(systemName: viewModel.tabIndex == 0 ? "house.fill" : "house")
                     .resizable()
                     .foregroundColor(viewModel.tabIndex == 0 ? Color.Theme.primary : Color.Theme.grayscalePrimary)
                     .aspectRatio(contentMode: .fit)
                     .padding(CGFloat.Theme.Layout.normal)
                     .frame(height: CGFloat.Theme.Layout.tabItemHeight)
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .contentShape(Rectangle())
                     .onTapGesture {
                         self.viewModel.tabIndex = 0
                 }
-                Spacer()
                 Image(systemName: "plus.circle.fill")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
@@ -44,21 +44,22 @@ struct TabBarView: View {
                     .onTapGesture {
                         self.viewModel.showCreateLogModal.toggle()
                 }
-                Spacer()
                 Image(systemName: viewModel.tabIndex == 1 ? "chart.bar.fill" : "chart.bar")
                     .resizable()
                     .foregroundColor(viewModel.tabIndex == 1 ? Color.Theme.primary : Color.Theme.grayscalePrimary)
                     .aspectRatio(contentMode: .fit)
                     .padding(CGFloat.Theme.Layout.normal)
                     .frame(height: CGFloat.Theme.Layout.tabItemHeight)
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .contentShape(Rectangle())
                     .onTapGesture {
                         self.viewModel.tabIndex = 1
                 }
-                Spacer()
             }
             .padding(.all, CGFloat.Theme.Layout.small)
         }
         .padding(.bottom, CGFloat.Theme.Layout.normal)
+        .frame(minWidth: 0, maxWidth: .infinity)
         .background(Color.Theme.backgroundSecondary)
     }
 }
