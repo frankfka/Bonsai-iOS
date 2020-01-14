@@ -24,6 +24,8 @@ struct CreateLogReducer {
             return searchDidComplete(state: state, results: results)
         case .searchItemDidSelect(let index):
             return searchItemDidSelect(state: state, selectedIndex: index)
+        case .onSearchViewDismiss:
+            return onSearchViewDismiss(state: state)
         case .onAddSearchItemPressed:
             return onAddSearchItemPressed(state: state)
         case let .onAddSearchItemSuccess(addedItem):
@@ -102,6 +104,13 @@ struct CreateLogReducer {
     private static func searchItemDidSelect(state: AppState, selectedIndex: Int) -> AppState {
         let selected = state.createLog.searchResults[selectedIndex]
         return searchItemDidSelect(state: state, selected: selected)
+    }
+
+    private static func onSearchViewDismiss(state: AppState) -> AppState {
+        var newState = state
+        newState.createLog.searchResults = []
+        newState.createLog.isSearching = false
+        return newState
     }
 
     private static func onAddSearchItemPressed(state: AppState) -> AppState {

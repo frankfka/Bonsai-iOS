@@ -42,6 +42,9 @@ struct SearchListViewContainer: View {
                     self.store.send(.createLog(action: .searchItemDidSelect(selectedIndex: selectedIndex)))
                     self.presentationMode.wrappedValue.dismiss()
                 },
+                onViewDismiss: {
+                    self.store.send(.createLog(action: .onSearchViewDismiss))
+                },
                 onAddNewSelect: { addNewItemName in
                     self.store.send(.createLog(action: .onAddSearchItemPressed(name: addNewItemName)))
                 },

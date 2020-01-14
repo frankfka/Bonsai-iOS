@@ -51,6 +51,7 @@ enum CreateLogAction {
     case onAddSearchItemSuccess(addedItem: LogSearchable)
     case onAddSearchItemFailure(error: Error)
     case onAddSearchResultPopupShown
+    case onSearchViewDismiss
 
     // Mood
     case moodRankSelected(selectedIndex: Int)

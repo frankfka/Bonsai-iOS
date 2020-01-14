@@ -60,15 +60,15 @@ struct ViewLogsTabContainer: View {
                 .padding(.all, CGFloat.Theme.Layout.normal)
             }
         }
-            // Use flex frame so it always fills width
-            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: Alignment.topLeading)
-            .onAppear {
-                self.viewModel.viewLogsTabDidAppear?()
+        // Use flex frame so it always fills width
+        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: Alignment.topLeading)
+        .onAppear {
+            self.viewModel.viewLogsTabDidAppear?()
         }
         .background(Color.Theme.backgroundPrimary)
         .navigationBarTitle("Logs")
         .embedInNavigationView()
-            .padding(.top) // Temporary - bug where scrollview goes under the status bar
+        .padding(.top) // Temporary - bug where scrollview goes under the status bar
     }
     
     private func getHeaderDatePickerViewModel() -> ViewLogsDateHeaderView.ViewModel {
@@ -82,19 +82,19 @@ struct ViewLogsTabContainer: View {
 }
 
 struct ViewLogsTabNoResultsView: View {
-
+    
     var body: some View {
         VStack(alignment: .center) {
             Spacer()
             Text("No Logs Found")
                 .font(Font.Theme.heading)
-                    .foregroundColor(Color.Theme.textDark)
+                .foregroundColor(Color.Theme.textDark)
             // TODO: "Or show most recent"
             Text("Try searching for other dates.")
-            .font(Font.Theme.normalText)
-            .foregroundColor(Color.Theme.text)
+                .font(Font.Theme.normalText)
+                .foregroundColor(Color.Theme.text)
             Spacer()
         }
     }
-
+    
 }

@@ -11,8 +11,6 @@ import Combine
 
 struct SearchListView: View {
     
-    // TODO: Need to test this after exiting page (buggy xcode)
-    
     struct ViewModel {
         // Represents the type of view to show within the search results container
         enum ResultViewType {
@@ -31,7 +29,7 @@ struct SearchListView: View {
         }
         var showAddNew: Bool {
             !queryIsEmpty &&
-                    results.firstIndex(where: { searchable in searchable.name.lowercased() == query.lowercased()}) == nil
+                results.firstIndex(where: { searchable in searchable.name.lowercased() == query.lowercased()}) == nil
         }
         
         let searchDescriptor: String // Medication, Nutrition, etc.
@@ -61,23 +59,25 @@ struct SearchListView: View {
         // Callbacks
         let onCancel: VoidCallback? // Cancel in nav bar pressed
         let onItemSelect: IntCallback? // Search result item pressed
+        let onViewDismiss: VoidCallback? // View disappears
         let onAddNewSelect: StringCallback? // Add new item pressed
         let onAddNewSuccessShown: VoidCallback? // Finished adding new item
         let onAddNewErrorShown: VoidCallback? // Finished adding new item
         
         init(
-            searchDescriptor: String,
-            query: Binding<String>,
-            isSearching: Bool,
-            results: [LogSearchable],
-            isCreatingNewLogItem: Bool,
-            createNewLogItemSuccess: Bool,
-            createNewLogItemError: Bool,
-            onCancel: VoidCallback? = nil,
-            onItemSelect: IntCallback? = nil,
-            onAddNewSelect: StringCallback? = nil,
-            onAddNewSuccessShown: VoidCallback? = nil,
-            onAddNewErrorShown: VoidCallback? = nil
+                searchDescriptor: String,
+                query: Binding<String>,
+                isSearching: Bool,
+                results: [LogSearchable],
+                isCreatingNewLogItem: Bool,
+                createNewLogItemSuccess: Bool,
+                createNewLogItemError: Bool,
+                onCancel: VoidCallback? = nil,
+                onItemSelect: IntCallback? = nil,
+                onViewDismiss: VoidCallback? = nil,
+                onAddNewSelect: StringCallback? = nil,
+                onAddNewSuccessShown: VoidCallback? = nil,
+                onAddNewErrorShown: VoidCallback? = nil
         ) {
             self.searchDescriptor = searchDescriptor.capitalizeFirstLetter()
             self.isSearching = isSearching
@@ -88,6 +88,7 @@ struct SearchListView: View {
             self.createNewLogItemError = createNewLogItemError
             self.onCancel = onCancel
             self.onItemSelect = onItemSelect
+            self.onViewDismiss = onViewDismiss
             self.onAddNewSelect = onAddNewSelect
             self.onAddNewSuccessShown = onAddNewSuccessShown
             self.onAddNewErrorShown = onAddNewErrorShown
@@ -107,64 +108,67 @@ struct SearchListView: View {
             ScrollView {
                 if viewModel.showAddNew {
                     AddNewListItemView(viewModel: getAddNewListItemViewModel())
-                            .modifier(RoundedBorderSection())
-                            .padding(.horizontal, CGFloat.Theme.Layout.normal)
-                            .padding(.top, CGFloat.Theme.Layout.normal)
+                        .modifier(RoundedBorderSection())
+                        .padding(.horizontal, CGFloat.Theme.Layout.normal)
+                        .padding(.top, CGFloat.Theme.Layout.normal)
                 }
                 VStack {
                     HStack {
                         Text("Search Results")
-                                .font(Font.Theme.heading)
-                                .foregroundColor(Color.Theme.textDark)
-                                .padding(.bottom, CGFloat.Theme.Layout.small)
+                            .font(Font.Theme.heading)
+                            .foregroundColor(Color.Theme.textDark)
+                            .padding(.bottom, CGFloat.Theme.Layout.small)
                         Spacer()
                     }
                     getResultView()
-                            .modifier(RoundedBorderSection())
+                        .modifier(RoundedBorderSection())
                 }
-                        .padding(.all, CGFloat.Theme.Layout.normal)
+                .padding(.all, CGFloat.Theme.Layout.normal)
             }
         }
-                // TODO: Temporary soln to fix bug in swiftui where scrollview scrolls under bottom bar
-                .padding(.bottom, 1.0)
-            // Disable/Enable interaction
-            .disableInteraction(isDisabled: .constant(self.viewModel.viewDisabled))
-            // Loading/Success/Failure States
-            .withLoadingPopup(show: .constant(self.viewModel.isCreatingNewLogItem), text: "Saving New Item")
-            .withStandardPopup(show: .constant(self.viewModel.createNewLogItemSuccess), type: .success, text: "Saved Successfully") {
-                self.viewModel.onAddNewSuccessShown?()
+        // TODO: Temporary soln to fix bug in swiftui where scrollview scrolls under bottom bar
+        .padding(.bottom, 1.0)
+        // Disable/Enable interaction
+        .disableInteraction(isDisabled: .constant(self.viewModel.viewDisabled))
+        // Loading/Success/Failure States
+        .withLoadingPopup(show: .constant(self.viewModel.isCreatingNewLogItem), text: "Saving New Item")
+        .withStandardPopup(show: .constant(self.viewModel.createNewLogItemSuccess), type: .success, text: "Saved Successfully") {
+            self.viewModel.onAddNewSuccessShown?()
         }
         .withStandardPopup(show: .constant(self.viewModel.createNewLogItemError), type: .failure, text: "Something Went Wrong") {
             self.viewModel.onAddNewErrorShown?()
         }
-            // Alert
-            .alert(isPresented: self.$showAddNewConfirmation) {
-                Alert(
-                    title: Text("Add Custom Item"),
-                    message: Text("Are you sure you want to add \(self.viewModel.addNewItemName) and select it from the list?"),
-                    primaryButton: .default(
-                        Text("Confirm")
-                            .foregroundColor(Color.Theme.primary)
-                    ) {
-                        self.viewModel.onAddNewSelect?(self.viewModel.addNewItemName)
-                    },
-                    secondaryButton: .cancel(
-                        Text("Cancel")
-                            .foregroundColor(Color.Theme.primary)
-                    )
-                )
+        .onDisappear {
+            self.viewModel.onViewDismiss?()
         }
-            // Navigation Bar
-            .navigationBarBackButtonHidden(true)
-            .navigationBarItems(leading: Button(action: {
-                self.viewModel.onCancel?()
-            }, label: {
-                Text("Cancel")
-                    .font(Font.Theme.normalText)
-                    .foregroundColor(Color.Theme.primary)
-            }))
-            .navigationBarTitle(viewModel.navigationBarTitle)
-            .background(Color.Theme.backgroundPrimary)
+        // Alert
+        .alert(isPresented: self.$showAddNewConfirmation) {
+            Alert(
+                title: Text("Add Custom Item"),
+                message: Text("Are you sure you want to add \(self.viewModel.addNewItemName) and select it from the list?"),
+                primaryButton: .default(
+                    Text("Confirm")
+                        .foregroundColor(Color.Theme.primary)
+                ) {
+                    self.viewModel.onAddNewSelect?(self.viewModel.addNewItemName)
+                },
+                secondaryButton: .cancel(
+                    Text("Cancel")
+                        .foregroundColor(Color.Theme.primary)
+                )
+            )
+        }
+        // Navigation Bar
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(leading: Button(action: {
+            self.viewModel.onCancel?()
+        }, label: {
+            Text("Cancel")
+                .font(Font.Theme.normalText)
+                .foregroundColor(Color.Theme.primary)
+        }))
+        .navigationBarTitle(Text(viewModel.navigationBarTitle), displayMode: .inline)
+        .background(Color.Theme.backgroundPrimary)
     }
     
     private func getResultView() -> AnyView {
