@@ -14,7 +14,7 @@ struct RecentLogSection: View {
         var showNoRecents: Bool {
             recentLogs.isEmpty
         }
-        let recentLogs: [RecentLogRow.ViewModel]
+        let recentLogs: [LogRow.ViewModel]
     }
     
     let viewModel: ViewModel
@@ -30,7 +30,7 @@ struct RecentLogSection: View {
             } else {
                 ForEach(viewModel.recentLogs) { log in
                     Group {
-                        RecentLogRow(viewModel: log)
+                        LogRow(viewModel: log)
                         if self.showDivider(after: log) {
                             Divider()
                         }
@@ -40,7 +40,7 @@ struct RecentLogSection: View {
         }
     }
 
-    private func showDivider(after vm: RecentLogRow.ViewModel) -> Bool {
+    private func showDivider(after vm: LogRow.ViewModel) -> Bool {
         if let index = viewModel.recentLogs.firstIndex(where: { log in log.id == vm.id }),
            index < self.viewModel.recentLogs.count - 1 {
             return true
@@ -63,7 +63,7 @@ struct NoRecentLogsView: View {
 
 struct RecentLogSection_Previews: PreviewProvider {
 
-    static let medicationLog: RecentLogRow.ViewModel = RecentLogRow.ViewModel(
+    static let medicationLog: LogRow.ViewModel = LogRow.ViewModel(
             id: "",
             categoryName: "Medication",
             categoryColor: LogCategory.medication.displayColor(),

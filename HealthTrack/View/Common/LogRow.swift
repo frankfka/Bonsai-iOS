@@ -8,10 +8,10 @@
 
 import SwiftUI
 
-struct RecentLogRow: View {
+struct LogRow: View {
     
     struct ViewModel: Identifiable {
-        internal let id: String
+        let id: String
         let categoryName: String
         let categoryColor: Color
         let logName: String
@@ -57,9 +57,9 @@ struct RecentLogRow: View {
     }
 }
 
-struct RecentLogRow_Previews: PreviewProvider {
+struct LogRow_Previews: PreviewProvider {
 
-    private static var medicationLogVm: RecentLogRow.ViewModel = RecentLogRow.ViewModel(
+    private static var medicationLogVm: LogRow.ViewModel = LogRow.ViewModel(
             id: "",
             categoryName: LogCategory.medication.displayValue(),
             categoryColor: LogCategory.medication.displayColor(),
@@ -67,7 +67,7 @@ struct RecentLogRow_Previews: PreviewProvider {
             timeString: "Jan 1, 2020"
     )
     
-    private static var noteLogVm: RecentLogRow.ViewModel = RecentLogRow.ViewModel(
+    private static var noteLogVm: LogRow.ViewModel = LogRow.ViewModel(
             id: "",
             categoryName: LogCategory.note.displayValue(),
             categoryColor: LogCategory.note.displayColor(),
@@ -77,8 +77,8 @@ struct RecentLogRow_Previews: PreviewProvider {
 
     static var previews: some View {
         Group {
-            RecentLogRow(viewModel: medicationLogVm)
-            RecentLogRow(viewModel: noteLogVm)
+            LogRow(viewModel: medicationLogVm)
+            LogRow(viewModel: noteLogVm)
         }.previewLayout(.sizeThatFits)
     }
 }

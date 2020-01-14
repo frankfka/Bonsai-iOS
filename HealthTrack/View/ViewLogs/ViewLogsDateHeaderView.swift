@@ -11,7 +11,7 @@ import SwiftUI
 extension DateFormatter {
     private static var logDatePickerFormatter: DateFormatter {
         let formatter = DateFormatter()
-        formatter.dateFormat = "EEE, MMM d, yyyy"
+        formatter.dateFormat = "EEE, MMM d, yyy"
         return formatter
     }
     static func stringForLogDatePicker(from date: Date) -> String {
@@ -22,6 +22,15 @@ extension DateFormatter {
             return "Yesterday"
         }
         return logDatePickerFormatter.string(from: date)
+    }
+
+    private static var logRowDateFormatter: DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "h:mm a, MMM d"
+        return dateFormatter
+    }
+    static func stringForLogRowDate(from date: Date) -> String {
+        return logRowDateFormatter.string(from: date)
     }
 }
 
@@ -48,6 +57,7 @@ struct ViewLogsDateHeaderView: View {
     // TODO: Today text, make it slide down instead of fade
     var body: some View {
         VStack(spacing: 0) {
+            Divider()
             // Top Bar view
             HStack {
                 // Left cancel button - show only when date picker is shown

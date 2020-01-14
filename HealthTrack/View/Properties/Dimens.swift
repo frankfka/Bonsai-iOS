@@ -43,7 +43,7 @@ struct AppDimensions {
         init() {
             normal = 16
             small = 8
-            rowSeparator = 64
+            rowSeparator = 16
             
             cornerRadius = 24
             

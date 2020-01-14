@@ -75,16 +75,13 @@ struct HomeTab: View {
     }
 
     private func getRecentLogSectionViewModel() -> RecentLogSection.ViewModel {
-        let recentLogDateFormatter = DateFormatter()
-        recentLogDateFormatter.dateStyle = .medium
-        recentLogDateFormatter.timeStyle = .none
-        let logViewModels = store.state.homeScreen.recentLogs.map { loggable -> RecentLogRow.ViewModel in
-            RecentLogRow.ViewModel(
+        let logViewModels = store.state.homeScreen.recentLogs.map { loggable -> LogRow.ViewModel in
+            LogRow.ViewModel(
                     id: loggable.id,
                     categoryName: loggable.category.displayValue(),
                     categoryColor: loggable.category.displayColor(),
                     logName: loggable.title,
-                    timeString: recentLogDateFormatter.string(from: loggable.dateCreated)
+                    timeString: DateFormatter.stringForLogRowDate(from: loggable.dateCreated)
             )
         }
         return RecentLogSection.ViewModel(recentLogs: logViewModels)

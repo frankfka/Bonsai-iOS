@@ -31,6 +31,7 @@ enum HomeScreenAction {
 
 enum ViewLogsAction {
     case screenDidShow
+    case fetchData(date: Date)
     case selectedDateChanged(date: Date) // Only support 1 day for now
     case dataLoadSuccess(logs: [Loggable])
     case dataLoadError(error: Error)

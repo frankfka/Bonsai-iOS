@@ -71,9 +71,8 @@ struct ContentView: View {
                 HomeTabContainer(viewModel: getHomeTabViewModel())
                     .environmentObject(self.store)
             } else {
-                Text("Second tab")
-                ViewLogsDateHeaderView(viewModel: ViewLogsDateHeaderView.ViewModel(initialDate: Date()))
-                Spacer()
+                ViewLogsTabContainer(viewModel: getLogsTabViewModel())
+                    .environmentObject(self.store)
             }
             TabBarView(viewModel: viewModel.tabBarViewModel)
         }
@@ -109,6 +108,27 @@ struct ContentView: View {
                 isLoading: isLoading,
                 loadError: loadError,
                 homeTabDidAppear: onShowHomeTab
+        )
+    }
+
+    private func getLogsTabViewModel() -> ViewLogsTabContainer.ViewModel {
+        return ViewLogsTabContainer.ViewModel(
+                isLoading: store.state.viewLogs.isLoading,
+                loadError: store.state.viewLogs.loadError != nil,
+                viewLogsTabDidAppear: {
+                    self.store.send(.viewLog(action: .screenDidShow))
+                    self.store.send(.viewLog(action: .fetchData(date: self.store.state.viewLogs.dateForLogs)))
+                },
+                dateForLogs: store.state.viewLogs.dateForLogs,
+                logs: store.state.viewLogs.logs.map { loggable in
+                    return LogRow.ViewModel(
+                            id: loggable.id,
+                            categoryName: loggable.category.displayValue(),
+                            categoryColor: loggable.category.displayColor(),
+                            logName: loggable.title,
+                            timeString: DateFormatter.stringForLogRowDate(from: loggable.dateCreated)
+                    )
+                }
         )
     }
 
