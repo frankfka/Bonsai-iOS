@@ -1,9 +1,9 @@
 platform :ios, '13.2'
 
-target 'HealthTrack' do
+target 'Bonsai' do
   use_frameworks!
 
-  # Pods for HealthTrack
+  # Pods for Bonsai
   pod 'Firebase/Core'
   pod 'Firebase/Firestore'
 

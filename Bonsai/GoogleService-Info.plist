@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>9424923453-03duefhvjjk3p70f337380i6ahodi2gc.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.9424923453-03duefhvjjk3p70f337380i6ahodi2gc</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBsDNS9diRMvPh4cwiwP368tHEbrb6Uwf8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>9424923453</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.jiafrank.HealthTrack</string>
+	<key>PROJECT_ID</key>
+	<string>healthtrack-6406b</string>
+	<key>STORAGE_BUCKET</key>
+	<string>healthtrack-6406b.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:9424923453:ios:260bf60d913bfd5548f354</string>
+	<key>DATABASE_URL</key>
+	<string>https://healthtrack-6406b.firebaseio.com</string>
+</dict>
+</plist>

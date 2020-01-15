@@ -45,7 +45,6 @@
 		11F445EA239A08D400B501CD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11F445E9239A08D400B501CD /* Assets.xcassets */; };
 		11F445ED239A08D400B501CD /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11F445EC239A08D400B501CD /* Preview Assets.xcassets */; };
 		11F445F0239A08D400B501CD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11F445EE239A08D400B501CD /* LaunchScreen.storyboard */; };
-		953C5DF1E8234D5DB94165DF /* Pods_HealthTrack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A8DC45F5FAA609AD2AB514E /* Pods_HealthTrack.framework */; };
 		9E04B066551BCEEF58E9DB5B /* HomeScreenMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B329C5305296C0C18D78 /* HomeScreenMiddleware.swift */; };
 		9E04B0E9C35B4A8C7F35725C /* LogRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B355F83BFA8404BC1206 /* LogRow.swift */; };
 		9E04B1DC07699EBE5C684C53 /* MedicationLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BC42FA01AF3C727FA0A7 /* MedicationLogView.swift */; };
@@ -91,6 +90,7 @@
 		9E04BF17E5C0A7F47F98403A /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BD4E8ECB33163CBA699C /* UserService.swift */; };
 		9E04BF9D42BED6CD1B95E47A /* UserConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B6C450860BE65AF311A7 /* UserConstants.swift */; };
 		9E04BFCF9C45BB3FCE40FFE3 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B4A50B14B9F44D696289 /* User.swift */; };
+		F8CAFC9280F4E68431474074 /* Pods_Bonsai.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76CC4C0B881B5BDB7CBB1305 /* Pods_Bonsai.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -127,15 +127,16 @@
 		11B4313123AE919B00909D47 /* CreateLogTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateLogTextField.swift; sourceTree = "<group>"; };
 		11EDE0E723C6D17A00A54673 /* ViewLogsDateHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewLogsDateHeaderView.swift; sourceTree = "<group>"; };
 		11EDE0ED23C6EE2E00A54673 /* DatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerView.swift; sourceTree = "<group>"; };
-		11F445E0239A08CB00B501CD /* HealthTrack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HealthTrack.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		11F445E0239A08CB00B501CD /* Bonsai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bonsai.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		11F445E3239A08CB00B501CD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		11F445E5239A08CB00B501CD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		11F445E9239A08D400B501CD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		11F445EC239A08D400B501CD /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		11F445EF239A08D400B501CD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		11F445F1239A08D400B501CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4A8DC45F5FAA609AD2AB514E /* Pods_HealthTrack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HealthTrack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5224D148B81081E7444187A6 /* Pods-HealthTrack.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthTrack.release.xcconfig"; path = "Target Support Files/Pods-HealthTrack/Pods-HealthTrack.release.xcconfig"; sourceTree = "<group>"; };
+		75E56A12C7431D234EDF9416 /* Pods-Bonsai.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bonsai.debug.xcconfig"; path = "Target Support Files/Pods-Bonsai/Pods-Bonsai.debug.xcconfig"; sourceTree = "<group>"; };
+		76CC4C0B881B5BDB7CBB1305 /* Pods_Bonsai.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bonsai.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E04B0FA059903598F57AE95 /* Nutrition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Nutrition.swift; sourceTree = "<group>"; };
 		9E04B116097027786675FBE7 /* FirebaseService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
 		9E04B11F0B3A84BA18DFF035 /* AppReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppReducer.swift; sourceTree = "<group>"; };
@@ -181,6 +182,7 @@
 		9E04BE25078C4D1D66F8E42F /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		9E04BF971048F9F4765391DA /* HomeScreenReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeScreenReducer.swift; sourceTree = "<group>"; };
 		9E04BFB9FC87753455D68DDA /* Popup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Popup.swift; sourceTree = "<group>"; };
+		C79500D120BF55D97837F14C /* Pods-Bonsai.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bonsai.release.xcconfig"; path = "Target Support Files/Pods-Bonsai/Pods-Bonsai.release.xcconfig"; sourceTree = "<group>"; };
 		FBC3618C0413FD0172D8BDA1 /* Pods-HealthTrack.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthTrack.debug.xcconfig"; path = "Target Support Files/Pods-HealthTrack/Pods-HealthTrack.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -189,7 +191,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				953C5DF1E8234D5DB94165DF /* Pods_HealthTrack.framework in Frameworks */,
+				F8CAFC9280F4E68431474074 /* Pods_Bonsai.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,7 +320,7 @@
 		11F445D7239A08CB00B501CD = {
 			isa = PBXGroup;
 			children = (
-				11F445E2239A08CB00B501CD /* HealthTrack */,
+				11F445E2239A08CB00B501CD /* Bonsai */,
 				11F445E1239A08CB00B501CD /* Products */,
 				24915546E47F308BA976B4E0 /* Pods */,
 				5B3DA4EB6C3517A5C6287EB7 /* Frameworks */,
@@ -328,12 +330,12 @@
 		11F445E1239A08CB00B501CD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				11F445E0239A08CB00B501CD /* HealthTrack.app */,
+				11F445E0239A08CB00B501CD /* Bonsai.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		11F445E2239A08CB00B501CD /* HealthTrack */ = {
+		11F445E2239A08CB00B501CD /* Bonsai */ = {
 			isa = PBXGroup;
 			children = (
 				11B4311423A57DB700909D47 /* GoogleService-Info.plist */,
@@ -349,7 +351,7 @@
 				9E04BEE589238655F7534763 /* Service */,
 				9E04B3920AAD10E938641431 /* Util */,
 			);
-			path = HealthTrack;
+			path = Bonsai;
 			sourceTree = "<group>";
 		};
 		11F445EB239A08D400B501CD /* Preview Content */ = {
@@ -365,6 +367,8 @@
 			children = (
 				FBC3618C0413FD0172D8BDA1 /* Pods-HealthTrack.debug.xcconfig */,
 				5224D148B81081E7444187A6 /* Pods-HealthTrack.release.xcconfig */,
+				75E56A12C7431D234EDF9416 /* Pods-Bonsai.debug.xcconfig */,
+				C79500D120BF55D97837F14C /* Pods-Bonsai.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -372,7 +376,7 @@
 		5B3DA4EB6C3517A5C6287EB7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4A8DC45F5FAA609AD2AB514E /* Pods_HealthTrack.framework */,
+				76CC4C0B881B5BDB7CBB1305 /* Pods_Bonsai.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -493,9 +497,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		11F445DF239A08CB00B501CD /* HealthTrack */ = {
+		11F445DF239A08CB00B501CD /* Bonsai */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 11F445F4239A08D400B501CD /* Build configuration list for PBXNativeTarget "HealthTrack" */;
+			buildConfigurationList = 11F445F4239A08D400B501CD /* Build configuration list for PBXNativeTarget "Bonsai" */;
 			buildPhases = (
 				1A59CEC6960C4D44D643885B /* [CP] Check Pods Manifest.lock */,
 				11F445DC239A08CB00B501CD /* Sources */,
@@ -507,9 +511,9 @@
 			);
 			dependencies = (
 			);
-			name = HealthTrack;
+			name = Bonsai;
 			productName = HealthTrack;
-			productReference = 11F445E0239A08CB00B501CD /* HealthTrack.app */;
+			productReference = 11F445E0239A08CB00B501CD /* Bonsai.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -527,7 +531,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 11F445DB239A08CB00B501CD /* Build configuration list for PBXProject "HealthTrack" */;
+			buildConfigurationList = 11F445DB239A08CB00B501CD /* Build configuration list for PBXProject "Bonsai" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -540,7 +544,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				11F445DF239A08CB00B501CD /* HealthTrack */,
+				11F445DF239A08CB00B501CD /* Bonsai */,
 			);
 		};
 /* End PBXProject section */
@@ -575,7 +579,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-HealthTrack-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Bonsai-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -588,15 +592,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HealthTrack/Pods-HealthTrack-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Bonsai/Pods-Bonsai-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HealthTrack/Pods-HealthTrack-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Bonsai/Pods-Bonsai-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HealthTrack/Pods-HealthTrack-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Bonsai/Pods-Bonsai-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -818,15 +822,15 @@
 		};
 		11F445F5239A08D400B501CD /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FBC3618C0413FD0172D8BDA1 /* Pods-HealthTrack.debug.xcconfig */;
+			baseConfigurationReference = 75E56A12C7431D234EDF9416 /* Pods-Bonsai.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"HealthTrack/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Bonsai/Preview Content\"";
 				DEVELOPMENT_TEAM = P2M6BCPR7S;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = HealthTrack/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Bonsai/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -840,15 +844,15 @@
 		};
 		11F445F6239A08D400B501CD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5224D148B81081E7444187A6 /* Pods-HealthTrack.release.xcconfig */;
+			baseConfigurationReference = C79500D120BF55D97837F14C /* Pods-Bonsai.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"HealthTrack/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Bonsai/Preview Content\"";
 				DEVELOPMENT_TEAM = P2M6BCPR7S;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = HealthTrack/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Bonsai/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -863,7 +867,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		11F445DB239A08CB00B501CD /* Build configuration list for PBXProject "HealthTrack" */ = {
+		11F445DB239A08CB00B501CD /* Build configuration list for PBXProject "Bonsai" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				11F445F2239A08D400B501CD /* Debug */,
@@ -872,7 +876,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		11F445F4239A08D400B501CD /* Build configuration list for PBXNativeTarget "HealthTrack" */ = {
+		11F445F4239A08D400B501CD /* Build configuration list for PBXNativeTarget "Bonsai" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				11F445F5239A08D400B501CD /* Debug */,
