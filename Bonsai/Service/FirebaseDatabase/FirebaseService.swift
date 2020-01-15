@@ -33,9 +33,16 @@ class FirebaseService: DatabaseService {
                 onComplete(.failure(ServiceError(message: "Error retrieving user \(userId)", wrappedError: err)))
                 return
             }
-            guard let docData = doc?.data() else {
+            guard let doc = doc, doc.exists else {
+                AppLogging.error("User \(userId) does not exist in Firebase")
+                // Tell handler to delete the user default ID
+                onComplete(.failure(ServiceError(message: "User \(userId) does not exist in Firebase", reason: ServiceError.DoesNotExistInDatabaseError)))
+                return
+            }
+            guard let docData = doc.data() else {
                 AppLogging.error("User \(userId) has no data")
-                onComplete(.failure(ServiceError(message: "User \(userId) has no data")))
+                // Tell handler to delete the user default ID
+                onComplete(.failure(ServiceError(message: "User \(userId) has no data", reason: ServiceError.DoesNotExistInDatabaseError)))
                 return
             }
             if let user: User = User.decode(data: docData) {

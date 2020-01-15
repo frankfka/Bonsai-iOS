@@ -11,12 +11,17 @@ typealias ServicePublisher<SuccessType> = AnyPublisher<SuccessType, ServiceError
 typealias ServiceFuture<SuccessType> = Future<SuccessType, ServiceError>
 
 struct ServiceError: Error {
+
+    static let DoesNotExistInDatabaseError = "DOES_NOT_EXIST_IN_DB"
+
     let message: String
     let wrappedError: Error?
+    let reason: String? // Allows conditional actions based on errors
 
-    init(message: String, wrappedError: Error? = nil) {
+    init(message: String, wrappedError: Error? = nil, reason: String? = nil) {
         self.message = message
         self.wrappedError = wrappedError
+        self.reason = reason
     }
 }
 

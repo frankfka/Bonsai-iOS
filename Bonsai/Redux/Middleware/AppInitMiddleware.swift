@@ -37,8 +37,11 @@ struct AppInitMiddleware {
                         AppLogging.info("Success getting user \(user.id)")
                         return AppAction.global(action: GlobalAction.initSuccess(user: user))
                     }.catch({ (err) -> Just<AppAction> in
-                        AppLogging.info("Failed to get user \(userId). Removing ID from user defaults: \(err)")
-                        UserDefaults.standard.removeObject(forKey: UserConstants.UserDefaultsUserIdKey)
+                        AppLogging.info("Failed to get user \(userId): \(err)")
+                        if let reason = err.reason, reason == ServiceError.DoesNotExistInDatabaseError {
+                            UserDefaults.standard.removeObject(forKey: UserConstants.UserDefaultsUserIdKey)
+                            AppLogging.info("Removing ID \(userId) from user defaults")
+                        }
                         return Just(AppAction.global(action: GlobalAction.initFailure(error: err)))
                     }).eraseToAnyPublisher()
         } else {

@@ -37,12 +37,6 @@ struct LogDetailView: View {
             VStack(alignment: .leading) {
                 Text(self.viewModel.logDate)
                 Text(self.viewModel.logCategory)
-                Text(self.viewModel.logDate)
-                Text(self.viewModel.logCategory)
-                Text(self.viewModel.logDate)
-                Text(self.viewModel.logCategory)
-                Text(self.viewModel.logDate)
-                Text(self.viewModel.logCategory)
                 LogDetailNotesView(viewModel: getNotesViewModel())
             }
             .padding(.all, CGFloat.Theme.Layout.normal)
@@ -62,9 +56,9 @@ struct LogDetailView: View {
     func getNotesViewModel() -> LogDetailNotesView.ViewModel {
         return LogDetailNotesView.ViewModel(notes: self.viewModel.loggable.notes)
     }
-    
-    
 }
+
+//struct L
 
 struct LogDetailView_Previews: PreviewProvider {
     static var previews: some View {
