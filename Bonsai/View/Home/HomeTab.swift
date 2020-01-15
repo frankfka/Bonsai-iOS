@@ -69,8 +69,8 @@ struct HomeTab: View {
             }
             .padding(.all, CGFloat.Theme.Layout.normal)
         }
-            // Use flex frame so it always fills width
-            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: Alignment.topLeading)
+        // Use flex frame so it always fills width
+        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: Alignment.topLeading)
     }
     
     private func getRecentLogSectionViewModel() -> RecentLogSection.ViewModel {

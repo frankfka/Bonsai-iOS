@@ -21,26 +21,17 @@ struct LogDetailNotesView: View {
     }
     
     var body: some View {
-        RoundedBorderTitledSection(sectionTitle: "Notes") {
+        TitledSection(sectionTitle: "Notes") {
             HStack {
-                // Center view if we show placeholder
-                if self.viewModel.showNoNotesPlaceholder {
-                    Spacer()
-                }
-                Text(
-                    self.viewModel.showNoNotesPlaceholder ?
-                        "No Notes" : self.viewModel.notes
-                )
-                .font(Font.Theme.normalText)
-                .foregroundColor(Color.Theme.text)
-                .multilineTextAlignment(
-                    self.viewModel.showNoNotesPlaceholder ?
-                        .center : .leading
-                )
+                Text(self.viewModel.showNoNotesPlaceholder ?  "No Notes" : self.viewModel.notes)
+                        .font(Font.Theme.normalText)
+                        .foregroundColor(Color.Theme.text)
+                        .multilineTextAlignment(.leading)
+                // Push text to leading
                 Spacer(minLength: 0)
             }
-            .frame(minWidth: 0, maxWidth: .infinity)
-            .padding(.all, CGFloat.Theme.Layout.small)
+            .padding(.all, CGFloat.Theme.Layout.normal)
+            .background(Color.Theme.backgroundSecondary)
         }
     }
 }

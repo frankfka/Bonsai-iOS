@@ -39,7 +39,7 @@ struct LogDetailView: View {
                 Text(self.viewModel.logCategory)
                 LogDetailNotesView(viewModel: getNotesViewModel())
             }
-            .padding(.all, CGFloat.Theme.Layout.normal)
+            .padding(.vertical, CGFloat.Theme.Layout.normal)
         }
         .background(Color.Theme.backgroundPrimary)
         .navigationBarTitle("Log Details")

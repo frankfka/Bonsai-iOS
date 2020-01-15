@@ -21,11 +21,21 @@ struct LogDetailSymptomView: View {
     }
 
     var body: some View {
-        RoundedBorderTitledSection(sectionTitle: "Symptom") {
-            VStack {
-                LogDetailItemView(viewModel: LogDetailItemView.ViewModel(title: "Symptom", value: self.viewModel.name))
-                LogDetailItemView(viewModel: LogDetailItemView.ViewModel(title: "Severity", value: self.viewModel.severity))
-            }
+        VStack {
+            TappableRowView(
+                    viewModel: TappableRowView.ViewModel(
+                            primaryText: .constant("Symptom"),
+                            secondaryText: .constant(self.viewModel.name),
+                            hasDisclosureIndicator: false
+                    )
+            )
+            TappableRowView(
+                    viewModel: TappableRowView.ViewModel(
+                            primaryText: .constant("Severity"),
+                            secondaryText: .constant(self.viewModel.severity),
+                            hasDisclosureIndicator: false
+                    )
+            )
         }
     }
 }
