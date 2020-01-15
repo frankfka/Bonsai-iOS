@@ -11,22 +11,24 @@ import SwiftUI
 struct LogRow: View {
     
     struct ViewModel: Identifiable {
-        let id: String
+        var id: String {
+            loggable.id
+        }
+        let loggable: Loggable
         let categoryName: String
         let categoryColor: Color
         let logName: String
         let timeString: String
 
-        init(id: String, categoryName: String, categoryColor: Color, logName: String, timeString: String) {
-            self.id = id
-            self.categoryName = categoryName
-            self.categoryColor = categoryColor
-            self.logName = logName
-            self.timeString = timeString
+        init(loggable: Loggable) {
+            self.loggable = loggable
+            self.categoryName = loggable.category.displayValue()
+            self.categoryColor = loggable.category.displayColor()
+            self.logName = loggable.title
+            self.timeString = DateFormatter.stringForLogRowDate(from: loggable.dateCreated)
         }
     }
-    
-    let viewModel: ViewModel
+    private let viewModel: ViewModel
     
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -59,26 +61,10 @@ struct LogRow: View {
 
 struct LogRow_Previews: PreviewProvider {
 
-    private static var medicationLogVm: LogRow.ViewModel = LogRow.ViewModel(
-            id: "",
-            categoryName: LogCategory.medication.displayValue(),
-            categoryColor: LogCategory.medication.displayColor(),
-            logName: "Advil",
-            timeString: "Jan 1, 2020"
-    )
-    
-    private static var noteLogVm: LogRow.ViewModel = LogRow.ViewModel(
-            id: "",
-            categoryName: LogCategory.note.displayValue(),
-            categoryColor: LogCategory.note.displayColor(),
-            logName: "This is a Long Testing Note Testing Testing Test",
-            timeString: "Jan 1, 2020"
-    )
-
     static var previews: some View {
         Group {
-            LogRow(viewModel: medicationLogVm)
-            LogRow(viewModel: noteLogVm)
+            LogRow(viewModel: LogRow.ViewModel(loggable: PreviewLoggables.medication))
+            LogRow(viewModel: LogRow.ViewModel(loggable: PreviewLoggables.notes))
         }.previewLayout(.sizeThatFits)
     }
 }

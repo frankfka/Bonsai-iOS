@@ -120,15 +120,7 @@ struct ContentView: View {
                     self.store.send(.viewLog(action: .fetchData(date: self.store.state.viewLogs.dateForLogs)))
                 },
                 dateForLogs: store.state.viewLogs.dateForLogs,
-                logs: store.state.viewLogs.logs.map { loggable in
-                    return LogRow.ViewModel(
-                            id: loggable.id,
-                            categoryName: loggable.category.displayValue(),
-                            categoryColor: loggable.category.displayColor(),
-                            logName: loggable.title,
-                            timeString: DateFormatter.stringForLogRowDate(from: loggable.dateCreated)
-                    )
-                }
+                logs: store.state.viewLogs.logs.map { LogRow.ViewModel(loggable: $0) }
         )
     }
 

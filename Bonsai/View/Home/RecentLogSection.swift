@@ -16,8 +16,7 @@ struct RecentLogSection: View {
         }
         let recentLogs: [LogRow.ViewModel]
     }
-    
-    let viewModel: ViewModel
+    private let viewModel: ViewModel
 
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -28,10 +27,14 @@ struct RecentLogSection: View {
             if self.viewModel.showNoRecents {
                 NoRecentLogsView()
             } else {
-                ForEach(viewModel.recentLogs) { log in
+                ForEach(viewModel.recentLogs) { logVm in
                     Group {
-                        LogRow(viewModel: log)
-                        if self.showDivider(after: log) {
+                        NavigationLink(
+                                destination: LogDetailView(viewModel: LogDetailView.ViewModel(loggable: logVm.loggable))
+                        ) {
+                            LogRow(viewModel: logVm)
+                        }
+                        if self.showDivider(after: logVm) {
                             Divider()
                         }
                     }
@@ -70,19 +73,14 @@ struct NoRecentLogsView: View {
 
 struct RecentLogSection_Previews: PreviewProvider {
 
-    static let medicationLog: LogRow.ViewModel = LogRow.ViewModel(
-            id: "",
-            categoryName: "Medication",
-            categoryColor: LogCategory.medication.displayColor(),
-            logName: "Test Medication",
-            timeString: "Tuesday, Feb 2, 2019"
-    )
-
     static var previews: some View {
         Group {
             RecentLogSection(
                     viewModel: RecentLogSection.ViewModel(
-                            recentLogs: [medicationLog]
+                            recentLogs: [
+                                LogRow.ViewModel(loggable: PreviewLoggables.medication),
+                                LogRow.ViewModel(loggable: PreviewLoggables.notes)
+                            ]
                     )
             )
         }.previewLayout(.sizeThatFits)

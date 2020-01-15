@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+// TODO: Allow for retries
 struct ErrorView: View {
     var body: some View {
         GeometryReader { geometry in
