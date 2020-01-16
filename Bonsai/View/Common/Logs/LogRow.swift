@@ -8,6 +8,18 @@
 
 import SwiftUI
 
+extension DateFormatter {
+    // Date + Time shown in log rows
+    private static var logRowDateFormatter: DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "h:mm a, MMM d"
+        return dateFormatter
+    }
+    static func stringForLogRowDate(from date: Date) -> String {
+        return logRowDateFormatter.string(from: date)
+    }
+}
+
 struct LogRow: View {
     
     struct ViewModel: Identifiable {

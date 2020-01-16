@@ -17,6 +17,7 @@ struct RecentLogSection: View {
         let recentLogs: [LogRow.ViewModel]
     }
     private let viewModel: ViewModel
+    @State(initialValue: false) var navigateToLogDetails: Bool? // Allows conditional pushing of navigation views
 
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -27,13 +28,16 @@ struct RecentLogSection: View {
             if self.viewModel.showNoRecents {
                 NoRecentLogsView()
             } else {
+                // Using the tag allows us to conditionally trigger navigation within an onTap method
+                NavigationLink(destination: LogDetailView(), tag: true, selection: $navigateToLogDetails) {
+                    EmptyView()
+                }
                 ForEach(viewModel.recentLogs) { logVm in
                     Group {
-                        NavigationLink(
-                                destination: LogDetailView(viewModel: LogDetailView.ViewModel(loggable: logVm.loggable))
-                        ) {
-                            LogRow(viewModel: logVm)
-                        }
+                        LogRow(viewModel: logVm)
+                            .onTapGesture {
+                                self.onLogRowTapped(loggable: logVm.loggable)
+                            }
                         if self.showDivider(after: logVm) {
                             Divider()
                         }
@@ -41,6 +45,10 @@ struct RecentLogSection: View {
                 }
             }
         }
+    }
+
+    private func onLogRowTapped(loggable: Loggable) {
+        navigateToLogDetails = true
     }
 
     private func showDivider(after vm: LogRow.ViewModel) -> Bool {

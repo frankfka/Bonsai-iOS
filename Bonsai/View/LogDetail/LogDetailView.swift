@@ -8,41 +8,218 @@
 
 import SwiftUI
 
-// TODO: On load, dispatch action to create state, use this to retrieve required metadata
+
 struct LogDetailView: View {
 
+    // Shown in case of error, when we don't have a loggable in the state
+    private static let ErrorLoggablePlaceholder = NoteLog(id: "", title: "", dateCreated: Date(), notes: "")
+
+    @EnvironmentObject var store: AppStore
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
     struct ViewModel {
         let loggable: Loggable
         let logDate: String
         let logCategory: String
         let logCategoryColor: Color
+        let isLoading: Bool
+        let showDeleteSuccess: Bool
+        let showError: Bool
+        var loadingMessage: String = "Loading"
+        var errorMessage: String = "Error"
 
-        init(loggable: Loggable) {
+        var disableActions: Bool {
+            isLoading || showDeleteSuccess || showError
+        }
+        var disableDelete: Bool {
+            disableActions || loggable.id.isEmptyWithoutWhitespace()
+        }
+
+        init(loggable: Loggable, isLoading: Bool = true, loadingMessage: String = "Loading",
+             showDeleteSuccess: Bool = false, showError: Bool = false, errorMessage: String = "Error") {
             self.loggable = loggable
             self.logDate = loggable.dateCreated.description
             self.logCategory = loggable.category.displayValue()
             self.logCategoryColor = loggable.category.displayColor()
+            self.loadingMessage = loadingMessage
+            self.isLoading = isLoading
+            self.showDeleteSuccess = showDeleteSuccess
+            self.errorMessage = errorMessage
+            self.showError = showError
         }
     }
-    private let viewModel: ViewModel
-    
-    init(viewModel: ViewModel) {
-        self.viewModel = viewModel
+    private var viewModel: ViewModel {
+        if let loggable = store.state.logDetails.loggable {
+            return ViewModel(
+                    loggable: loggable,
+                    isLoading: true,
+                    loadingMessage: "Loading",
+                    showDeleteSuccess: false,
+                    showError: false,
+                    errorMessage: "Error"
+            )
+        } else {
+            return ViewModel(loggable: LogDetailView.ErrorLoggablePlaceholder)
+        }
     }
-    
-    // TODO: Add date, category, etc
-    // TODO: Deletion, relog, etc
+    @State(initialValue: false) var showCreateLogModal: Bool
+    @State(initialValue: false) var showDeleteLogConfirmation: Bool
+
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading) {
-                Text(self.viewModel.logDate)
-                Text(self.viewModel.logCategory)
+            VStack(spacing: CGFloat.Theme.Layout.normal) {
+                // Detail Views
+                LogDetailBasicsView(viewModel: getBasicDetailsViewModel())
+                getCategorySpecificView()
                 LogDetailNotesView(viewModel: getNotesViewModel())
+                // Quick Re-log button
+                Button(action: {
+                    self.onLogAgainTapped()
+                }) {
+                    Text("Log This Again")
+                        .font(Font.Theme.normalText)
+                        .foregroundColor(
+                            self.viewModel.disableActions ?
+                            Color.Theme.grayscalePrimary : Color.Theme.primary
+                        )
+                        .padding(.horizontal, CGFloat.Theme.Layout.normal)
+                        .padding(.vertical, CGFloat.Theme.Layout.small)
+                }
+                .modifier(RoundedBorderSection())
+                .padding(.top, CGFloat.Theme.Layout.normal)
+                .disabled(self.viewModel.disableActions)
             }
             .padding(.vertical, CGFloat.Theme.Layout.normal)
         }
         .background(Color.Theme.backgroundPrimary)
-        .navigationBarTitle("Log Details")
+        .navigationBarItems(
+                leading: Button(action: {
+                        self.onBackTapped()
+                    }, label: {
+                        HStack(spacing: CGFloat.Theme.Layout.small) {
+                            Image(systemName: "chevron.left")
+                                    .foregroundColor(Color.Theme.primary)
+                            Text("Back")
+                                    .font(Font.Theme.normalText)
+                                    .foregroundColor(Color.Theme.primary)
+                                    // Prevents truncation
+                                    .fixedSize()
+                                    .frame(minWidth: 0, maxWidth: .infinity)
+                        }
+                        .frame(height: CGFloat.Theme.Layout.navBarItemHeight)
+                    }),
+                trailing: Button(action: {
+                        self.onDeleteLogTapped()
+                    }, label: {
+                        Image(systemName: "trash")
+                                .resizable()
+                                .aspectRatio(1, contentMode: .fit)
+                                .frame(height: CGFloat.Theme.Layout.navBarItemHeight)
+                                .foregroundColor(
+                                        self.viewModel.disableDelete ?
+                                        Color.Theme.grayscalePrimary : Color.Theme.primary
+                                )
+                    })
+                    .disabled(self.viewModel.disableDelete)
+        )
+        .navigationBarTitle("Log Details", displayMode: .inline)
+        .navigationBarBackButtonHidden(true)
+        // Delete Log Confirmation
+        .alert(isPresented: $showDeleteLogConfirmation) {
+            Alert(
+                title: Text("Delete Log"),
+                message: Text("Are you sure you want to delete this log?"),
+                primaryButton: .destructive(
+                    Text("Confirm"),
+                    action: {
+                        self.onDeleteLogConfirmed()
+                }),
+                secondaryButton: .cancel(
+                    Text("Cancel")
+                )
+            )
+        }
+        // Create Log Modal
+        .sheet(
+            isPresented: $showCreateLogModal,
+            onDismiss: {
+                self.onCreateLogModalDismiss()
+            }) {
+                CreateLogView(
+                        viewModel: self.getCreateLogModalViewModel()
+                ).environmentObject(self.store)
+        }
+        // Popups
+        .withLoadingPopup(show: .constant(self.viewModel.isLoading), text: self.viewModel.loadingMessage)
+        .withStandardPopup(show: .constant(self.viewModel.showError), type: .failure, text: self.viewModel.errorMessage) {
+            self.onErrorPopupDismiss()
+        }
+        .withStandardPopup(show: .constant(self.viewModel.showDeleteSuccess), type: .success, text: "Deleted Successfully") {
+            self.onSuccessPopupDismiss()
+        }
+    }
+    
+    // MARK: Actions
+    private func onBackTapped() {
+        self.presentationMode.wrappedValue.dismiss()
+    }
+
+    private func onLogAgainTapped() {
+        // Dispatch an action for logging that will initialize the state
+        store.send(.createLog(action: .initFromPreviousLog(loggable: self.viewModel.loggable)))
+        showCreateLogModal.toggle()
+    }
+
+    private func onCreateLogModalDismiss() {
+        store.send(.createLog(action: .screenDidDismiss))
+    }
+    
+    private func onDeleteLogTapped() {
+        // Show alert
+        showDeleteLogConfirmation.toggle()
+    }
+    
+    private func onDeleteLogConfirmed() {
+        // Dispatch action to delete the log
+        store.send(.logDetails(action: .deleteLog(logId: viewModel.loggable.id)))
+    }
+
+    private func onErrorPopupDismiss() {
+        // Tell store to reset all errors so we hide the prompt
+        store.send(.logDetails(action: .errorPopupShown))
+    }
+
+    private func onSuccessPopupDismiss() {
+        // Only shown when log is deleted successfully, so we're safe to dismiss
+        self.presentationMode.wrappedValue.dismiss()
+    }
+    
+    // MARK: Rendered for all logs
+    private func getBasicDetailsViewModel() -> LogDetailBasicsView.ViewModel {
+        return LogDetailBasicsView.ViewModel(loggable: self.viewModel.loggable)
+    }
+    
+    private func getNotesViewModel() -> LogDetailNotesView.ViewModel {
+        return LogDetailNotesView.ViewModel(notes: self.viewModel.loggable.notes)
+    }
+
+    private func getCreateLogModalViewModel() -> CreateLogView.ViewModel {
+        return CreateLogView.ViewModel(showModal: $showCreateLogModal, createLogState: store.state.createLog)
+    }
+    
+    // MARK: Category-specific views
+    private func getCategorySpecificView() -> AnyView {
+        switch self.viewModel.loggable.category {
+        case .symptom:
+            guard let symptomVm = getSymptomDetailViewModel() else {
+                AppLogging.warn("Should be showing symptom log details but could not create view model")
+                break
+            }
+            return LogDetailSymptomView(viewModel: symptomVm).eraseToAnyView()
+        default:
+            break
+        }
+        return EmptyView().eraseToAnyView()
     }
     
     func getSymptomDetailViewModel() -> LogDetailSymptomView.ViewModel? {
@@ -52,20 +229,14 @@ struct LogDetailView: View {
         }
         return LogDetailSymptomView.ViewModel(name: "Test Name", severity: symptomLog.severity.displayValue())
     }
-    
-    func getNotesViewModel() -> LogDetailNotesView.ViewModel {
-        return LogDetailNotesView.ViewModel(notes: self.viewModel.loggable.notes)
-    }
 }
 
-//struct L
 
+// TODO: Need a preview here
 struct LogDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        LogDetailView(
-            viewModel: LogDetailView.ViewModel(
-                loggable: NoteLog(id: "", title: "", dateCreated: Date(), notes: "Example notes")
-            )
-        )
+        Group {
+            LogDetailView()
+        }.embedInNavigationView()
     }
 }

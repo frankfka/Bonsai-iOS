@@ -12,6 +12,7 @@ enum AppAction {
     case global(action: GlobalAction)
     case homeScreen(action: HomeScreenAction)
     case viewLog(action: ViewLogsAction)
+    case logDetails(action: LogDetailsAction)
     case createLog(action: CreateLogAction)
 }
 
@@ -37,11 +38,24 @@ enum ViewLogsAction {
     case dataLoadError(error: Error)
 }
 
+enum LogDetailsAction {
+    case initState(loggable: Loggable)
+    case fetchLogDataSuccess(loggable: Loggable)
+    case fetchLogDataError(error: Error)
+    case deleteLog(logId: String)
+    case deleteSuccess
+    case deleteError(error: Error)
+    case errorPopupShown
+}
+
 enum CreateLogAction {
     case screenDidShow
     case screenDidDismiss
     case logCategoryDidChange(newIndex: Int)
     case noteDidUpdate(note: String)
+
+    // Occurs when "Create Again" is pressed in details
+    case initFromPreviousLog(loggable: Loggable)
 
     // Search
     case searchQueryDidChange(query: String)

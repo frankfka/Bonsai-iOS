@@ -31,8 +31,6 @@ struct ViewLogsTabContainer: View {
     
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
-        // TODO: Using unmonitored UIColor here
-        UINavigationBar.appearance().backgroundColor = .secondarySystemGroupedBackground
     }
     
     var body: some View {
@@ -55,9 +53,10 @@ struct ViewLogsTabContainer: View {
                                 }
                             }
                         }
-                    }.modifier(RoundedBorderSection())
+                    }
+                    .modifier(RoundedBorderSection())
+                    .padding(.all, CGFloat.Theme.Layout.normal)
                 }
-                .padding(.all, CGFloat.Theme.Layout.normal)
             }
         }
         // Use flex frame so it always fills width

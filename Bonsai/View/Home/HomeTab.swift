@@ -20,8 +20,6 @@ struct HomeTabContainer: View {
     
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
-        // TODO: Using unmonitored UIColor here
-        UINavigationBar.appearance().backgroundColor = .secondarySystemGroupedBackground
     }
     
     var body: some View {

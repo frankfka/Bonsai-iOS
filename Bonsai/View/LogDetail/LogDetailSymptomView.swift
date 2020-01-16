@@ -21,21 +21,24 @@ struct LogDetailSymptomView: View {
     }
 
     var body: some View {
-        VStack {
-            TappableRowView(
-                    viewModel: TappableRowView.ViewModel(
-                            primaryText: .constant("Symptom"),
-                            secondaryText: .constant(self.viewModel.name),
-                            hasDisclosureIndicator: false
-                    )
-            )
-            TappableRowView(
-                    viewModel: TappableRowView.ViewModel(
-                            primaryText: .constant("Severity"),
-                            secondaryText: .constant(self.viewModel.severity),
-                            hasDisclosureIndicator: false
-                    )
-            )
+        TitledSection(sectionTitle: "Symptom") {
+            VStack(spacing: 0) {
+                TappableRowView(
+                        viewModel: TappableRowView.ViewModel(
+                                primaryText: .constant("Name"),
+                                secondaryText: .constant(self.viewModel.name),
+                                hasDisclosureIndicator: false
+                        )
+                )
+                Divider()
+                TappableRowView(
+                        viewModel: TappableRowView.ViewModel(
+                                primaryText: .constant("Severity"),
+                                secondaryText: .constant(self.viewModel.severity),
+                                hasDisclosureIndicator: false
+                        )
+                )
+            }
         }
     }
 }

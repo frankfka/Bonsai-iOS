@@ -9,6 +9,7 @@
 import SwiftUI
 
 extension DateFormatter {
+    // For date selection
     private static var logDatePickerFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "EEE, MMM d, yyy"
@@ -22,15 +23,6 @@ extension DateFormatter {
             return "Yesterday"
         }
         return logDatePickerFormatter.string(from: date)
-    }
-
-    private static var logRowDateFormatter: DateFormatter {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "h:mm a, MMM d"
-        return dateFormatter
-    }
-    static func stringForLogRowDate(from date: Date) -> String {
-        return logRowDateFormatter.string(from: date)
     }
 }
 

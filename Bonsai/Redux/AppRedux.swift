@@ -38,6 +38,8 @@ struct AppState {
     var homeScreen: HomeScreenState
     // View logs tab
     var viewLogs: ViewLogsState
+    // Log Details page
+    var logDetails: LogDetailState
     // Create log
     var createLog: CreateLogState
 
@@ -45,6 +47,7 @@ struct AppState {
         global = GlobalState()
         homeScreen = HomeScreenState()
         viewLogs = ViewLogsState()
+        logDetails = LogDetailState()
         createLog = CreateLogState()
     }
 }

@@ -24,20 +24,18 @@ struct CreateLogView: View {
             isLoading || showSuccessDialog || showErrorDialog
         }
         
-        init(showModal: Binding<Bool>, isFormValid: Bool, isLoading: Bool, createSuccess: Bool, createError: Bool) {
+        init(showModal: Binding<Bool>, createLogState: CreateLogState) {
             self._showModal = showModal
-            self.isFormValid = isFormValid
-            self.showSuccessDialog = createSuccess
-            self.showErrorDialog = createError
-            self.isLoading = isLoading
+            self.isFormValid = createLogState.isFormValid()
+            self.showSuccessDialog = createLogState.createSuccess
+            self.showErrorDialog = createLogState.createError != nil
+            self.isLoading = createLogState.isCreatingLog
         }
     }
     @State(initialValue: false) private var showPicker
     private var viewModel: ViewModel
     
     init(viewModel: ViewModel) {
-        // TODO: Using unmonitored UIColor here
-        UINavigationBar.appearance().backgroundColor = .secondarySystemGroupedBackground
         self.viewModel = viewModel
     }
     
@@ -71,9 +69,9 @@ struct CreateLogView: View {
             })
                 .disabled(viewModel.isSaveButtonDisabled)
         )
-            .embedInNavigationView()
-            .onAppear() {
-                self.store.send(.createLog(action: .screenDidShow))
+        .embedInNavigationView()
+        .onAppear() {
+            self.onAppear()
         }
         .withLoadingPopup(show: .constant(self.viewModel.isLoading), text: "Saving")
         .withStandardPopup(show: .constant(self.viewModel.showSuccessDialog), type: .success, text: "Saved Successfully") {
@@ -82,6 +80,10 @@ struct CreateLogView: View {
         .withStandardPopup(show: .constant(self.viewModel.showErrorDialog), type: .failure, text: "Something Went Wrong") {
             self.onSaveErrorPopupDismiss()
         }
+    }
+
+    private func onAppear() {
+        self.store.send(.createLog(action: .screenDidShow))
     }
     
     private func onSave() {
@@ -113,7 +115,6 @@ struct CreateLogView: View {
     func getCategorySpecificView() -> AnyView {
         
         switch store.state.createLog.selectedCategory {
-            
         case .note:
             return EmptyView().eraseToAnyView()
         case .symptom:
@@ -154,19 +155,16 @@ struct CreateLogView_Previews: PreviewProvider {
     
     static let viewModel = CreateLogView.ViewModel(
         showModal: .constant(true),
-        isFormValid: true,
-        isLoading: false,
-        createSuccess: true,
-        createError: false
+        createLogState: PreviewRedux.initialStore.state.createLog
     )
     
     static var previews: some View {
         Group {
             CreateLogView(viewModel: viewModel)
-                .environmentObject(AppStore(initialState: AppState(), reducer: AppReducer.reduce))
+                .environmentObject(PreviewRedux.initialStore)
             
             CreateLogView(viewModel: viewModel)
-                .environmentObject(AppStore(initialState: AppState(), reducer: AppReducer.reduce))
+                .environmentObject(PreviewRedux.initialStore)
                 .environment(\.colorScheme, .dark)
         }
     }

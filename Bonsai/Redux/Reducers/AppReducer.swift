@@ -14,6 +14,8 @@ struct AppReducer {
             return HomeScreenReducer.reduce(state: state, action: action)
         case let .viewLog(action):
             return ViewLogsReducer.reduce(state: state, action: action)
+        case let .logDetails(action):
+            return LogDetailsReducer.reduce(state: state, action: action)
         case let .createLog(action):
             return CreateLogReducer.reduce(state: state, action: action)
         }

@@ -21,6 +21,8 @@ extension AppAction {
             return "Home Screen: \(action.actionName)"
         case let .viewLog(action):
             return "View Log: \(action.actionName)"
+        case let .logDetails(action):
+            return "Log Details: \(action.actionName)"
         case let.createLog(action):
             return "Create Log: \(action.actionName)"
         }
@@ -50,6 +52,16 @@ extension HomeScreenAction {
     }
 }
 extension ViewLogsAction {
+    var actionName: String {
+        let mirror = Mirror(reflecting: self)
+        if let label = mirror.children.first?.label {
+            return label
+        } else {
+            return String(describing: self)
+        }
+    }
+}
+extension LogDetailsAction {
     var actionName: String {
         let mirror = Mirror(reflecting: self)
         if let label = mirror.children.first?.label {

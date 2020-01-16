@@ -9,13 +9,16 @@ struct CreateLogReducer {
     static func reduce(state: AppState, action: CreateLogAction) -> AppState {
         switch action {
         case .screenDidShow:
-            return resetCreateLogState(state: state)
+            return state
         case .screenDidDismiss:
             return resetCreateLogState(state: state)
         case let .logCategoryDidChange(newIndex):
             return logCategoryDidChange(state: state, newIndex: newIndex)
         case let .noteDidUpdate(notes):
             return noteDidUpdate(state: state, newNotes: notes)
+
+        case let .initFromPreviousLog(loggable):
+            return initFromPreviousLog(state: state, loggable: loggable)
 
         // Search
         case .searchQueryDidChange:
@@ -84,6 +87,43 @@ struct CreateLogReducer {
     private static func noteDidUpdate(state: AppState, newNotes: String) -> AppState {
         var newState = state
         newState.createLog.notes = newNotes
+        return newState
+    }
+
+    // MARK: Init from previous
+    private static func initFromPreviousLog(state: AppState, loggable: Loggable) -> AppState {
+        var newState = state
+        var newCreateLogState = CreateLogState()
+        guard let loggableCategoryIndex = newCreateLogState.allCategories.firstIndex(of: loggable.category) else {
+            AppLogging.warn("Category of loggable not found in state")
+            return newState
+        }
+        newCreateLogState.selectedCategoryIndex = loggableCategoryIndex
+        newCreateLogState.notes = loggable.notes
+        switch loggable.category {
+        case .symptom:
+            break
+        case .medication:
+            break
+        case .activity:
+            break
+        case .nutrition:
+            break
+        case .mood:
+            guard let moodLog = loggable as? MoodLog else {
+                AppLogging.warn("Could not cast loggable as Mood Log but category was Mood")
+                return newState
+            }
+            guard let moodRankIndex = newCreateLogState.mood.allMoodRanks.firstIndex(of: moodLog.moodRank) else {
+                AppLogging.warn("Category of loggable not found in state")
+                return newState
+            }
+            newCreateLogState.mood.selectedMoodRankIndex = moodRankIndex
+        case .note:
+            break
+        }
+
+        newState.createLog = newCreateLogState
         return newState
     }
 

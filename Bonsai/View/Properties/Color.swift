@@ -23,6 +23,7 @@ struct AppColors {
     let backgroundPrimary: Color!
     let backgroundSecondary: Color!
     let overlay: Color!
+    let popupBackground: Color!
     
     init() {
         textDark = Color.init(.label)
@@ -41,6 +42,7 @@ struct AppColors {
         backgroundPrimary = Color.init(.systemGroupedBackground)
         backgroundSecondary = Color.init(.secondarySystemGroupedBackground)
         overlay = grayscaleSecondary.opacity(0.5)
+        popupBackground = backgroundSecondary
     }
 }
 

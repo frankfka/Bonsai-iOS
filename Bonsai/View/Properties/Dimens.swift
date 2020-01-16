@@ -38,6 +38,7 @@ struct AppDimensions {
         let cornerRadius: CGFloat!
         
         let tabItemHeight: CGFloat!
+        let navBarItemHeight: CGFloat!
         let popupFrameSize: CGFloat!
         
         init() {
@@ -48,6 +49,7 @@ struct AppDimensions {
             cornerRadius = 24
             
             tabItemHeight = 60
+            navBarItemHeight = 24
             popupFrameSize = 96
         }
     }

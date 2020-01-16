@@ -174,18 +174,14 @@ struct SearchListView: View {
     private func getResultView() -> AnyView {
         switch viewModel.resultViewType {
         case .searchResults:
-            return AnyView(
-                SearchResultsView(viewModel: getSearchResultsViewModel())
-            )
+            return SearchResultsView(viewModel: getSearchResultsViewModel()).eraseToAnyView()
         case .loading:
-            return AnyView(
-                FullWidthLoadingSpinner(size: .small)
-                    .padding(CGFloat.Theme.Layout.normal)
-            )
+            return FullWidthLoadingSpinner(size: .small)
+                .padding(CGFloat.Theme.Layout.normal)
+                .eraseToAnyView()
         case .info:
-            return AnyView(
-                SearchInfoView(viewModel: getSearchInfoViewModel())
-            )
+            return SearchInfoView(viewModel: getSearchInfoViewModel())
+                .eraseToAnyView()
         }
     }
     

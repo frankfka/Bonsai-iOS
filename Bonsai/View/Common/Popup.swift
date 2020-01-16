@@ -25,8 +25,12 @@ struct Popup<Content>: View where Content: View {
                     .padding(CGFloat.Theme.Layout.normal)
                     .frame(minWidth: CGFloat.Theme.Layout.popupFrameSize, minHeight: CGFloat.Theme.Layout.popupFrameSize)
                     .background(
-                        RoundedRectangle(cornerRadius: CGFloat.Theme.Layout.cornerRadius)
-                            .foregroundColor(Color.Theme.overlay)
+                        ZStack {
+                            RoundedRectangle(cornerRadius: CGFloat.Theme.Layout.cornerRadius)
+                                    .foregroundColor(Color.Theme.popupBackground)
+                            RoundedRectangle(cornerRadius: CGFloat.Theme.Layout.cornerRadius)
+                                    .stroke(Color.Theme.grayscaleSecondary, lineWidth: 0.5)
+                        }
                     )
             }
         }
