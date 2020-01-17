@@ -25,10 +25,10 @@ class UserServiceImpl: UserService {
     }
 
     func save(user: User) -> ServicePublisher<Void> {
-        return self.db.save(user: user)
+        return self.db.saveUser(user: user)
     }
 
     func get(userId: String) -> ServicePublisher<User> {
-        return self.db.get(userId: userId)
+        return self.db.getUser(userId: userId)
     }
 }

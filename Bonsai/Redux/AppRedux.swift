@@ -71,6 +71,8 @@ struct AppMiddleware {
         middleware.append(contentsOf: HomeScreenMiddleware.middleware(services: services))
         // View logs
         middleware.append(contentsOf: ViewLogsMiddleware.middleware(services: services))
+        // Log Detail
+        middleware.append(contentsOf: LogDetailMiddleware.middleware(services: services))
         // Create log
         middleware.append(contentsOf: CreateLogMiddleware.middleware(services: services))
         

@@ -17,7 +17,7 @@ class FirebaseService: DatabaseService {
         self.db = Firestore.firestore()
     }
 
-    func get(userId: String) -> ServicePublisher<User> {
+    func getUser(userId: String) -> ServicePublisher<User> {
         let future = ServiceFuture<User> { promise in
             self.get(userId: userId) { result in
                 promise(result)
@@ -55,7 +55,7 @@ class FirebaseService: DatabaseService {
         }
     }
 
-    func save(user: User) -> ServicePublisher<Void> {
+    func saveUser(user: User) -> ServicePublisher<Void> {
         guard !user.id.isEmpty else {
             return Fail(error: ServiceError(message: "User ID is empty")).eraseToAnyPublisher()
         }
@@ -81,7 +81,7 @@ class FirebaseService: DatabaseService {
                 }
     }
 
-    func search(query: String, by user: User, in category: LogCategory) -> ServicePublisher<[LogSearchable]> {
+    func searchLogSearchables(query: String, by user: User, in category: LogCategory) -> ServicePublisher<[LogSearchable]> {
         let future = Future<[LogSearchable], ServiceError> { promise in
             self.search(query: query, by: user, in: category) { result in
                 promise(result)
@@ -124,7 +124,38 @@ class FirebaseService: DatabaseService {
                 }
     }
 
-    func save(logItem: LogSearchable, for user: User) -> ServicePublisher<Void> {
+    func getLogSearchable(with id: String, in category: LogCategory) -> ServicePublisher<LogSearchable> {
+        let future = Future<LogSearchable, ServiceError> { promise in
+            self.get(with: id, in: category) { result in
+                promise(result)
+            }
+        }
+        return AnyPublisher(future)
+    }
+
+    private func get(with id: String, in category: LogCategory, onComplete: @escaping ServiceCallback<LogSearchable>) {
+        guard let collectionName = category.firebaseLogSearchableCollectionName() else {
+            onComplete(.failure(ServiceError(message: "Invalid Log Searchable category \(category)")))
+            return
+        }
+        self.db.collection(collectionName).document(id).getDocument { (doc, err) in
+            guard err == nil else {
+                onComplete(.failure(ServiceError(message: "Error retrieving log searchable with ID \(id)", wrappedError: err)))
+                return
+            }
+            guard let doc = doc, doc.exists, let docData = doc.data() else {
+                onComplete(.failure(ServiceError(message: "Log Searchable with ID \(id) not found", wrappedError: nil)))
+                return
+            }
+            if let result: LogSearchable = self.decode(data: docData, parentCategory: category) {
+                onComplete(.success(result))
+            } else {
+                onComplete(.failure(ServiceError(message: "Could not decode log searchable with ID \(id)")))
+            }
+        }
+    }
+
+    func saveLogSearchable(logItem: LogSearchable, for user: User) -> ServicePublisher<Void> {
         let future = ServiceFuture<Void> { promise in
             self.save(logItem: logItem, for: user) { result in
                 promise(result)
@@ -153,7 +184,7 @@ class FirebaseService: DatabaseService {
                 }
     }
 
-    func save(log: Loggable, for user: User) -> ServicePublisher<Void> {
+    func saveLog(log: Loggable, for user: User) -> ServicePublisher<Void> {
         let future = ServiceFuture<Void> { promise in
             self.save(log: log, for: user) { result in
                 promise(result)
@@ -180,7 +211,7 @@ class FirebaseService: DatabaseService {
                 }
     }
 
-    func get(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?) -> ServicePublisher<[Loggable]> {
+    func getLog(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?) -> ServicePublisher<[Loggable]> {
         let future = ServiceFuture<[Loggable]> { promise in
             self.get(for: user, in: category, since: beginDate, toAndIncluding: endDate) { result in
                 promise(result)
@@ -228,6 +259,26 @@ class FirebaseService: DatabaseService {
                 onComplete(.success(fetchedLogs))
             }
         }
+    }
+
+    func deleteLog(for user: User, with id: String) -> ServicePublisher<Void> {
+        let future = ServiceFuture<Void> { promise in
+            self.deleteLog(for: user, with: id) { result in
+                promise(result)
+            }
+        }
+        return AnyPublisher(future)
+    }
+
+    private func deleteLog(for user: User, with id: String, onComplete: @escaping ServiceCallback<Void>) {
+        self.db.collection(FirebaseConstants.User.Collection).document(user.id)
+                .collection(FirebaseConstants.Logs.Collection).document(id).delete() { err in
+                    if let err = err {
+                        onComplete(.failure(ServiceError(message: "Error deleting log \(id) for user \(user.id)", wrappedError: err)))
+                    } else {
+                        onComplete(.success(()))
+                    }
+                }
     }
 
 }

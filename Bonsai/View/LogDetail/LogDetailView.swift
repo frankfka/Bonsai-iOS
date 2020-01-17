@@ -35,7 +35,7 @@ struct LogDetailView: View {
             disableActions || loggable.id.isEmptyWithoutWhitespace()
         }
 
-        init(loggable: Loggable, isLoading: Bool = true, loadingMessage: String = "Loading",
+        init(loggable: Loggable, isLoading: Bool = false, loadingMessage: String = "Loading",
              showDeleteSuccess: Bool = false, showError: Bool = false, errorMessage: String = "Error") {
             self.loggable = loggable
             self.logDate = loggable.dateCreated.description
@@ -50,12 +50,16 @@ struct LogDetailView: View {
     }
     private var viewModel: ViewModel {
         if let loggable = store.state.logDetails.loggable {
+            let isLoading = store.state.logDetails.isLoading || store.state.logDetails.isDeleting
+            let showDeleteSuccess = store.state.logDetails.deleteSuccess
+            let showError = store.state.logDetails.loadError != nil || store.state.logDetails.deleteError != nil
+            // TODO: Messages
             return ViewModel(
                     loggable: loggable,
-                    isLoading: true,
+                    isLoading: isLoading,
                     loadingMessage: "Loading",
-                    showDeleteSuccess: false,
-                    showError: false,
+                    showDeleteSuccess: showDeleteSuccess,
+                    showError: showError,
                     errorMessage: "Error"
             )
         } else {
@@ -155,7 +159,7 @@ struct LogDetailView: View {
             self.onErrorPopupDismiss()
         }
         .withStandardPopup(show: .constant(self.viewModel.showDeleteSuccess), type: .success, text: "Deleted Successfully") {
-            self.onSuccessPopupDismiss()
+            self.onDeleteSuccessPopupDismiss()
         }
     }
     
@@ -181,7 +185,7 @@ struct LogDetailView: View {
     
     private func onDeleteLogConfirmed() {
         // Dispatch action to delete the log
-        store.send(.logDetails(action: .deleteLog(logId: viewModel.loggable.id)))
+        store.send(.logDetails(action: .deleteCurrentLog))
     }
 
     private func onErrorPopupDismiss() {
@@ -189,7 +193,7 @@ struct LogDetailView: View {
         store.send(.logDetails(action: .errorPopupShown))
     }
 
-    private func onSuccessPopupDismiss() {
+    private func onDeleteSuccessPopupDismiss() {
         // Only shown when log is deleted successfully, so we're safe to dismiss
         self.presentationMode.wrappedValue.dismiss()
     }

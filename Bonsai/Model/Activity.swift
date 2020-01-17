@@ -15,4 +15,5 @@ struct ActivityLog: Loggable {
     let notes: String
     let activityId: String
     let duration: TimeInterval
+    var selectedActivity: Activity? = nil
 }

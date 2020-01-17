@@ -51,4 +51,5 @@ struct SymptomLog: Loggable {
     let notes: String
     let symptomId: String
     let severity: Severity
+    var selectedSymptom: Symptom? = nil
 }

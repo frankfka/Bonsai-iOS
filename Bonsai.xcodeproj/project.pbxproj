@@ -53,6 +53,7 @@
 		9E04B20DF75F4ECBB16C6DBC /* Symptom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B658D36CC2F8B5F120B2 /* Symptom.swift */; };
 		9E04B2A80CC13789F016F18C /* LogDetailBasicsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BF258092F6829380B3A0 /* LogDetailBasicsView.swift */; };
 		9E04B2AB822789B9206A8765 /* CreateLogReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B5273996AD629A11C11A /* CreateLogReducer.swift */; };
+		9E04B3A3E68A3436D2572C29 /* GlobalLogReducerUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BFD370D77FBBD8821004 /* GlobalLogReducerUtil.swift */; };
 		9E04B43BF70AF74B23CE5CA1 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BE25078C4D1D66F8E42F /* Note.swift */; };
 		9E04B50598E3E5F85D218185 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BCFAAF7B3D5C2A36CCA7 /* Activity.swift */; };
 		9E04B513CC19B5E2DB63CED9 /* SearchTextObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B763E5A55C21C9EF3E57 /* SearchTextObservable.swift */; };
@@ -200,6 +201,7 @@
 		9E04BF258092F6829380B3A0 /* LogDetailBasicsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogDetailBasicsView.swift; sourceTree = "<group>"; };
 		9E04BF971048F9F4765391DA /* HomeScreenReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeScreenReducer.swift; sourceTree = "<group>"; };
 		9E04BFB9FC87753455D68DDA /* Popup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Popup.swift; sourceTree = "<group>"; };
+		9E04BFD370D77FBBD8821004 /* GlobalLogReducerUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalLogReducerUtil.swift; sourceTree = "<group>"; };
 		C79500D120BF55D97837F14C /* Pods-Bonsai.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bonsai.release.xcconfig"; path = "Target Support Files/Pods-Bonsai/Pods-Bonsai.release.xcconfig"; sourceTree = "<group>"; };
 		FBC3618C0413FD0172D8BDA1 /* Pods-HealthTrack.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthTrack.debug.xcconfig"; path = "Target Support Files/Pods-HealthTrack/Pods-HealthTrack.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -460,6 +462,7 @@
 				9E04B5273996AD629A11C11A /* CreateLogReducer.swift */,
 				9E04B4F958CBB6E0E7260A21 /* ViewLogsReducer.swift */,
 				9E04B636D29C54C7BDCD27A7 /* LogDetailsReducer.swift */,
+				9E04BFD370D77FBBD8821004 /* GlobalLogReducerUtil.swift */,
 			);
 			path = Reducers;
 			sourceTree = "<group>";
@@ -749,6 +752,7 @@
 				9E04B95B683A587ACED91D5F /* LogDetailState.swift in Sources */,
 				9E04BAA1D418E7593D4D4FD8 /* LogDetailMiddleware.swift in Sources */,
 				9E04BF8B0D0B677809F642FB /* LogDetailsReducer.swift in Sources */,
+				9E04B3A3E68A3436D2572C29 /* GlobalLogReducerUtil.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

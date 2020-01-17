@@ -8,16 +8,16 @@ import Combine
 
 protocol DatabaseService {
     // User functions
-    func save(user: User) -> ServicePublisher<Void>
-    func get(userId: String) -> ServicePublisher<User>
+    func saveUser(user: User) -> ServicePublisher<Void>
+    func getUser(userId: String) -> ServicePublisher<User>
 
-    // Search functions
-    func search(query: String, by user: User, in category: LogCategory) -> ServicePublisher<[LogSearchable]>
+    // LogSearchable functions
+    func searchLogSearchables(query: String, by user: User, in category: LogCategory) -> ServicePublisher<[LogSearchable]>
+    func getLogSearchable(with id: String, in category: LogCategory) -> ServicePublisher<LogSearchable>
+    func saveLogSearchable(logItem: LogSearchable, for user: User) -> ServicePublisher<Void>
 
-    // Log Save functions
-    func save(logItem: LogSearchable, for user: User) -> ServicePublisher<Void>
-    func save(log: Loggable, for user: User) -> ServicePublisher<Void>
-
-    // Log Get functions
-    func get(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?) -> ServicePublisher<[Loggable]>
+    // Log functions
+    func saveLog(log: Loggable, for user: User) -> ServicePublisher<Void>
+    func getLog(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?) -> ServicePublisher<[Loggable]>
+    func deleteLog(for user: User, with id: String) -> ServicePublisher<Void>
 }

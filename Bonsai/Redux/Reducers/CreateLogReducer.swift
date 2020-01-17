@@ -271,7 +271,7 @@ struct CreateLogReducer {
         var newState = state
         newState.createLog.isCreatingLog = false
         newState.createLog.createSuccess = true
-        newState.homeScreen.recentLogs.insert(newLog, at: 0)
+        GlobalLogReducerUtil.add(state: &newState, newLog: newLog)
         return newState
     }
 

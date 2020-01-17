@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct RecentLogSection: View {
+    @EnvironmentObject var store: AppStore
     
     struct ViewModel {
         var showNoRecents: Bool {
@@ -48,6 +49,7 @@ struct RecentLogSection: View {
     }
 
     private func onLogRowTapped(loggable: Loggable) {
+        store.send(.logDetails(action: .initState(loggable: loggable)))
         navigateToLogDetails = true
     }
 

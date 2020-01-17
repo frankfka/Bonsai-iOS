@@ -42,8 +42,8 @@ enum LogDetailsAction {
     case initState(loggable: Loggable)
     case fetchLogDataSuccess(loggable: Loggable)
     case fetchLogDataError(error: Error)
-    case deleteLog(logId: String)
-    case deleteSuccess
+    case deleteCurrentLog
+    case deleteSuccess(deletedId: String)
     case deleteError(error: Error)
     case errorPopupShown
 }

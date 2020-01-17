@@ -15,4 +15,5 @@ struct NutritionLog: Loggable {
     let notes: String
     let nutritionItemId: String
     let amount: String
+    var selectedNutritionItem: NutritionItem? = nil
 }

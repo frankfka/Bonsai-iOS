@@ -44,7 +44,7 @@ struct CreateLogMiddleware {
     }
 
     private static func search(logService: LogService, with query: String, for user: User, in category: LogCategory) -> AnyPublisher<AppAction, Never> {
-        return logService.search(with: query, by: user, in: category)
+        return logService.searchLogSearchables(with: query, by: user, in: category)
                 .map { results in
                     return AppAction.createLog(action: .searchDidComplete(results: results))
                 }.catch { (err) -> Just<AppAction> in
@@ -87,7 +87,7 @@ struct CreateLogMiddleware {
     }
 
     private static func save(logService: LogService, logItem: LogSearchable, for user: User) -> AnyPublisher<AppAction, Never> {
-        return logService.save(logItem: logItem, for: user)
+        return logService.saveLogSearchable(logItem: logItem, for: user)
                 .map {
                     return AppAction.createLog(action: .onAddSearchItemSuccess(addedItem: logItem))
                 }.catch { (err) -> Just<AppAction> in
@@ -136,7 +136,7 @@ struct CreateLogMiddleware {
     }
 
     private static func save(logService: LogService, log: Loggable, for user: User) -> AnyPublisher<AppAction, Never> {
-        return logService.save(log: log, for: user)
+        return logService.saveLog(log: log, for: user)
                 .map { result in
                     return AppAction.createLog(action: .onCreateLogSuccess(newLog: log))
                 }.catch { (err) -> Just<AppAction> in
@@ -180,7 +180,8 @@ struct CreateLogMiddleware {
                     dateCreated: logDate,
                     notes: logNotes,
                     nutritionItemId: selectedNutrition.id,
-                    amount: state.nutrition.amount
+                    amount: state.nutrition.amount,
+                    selectedNutritionItem: selectedNutrition
             )
         case .medication:
             guard let selectedMedication = state.medication.selectedMedication else {
@@ -197,7 +198,8 @@ struct CreateLogMiddleware {
                     dateCreated: logDate,
                     notes: logNotes,
                     medicationId: selectedMedication.id,
-                    dosage: state.medication.dosage
+                    dosage: state.medication.dosage,
+                    selectedMedication: selectedMedication
             )
         case .symptom:
             guard let selectedSymptom = state.symptom.selectedSymptom else {
@@ -210,7 +212,8 @@ struct CreateLogMiddleware {
                     dateCreated: logDate,
                     notes: logNotes,
                     symptomId: selectedSymptom.id,
-                    severity: state.symptom.severity
+                    severity: state.symptom.severity,
+                    selectedSymptom: selectedSymptom
             )
         case .activity:
             guard let selectedActivity = state.activity.selectedActivity else {
@@ -227,7 +230,8 @@ struct CreateLogMiddleware {
                     dateCreated: logDate,
                     notes: logNotes,
                     activityId: selectedActivity.id,
-                    duration: activityDuration
+                    duration: activityDuration,
+                    selectedActivity: selectedActivity
             )
         case .note:
             guard !logNotes.isEmptyWithoutWhitespace() else {

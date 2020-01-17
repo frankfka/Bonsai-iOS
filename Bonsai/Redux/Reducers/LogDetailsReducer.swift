@@ -14,10 +14,10 @@ struct LogDetailsReducer {
             return fetchLogDataSuccess(state: state, loggable: loggable)
         case let .fetchLogDataError(error):
             return fetchLogDataError(state: state, error: error)
-        case .deleteLog:
+        case .deleteCurrentLog:
             return deleteLog(state: state)
-        case .deleteSuccess:
-            return deleteSuccess(state: state)
+        case let .deleteSuccess(deletedId):
+            return deleteSuccess(state: state, deletedLogId: deletedId)
         case let .deleteError(error):
             return deleteError(state: state, error: error)
         case .errorPopupShown:
@@ -62,10 +62,11 @@ struct LogDetailsReducer {
         return newState
     }
 
-    static private func deleteSuccess(state: AppState) -> AppState {
+    static private func deleteSuccess(state: AppState, deletedLogId: String) -> AppState {
         var newState = state
         newState.logDetails.isDeleting = false
         newState.logDetails.deleteSuccess = true
+        GlobalLogReducerUtil.delete(state: &newState, deletedLogId: deletedLogId)
         return newState
     }
     

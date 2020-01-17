@@ -23,4 +23,5 @@ struct MedicationLog: Loggable {
     let notes: String
     let medicationId: String
     let dosage: String
+    var selectedMedication: Medication? = nil
 }

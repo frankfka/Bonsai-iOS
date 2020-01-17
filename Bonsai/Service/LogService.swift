@@ -8,14 +8,17 @@ import FirebaseCore
 import FirebaseFirestore
 import Combine
 
+// TODO: make fn names more clear
+// TODO: caching for logsearchables
 protocol LogService {
     // CRUD on logs
-    func get(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?) -> ServicePublisher<[Loggable]>
-    func save(log: Loggable, for user: User) -> ServicePublisher<Void>
-    func delete(id: String)
+    func getLogs(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?) -> ServicePublisher<[Loggable]>
+    func saveLog(log: Loggable, for user: User) -> ServicePublisher<Void>
+    func deleteLog(with id: String, for user: User) -> ServicePublisher<Void>
     // CRUD on log items (medications, nutrition, etc.)
-    func search(with query: String, by user: User, in category: LogCategory) -> ServicePublisher<[LogSearchable]>
-    func save(logItem: LogSearchable, for user: User) -> ServicePublisher<Void>
+    func getLogSearchable(with id: String, in category: LogCategory) -> ServicePublisher<LogSearchable>
+    func searchLogSearchables(with query: String, by user: User, in category: LogCategory) -> ServicePublisher<[LogSearchable]>
+    func saveLogSearchable(logItem: LogSearchable, for user: User) -> ServicePublisher<Void>
 }
 
 class LogServiceImpl: LogService {
@@ -25,25 +28,30 @@ class LogServiceImpl: LogService {
         self.db = db
     }
 
-    func get(for user: User, in category: LogCategory? = nil, since beginDate: Date?, toAndIncluding endDate: Date?) -> ServicePublisher<[Loggable]> {
-        return self.db.get(for: user, in: category, since: beginDate, toAndIncluding: endDate)
+    func getLogs(for user: User, in category: LogCategory? = nil, since beginDate: Date?, toAndIncluding endDate: Date?) -> ServicePublisher<[Loggable]> {
+        return self.db.getLog(for: user, in: category, since: beginDate, toAndIncluding: endDate)
     }
 
-    func save(logItem: LogSearchable, for user: User) -> ServicePublisher<Void> {
-        return self.db.save(logItem: logItem, for: user)
+    func saveLogSearchable(logItem: LogSearchable, for user: User) -> ServicePublisher<Void> {
+        return self.db.saveLogSearchable(logItem: logItem, for: user)
     }
 
-    func save(log: Loggable, for user: User) -> ServicePublisher<Void> {
-        AppLogging.debug("Saving log \(log)")
-        return self.db.save(log: log, for: user)
+    func saveLog(log: Loggable, for user: User) -> ServicePublisher<Void> {
+        return self.db.saveLog(log: log, for: user)
     }
 
-    func delete(id: String) {
 
+    func deleteLog(with id: String, for user: User) -> ServicePublisher<Void> {
+        return self.db.deleteLog(for: user, with: id)
     }
 
-    func search(with query: String, by user: User, in category: LogCategory) -> ServicePublisher<[LogSearchable]> {
-        return self.db.search(query: query, by: user, in: category)
+    func getLogSearchable(with id: String, in category: LogCategory) -> ServicePublisher<LogSearchable> {
+        // TODO: Some cache lookup first
+        return self.db.getLogSearchable(with: id, in: category)
+    }
+
+    func searchLogSearchables(with query: String, by user: User, in category: LogCategory) -> ServicePublisher<[LogSearchable]> {
+        return self.db.searchLogSearchables(query: query, by: user, in: category)
     }
 
 }
