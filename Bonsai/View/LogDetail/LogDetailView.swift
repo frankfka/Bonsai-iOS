@@ -8,7 +8,8 @@
 
 import SwiftUI
 
-
+// TODO: other views for different logs
+// TODO: log this again for all categories
 struct LogDetailView: View {
 
     // Shown in case of error, when we don't have a loggable in the state
@@ -53,14 +54,15 @@ struct LogDetailView: View {
             let isLoading = store.state.logDetails.isLoading || store.state.logDetails.isDeleting
             let showDeleteSuccess = store.state.logDetails.deleteSuccess
             let showError = store.state.logDetails.loadError != nil || store.state.logDetails.deleteError != nil
-            // TODO: Messages
+            let loadingMessage = store.state.logDetails.isDeleting ? "Deleting Log" : "Loading"
+            let errorMessage = store.state.logDetails.deleteError != nil ? "Error Deleting Log" : "Error Loading Log"
             return ViewModel(
                     loggable: loggable,
                     isLoading: isLoading,
-                    loadingMessage: "Loading",
+                    loadingMessage: loadingMessage,
                     showDeleteSuccess: showDeleteSuccess,
                     showError: showError,
-                    errorMessage: "Error"
+                    errorMessage: errorMessage
             )
         } else {
             return ViewModel(loggable: LogDetailView.ErrorLoggablePlaceholder)
@@ -231,7 +233,8 @@ struct LogDetailView: View {
         guard loggable.category == .symptom, let symptomLog = loggable as? SymptomLog else {
             return nil
         }
-        return LogDetailSymptomView.ViewModel(name: "Test Name", severity: symptomLog.severity.displayValue())
+        let symptomName = symptomLog.selectedSymptom?.name ?? "Unknown"
+        return LogDetailSymptomView.ViewModel(name: symptomName, severity: symptomLog.severity.displayValue())
     }
 }
 

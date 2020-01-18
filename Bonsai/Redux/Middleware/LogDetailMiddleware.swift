@@ -20,10 +20,10 @@ struct LogDetailMiddleware {
             switch action {
             case .logDetails(action: .initState(let initialLoggable)):
                 // Check that we need to fetch data
-                if (initialLoggable as? MedicationLog)?.selectedMedication == nil ||
-                           (initialLoggable as? SymptomLog)?.selectedSymptom == nil ||
-                           (initialLoggable as? NutritionLog)?.selectedNutritionItem == nil ||
-                           (initialLoggable as? ActivityLog)?.selectedActivity == nil {
+                if initialLoggable.category == .medication && (initialLoggable as? MedicationLog)?.selectedMedication == nil ||
+                           initialLoggable.category == .symptom && (initialLoggable as? SymptomLog)?.selectedSymptom == nil ||
+                           initialLoggable.category == .nutrition && (initialLoggable as? NutritionLog)?.selectedNutritionItem == nil ||
+                           initialLoggable.category == .activity && (initialLoggable as? ActivityLog)?.selectedActivity == nil {
                     // We're missing the selected log searchable item, so need to fetch
                     initLogData(for: initialLoggable, logService: logService)
                             .sink(receiveValue: { newAction in
@@ -111,7 +111,7 @@ struct LogDetailMiddleware {
                     .eraseToAnyPublisher()
         }
         AppLogging.warn("Returning empty publisher in retrieving log detail data. This shouldn't be called. Investigate!")
-        return Empty<AppAction,Never>().eraseToAnyPublisher()
+        return Empty<AppAction, Never>().eraseToAnyPublisher()
     }
 
     private static func deleteLog(logService: LogService) -> Middleware<AppState> {

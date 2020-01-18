@@ -6,6 +6,7 @@
 import Foundation
 
 // Util for modifying state for loggable CRUD operations
+// This allows for a centralized place where we can change state of logs
 struct GlobalLogReducerUtil {
 
     static func add(state: inout AppState, newLog: Loggable) {
