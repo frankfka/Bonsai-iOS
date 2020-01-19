@@ -75,7 +75,7 @@ struct LogDetailMiddleware {
             }
         case .nutrition:
             if let loggable = loggable as? NutritionLog {
-                mappedPublisher = logService.getLogSearchable(with: loggable.nutritionItemId, in: .symptom)
+                mappedPublisher = logService.getLogSearchable(with: loggable.nutritionItemId, in: .nutrition)
                         .map { logSearchable -> AppAction in
                             var newLoggable = loggable
                             if let logSearchable = logSearchable as? NutritionItem {
@@ -88,7 +88,7 @@ struct LogDetailMiddleware {
             }
         case .activity:
             if let loggable = loggable as? ActivityLog {
-                mappedPublisher = logService.getLogSearchable(with: loggable.activityId, in: .symptom)
+                mappedPublisher = logService.getLogSearchable(with: loggable.activityId, in: .activity)
                         .map { logSearchable -> AppAction in
                             var newLoggable = loggable
                             if let logSearchable = logSearchable as? Activity {

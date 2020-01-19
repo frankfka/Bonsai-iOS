@@ -222,6 +222,24 @@ struct LogDetailView: View {
                 break
             }
             return LogDetailSymptomView(viewModel: symptomVm).eraseToAnyView()
+        case .activity:
+            guard let activityVm = getActivityDetailViewModel() else {
+                AppLogging.warn("Should be showing activity log details but could not create view model")
+                break
+            }
+            return LogDetailActivityView(viewModel: activityVm).eraseToAnyView()
+        case .medication:
+            guard let medicationVm = getMedicationDetailViewModel() else {
+                AppLogging.warn("Should be showing medication log details but could not create view model")
+                break
+            }
+            return LogDetailMedicationView(viewModel: medicationVm).eraseToAnyView()
+        case .nutrition:
+            guard let nutritionVm = getNutritionDetailViewModel() else {
+                AppLogging.warn("Should be showing nutrition log details but could not create view model")
+                break
+            }
+            return LogDetailNutritionView(viewModel: nutritionVm).eraseToAnyView()
         default:
             break
         }
@@ -236,6 +254,34 @@ struct LogDetailView: View {
         let symptomName = symptomLog.selectedSymptom?.name ?? "Unknown"
         return LogDetailSymptomView.ViewModel(name: symptomName, severity: symptomLog.severity.displayValue())
     }
+
+    func getActivityDetailViewModel() -> LogDetailActivityView.ViewModel? {
+        let loggable = viewModel.loggable
+        guard loggable.category == .activity, let activityLog = loggable as? ActivityLog else {
+            return nil
+        }
+        let activityName = activityLog.selectedActivity?.name ?? "Unknown"
+        return LogDetailActivityView.ViewModel(name: activityName, duration: activityLog.duration)
+    }
+
+    func getMedicationDetailViewModel() -> LogDetailMedicationView.ViewModel? {
+        let loggable = viewModel.loggable
+        guard loggable.category == .medication, let medicationLog = loggable as? MedicationLog else {
+            return nil
+        }
+        let medicationName = medicationLog.selectedMedication?.name ?? "Unknown"
+        return LogDetailMedicationView.ViewModel(name: medicationName, dosage: medicationLog.dosage)
+    }
+
+    func getNutritionDetailViewModel() -> LogDetailNutritionView.ViewModel? {
+        let loggable = viewModel.loggable
+        guard loggable.category == .nutrition, let nutritionLog = loggable as? NutritionLog else {
+            return nil
+        }
+        let nutritionItemName = nutritionLog.selectedNutritionItem?.name ?? "Unknown"
+        return LogDetailNutritionView.ViewModel(name: nutritionItemName, amount: nutritionLog.amount)
+    }
+
 }
 
 

@@ -1,10 +1,10 @@
 import SwiftUI
 
-struct LogDetailSymptomView: View {
+struct LogDetailNutritionView: View {
 
     struct ViewModel {
         let name: String
-        let severity: String
+        let amount: String
     }
     private let viewModel: ViewModel
 
@@ -13,7 +13,7 @@ struct LogDetailSymptomView: View {
     }
 
     var body: some View {
-        TitledSection(sectionTitle: "Symptom") {
+        TitledSection(sectionTitle: "Nutrition") {
             VStack(spacing: 0) {
                 TappableRowView(
                         viewModel: TappableRowView.ViewModel(
@@ -25,8 +25,8 @@ struct LogDetailSymptomView: View {
                 Divider()
                 TappableRowView(
                         viewModel: TappableRowView.ViewModel(
-                                primaryText: .constant("Severity"),
-                                secondaryText: .constant(self.viewModel.severity),
+                                primaryText: .constant("Amount"),
+                                secondaryText: .constant(self.viewModel.amount),
                                 hasDisclosureIndicator: false
                         )
                 )
@@ -35,11 +35,11 @@ struct LogDetailSymptomView: View {
     }
 }
 
-struct LogDetailSymptomView_Previews: PreviewProvider {
+struct LogDetailNutritionView_Previews: PreviewProvider {
     static var previews: some View {
-        LogDetailSymptomView(
-                viewModel: LogDetailSymptomView.ViewModel(name: "Fatigue", severity: "Extreme")
+        LogDetailNutritionView(
+                viewModel: LogDetailNutritionView.ViewModel(name: "Creatine", amount: "1 Teaspoon")
         )
-            .previewLayout(.sizeThatFits)
+        .previewLayout(.sizeThatFits)
     }
 }

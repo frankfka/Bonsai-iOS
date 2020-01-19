@@ -1,5 +1,16 @@
 import SwiftUI
 
+extension TimeInterval {
+    func hourMinuteDescription() -> String {
+        var seconds: Int = Int(self.magnitude)
+        let hours: Int
+        let minutes: Int
+        (hours, seconds) = seconds.quotientAndRemainder(dividingBy: 3600)
+        minutes = seconds / 60
+        return "\(hours) Hr, \(minutes) Min"
+    }
+}
+
 struct ActivityLogDurationRowView: View {
     
     struct ViewModel {
@@ -8,12 +19,7 @@ struct ActivityLogDurationRowView: View {
         let onDurationChange: ActivityLogDurationPickerView.DurationCallback?
         var selectedDurationString: String {
             if let selectedDuration = self.selectedDuration {
-                var seconds: Int = Int(selectedDuration.magnitude)
-                let hours: Int
-                let minutes: Int
-                (hours, seconds) = seconds.quotientAndRemainder(dividingBy: 3600)
-                minutes = seconds / 60
-                return "\(hours) Hr, \(minutes) Min"
+                return selectedDuration.hourMinuteDescription()
             }
             return "Select Duration"
         }

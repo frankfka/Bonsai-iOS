@@ -138,6 +138,7 @@ class FirebaseService: DatabaseService {
             onComplete(.failure(ServiceError(message: "Invalid Log Searchable category \(category)")))
             return
         }
+        AppLogging.debug("Finding \(id) in \(collectionName)")
         self.db.collection(collectionName).document(id).getDocument { (doc, err) in
             guard err == nil else {
                 onComplete(.failure(ServiceError(message: "Error retrieving log searchable with ID \(id)", wrappedError: err)))
