@@ -28,6 +28,7 @@ struct ViewLogsTabContainer: View {
     }
     
     private let viewModel: ViewModel
+    @State(initialValue: false) private var navigateToLogDetails: Bool? // Allows conditional pushing of navigation views
     
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -45,10 +46,17 @@ struct ViewLogsTabContainer: View {
             } else {
                 ScrollView {
                     VStack(alignment: .leading) {
-                        ForEach(viewModel.logs) { log in
+                        // Using the tag allows us to conditionally trigger navigation within an onTap method
+                        NavigationLink(destination: LogDetailView(), tag: true, selection: $navigateToLogDetails) {
+                            EmptyView()
+                        }
+                        ForEach(viewModel.logs) { logVm in
                             Group {
-                                LogRow(viewModel: log)
-                                if self.viewModel.showDivider(after: log) {
+                                LogRow(viewModel: logVm)
+                                        .onTapGesture {
+                                            self.onLogRowTapped(loggable: logVm.loggable)
+                                        }
+                                if self.viewModel.showDivider(after: logVm) {
                                     Divider()
                                 }
                             }
@@ -62,14 +70,19 @@ struct ViewLogsTabContainer: View {
         // Use flex frame so it always fills width
         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: Alignment.topLeading)
         .onAppear {
-            self.viewModel.viewLogsTabDidAppear?()
+            self.onAppear()
         }
         .background(Color.Theme.backgroundPrimary)
         .navigationBarTitle("Logs")
         .embedInNavigationView()
         .padding(.top) // Temporary - bug where scrollview goes under the status bar
     }
-    
+
+    private func onAppear() {
+        self.navigateToLogDetails = nil // Resets navigation state
+        self.viewModel.viewLogsTabDidAppear?()
+    }
+
     private func getHeaderDatePickerViewModel() -> ViewLogsDateHeaderView.ViewModel {
         return ViewLogsDateHeaderView.ViewModel(
             initialDate: store.state.viewLogs.dateForLogs
@@ -78,6 +91,12 @@ struct ViewLogsTabContainer: View {
             self.store.send(.viewLog(action: .fetchData(date: newDate)))
         }
     }
+
+    private func onLogRowTapped(loggable: Loggable) {
+        store.send(.logDetails(action: .initState(loggable: loggable)))
+        navigateToLogDetails = true
+    }
+
 }
 
 struct ViewLogsTabNoResultsView: View {

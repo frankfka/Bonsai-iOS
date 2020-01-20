@@ -8,8 +8,6 @@
 
 import SwiftUI
 
-// TODO: other views for different logs
-// TODO: log this again for all categories
 struct LogDetailView: View {
 
     // Shown in case of error, when we don't have a loggable in the state

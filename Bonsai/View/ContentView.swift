@@ -37,7 +37,10 @@ struct ContentViewContainer: View {
     }
     
     func getTabBarViewModel() -> TabBarView.ViewModel {
-        return TabBarView.ViewModel(tabIndex: $viewModel.tabIndex, showCreateLogModal: $viewModel.showCreateLogModal)
+        return TabBarView.ViewModel(
+                tabIndex: $viewModel.tabIndex,
+                showCreateLogModal: $viewModel.showCreateLogModal
+        )
     }
 }
 

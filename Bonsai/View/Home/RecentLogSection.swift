@@ -18,6 +18,7 @@ struct RecentLogSection: View {
         let recentLogs: [LogRow.ViewModel]
     }
     private let viewModel: ViewModel
+    // TODO: this should be in home tab state?
     @State(initialValue: false) var navigateToLogDetails: Bool? // Allows conditional pushing of navigation views
 
     init(viewModel: ViewModel) {
@@ -45,7 +46,13 @@ struct RecentLogSection: View {
                     }
                 }
             }
+        }.onAppear {
+            self.onAppear()
         }
+    }
+
+    private func onAppear() {
+        self.navigateToLogDetails = nil // Resets navigation state
     }
 
     private func onLogRowTapped(loggable: Loggable) {

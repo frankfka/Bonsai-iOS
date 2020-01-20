@@ -102,16 +102,36 @@ struct CreateLogReducer {
         newCreateLogState.notes = loggable.notes
         switch loggable.category {
         case .symptom:
-            break
+            guard let symptomLog = loggable as? SymptomLog else {
+                AppLogging.warn("Could not cast loggable as symptom log")
+                return newState
+            }
+            newCreateLogState.symptom.selectedSymptom = symptomLog.selectedSymptom
+            newCreateLogState.symptom.severity = symptomLog.severity
         case .medication:
-            break
+            guard let medicationLog = loggable as? MedicationLog else {
+                AppLogging.warn("Could not cast loggable as medication log")
+                return newState
+            }
+            newCreateLogState.medication.selectedMedication = medicationLog.selectedMedication
+            newCreateLogState.medication.dosage = medicationLog.dosage
         case .activity:
-            break
+            guard let activityLog = loggable as? ActivityLog else {
+                AppLogging.warn("Could not cast loggable as activity log")
+                return newState
+            }
+            newCreateLogState.activity.selectedActivity = activityLog.selectedActivity
+            newCreateLogState.activity.duration = activityLog.duration
         case .nutrition:
-            break
+            guard let nutritionLog = loggable as? NutritionLog else {
+                AppLogging.warn("Could not cast loggable as nutrition log")
+                return newState
+            }
+            newCreateLogState.nutrition.selectedItem = nutritionLog.selectedNutritionItem
+            newCreateLogState.nutrition.amount = nutritionLog.amount
         case .mood:
             guard let moodLog = loggable as? MoodLog else {
-                AppLogging.warn("Could not cast loggable as Mood Log but category was Mood")
+                AppLogging.warn("Could not cast loggable as mood log")
                 return newState
             }
             guard let moodRankIndex = newCreateLogState.mood.allMoodRanks.firstIndex(of: moodLog.moodRank) else {
@@ -120,7 +140,11 @@ struct CreateLogReducer {
             }
             newCreateLogState.mood.selectedMoodRankIndex = moodRankIndex
         case .note:
-            break
+            guard let noteLog = loggable as? NoteLog else {
+                AppLogging.warn("Could not cast loggable as note log")
+                return newState
+            }
+            newCreateLogState.notes = noteLog.notes
         }
 
         newState.createLog = newCreateLogState

@@ -5,6 +5,7 @@
 
 import Foundation
 
+// TODO: store a dictionary of date to logs, then we don't need to keep reloading
 struct ViewLogsState {
     var isLoading: Bool = false
     var loadError: Error? = nil

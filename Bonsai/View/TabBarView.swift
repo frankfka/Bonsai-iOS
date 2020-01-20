@@ -13,10 +13,12 @@ struct TabBarView: View {
     struct ViewModel {
         @Binding var tabIndex: Int
         @Binding var showCreateLogModal: Bool
+        let onTabPressed: IntCallback?
         
-        init(tabIndex: Binding<Int>, showCreateLogModal: Binding<Bool>) {
+        init(tabIndex: Binding<Int>, showCreateLogModal: Binding<Bool>, onTabPressed: IntCallback? = nil) {
             self._tabIndex = tabIndex
             self._showCreateLogModal = showCreateLogModal
+            self.onTabPressed = onTabPressed
         }
     }
     let viewModel: ViewModel
@@ -34,7 +36,7 @@ struct TabBarView: View {
                     .frame(minWidth: 0, maxWidth: .infinity)
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        self.viewModel.tabIndex = 0
+                        self.onTabPressed(index: 0)
                 }
                 Image(systemName: "plus.circle.fill")
                     .resizable()
@@ -53,7 +55,7 @@ struct TabBarView: View {
                     .frame(minWidth: 0, maxWidth: .infinity)
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        self.viewModel.tabIndex = 1
+                        self.onTabPressed(index: 1)
                 }
             }
             .padding(.all, CGFloat.Theme.Layout.small)
@@ -62,6 +64,12 @@ struct TabBarView: View {
         .frame(minWidth: 0, maxWidth: .infinity)
         .background(Color.Theme.backgroundSecondary)
     }
+
+    private func onTabPressed(index: Int) {
+        self.viewModel.tabIndex = index
+        self.viewModel.onTabPressed?(index)
+    }
+
 }
 
 struct TabBarView_Previews: PreviewProvider {
