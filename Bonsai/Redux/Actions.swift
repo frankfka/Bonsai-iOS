@@ -43,7 +43,7 @@ enum LogDetailsAction {
     case fetchLogDataSuccess(loggable: Loggable)
     case fetchLogDataError(error: Error)
     case deleteCurrentLog
-    case deleteSuccess(deletedId: String)
+    case deleteSuccess(deletedLog: Loggable)
     case deleteError(error: Error)
     case errorPopupShown
 }

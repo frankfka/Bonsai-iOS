@@ -122,13 +122,13 @@ struct LogDetailMiddleware {
                 guard let user = state.global.user else {
                     fatalError("No user initialized when attempting to delete a log")
                 }
-                guard let logId = state.logDetails.loggable?.id else {
+                guard let log = state.logDetails.loggable else {
                     doInMiddleware {
                         send(.logDetails(action: .deleteError(error: ServiceError(message: "No loggable initialized in log details state, so cannot delete the log"))))
                     }
                     return
                 }
-                deleteLog(for: user, with: logId, logService: logService)
+                deleteLog(_ : log, for: user, logService: logService)
                         .sink(receiveValue: { newAction in
                             send(newAction)
                         })
@@ -139,13 +139,13 @@ struct LogDetailMiddleware {
         }
     }
 
-    private static func deleteLog(for user: User, with id: String, logService: LogService) -> AnyPublisher<AppAction, Never> {
-        return logService.deleteLog(with: id, for: user)
+    private static func deleteLog(_ log: Loggable, for user: User, logService: LogService) -> AnyPublisher<AppAction, Never> {
+        return logService.deleteLog(with: log.id, for: user)
                 .map {
-                    AppLogging.info("Success deleting log \(id) for user \(user.id)")
-                    return AppAction.logDetails(action: .deleteSuccess(deletedId: id))
+                    AppLogging.info("Success deleting log \(log.id) for user \(user.id)")
+                    return AppAction.logDetails(action: .deleteSuccess(deletedLog: log))
                 }.catch({ (err) -> Just<AppAction> in
-                    AppLogging.info("Failed to delete log \(id) for user \(user.id): \(err)")
+                    AppLogging.info("Failed to delete log \(log.id) for user \(user.id): \(err)")
                     return Just(AppAction.logDetails(action: .deleteError(error: err)))
                 }).eraseToAnyPublisher()
     }

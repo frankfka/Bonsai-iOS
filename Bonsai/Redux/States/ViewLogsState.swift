@@ -5,10 +5,30 @@
 
 import Foundation
 
-// TODO: store a dictionary of date to logs, then we don't need to keep reloading
 struct ViewLogsState {
     var isLoading: Bool = false
     var loadError: Error? = nil
     var dateForLogs: Date = Date()
-    var logs: [Loggable] = []
+    var allLogs: [Date:[Loggable]] = [:]
+
+    // This ensures proper retrieval/adding of logs
+    var logsForSelectedDate: [Loggable] {
+        logsForDate(dateForLogs)
+    }
+    func logsForDate(_ date: Date) -> [Loggable] {
+        return allLogs[date.beginningOfDate()] ?? []
+    }
+    mutating func replaceLogs(_ logs: [Loggable], for date: Date? = nil) {
+        let selectedDate = (date ?? dateForLogs).beginningOfDate()
+        allLogs[selectedDate] = logs
+    }
+    mutating func addLog(log: Loggable, for date: Date? = nil) {
+        let selectedDate = (date ?? dateForLogs).beginningOfDate()
+        // Insert, then sort
+        var newLogs: [Loggable] = allLogs[selectedDate] ?? []
+        newLogs.append(log)
+        newLogs.sort { first, second in first.dateCreated > second.dateCreated } // Descending (latest first)
+        allLogs[selectedDate] = newLogs
+    }
+
 }

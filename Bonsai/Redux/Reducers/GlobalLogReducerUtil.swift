@@ -10,11 +10,24 @@ import Foundation
 struct GlobalLogReducerUtil {
 
     static func add(state: inout AppState, newLog: Loggable) {
+        // Home
         state.homeScreen.recentLogs.insert(newLog, at: 0)
+        // View Logs
+        let logsForDate = state.viewLogs.logsForDate(newLog.dateCreated)
+        if !logsForDate.isEmpty {
+            // Add the log only if the dictionary has already initialized logs for the new log date
+            state.viewLogs.addLog(log: newLog, for: newLog.dateCreated)
+        }
     }
 
-    static func delete(state: inout AppState, deletedLogId: String) {
-        state.homeScreen.recentLogs.removeAll { loggable in loggable.id == deletedLogId }
+    static func delete(state: inout AppState, deletedLog: Loggable) {
+        // Home
+        state.homeScreen.recentLogs.removeAll { loggable in loggable.id == deletedLog.id }
+        // View Logs
+        var logsForDate = state.viewLogs.logsForDate(deletedLog.dateCreated)
+        // No need to check for existence - will just be empty if not initialized
+        logsForDate.removeAll { loggable in loggable.id == deletedLog.id }
+        state.viewLogs.replaceLogs(logsForDate, for: deletedLog.dateCreated)
     }
 
 }

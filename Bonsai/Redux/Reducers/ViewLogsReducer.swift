@@ -39,13 +39,13 @@ struct ViewLogsReducer {
         var newState = state
         newState.viewLogs.isLoading = false
         newState.viewLogs.loadError = nil
-        newState.viewLogs.logs = logs
+        newState.viewLogs.replaceLogs(logs)
         return newState
     }
 
     static private func dataLoadError(state: AppState, error: Error) -> AppState {
         var newState = state
-        newState.viewLogs.logs = []
+        newState.viewLogs.replaceLogs([])
         newState.viewLogs.isLoading = false
         newState.viewLogs.loadError = error
         return newState

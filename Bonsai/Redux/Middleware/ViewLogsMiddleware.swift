@@ -32,6 +32,15 @@ struct ViewLogsMiddleware {
                 guard let user = state.global.user else {
                     fatalError("No user initialized when fetching logs")
                 }
+                // Don't fetch if we already have data
+                let logsForDate = state.viewLogs.logsForDate(date)
+                guard logsForDate.isEmpty else {
+                    AppLogging.info("Logs already exist for this date, not retrieving from service")
+                    doInMiddleware {
+                        send(AppAction.viewLog(action: .dataLoadSuccess(logs: logsForDate)))
+                    }
+                    return
+                }
                 fetchLogData(for: date, with: user, logService: logService)
                         .sink(receiveValue: { newAction in
                             send(newAction)

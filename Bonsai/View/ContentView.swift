@@ -117,7 +117,7 @@ struct ContentView: View {
                     self.store.send(.viewLog(action: .fetchData(date: self.store.state.viewLogs.dateForLogs)))
                 },
                 dateForLogs: store.state.viewLogs.dateForLogs,
-                logs: store.state.viewLogs.logs.map { LogRow.ViewModel(loggable: $0) }
+                logs: store.state.viewLogs.logsForSelectedDate.map { LogRow.ViewModel(loggable: $0) }
         )
     }
 
