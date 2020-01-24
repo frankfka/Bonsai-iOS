@@ -8,7 +8,6 @@ import FirebaseCore
 import FirebaseFirestore
 import Combine
 
-// TODO: make fn names more clear
 // TODO: caching for logsearchables
 protocol LogService {
     // CRUD on logs
@@ -23,9 +22,11 @@ protocol LogService {
 
 class LogServiceImpl: LogService {
     private let db: DatabaseService
+    private let cache: CacheService
 
-    init(db: DatabaseService) {
+    init(db: DatabaseService, cache: CacheService) {
         self.db = db
+        self.cache = cache
     }
 
     func getLogs(for user: User, in category: LogCategory? = nil, since beginDate: Date?, toAndIncluding endDate: Date?) -> ServicePublisher<[Loggable]> {
@@ -46,8 +47,14 @@ class LogServiceImpl: LogService {
     }
 
     func getLogSearchable(with id: String, in category: LogCategory) -> ServicePublisher<LogSearchable> {
-        // TODO: Some cache lookup first
-        return self.db.getLogSearchable(with: id, in: category)
+        if let cached = self.cache.getLogSearchable(with: id, in: category) {
+            AppLogging.debug("Returning cached log searchable \(id)")
+            return AnyPublisher(Just(cached).setFailureType(to: ServiceError.self))
+        }
+        return self.db.getLogSearchable(with: id, in: category).map { result -> LogSearchable in
+            self.cache.saveLogSearchable(result)
+            return result
+        }.eraseToAnyPublisher()
     }
 
     func searchLogSearchables(with query: String, by user: User, in category: LogCategory) -> ServicePublisher<[LogSearchable]> {

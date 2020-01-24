@@ -53,6 +53,7 @@ struct HomeTab: View {
         
     }
     private let viewModel: ViewModel
+    @State(initialValue: false) var navigateToLogDetails: Bool? // Allows conditional pushing of navigation views
     
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -73,7 +74,10 @@ struct HomeTab: View {
     
     private func getRecentLogSectionViewModel() -> RecentLogSection.ViewModel {
         let logViewModels = store.state.homeScreen.recentLogs.map { LogRow.ViewModel(loggable: $0) }
-        return RecentLogSection.ViewModel(recentLogs: logViewModels)
+        return RecentLogSection.ViewModel(
+                recentLogs: logViewModels,
+                navigateToLogDetails: $navigateToLogDetails
+        )
     }
 }
 

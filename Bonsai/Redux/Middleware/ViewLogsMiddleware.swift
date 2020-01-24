@@ -36,9 +36,7 @@ struct ViewLogsMiddleware {
                 let logsForDate = state.viewLogs.logsForDate(date)
                 guard logsForDate.isEmpty else {
                     AppLogging.info("Logs already exist for this date, not retrieving from service")
-                    doInMiddleware {
-                        send(AppAction.viewLog(action: .dataLoadSuccess(logs: logsForDate)))
-                    }
+                    send(AppAction.viewLog(action: .dataLoadSuccess(logs: logsForDate)))
                     return
                 }
                 fetchLogData(for: date, with: user, logService: logService)

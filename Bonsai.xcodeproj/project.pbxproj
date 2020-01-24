@@ -96,6 +96,7 @@
 		9E04BD64D0B8E18A2071FD45 /* ViewLogsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B345F9A5313B154DC745 /* ViewLogsTab.swift */; };
 		9E04BD764A5BD572470ED4E6 /* LogDetailNutritionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B0E20E298722B690F1C4 /* LogDetailNutritionView.swift */; };
 		9E04BE1242E1E56CB9BD4DF4 /* LoggingMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BB465D817C71E35F45EF /* LoggingMiddleware.swift */; };
+		9E04BE181FE86A8C5846BA79 /* CacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BD42E217456E1AA1DA03 /* CacheService.swift */; };
 		9E04BEAB2820AE84A00779F5 /* ViewLogsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B3D87A2D9D0DC0EFC30B /* ViewLogsState.swift */; };
 		9E04BEB7D91AD8C615C84D77 /* ActivityLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B158D38EBC0BEC5C2A77 /* ActivityLogView.swift */; };
 		9E04BF009A3FCEC39D6F0D59 /* StandardPopups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BE18499AF88003242B88 /* StandardPopups.swift */; };
@@ -198,6 +199,7 @@
 		9E04BC484C03DA14EC33586F /* GlobalState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalState.swift; sourceTree = "<group>"; };
 		9E04BC48C0B7BB0F4682BE68 /* NutritionLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NutritionLogView.swift; sourceTree = "<group>"; };
 		9E04BCFAAF7B3D5C2A36CCA7 /* Activity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
+		9E04BD42E217456E1AA1DA03 /* CacheService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheService.swift; sourceTree = "<group>"; };
 		9E04BD4984DDBAEC66B08A34 /* DisableInteraction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisableInteraction.swift; sourceTree = "<group>"; };
 		9E04BD4E8ECB33163CBA699C /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		9E04BE18499AF88003242B88 /* StandardPopups.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardPopups.swift; sourceTree = "<group>"; };
@@ -544,6 +546,7 @@
 				9E04B80ECAC1F22023914602 /* DatabaseService.swift */,
 				9E04BD4E8ECB33163CBA699C /* UserService.swift */,
 				9E04B62749DC92BF7454FC72 /* FirebaseDatabase */,
+				9E04BD42E217456E1AA1DA03 /* CacheService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -765,6 +768,7 @@
 				9E04B9CCE5B730A6CD36D39A /* LogDetailMedicationView.swift in Sources */,
 				9E04BD764A5BD572470ED4E6 /* LogDetailNutritionView.swift in Sources */,
 				9E04B885C9949CF44B529078 /* LogDetailActivityView.swift in Sources */,
+				9E04BE181FE86A8C5846BA79 /* CacheService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

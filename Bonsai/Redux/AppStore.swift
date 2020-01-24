@@ -29,7 +29,14 @@ final class AppStore: ObservableObject {
     func send(_ action: AppAction) {
         state = self.reducer(state, action)
         self.middleware.forEach { m in
-            m(state, action, &cancellables, send)
+            m(state, action, &cancellables, sendThroughMiddleware)
         }
     }
+
+    func sendThroughMiddleware(_ action: AppAction) {
+        doInMiddleware {
+            self.send(action)
+        }
+    }
+
 }

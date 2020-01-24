@@ -283,7 +283,6 @@ struct LogDetailView: View {
 }
 
 
-// TODO: Need a preview here
 struct LogDetailView_Previews: PreviewProvider {
     static var previews: some View {
         Group {

@@ -24,9 +24,7 @@ struct HomeScreenMiddleware {
                     return
                 }
                 // Send action to initialize data
-                doInMiddleware {
-                    send(.homeScreen(action: .initializeData))
-                }
+                send(.homeScreen(action: .initializeData))
             default:
                 break
             }

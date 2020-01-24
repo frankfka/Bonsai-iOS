@@ -16,10 +16,15 @@ struct RecentLogSection: View {
             recentLogs.isEmpty
         }
         let recentLogs: [LogRow.ViewModel]
+        @Binding var navigateToLogDetails: Bool?
+
+        init(recentLogs: [LogRow.ViewModel], navigateToLogDetails: Binding<Bool?>) {
+            self.recentLogs = recentLogs
+            self._navigateToLogDetails = navigateToLogDetails
+        }
+
     }
     private let viewModel: ViewModel
-    // TODO: this should be in home tab state?
-    @State(initialValue: false) var navigateToLogDetails: Bool? // Allows conditional pushing of navigation views
 
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -31,7 +36,7 @@ struct RecentLogSection: View {
                 NoRecentLogsView()
             } else {
                 // Using the tag allows us to conditionally trigger navigation within an onTap method
-                NavigationLink(destination: LogDetailView(), tag: true, selection: $navigateToLogDetails) {
+                NavigationLink(destination: LogDetailView(), tag: true, selection: viewModel.$navigateToLogDetails) {
                     EmptyView()
                 }
                 ForEach(viewModel.recentLogs) { logVm in
@@ -52,12 +57,12 @@ struct RecentLogSection: View {
     }
 
     private func onAppear() {
-        self.navigateToLogDetails = nil // Resets navigation state
+        viewModel.navigateToLogDetails = nil // Resets navigation state
     }
 
     private func onLogRowTapped(loggable: Loggable) {
         store.send(.logDetails(action: .initState(loggable: loggable)))
-        navigateToLogDetails = true
+        viewModel.navigateToLogDetails = true
     }
 
     private func showDivider(after vm: LogRow.ViewModel) -> Bool {
@@ -97,7 +102,8 @@ struct RecentLogSection_Previews: PreviewProvider {
                             recentLogs: [
                                 LogRow.ViewModel(loggable: PreviewLoggables.medication),
                                 LogRow.ViewModel(loggable: PreviewLoggables.notes)
-                            ]
+                            ],
+                            navigateToLogDetails: .constant(nil)
                     )
             )
         }.previewLayout(.sizeThatFits)

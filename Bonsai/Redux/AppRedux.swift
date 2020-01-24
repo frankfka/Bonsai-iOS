@@ -26,8 +26,9 @@ class Services {
     init() {
         // Init serves as dependency management
         let db = FirebaseService()
+        let cache = CacheServiceImpl()
         userService = UserServiceImpl(db: db)
-        logService = LogServiceImpl(db: db)
+        logService = LogServiceImpl(db: db, cache: cache)
     }
 }
 

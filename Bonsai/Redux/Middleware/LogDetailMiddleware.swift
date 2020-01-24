@@ -32,9 +32,7 @@ struct LogDetailMiddleware {
                             .store(in: &cancellables)
                 } else {
                     // No fetch needed
-                    doInMiddleware {
-                        send(.logDetails(action: .fetchLogDataSuccess(loggable: initialLoggable)))
-                    }
+                    send(.logDetails(action: .fetchLogDataSuccess(loggable: initialLoggable)))
                 }
             default:
                 break
@@ -123,9 +121,7 @@ struct LogDetailMiddleware {
                     fatalError("No user initialized when attempting to delete a log")
                 }
                 guard let log = state.logDetails.loggable else {
-                    doInMiddleware {
-                        send(.logDetails(action: .deleteError(error: ServiceError(message: "No loggable initialized in log details state, so cannot delete the log"))))
-                    }
+                    send(.logDetails(action: .deleteError(error: ServiceError(message: "No loggable initialized in log details state, so cannot delete the log"))))
                     return
                 }
                 deleteLog(_ : log, for: user, logService: logService)
