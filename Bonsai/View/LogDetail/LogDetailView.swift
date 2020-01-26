@@ -97,21 +97,6 @@ struct LogDetailView: View {
         }
         .background(Color.Theme.backgroundPrimary)
         .navigationBarItems(
-                leading: Button(action: {
-                        self.onBackTapped()
-                    }, label: {
-                        HStack(spacing: CGFloat.Theme.Layout.small) {
-                            Image(systemName: "chevron.left")
-                                    .foregroundColor(Color.Theme.primary)
-                            Text("Back")
-                                    .font(Font.Theme.normalText)
-                                    .foregroundColor(Color.Theme.primary)
-                                    // Prevents truncation
-                                    .fixedSize()
-                                    .frame(minWidth: 0, maxWidth: .infinity)
-                        }
-                        .frame(height: CGFloat.Theme.Layout.navBarItemHeight)
-                    }),
                 trailing: Button(action: {
                         self.onDeleteLogTapped()
                     }, label: {
@@ -127,7 +112,6 @@ struct LogDetailView: View {
                     .disabled(self.viewModel.disableDelete)
         )
         .navigationBarTitle("Log Details", displayMode: .inline)
-        .navigationBarBackButtonHidden(true)
         // Delete Log Confirmation
         .alert(isPresented: $showDeleteLogConfirmation) {
             Alert(
@@ -165,7 +149,7 @@ struct LogDetailView: View {
     
     // MARK: Actions
     private func onBackTapped() {
-        self.presentationMode.wrappedValue.dismiss()
+        dismissView()
     }
 
     private func onLogAgainTapped() {
@@ -195,6 +179,11 @@ struct LogDetailView: View {
 
     private func onDeleteSuccessPopupDismiss() {
         // Only shown when log is deleted successfully, so we're safe to dismiss
+        dismissView()
+    }
+
+    private func dismissView() {
+        store.send(.logDetails(action: .screenDidDismiss))
         self.presentationMode.wrappedValue.dismiss()
     }
     
