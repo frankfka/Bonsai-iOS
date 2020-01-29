@@ -24,8 +24,8 @@
 		114B743D23A20D120095D44B /* Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114B743C23A20D120095D44B /* Actions.swift */; };
 		114B743F23A28A800095D44B /* AppRedux.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114B743E23A28A800095D44B /* AppRedux.swift */; };
 		1162466D23C1390500788BA5 /* SymptomSeveritySliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1162466C23C1390400788BA5 /* SymptomSeveritySliderView.swift */; };
+		117F128D23E137990036C055 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 117F128C23E137980036C055 /* GoogleService-Info.plist */; };
 		11929D1123CC358400B06B99 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11929D1023CC358400B06B99 /* ErrorView.swift */; };
-		11B4311523A57DB700909D47 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 11B4311423A57DB700909D47 /* GoogleService-Info.plist */; };
 		11B4311823A5BBB700909D47 /* Mood.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B4311723A5BBB700909D47 /* Mood.swift */; };
 		11B4311A23A6960500909D47 /* LoadingSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B4311923A6960500909D47 /* LoadingSpinner.swift */; };
 		11B4311D23A6974C00909D47 /* LoadingSpinnerWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B4311C23A6974C00909D47 /* LoadingSpinnerWrappers.swift */; };
@@ -39,6 +39,7 @@
 		11B7651323CEDA5F00BC08CB /* LogDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B7651223CEDA5F00BC08CB /* LogDetailView.swift */; };
 		11B7651523CEDAA100BC08CB /* LogDetailSymptomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B7651423CEDAA100BC08CB /* LogDetailSymptomView.swift */; };
 		11B7651923CF6D7100BC08CB /* LogDetailNotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B7651823CF6D7100BC08CB /* LogDetailNotesView.swift */; };
+		11EBB8E623DD39E400575CA1 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EBB8E523DD39E400575CA1 /* SettingsView.swift */; };
 		11EDE0E823C6D17A00A54673 /* ViewLogsDateHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EDE0E723C6D17A00A54673 /* ViewLogsDateHeaderView.swift */; };
 		11EDE0EE23C6EE2E00A54673 /* DatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EDE0ED23C6EE2E00A54673 /* DatePickerView.swift */; };
 		11F445E4239A08CB00B501CD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F445E3239A08CB00B501CD /* AppDelegate.swift */; };
@@ -51,10 +52,12 @@
 		9E04B1DC07699EBE5C684C53 /* MedicationLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BC42FA01AF3C727FA0A7 /* MedicationLogView.swift */; };
 		9E04B1F285BD40EB2E48688C /* SymptomLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B359724D8C94ED1CFA37 /* SymptomLogView.swift */; };
 		9E04B20DF75F4ECBB16C6DBC /* Symptom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B658D36CC2F8B5F120B2 /* Symptom.swift */; };
+		9E04B25F7C690817E09E203E /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BCEA3FA0AEBDF8B13209 /* UserService.swift */; };
 		9E04B2A80CC13789F016F18C /* LogDetailBasicsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BF258092F6829380B3A0 /* LogDetailBasicsView.swift */; };
 		9E04B2AB822789B9206A8765 /* CreateLogReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B5273996AD629A11C11A /* CreateLogReducer.swift */; };
 		9E04B3A3E68A3436D2572C29 /* GlobalLogReducerUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BFD370D77FBBD8821004 /* GlobalLogReducerUtil.swift */; };
 		9E04B43BF70AF74B23CE5CA1 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BE25078C4D1D66F8E42F /* Note.swift */; };
+		9E04B43EFE2FEC2099CB0364 /* SettingsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B03E2878B40603D16455 /* SettingsState.swift */; };
 		9E04B50598E3E5F85D218185 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BCFAAF7B3D5C2A36CCA7 /* Activity.swift */; };
 		9E04B513CC19B5E2DB63CED9 /* SearchTextObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B763E5A55C21C9EF3E57 /* SearchTextObservable.swift */; };
 		9E04B5451F43ADCBD5CC72FA /* HomeScreenReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BF971048F9F4765391DA /* HomeScreenReducer.swift */; };
@@ -76,10 +79,13 @@
 		9E04B885C9949CF44B529078 /* LogDetailActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B6982A1B96DB0D1B6D6F /* LogDetailActivityView.swift */; };
 		9E04B8EC811016356918B8F3 /* SearchListViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B66DB477D3F118D5DA41 /* SearchListViewContainer.swift */; };
 		9E04B95B683A587ACED91D5F /* LogDetailState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B0F0135005B16E61B8A4 /* LogDetailState.swift */; };
+		9E04B986D42B107ED18ED0E5 /* AuthViewControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B755AF0815DAF19D6FE2 /* AuthViewControllerRepresentable.swift */; };
 		9E04B9CCE5B730A6CD36D39A /* LogDetailMedicationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BB72735E65800D5B71ED /* LogDetailMedicationView.swift */; };
 		9E04B9DD062519A86C6F3CD9 /* NutritionLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BC48C0B7BB0F4682BE68 /* NutritionLogView.swift */; };
 		9E04BA0B391A9ECA68557B6E /* ViewLogsMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BB39F1BF4E0343249791 /* ViewLogsMiddleware.swift */; };
 		9E04BA2F6B0EAE778B64DAEC /* TappableRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BE968E2C57ED5F12F9BB /* TappableRowView.swift */; };
+		9E04BA3CE472D42D9248BDCC /* SettingsReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B63095D6F8938ED7D75C /* SettingsReducer.swift */; };
+		9E04BA76B3A26CF5EAF2AB58 /* FirebaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BDF894B8BF390969E233 /* FirebaseAuthService.swift */; };
 		9E04BAA1D418E7593D4D4FD8 /* LogDetailMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BEBBE15540376ABFCEBC /* LogDetailMiddleware.swift */; };
 		9E04BAB33DC97B591A4C4192 /* GlobalReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B17C034FABD17AEC4BFB /* GlobalReducer.swift */; };
 		9E04BAB3F139D3832AA46E46 /* SectionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B9D9B417E31F7195DE54 /* SectionViews.swift */; };
@@ -89,18 +95,18 @@
 		9E04BB66ECCD13C94DFBC8B1 /* Popup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BFB9FC87753455D68DDA /* Popup.swift */; };
 		9E04BBC2B2FF6C3F91B2FC86 /* ViewLogsReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B4F958CBB6E0E7260A21 /* ViewLogsReducer.swift */; };
 		9E04BBC70F549E1E51568666 /* DisableInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BD4984DDBAEC66B08A34 /* DisableInteraction.swift */; };
-		9E04BC228D55A2BFEEDF93F7 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B116097027786675FBE7 /* FirebaseService.swift */; };
+		9E04BC228D55A2BFEEDF93F7 /* FirebaseFirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B116097027786675FBE7 /* FirebaseFirestoreService.swift */; };
 		9E04BC8DB125285AF036E6F4 /* PreviewLoggables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B6B20E717222C1408967 /* PreviewLoggables.swift */; };
 		9E04BC93C6BC7E379AC5D5A7 /* Medication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B5D9DCFF8D0157D8B57A /* Medication.swift */; };
 		9E04BD31DF1944F44048BFA2 /* DatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B80ECAC1F22023914602 /* DatabaseService.swift */; };
 		9E04BD64D0B8E18A2071FD45 /* ViewLogsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B345F9A5313B154DC745 /* ViewLogsTab.swift */; };
 		9E04BD764A5BD572470ED4E6 /* LogDetailNutritionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B0E20E298722B690F1C4 /* LogDetailNutritionView.swift */; };
+		9E04BDBDF506B0CB3069CA8E /* SettingsMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BD4AB903F6E3E687B8B6 /* SettingsMiddleware.swift */; };
 		9E04BE1242E1E56CB9BD4DF4 /* LoggingMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BB465D817C71E35F45EF /* LoggingMiddleware.swift */; };
 		9E04BE181FE86A8C5846BA79 /* CacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BD42E217456E1AA1DA03 /* CacheService.swift */; };
 		9E04BEAB2820AE84A00779F5 /* ViewLogsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B3D87A2D9D0DC0EFC30B /* ViewLogsState.swift */; };
 		9E04BEB7D91AD8C615C84D77 /* ActivityLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B158D38EBC0BEC5C2A77 /* ActivityLogView.swift */; };
 		9E04BF009A3FCEC39D6F0D59 /* StandardPopups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BE18499AF88003242B88 /* StandardPopups.swift */; };
-		9E04BF17E5C0A7F47F98403A /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BD4E8ECB33163CBA699C /* UserService.swift */; };
 		9E04BF8B0D0B677809F642FB /* LogDetailsReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B636D29C54C7BDCD27A7 /* LogDetailsReducer.swift */; };
 		9E04BF9D42BED6CD1B95E47A /* UserConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B6C450860BE65AF311A7 /* UserConstants.swift */; };
 		9E04BFCF9C45BB3FCE40FFE3 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B4A50B14B9F44D696289 /* User.swift */; };
@@ -125,8 +131,8 @@
 		114B743C23A20D120095D44B /* Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Actions.swift; sourceTree = "<group>"; };
 		114B743E23A28A800095D44B /* AppRedux.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRedux.swift; sourceTree = "<group>"; };
 		1162466C23C1390400788BA5 /* SymptomSeveritySliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomSeveritySliderView.swift; sourceTree = "<group>"; };
+		117F128C23E137980036C055 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		11929D1023CC358400B06B99 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
-		11B4311423A57DB700909D47 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		11B4311723A5BBB700909D47 /* Mood.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mood.swift; sourceTree = "<group>"; };
 		11B4311923A6960500909D47 /* LoadingSpinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingSpinner.swift; sourceTree = "<group>"; };
 		11B4311C23A6974C00909D47 /* LoadingSpinnerWrappers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingSpinnerWrappers.swift; sourceTree = "<group>"; };
@@ -140,6 +146,7 @@
 		11B7651223CEDA5F00BC08CB /* LogDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDetailView.swift; sourceTree = "<group>"; };
 		11B7651423CEDAA100BC08CB /* LogDetailSymptomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDetailSymptomView.swift; sourceTree = "<group>"; };
 		11B7651823CF6D7100BC08CB /* LogDetailNotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDetailNotesView.swift; sourceTree = "<group>"; };
+		11EBB8E523DD39E400575CA1 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		11EDE0E723C6D17A00A54673 /* ViewLogsDateHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewLogsDateHeaderView.swift; sourceTree = "<group>"; };
 		11EDE0ED23C6EE2E00A54673 /* DatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerView.swift; sourceTree = "<group>"; };
 		11F445E0239A08CB00B501CD /* Bonsai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bonsai.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -152,10 +159,11 @@
 		5224D148B81081E7444187A6 /* Pods-HealthTrack.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthTrack.release.xcconfig"; path = "Target Support Files/Pods-HealthTrack/Pods-HealthTrack.release.xcconfig"; sourceTree = "<group>"; };
 		75E56A12C7431D234EDF9416 /* Pods-Bonsai.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bonsai.debug.xcconfig"; path = "Target Support Files/Pods-Bonsai/Pods-Bonsai.debug.xcconfig"; sourceTree = "<group>"; };
 		76CC4C0B881B5BDB7CBB1305 /* Pods_Bonsai.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bonsai.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9E04B03E2878B40603D16455 /* SettingsState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsState.swift; sourceTree = "<group>"; };
 		9E04B0E20E298722B690F1C4 /* LogDetailNutritionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogDetailNutritionView.swift; sourceTree = "<group>"; };
 		9E04B0F0135005B16E61B8A4 /* LogDetailState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogDetailState.swift; sourceTree = "<group>"; };
 		9E04B0FA059903598F57AE95 /* Nutrition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Nutrition.swift; sourceTree = "<group>"; };
-		9E04B116097027786675FBE7 /* FirebaseService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
+		9E04B116097027786675FBE7 /* FirebaseFirestoreService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseFirestoreService.swift; sourceTree = "<group>"; };
 		9E04B11F0B3A84BA18DFF035 /* AppReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppReducer.swift; sourceTree = "<group>"; };
 		9E04B158D38EBC0BEC5C2A77 /* ActivityLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityLogView.swift; sourceTree = "<group>"; };
 		9E04B17C034FABD17AEC4BFB /* GlobalReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalReducer.swift; sourceTree = "<group>"; };
@@ -173,6 +181,7 @@
 		9E04B5273996AD629A11C11A /* CreateLogReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogReducer.swift; sourceTree = "<group>"; };
 		9E04B5548FA5FE0689E72183 /* CreateLogMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogMiddleware.swift; sourceTree = "<group>"; };
 		9E04B5D9DCFF8D0157D8B57A /* Medication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Medication.swift; sourceTree = "<group>"; };
+		9E04B63095D6F8938ED7D75C /* SettingsReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsReducer.swift; sourceTree = "<group>"; };
 		9E04B636D29C54C7BDCD27A7 /* LogDetailsReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogDetailsReducer.swift; sourceTree = "<group>"; };
 		9E04B658D36CC2F8B5F120B2 /* Symptom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Symptom.swift; sourceTree = "<group>"; };
 		9E04B66DB477D3F118D5DA41 /* SearchListViewContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchListViewContainer.swift; sourceTree = "<group>"; };
@@ -180,6 +189,7 @@
 		9E04B6B20E717222C1408967 /* PreviewLoggables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewLoggables.swift; sourceTree = "<group>"; };
 		9E04B6C42CD67CF8BEF300C2 /* LogService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogService.swift; sourceTree = "<group>"; };
 		9E04B6C450860BE65AF311A7 /* UserConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserConstants.swift; sourceTree = "<group>"; };
+		9E04B755AF0815DAF19D6FE2 /* AuthViewControllerRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthViewControllerRepresentable.swift; sourceTree = "<group>"; };
 		9E04B763E5A55C21C9EF3E57 /* SearchTextObservable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTextObservable.swift; sourceTree = "<group>"; };
 		9E04B7E1E4E86978635840E1 /* FirebaseHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseHelpers.swift; sourceTree = "<group>"; };
 		9E04B80416B6B7E5CB269041 /* SearchListResultsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchListResultsView.swift; sourceTree = "<group>"; };
@@ -198,10 +208,12 @@
 		9E04BC42FA01AF3C727FA0A7 /* MedicationLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MedicationLogView.swift; sourceTree = "<group>"; };
 		9E04BC484C03DA14EC33586F /* GlobalState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalState.swift; sourceTree = "<group>"; };
 		9E04BC48C0B7BB0F4682BE68 /* NutritionLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NutritionLogView.swift; sourceTree = "<group>"; };
+		9E04BCEA3FA0AEBDF8B13209 /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		9E04BCFAAF7B3D5C2A36CCA7 /* Activity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
 		9E04BD42E217456E1AA1DA03 /* CacheService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheService.swift; sourceTree = "<group>"; };
 		9E04BD4984DDBAEC66B08A34 /* DisableInteraction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisableInteraction.swift; sourceTree = "<group>"; };
-		9E04BD4E8ECB33163CBA699C /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
+		9E04BD4AB903F6E3E687B8B6 /* SettingsMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsMiddleware.swift; sourceTree = "<group>"; };
+		9E04BDF894B8BF390969E233 /* FirebaseAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseAuthService.swift; sourceTree = "<group>"; };
 		9E04BE18499AF88003242B88 /* StandardPopups.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardPopups.swift; sourceTree = "<group>"; };
 		9E04BE25078C4D1D66F8E42F /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		9E04BE968E2C57ED5F12F9BB /* TappableRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TappableRowView.swift; sourceTree = "<group>"; };
@@ -229,6 +241,7 @@
 		110C63A9239D5DBB00D904DE /* View */ = {
 			isa = PBXGroup;
 			children = (
+				11EBB8E423DD398400575CA1 /* Settings */,
 				11B7651123CEDA4900BC08CB /* LogDetail */,
 				11EDE0E623C6D13900A54673 /* ViewLogs */,
 				11B4311B23A6965500909D47 /* Common */,
@@ -360,6 +373,15 @@
 			path = LogDetail;
 			sourceTree = "<group>";
 		};
+		11EBB8E423DD398400575CA1 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				11EBB8E523DD39E400575CA1 /* SettingsView.swift */,
+				9E04B755AF0815DAF19D6FE2 /* AuthViewControllerRepresentable.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		11EDE0E623C6D13900A54673 /* ViewLogs */ = {
 			isa = PBXGroup;
 			children = (
@@ -390,7 +412,7 @@
 		11F445E2239A08CB00B501CD /* Bonsai */ = {
 			isa = PBXGroup;
 			children = (
-				11B4311423A57DB700909D47 /* GoogleService-Info.plist */,
+				117F128C23E137980036C055 /* GoogleService-Info.plist */,
 				114B743323A205BD0095D44B /* Model */,
 				114B743023A2051D0095D44B /* Redux */,
 				110C63A9239D5DBB00D904DE /* View */,
@@ -441,6 +463,15 @@
 			path = Nutrition;
 			sourceTree = "<group>";
 		};
+		9E04B0D243CEC2F8CCB8B704 /* UserService */ = {
+			isa = PBXGroup;
+			children = (
+				9E04BCEA3FA0AEBDF8B13209 /* UserService.swift */,
+				9E04BDF894B8BF390969E233 /* FirebaseAuthService.swift */,
+			);
+			path = UserService;
+			sourceTree = "<group>";
+		};
 		9E04B14B7D6624B5C4342B28 /* Middleware */ = {
 			isa = PBXGroup;
 			children = (
@@ -450,6 +481,7 @@
 				9E04B329C5305296C0C18D78 /* HomeScreenMiddleware.swift */,
 				9E04BB39F1BF4E0343249791 /* ViewLogsMiddleware.swift */,
 				9E04BEBBE15540376ABFCEBC /* LogDetailMiddleware.swift */,
+				9E04BD4AB903F6E3E687B8B6 /* SettingsMiddleware.swift */,
 			);
 			path = Middleware;
 			sourceTree = "<group>";
@@ -474,6 +506,7 @@
 				9E04B4F958CBB6E0E7260A21 /* ViewLogsReducer.swift */,
 				9E04B636D29C54C7BDCD27A7 /* LogDetailsReducer.swift */,
 				9E04BFD370D77FBBD8821004 /* GlobalLogReducerUtil.swift */,
+				9E04B63095D6F8938ED7D75C /* SettingsReducer.swift */,
 			);
 			path = Reducers;
 			sourceTree = "<group>";
@@ -481,7 +514,7 @@
 		9E04B62749DC92BF7454FC72 /* FirebaseDatabase */ = {
 			isa = PBXGroup;
 			children = (
-				9E04B116097027786675FBE7 /* FirebaseService.swift */,
+				9E04B116097027786675FBE7 /* FirebaseFirestoreService.swift */,
 				9E04B7E1E4E86978635840E1 /* FirebaseHelpers.swift */,
 			);
 			path = FirebaseDatabase;
@@ -534,6 +567,7 @@
 				9E04B2034124C63454F0CEDC /* HomeScreenState.swift */,
 				9E04B3D87A2D9D0DC0EFC30B /* ViewLogsState.swift */,
 				9E04B0F0135005B16E61B8A4 /* LogDetailState.swift */,
+				9E04B03E2878B40603D16455 /* SettingsState.swift */,
 			);
 			path = States;
 			sourceTree = "<group>";
@@ -544,9 +578,9 @@
 				9E04B6C42CD67CF8BEF300C2 /* LogService.swift */,
 				9E04B315B5D54A72FC7B7D71 /* Common.swift */,
 				9E04B80ECAC1F22023914602 /* DatabaseService.swift */,
-				9E04BD4E8ECB33163CBA699C /* UserService.swift */,
 				9E04B62749DC92BF7454FC72 /* FirebaseDatabase */,
 				9E04BD42E217456E1AA1DA03 /* CacheService.swift */,
+				9E04B0D243CEC2F8CCB8B704 /* UserService */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -572,6 +606,7 @@
 				11F445DD239A08CB00B501CD /* Frameworks */,
 				11F445DE239A08CB00B501CD /* Resources */,
 				4D382233B74B5E98621F9DBB /* [CP] Embed Pods Frameworks */,
+				E113C408A9A631F7A83B9E0D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -621,7 +656,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				11F445F0239A08D400B501CD /* LaunchScreen.storyboard in Resources */,
-				11B4311523A57DB700909D47 /* GoogleService-Info.plist in Resources */,
+				117F128D23E137990036C055 /* GoogleService-Info.plist in Resources */,
 				11F445ED239A08D400B501CD /* Preview Assets.xcassets in Resources */,
 				11F445EA239A08D400B501CD /* Assets.xcassets in Resources */,
 			);
@@ -669,6 +704,23 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Bonsai/Pods-Bonsai-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		E113C408A9A631F7A83B9E0D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Bonsai/Pods-Bonsai-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Bonsai/Pods-Bonsai-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Bonsai/Pods-Bonsai-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -712,7 +764,6 @@
 				9E04BD31DF1944F44048BFA2 /* DatabaseService.swift in Sources */,
 				11B4311A23A6960500909D47 /* LoadingSpinner.swift in Sources */,
 				11B4311D23A6974C00909D47 /* LoadingSpinnerWrappers.swift in Sources */,
-				9E04BF17E5C0A7F47F98403A /* UserService.swift in Sources */,
 				11B4313023AB211B00909D47 /* SearchBar.swift in Sources */,
 				9E04B6DD94E5A95F4D9DCA11 /* FirebaseConstants.swift in Sources */,
 				9E04BC93C6BC7E379AC5D5A7 /* Medication.swift in Sources */,
@@ -728,7 +779,7 @@
 				9E04B5AFF3ADE20F1639D10D /* SearchListItemRow.swift in Sources */,
 				9E04B755EF3C338636399E89 /* GlobalState.swift in Sources */,
 				9E04BB30BD8E25713D8572AA /* CreateLogState.swift in Sources */,
-				9E04BC228D55A2BFEEDF93F7 /* FirebaseService.swift in Sources */,
+				9E04BC228D55A2BFEEDF93F7 /* FirebaseFirestoreService.swift in Sources */,
 				11EDE0EE23C6EE2E00A54673 /* DatePickerView.swift in Sources */,
 				9E04B5BB7DC27D9DA0B6AAD9 /* FirebaseHelpers.swift in Sources */,
 				9E04BB66ECCD13C94DFBC8B1 /* Popup.swift in Sources */,
@@ -752,6 +803,7 @@
 				9E04B548CF6C4197ED8E871C /* ActivityLogDurationRowView.swift in Sources */,
 				9E04BEAB2820AE84A00779F5 /* ViewLogsState.swift in Sources */,
 				9E04B2AB822789B9206A8765 /* CreateLogReducer.swift in Sources */,
+				11EBB8E623DD39E400575CA1 /* SettingsView.swift in Sources */,
 				9E04BBC2B2FF6C3F91B2FC86 /* ViewLogsReducer.swift in Sources */,
 				9E04BD64D0B8E18A2071FD45 /* ViewLogsTab.swift in Sources */,
 				9E04BA0B391A9ECA68557B6E /* ViewLogsMiddleware.swift in Sources */,
@@ -769,6 +821,12 @@
 				9E04BD764A5BD572470ED4E6 /* LogDetailNutritionView.swift in Sources */,
 				9E04B885C9949CF44B529078 /* LogDetailActivityView.swift in Sources */,
 				9E04BE181FE86A8C5846BA79 /* CacheService.swift in Sources */,
+				9E04B25F7C690817E09E203E /* UserService.swift in Sources */,
+				9E04BA76B3A26CF5EAF2AB58 /* FirebaseAuthService.swift in Sources */,
+				9E04B43EFE2FEC2099CB0364 /* SettingsState.swift in Sources */,
+				9E04BA3CE472D42D9248BDCC /* SettingsReducer.swift in Sources */,
+				9E04BDBDF506B0CB3069CA8E /* SettingsMiddleware.swift in Sources */,
+				9E04B986D42B107ED18ED0E5 /* AuthViewControllerRepresentable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -915,7 +973,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.jiafrank.HealthTrack;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jiafrank.Bonsai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -937,7 +995,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.jiafrank.HealthTrack;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jiafrank.Bonsai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

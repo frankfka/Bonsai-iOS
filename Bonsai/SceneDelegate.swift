@@ -19,13 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
         // Create the SwiftUI view that provides the window contents.
-        let appStore = AppStore(
-                initialState: AppState(),
-                reducer: AppReducer.reduce,
-                middleware: AppMiddleware.middleware(services: Services())
-        )
-        appStore.send(.global(action: .appDidLaunch))
-        let contentView = RootView().environmentObject(appStore)
+        let contentView = RootView().environmentObject(globalStore)
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {

@@ -23,6 +23,8 @@ extension AppAction {
             return "View Log: \(action.actionName)"
         case let .logDetails(action):
             return "Log Details: \(action.actionName)"
+        case let .settings(action):
+            return "Settings: \(action.actionName)"
         case let.createLog(action):
             return "Create Log: \(action.actionName)"
         }
@@ -62,6 +64,16 @@ extension ViewLogsAction {
     }
 }
 extension LogDetailsAction {
+    var actionName: String {
+        let mirror = Mirror(reflecting: self)
+        if let label = mirror.children.first?.label {
+            return label
+        } else {
+            return String(describing: self)
+        }
+    }
+}
+extension SettingsAction {
     var actionName: String {
         let mirror = Mirror(reflecting: self)
         if let label = mirror.children.first?.label {

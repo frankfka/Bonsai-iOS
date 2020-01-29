@@ -18,7 +18,8 @@ struct GlobalReducer {
     }
 
     static private func appDidLaunch(state: AppState) -> AppState {
-        var newState = state
+        // Begin with a fresh state
+        var newState = AppState()
         newState.global.isInitializing = true
         return newState
     }

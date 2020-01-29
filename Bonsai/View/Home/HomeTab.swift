@@ -37,8 +37,14 @@ struct HomeTabContainer: View {
         }
         .background(Color.Theme.backgroundPrimary)
         .navigationBarTitle("Home")
+        .navigationBarItems(
+                // TODO: Use actual icon here
+                trailing: NavigationLink(destination: SettingsView().environmentObject(store)) {
+                    Text("Settings")
+                }
+        )
         .embedInNavigationView()
-            .padding(.top) // Temporary - bug where scrollview goes under the status bar
+        .padding(.top) // Temporary - bug where scrollview goes under the status bar
     }
     
     func getHomeTabViewModel() -> HomeTab.ViewModel {
@@ -68,8 +74,6 @@ struct HomeTab: View {
             }
             .padding(.all, CGFloat.Theme.Layout.normal)
         }
-        // Use flex frame so it always fills width
-        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: Alignment.topLeading)
     }
     
     private func getRecentLogSectionViewModel() -> RecentLogSection.ViewModel {

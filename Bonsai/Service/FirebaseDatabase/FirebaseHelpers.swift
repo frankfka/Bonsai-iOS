@@ -8,7 +8,7 @@ import Combine
 import FirebaseFirestore
 
 // Service extension to decode data - this is hacky but it's the only way that works with the protocol implementation
-extension FirebaseService {
+extension FirebaseFirestoreService {
     func decode(data: [String: Any], parentCategory: LogCategory) -> LogSearchable? {
         // Common fields
         guard let name = data[FirebaseConstants.Searchable.ItemNameField] as? String,
@@ -115,7 +115,8 @@ extension User {
     func encode() -> [String: Any] {
         return [
             FirebaseConstants.User.IdField: self.id,
-            FirebaseConstants.User.DateCreatedField: self.dateCreated
+            FirebaseConstants.User.DateCreatedField: self.dateCreated,
+            FirebaseConstants.User.LinkedGoogleAccountField: self.linkedFirebaseGoogleAccount?.encode() as Any
         ]
     }
 
@@ -123,7 +124,32 @@ extension User {
         let userId = data[FirebaseConstants.User.IdField] as? String
         let dateCreated = Date.fromFirebaseTimestamp(data[FirebaseConstants.User.DateCreatedField])
         if let userId = userId, let dateCreated = dateCreated {
-            return User(id: userId, dateCreated: dateCreated)
+            var linkedFirebaseAccount: FirebaseGoogleAccount? = nil
+            if let linkedGoogleAccountData = data[FirebaseConstants.User.LinkedGoogleAccountField] as? [String: Any],
+               let googleAccount = FirebaseGoogleAccount.decode(data: linkedGoogleAccountData) {
+                linkedFirebaseAccount = googleAccount
+            }
+            return User(id: userId, dateCreated: dateCreated, linkedFirebaseGoogleAccount: linkedFirebaseAccount)
+        }
+        return nil
+    }
+}
+extension User.FirebaseGoogleAccount {
+    func encode() -> [String: Any] {
+        return [
+            FirebaseConstants.User.FirebaseGoogleAccount.IdField: self.id,
+            FirebaseConstants.User.FirebaseGoogleAccount.NameField: self.name,
+            FirebaseConstants.User.FirebaseGoogleAccount.EmailField: self.email
+        ]
+    }
+
+    static func decode(data: [String: Any]) -> User.FirebaseGoogleAccount? {
+        let googleId = data[FirebaseConstants.User.FirebaseGoogleAccount.IdField] as? String
+        let email = data[FirebaseConstants.User.FirebaseGoogleAccount.EmailField] as? String
+        // Name not currently needed
+        let name = data[FirebaseConstants.User.FirebaseGoogleAccount.NameField] as? String ?? ""
+        if let googleId = googleId, let email = email {
+            return User.FirebaseGoogleAccount(id: googleId, name: name, email: email)
         }
         return nil
     }

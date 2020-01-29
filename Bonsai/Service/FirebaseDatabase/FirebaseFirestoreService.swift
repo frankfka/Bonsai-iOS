@@ -7,8 +7,9 @@ import Foundation
 import Combine
 import FirebaseFirestore
 
-class FirebaseService: DatabaseService {
+class FirebaseFirestoreService: DatabaseService {
 
+    private let linkedGoogleAccountQueryLimit = 1 // Number of results to return when we look for a linked Google account
     private let logQueryLimit = 10 // Number of results to return when user sees logs
     private let logSearchableQueryLimit = 10  // Number of results to return when a user searches
     private let db: Firestore
@@ -77,6 +78,58 @@ class FirebaseService: DatabaseService {
                     } else {
                         AppLogging.debug("User \(user.id) saved successfully")
                         onComplete(.success(()))
+                    }
+                }
+    }
+
+    func deleteUser(user: User) -> ServicePublisher<Void> {
+        let future = ServiceFuture<Void> { promise in
+            self.deleteUser(user: user) { result in
+                promise(result)
+            }
+        }
+        return AnyPublisher(future)
+    }
+
+    private func deleteUser(user: User, onComplete: @escaping ServiceCallback<Void>) {
+        // TODO: This does not delete log subcollections
+        self.db.collection(FirebaseConstants.User.Collection).document(user.id).delete() { err in
+            if let err = err {
+                let errorMessage = "Error deleting user \(user.id): \(err)"
+                AppLogging.error(errorMessage)
+                onComplete(.failure(ServiceError(message: errorMessage, wrappedError: err)))
+            } else {
+                onComplete(.success(()))
+            }
+        }
+    }
+
+    func findExistingUserWithGoogleAccount(googleId: String) -> ServicePublisher<User?> {
+        let future = ServiceFuture<User?> { promise in
+            self.findExistingUserWithGoogleAccount(googleId: googleId) { result in
+                promise(result)
+            }
+        }
+        return AnyPublisher(future)
+    }
+
+    private func findExistingUserWithGoogleAccount(googleId: String, onComplete: @escaping ServiceCallback<User?>) {
+        self.db.collection(FirebaseConstants.User.Collection)
+                .whereField("\(FirebaseConstants.User.LinkedGoogleAccountField).\(FirebaseConstants.User.FirebaseGoogleAccount.IdField)", isEqualTo: googleId)
+                .limit(to: linkedGoogleAccountQueryLimit)  // Should not have more than 1 linked user
+                .getDocuments() { (querySnapshot, err) in
+                    if let err = err {
+                        let errString = "Error in finding user with linked Google account ID \(googleId): \(err)"
+                        AppLogging.error(errString)
+                        onComplete(.failure(ServiceError(message: errString, wrappedError: err)))
+                    } else {
+                        var linkedUser: User? = nil
+                        if let foundDocument = querySnapshot!.documents.first?.data(),
+                            let foundUser = User.decode(data: foundDocument) {
+                            linkedUser = foundUser
+                            AppLogging.info("Found user ID \(foundUser.id) already linked to Google ID \(googleId)")
+                        }
+                        onComplete(.success(linkedUser))
                     }
                 }
     }

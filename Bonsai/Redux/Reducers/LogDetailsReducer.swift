@@ -22,6 +22,8 @@ struct LogDetailsReducer {
             return deleteError(state: state, error: error)
         case .errorPopupShown:
             return errorPopupShown(state: state)
+        case .screenDidDismiss:
+            return screenDidDismiss(state: state)
         }
     }
 

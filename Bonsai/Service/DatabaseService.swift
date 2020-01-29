@@ -10,6 +10,8 @@ protocol DatabaseService {
     // User functions
     func saveUser(user: User) -> ServicePublisher<Void>
     func getUser(userId: String) -> ServicePublisher<User>
+    func deleteUser(user: User) -> ServicePublisher<Void>
+    func findExistingUserWithGoogleAccount(googleId: String) -> ServicePublisher<User?>
 
     // LogSearchable functions
     func searchLogSearchables(query: String, by user: User, in category: LogCategory) -> ServicePublisher<[LogSearchable]>

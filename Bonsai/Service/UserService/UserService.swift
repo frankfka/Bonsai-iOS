@@ -6,16 +6,27 @@
 import Combine
 import Foundation
 
+import GoogleSignIn
+
 protocol UserService {
     func createUser() -> User
     func save(user: User) -> ServicePublisher<Void>
     func get(userId: String) -> ServicePublisher<User>
+
+    func findExistingUserWithGoogleAccount(googleAccount: User.FirebaseGoogleAccount) -> ServicePublisher<User?>
+    func restoreUser(currentUser: User, userToRestore: User) -> ServicePublisher<Void>
+
+    // Firebase Integrations - separate from the core service
+    func signInWithGoogle(presentingVc: UIViewController)
+    func googleSignedIn(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!)
 }
 
 class UserServiceImpl: UserService {
-    let db: DatabaseService
+    private let db: DatabaseService
+    private let auth: FirebaseAuthService
 
-    init(db: DatabaseService) {
+    init(db: DatabaseService, auth: FirebaseAuthService) {
+        self.auth = auth
         self.db = db
     }
 
@@ -30,5 +41,28 @@ class UserServiceImpl: UserService {
 
     func get(userId: String) -> ServicePublisher<User> {
         return self.db.getUser(userId: userId)
+    }
+
+    func findExistingUserWithGoogleAccount(googleAccount: User.FirebaseGoogleAccount) -> ServicePublisher<User?> {
+        return self.db.findExistingUserWithGoogleAccount(googleId: googleAccount.id)
+    }
+
+    func restoreUser(currentUser: User, userToRestore: User) -> ServicePublisher<Void> {
+        // Delete current user, then set local ID to the new user
+        self.db.deleteUser(user: currentUser).map {
+            AppLogging.info("Deleted user \(currentUser.id)")
+            UserDefaults.standard.set(userToRestore.id, forKey: UserConstants.UserDefaultsUserIdKey)
+            AppLogging.info("Set user \(userToRestore.id) as default user in UserDefaults")
+        }.eraseToAnyPublisher()
+    }
+
+    // MARK: Firebase Integrations
+    func signInWithGoogle(presentingVc: UIViewController) {
+        self.auth.signInWithGoogle(presentingVc: presentingVc)
+    }
+
+    func googleSignedIn(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        // Delegate to firebase service
+        return self.auth.googleSignedIn(signIn, didSignInFor: user, withError: error)
     }
 }

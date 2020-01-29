@@ -36,6 +36,7 @@ struct RecentLogSection: View {
                 NoRecentLogsView()
             } else {
                 // Using the tag allows us to conditionally trigger navigation within an onTap method
+                // This is useful because we can dispatch an action to initialize the redux state
                 NavigationLink(destination: LogDetailView(), tag: true, selection: viewModel.$navigateToLogDetails) {
                     EmptyView()
                 }

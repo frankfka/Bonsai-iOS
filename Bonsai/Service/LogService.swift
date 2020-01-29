@@ -8,7 +8,6 @@ import FirebaseCore
 import FirebaseFirestore
 import Combine
 
-// TODO: caching for logsearchables
 protocol LogService {
     // CRUD on logs
     func getLogs(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?) -> ServicePublisher<[Loggable]>

@@ -7,12 +7,14 @@
 //
 
 import Foundation
+import UIKit
 
 enum AppAction {
     case global(action: GlobalAction)
     case homeScreen(action: HomeScreenAction)
     case viewLog(action: ViewLogsAction)
     case logDetails(action: LogDetailsAction)
+    case settings(action: SettingsAction)
     case createLog(action: CreateLogAction)
 }
 
@@ -46,6 +48,28 @@ enum LogDetailsAction {
     case deleteSuccess(deletedLog: Loggable)
     case deleteError(error: Error)
     case errorPopupShown
+    case screenDidDismiss
+}
+
+enum SettingsAction {
+    case linkGoogleAccountPressed(presentingVc: UIViewController)
+    // User first signs in with Google
+    case googleSignedIn(googleAccount: User.FirebaseGoogleAccount)
+    case googleSignInError(error: Error)
+    // We then see if an existing account is already linked
+    case findLinkedGoogleAccountSuccess(user: User?, googleAccount: User.FirebaseGoogleAccount)
+    case findLinkedGoogleAccountError(error: Error)
+    // We currently do not support merges, so either user links for the first time, or we're changing the local user ID
+    case linkGoogleAccount(googleAccount: User.FirebaseGoogleAccount)
+    case linkGoogleAccountSuccess(newUserWithGoogleAccount: User) // Linked for the first time
+    case linkGoogleAccountError(error: Error)
+    case existingUserWithGoogleAccountFound(existingUser: User)
+    case restoreLinkedAccount(userToRestore: User) // Dispatch when user chooses to restore to an existing linked account
+    case restoreLinkedAccountSuccess(restoredUser: User)
+    case restoreLinkedAccountError(error: Error)
+    case cancelRestoreLinkedAccount
+    case errorPopupShown
+    case successPopupShown
 }
 
 enum CreateLogAction {

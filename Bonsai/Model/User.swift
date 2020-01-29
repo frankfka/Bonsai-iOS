@@ -8,4 +8,17 @@ import Foundation
 struct User {
     let id: String
     let dateCreated: Date
+    var linkedFirebaseGoogleAccount: FirebaseGoogleAccount?
+
+    struct FirebaseGoogleAccount {
+        let id: String
+        let name: String
+        let email: String
+    }
+
+    init(id: String, dateCreated: Date, linkedFirebaseGoogleAccount: FirebaseGoogleAccount? = nil) {
+        self.id = id
+        self.dateCreated = dateCreated
+        self.linkedFirebaseGoogleAccount = linkedFirebaseGoogleAccount
+    }
 }

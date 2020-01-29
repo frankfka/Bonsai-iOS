@@ -9,13 +9,19 @@
 import UIKit
 import SwiftUI
 import Firebase
+import GoogleSignIn
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        // Configure Firebase
         FirebaseApp.configure()
+        GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
+        GIDSignIn.sharedInstance().delegate = self
+        
+        globalStore.send(.global(action: .appDidLaunch))
+
         let navigationBarAppearace = UINavigationBar.appearance()
         // TODO: Using unmonitored UIColor here
         navigationBarAppearace.backgroundColor = .secondarySystemGroupedBackground
@@ -23,6 +29,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationBarAppearace.tintColor = Color.Theme.primaryUIColor
         return true
     }
+
+    // MARK: Firebase Auth
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        globalServices.userService.googleSignedIn(signIn, didSignInFor: user, withError: error)
+    }
+    // Not supporting below iOS 9
+    @available(iOS 9.0, *)
+    func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any])
+                    -> Bool {
+        return GIDSignIn.sharedInstance().handle(url)
+    }
+
 
     // MARK: UISceneSession Lifecycle
 

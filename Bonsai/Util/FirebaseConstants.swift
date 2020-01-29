@@ -46,6 +46,13 @@ struct FirebaseConstants {
         static let Collection = "users"
         static let IdField = "userId"
         static let DateCreatedField = "dateCreated"
+        static let LinkedGoogleAccountField = "linkedGoogleAccount"
+
+        struct FirebaseGoogleAccount {
+            static let IdField = "googleId"
+            static let NameField = "name"
+            static let EmailField = "email"
+        }
     }
 
     struct Logs {

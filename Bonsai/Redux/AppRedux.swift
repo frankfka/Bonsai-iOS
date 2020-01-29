@@ -25,9 +25,10 @@ class Services {
 
     init() {
         // Init serves as dependency management
-        let db = FirebaseService()
+        let db = FirebaseFirestoreService()
         let cache = CacheServiceImpl()
-        userService = UserServiceImpl(db: db)
+        let firebaseAuthService = FirebaseAuthService()
+        userService = UserServiceImpl(db: db, auth: firebaseAuthService)
         logService = LogServiceImpl(db: db, cache: cache)
     }
 }
@@ -41,6 +42,8 @@ struct AppState {
     var viewLogs: ViewLogsState
     // Log Details page
     var logDetails: LogDetailState
+    // Settings page
+    var settings: SettingsState
     // Create log
     var createLog: CreateLogState
 
@@ -49,12 +52,19 @@ struct AppState {
         homeScreen = HomeScreenState()
         viewLogs = ViewLogsState()
         logDetails = LogDetailState()
+        settings = SettingsState()
         createLog = CreateLogState()
     }
 }
 
 // Global services wrapper
-private let services = Services()
+let globalServices = Services()
+// Global store
+let globalStore = AppStore(
+        initialState: AppState(),
+        reducer: AppReducer.reduce,
+        middleware: AppMiddleware.middleware(services: Services())
+)
 // Somewhat hacky way to send actions in our naive redux implementation
 func doInMiddleware(_ action: @escaping VoidCallback) {
     DispatchQueue.main.asyncAfter(deadline: .now()) {
@@ -74,6 +84,8 @@ struct AppMiddleware {
         middleware.append(contentsOf: ViewLogsMiddleware.middleware(services: services))
         // Log Detail
         middleware.append(contentsOf: LogDetailMiddleware.middleware(services: services))
+        // Settings
+        middleware.append(contentsOf: SettingsMiddleware.middleware(services: services))
         // Create log
         middleware.append(contentsOf: CreateLogMiddleware.middleware(services: services))
         
