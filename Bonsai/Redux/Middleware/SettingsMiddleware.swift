@@ -14,7 +14,8 @@ struct SettingsMiddleware {
             linkGoogleAccountSuccessMiddleware(userService: services.userService),
             searchForExistingUsersSuccessMiddleware(),
             linkGoogleAccountMiddleware(userService: services.userService),
-            restoreUserMiddleware(userService: services.userService)
+            restoreUserMiddleware(userService: services.userService),
+            unlinkGoogleAccountMiddleware(userService: services.userService)
         ]
     }
 
@@ -140,9 +141,36 @@ struct SettingsMiddleware {
                 }).eraseToAnyPublisher()
     }
 
-    // Restore was complete, trigger app data reload
-//    private static func restoreUserSuccessMiddleware() -> Middleware<AppState> {
-//
-//    }
+    // Unlink the Google account from the user
+    private static func unlinkGoogleAccountMiddleware(userService: UserService) -> Middleware<AppState> {
+        return { state, action, cancellables, send in
+            switch action {
+            case .settings(action: let .unlinkGoogleAccount):
+                // Check user exists
+                guard let user = state.global.user else {
+                    fatalError("No user initialized when linking Google account")
+                }
+                unlinkGoogleAccountMiddleware(user: user, userService: userService)
+                        .sink(receiveValue: { newAction in
+                            send(newAction)
+                        })
+                        .store(in: &cancellables)
+            default:
+                break
+            }
+        }
+    }
+
+    private static func unlinkGoogleAccountMiddleware(user: User, userService: UserService) -> AnyPublisher<AppAction, Never> {
+        var newUser = user
+        newUser.linkedFirebaseGoogleAccount = nil
+        return userService.save(user: newUser)
+                .map {
+                    AppAction.settings(action: .unlinkGoogleAccountSuccess(newUser: newUser))
+                }.catch({ (err) -> Just<AppAction> in
+                    AppLogging.error("Error unlinking Google account from user \(newUser.id): \(err)")
+                    return Just(AppAction.settings(action: .unlinkGoogleAccountError(error: err)))
+                }).eraseToAnyPublisher()
+    }
 
 }

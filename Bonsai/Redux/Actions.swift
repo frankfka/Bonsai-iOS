@@ -67,6 +67,9 @@ enum SettingsAction {
     case restoreLinkedAccount(userToRestore: User) // Dispatch when user chooses to restore to an existing linked account
     case restoreLinkedAccountSuccess(restoredUser: User)
     case restoreLinkedAccountError(error: Error)
+    case unlinkGoogleAccount
+    case unlinkGoogleAccountSuccess(newUser: User)
+    case unlinkGoogleAccountError(error: Error)
     case cancelRestoreLinkedAccount
     case errorPopupShown
     case successPopupShown

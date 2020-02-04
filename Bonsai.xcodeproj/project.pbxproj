@@ -47,6 +47,7 @@
 		11F445EA239A08D400B501CD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11F445E9239A08D400B501CD /* Assets.xcassets */; };
 		11F445ED239A08D400B501CD /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11F445EC239A08D400B501CD /* Preview Assets.xcassets */; };
 		11F445F0239A08D400B501CD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11F445EE239A08D400B501CD /* LaunchScreen.storyboard */; };
+		11FEACD223E2A5C800C22095 /* RoundedBorderButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FEACD123E2A5C800C22095 /* RoundedBorderButtonView.swift */; };
 		9E04B066551BCEEF58E9DB5B /* HomeScreenMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B329C5305296C0C18D78 /* HomeScreenMiddleware.swift */; };
 		9E04B0E9C35B4A8C7F35725C /* LogRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B355F83BFA8404BC1206 /* LogRow.swift */; };
 		9E04B1DC07699EBE5C684C53 /* MedicationLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BC42FA01AF3C727FA0A7 /* MedicationLogView.swift */; };
@@ -156,6 +157,7 @@
 		11F445EC239A08D400B501CD /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		11F445EF239A08D400B501CD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		11F445F1239A08D400B501CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		11FEACD123E2A5C800C22095 /* RoundedBorderButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedBorderButtonView.swift; sourceTree = "<group>"; };
 		5224D148B81081E7444187A6 /* Pods-HealthTrack.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthTrack.release.xcconfig"; path = "Target Support Files/Pods-HealthTrack/Pods-HealthTrack.release.xcconfig"; sourceTree = "<group>"; };
 		75E56A12C7431D234EDF9416 /* Pods-Bonsai.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bonsai.debug.xcconfig"; path = "Target Support Files/Pods-Bonsai/Pods-Bonsai.debug.xcconfig"; sourceTree = "<group>"; };
 		76CC4C0B881B5BDB7CBB1305 /* Pods_Bonsai.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bonsai.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -338,6 +340,7 @@
 				11929D1023CC358400B06B99 /* ErrorView.swift */,
 				9E04B9D9B417E31F7195DE54 /* SectionViews.swift */,
 				9E04BE968E2C57ED5F12F9BB /* TappableRowView.swift */,
+				11FEACD123E2A5C800C22095 /* RoundedBorderButtonView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -746,6 +749,7 @@
 				11B4311F23A69AC300909D47 /* ContentView.swift in Sources */,
 				114B7428239F549D0095D44B /* RecentLogSection.swift in Sources */,
 				11EDE0E823C6D17A00A54673 /* ViewLogsDateHeaderView.swift in Sources */,
+				11FEACD223E2A5C800C22095 /* RoundedBorderButtonView.swift in Sources */,
 				11929D1123CC358400B06B99 /* ErrorView.swift in Sources */,
 				11B4312723A8A03D00909D47 /* MoodLogView.swift in Sources */,
 				11F445E6239A08CB00B501CD /* SceneDelegate.swift in Sources */,

@@ -10,6 +10,8 @@ struct SettingsState {
     var googleSignInError: Error? = nil
     var linkGoogleAccountError: Error? = nil
     var linkGoogleAccountSuccess: Bool = false
+    var unlinkGoogleAccountSuccess: Bool = false
+    var unlinkGoogleAccountError: Error? = nil
     var accountRestoreSuccess: Bool = false
     var existingUserWithLinkedGoogleAccount: User? = nil
 }

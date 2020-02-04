@@ -38,9 +38,12 @@ struct HomeTabContainer: View {
         .background(Color.Theme.backgroundPrimary)
         .navigationBarTitle("Home")
         .navigationBarItems(
-                // TODO: Use actual icon here
                 trailing: NavigationLink(destination: SettingsView().environmentObject(store)) {
-                    Text("Settings")
+                    Image(systemName: "person.crop.circle")
+                            .resizable()
+                            .aspectRatio(1, contentMode: .fit)
+                            .frame(height: CGFloat.Theme.Layout.navBarItemHeight)
+                            .foregroundColor(Color.Theme.primary)
                 }
         )
         .embedInNavigationView()

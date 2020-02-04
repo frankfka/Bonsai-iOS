@@ -77,21 +77,9 @@ struct LogDetailView: View {
                 getCategorySpecificView()
                 LogDetailNotesView(viewModel: getNotesViewModel())
                 // Quick Re-log button
-                Button(action: {
-                    self.onLogAgainTapped()
-                }) {
-                    Text("Log This Again")
-                        .font(Font.Theme.normalText)
-                        .foregroundColor(
-                            self.viewModel.disableActions ?
-                            Color.Theme.grayscalePrimary : Color.Theme.primary
-                        )
-                        .padding(.horizontal, CGFloat.Theme.Layout.normal)
-                        .padding(.vertical, CGFloat.Theme.Layout.small)
-                }
-                .modifier(RoundedBorderSection())
-                .padding(.top, CGFloat.Theme.Layout.normal)
-                .disabled(self.viewModel.disableActions)
+                RoundedBorderButtonView(viewModel: getLogAgainButtonViewModel())
+                    .padding(.top, CGFloat.Theme.Layout.normal)
+                    .disabled(self.viewModel.disableActions)
             }
             .padding(.vertical, CGFloat.Theme.Layout.normal)
         }
@@ -194,6 +182,14 @@ struct LogDetailView: View {
     
     private func getNotesViewModel() -> LogDetailNotesView.ViewModel {
         return LogDetailNotesView.ViewModel(notes: self.viewModel.loggable.notes)
+    }
+
+    private func getLogAgainButtonViewModel() -> RoundedBorderButtonView.ViewModel {
+        return RoundedBorderButtonView.ViewModel(
+                text: "Log This Again",
+                textColor: self.viewModel.disableActions ? Color.Theme.text : Color.Theme.primary,
+                onTap: self.onLogAgainTapped
+        )
     }
 
     private func getCreateLogModalViewModel() -> CreateLogView.ViewModel {

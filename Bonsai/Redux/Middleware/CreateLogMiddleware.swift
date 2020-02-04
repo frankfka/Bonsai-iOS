@@ -97,6 +97,12 @@ struct CreateLogMiddleware {
         switch state.selectedCategory {
         case .medication:
             return Medication(id: itemId, name: itemName, createdBy: createdBy)
+        case .nutrition:
+            return NutritionItem(id: itemId, name: itemName, createdBy: createdBy)
+        case .activity:
+            return Activity(id: itemId, name: itemName, createdBy: createdBy)
+        case .symptom:
+            return Symptom(id: itemId, name: itemName, createdBy: createdBy)
         default:
             break
         }

@@ -36,6 +36,12 @@ struct SettingsReducer {
             return cancelRestoreLinkedAccount(state: state)
         case let .restoreLinkedAccountSuccess(restoredUser):
             return restoreLinkedAccountSuccess(state: state, restoredUser: restoredUser)
+        case .unlinkGoogleAccount:
+            return unlinkGoogleAccount(state: state)
+        case let .unlinkGoogleAccountSuccess(newUser):
+            return unlinkGoogleAccountSuccess(state: state, newUser: newUser)
+        case let .unlinkGoogleAccountError(error):
+            return unlinkGoogleAccountError(state: state, error: error)
         case .successPopupShown:
             return successPopupShown(state: state)
         case .errorPopupShown:
@@ -131,10 +137,32 @@ struct SettingsReducer {
         return newState
     }
 
+    static private func unlinkGoogleAccount(state: AppState) -> AppState {
+        var newState = state
+        newState.settings.isLoading = true
+        return newState
+    }
+
+    static private func unlinkGoogleAccountSuccess(state: AppState, newUser: User) -> AppState {
+        var newState = state
+        newState.settings.isLoading = false
+        // Update global user
+        newState.global.user = newUser
+        return newState
+    }
+
+    static private func unlinkGoogleAccountError(state: AppState, error: Error) -> AppState {
+        var newState = state
+        newState.settings.isLoading = false
+        newState.settings.unlinkGoogleAccountError = error
+        return newState
+    }
+
     static private func successPopupShown(state: AppState) -> AppState {
         var newState = state
         newState.settings.accountRestoreSuccess = false
         newState.settings.linkGoogleAccountSuccess = false
+        newState.settings.unlinkGoogleAccountSuccess = false
         return newState
     }
 
@@ -142,6 +170,7 @@ struct SettingsReducer {
         var newState = state
         newState.settings.googleSignInError = nil
         newState.settings.linkGoogleAccountError = nil
+        newState.settings.unlinkGoogleAccountError = nil
         return newState
     }
 
