@@ -13,12 +13,13 @@
 		110C63B3239D6FA100D904DE /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110C63B2239D6FA100D904DE /* Icon.swift */; };
 		110C63B5239DDCA500D904DE /* Dimens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110C63B4239DDCA500D904DE /* Dimens.swift */; };
 		110C63B7239E067500D904DE /* LogReminderSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110C63B6239E067500D904DE /* LogReminderSection.swift */; };
+		111D61B623F31F100025019F /* CreateLogDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D61B523F31F100025019F /* CreateLogDateView.swift */; };
 		1120F7BC23C24BF900287337 /* ActivityLogDurationPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1120F7BB23C24BF900287337 /* ActivityLogDurationPickerView.swift */; };
 		114B7426239F4CA10095D44B /* HomeTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114B7425239F4CA10095D44B /* HomeTab.swift */; };
 		114B7428239F549D0095D44B /* RecentLogSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114B7427239F549D0095D44B /* RecentLogSection.swift */; };
 		114B742A239FE9E20095D44B /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114B7429239FE9E20095D44B /* RootView.swift */; };
 		114B742C23A0B2E50095D44B /* CreateLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114B742B23A0B2E40095D44B /* CreateLogView.swift */; };
-		114B742F23A1E3D40095D44B /* LogCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114B742E23A1E3D40095D44B /* LogCategoryView.swift */; };
+		114B742F23A1E3D40095D44B /* CreateLogCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114B742E23A1E3D40095D44B /* CreateLogCategoryView.swift */; };
 		114B743523A205EE0095D44B /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114B743423A205EE0095D44B /* Log.swift */; };
 		114B743723A207B10095D44B /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114B743623A207B10095D44B /* AppStore.swift */; };
 		114B743D23A20D120095D44B /* Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114B743C23A20D120095D44B /* Actions.swift */; };
@@ -50,6 +51,7 @@
 		11FEACD223E2A5C800C22095 /* RoundedBorderButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FEACD123E2A5C800C22095 /* RoundedBorderButtonView.swift */; };
 		9E04B066551BCEEF58E9DB5B /* HomeScreenMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B329C5305296C0C18D78 /* HomeScreenMiddleware.swift */; };
 		9E04B0E9C35B4A8C7F35725C /* LogRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B355F83BFA8404BC1206 /* LogRow.swift */; };
+		9E04B19E91A48EB332B64267 /* KeyboardPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BBCE4CF1BE99C653BB69 /* KeyboardPadding.swift */; };
 		9E04B1DC07699EBE5C684C53 /* MedicationLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BC42FA01AF3C727FA0A7 /* MedicationLogView.swift */; };
 		9E04B1F285BD40EB2E48688C /* SymptomLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B359724D8C94ED1CFA37 /* SymptomLogView.swift */; };
 		9E04B20DF75F4ECBB16C6DBC /* Symptom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B658D36CC2F8B5F120B2 /* Symptom.swift */; };
@@ -121,12 +123,13 @@
 		110C63B2239D6FA100D904DE /* Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icon.swift; sourceTree = "<group>"; };
 		110C63B4239DDCA500D904DE /* Dimens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dimens.swift; sourceTree = "<group>"; };
 		110C63B6239E067500D904DE /* LogReminderSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogReminderSection.swift; sourceTree = "<group>"; };
+		111D61B523F31F100025019F /* CreateLogDateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateLogDateView.swift; sourceTree = "<group>"; };
 		1120F7BB23C24BF900287337 /* ActivityLogDurationPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLogDurationPickerView.swift; sourceTree = "<group>"; };
 		114B7425239F4CA10095D44B /* HomeTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTab.swift; sourceTree = "<group>"; };
 		114B7427239F549D0095D44B /* RecentLogSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentLogSection.swift; sourceTree = "<group>"; };
 		114B7429239FE9E20095D44B /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		114B742B23A0B2E40095D44B /* CreateLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateLogView.swift; sourceTree = "<group>"; };
-		114B742E23A1E3D40095D44B /* LogCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogCategoryView.swift; sourceTree = "<group>"; };
+		114B742E23A1E3D40095D44B /* CreateLogCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateLogCategoryView.swift; sourceTree = "<group>"; };
 		114B743423A205EE0095D44B /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		114B743623A207B10095D44B /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
 		114B743C23A20D120095D44B /* Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Actions.swift; sourceTree = "<group>"; };
@@ -206,6 +209,7 @@
 		9E04BB43647F9802F581CE76 /* PreviewState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewState.swift; sourceTree = "<group>"; };
 		9E04BB465D817C71E35F45EF /* LoggingMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggingMiddleware.swift; sourceTree = "<group>"; };
 		9E04BB72735E65800D5B71ED /* LogDetailMedicationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogDetailMedicationView.swift; sourceTree = "<group>"; };
+		9E04BBCE4CF1BE99C653BB69 /* KeyboardPadding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardPadding.swift; sourceTree = "<group>"; };
 		9E04BC18297FF062E82106AC /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		9E04BC42FA01AF3C727FA0A7 /* MedicationLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MedicationLogView.swift; sourceTree = "<group>"; };
 		9E04BC484C03DA14EC33586F /* GlobalState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalState.swift; sourceTree = "<group>"; };
@@ -287,7 +291,8 @@
 				9E04B9C0C2C39309FB8FB6F0 /* Medication */,
 				11B4312C23A9F43600909D47 /* Mood */,
 				114B742B23A0B2E40095D44B /* CreateLogView.swift */,
-				114B742E23A1E3D40095D44B /* LogCategoryView.swift */,
+				114B742E23A1E3D40095D44B /* CreateLogCategoryView.swift */,
+				111D61B523F31F100025019F /* CreateLogDateView.swift */,
 				11B4313123AE919B00909D47 /* CreateLogTextField.swift */,
 				9E04B05F86D13F8DFC4D8D71 /* Nutrition */,
 				9E04BEF2F4F338929AA338D9 /* Symptom */,
@@ -341,6 +346,7 @@
 				9E04B9D9B417E31F7195DE54 /* SectionViews.swift */,
 				9E04BE968E2C57ED5F12F9BB /* TappableRowView.swift */,
 				11FEACD123E2A5C800C22095 /* RoundedBorderButtonView.swift */,
+				9E04BBCE4CF1BE99C653BB69 /* KeyboardPadding.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -738,7 +744,7 @@
 				11F445E4239A08CB00B501CD /* AppDelegate.swift in Sources */,
 				11B4312323A6D71B00909D47 /* Helpers.swift in Sources */,
 				11B7651923CF6D7100BC08CB /* LogDetailNotesView.swift in Sources */,
-				114B742F23A1E3D40095D44B /* LogCategoryView.swift in Sources */,
+				114B742F23A1E3D40095D44B /* CreateLogCategoryView.swift in Sources */,
 				11B4312B23A9213400909D47 /* MoodRankPickerView.swift in Sources */,
 				110C63B3239D6FA100D904DE /* Icon.swift in Sources */,
 				110C63AC239D5ECB00D904DE /* Color.swift in Sources */,
@@ -830,7 +836,9 @@
 				9E04B43EFE2FEC2099CB0364 /* SettingsState.swift in Sources */,
 				9E04BA3CE472D42D9248BDCC /* SettingsReducer.swift in Sources */,
 				9E04BDBDF506B0CB3069CA8E /* SettingsMiddleware.swift in Sources */,
+				111D61B623F31F100025019F /* CreateLogDateView.swift in Sources */,
 				9E04B986D42B107ED18ED0E5 /* AuthViewControllerRepresentable.swift in Sources */,
+				9E04B19E91A48EB332B64267 /* KeyboardPadding.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -16,6 +16,8 @@ struct CreateLogReducer {
             return logCategoryDidChange(state: state, newIndex: newIndex)
         case let .noteDidUpdate(notes):
             return noteDidUpdate(state: state, newNotes: notes)
+        case let .dateDidChange(newDate):
+            return dateDidChange(state: state, newDate: newDate)
 
         case let .initFromPreviousLog(loggable):
             return initFromPreviousLog(state: state, loggable: loggable)
@@ -87,6 +89,12 @@ struct CreateLogReducer {
     private static func noteDidUpdate(state: AppState, newNotes: String) -> AppState {
         var newState = state
         newState.createLog.notes = newNotes
+        return newState
+    }
+
+    private static func dateDidChange(state: AppState, newDate: Date) -> AppState {
+        var newState = state
+        newState.createLog.date = newDate
         return newState
     }
 

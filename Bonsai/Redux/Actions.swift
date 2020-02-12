@@ -80,6 +80,7 @@ enum CreateLogAction {
     case screenDidDismiss
     case logCategoryDidChange(newIndex: Int)
     case noteDidUpdate(note: String)
+    case dateDidChange(newDate: Date)
 
     // Occurs when "Create Again" is pressed in details
     case initFromPreviousLog(loggable: Loggable)

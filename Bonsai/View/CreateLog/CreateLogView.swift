@@ -15,7 +15,7 @@ struct CreateLogView: View {
         @Binding var showModal: Bool
         private let isFormValid: Bool
         let isLoading: Bool
-        var showSuccessDialog: Bool
+        let showSuccessDialog: Bool
         let showErrorDialog: Bool
         var isSaveButtonDisabled: Bool {
             !isFormValid || isFormDisabled
@@ -32,7 +32,9 @@ struct CreateLogView: View {
             self.isLoading = createLogState.isCreatingLog
         }
     }
-    @State(initialValue: false) private var showPicker
+    @State(initialValue: false) private var showCategoryPicker
+    @State(initialValue: false) private var showDatePicker
+    @State(initialValue: false) private var showTimePicker
     private var viewModel: ViewModel
     
     init(viewModel: ViewModel) {
@@ -42,12 +44,15 @@ struct CreateLogView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: CGFloat.Theme.Layout.normal) {
-                LogCategoryView(viewModel: getCategoryPickerViewModel())
+                CreateLogCategoryView(viewModel: getCategoryPickerViewModel())
                     .padding(.top, CGFloat.Theme.Layout.normal)
-                getCategorySpecificView().environmentObject(self.store)
+                CreateLogDateView(viewModel: getCreateLogDateViewModel())
+                getCategorySpecificView()
+                    .environmentObject(self.store)
                 CreateLogTextField(viewModel: getNotesViewModel())
                 Spacer()
             }
+            .keyboardAwarePadding()
         }
         .disableInteraction(isDisabled: .constant(self.viewModel.isFormDisabled))
         .background(Color.Theme.backgroundPrimary)
@@ -107,6 +112,10 @@ struct CreateLogView: View {
     private func onSelectedCategoryChange(newVal: Int) {
         self.store.send(.createLog(action: CreateLogAction.logCategoryDidChange(newIndex: newVal)))
     }
+
+    private func onLogDateChange(newDate: Date) {
+        self.store.send(.createLog(action: .dateDidChange(newDate: newDate)))
+    }
     
     private func notesDidChange(note: String) {
         self.store.send(.createLog(action: .noteDidUpdate(note: note)))
@@ -130,15 +139,25 @@ struct CreateLogView: View {
         }
     }
     
-    private func getCategoryPickerViewModel() -> LogCategoryView.ViewModel {
-        return LogCategoryView.ViewModel(
+    private func getCategoryPickerViewModel() -> CreateLogCategoryView.ViewModel {
+        return CreateLogCategoryView.ViewModel(
             categories: store.state.createLog.allCategories.map {
                 $0.displayValue()
             },
             selectedCategory: store.state.createLog.selectedCategoryIndex,
             selectedCategoryDidChange: onSelectedCategoryChange,
-            showPicker: $showPicker
+            showPicker: $showCategoryPicker
         )
+    }
+
+    private func getCreateLogDateViewModel() -> CreateLogDateView.ViewModel {
+        return CreateLogDateView.ViewModel(
+                selectedDate: store.state.createLog.date,
+                showDatePicker: $showDatePicker,
+                showTimePicker: $showTimePicker
+        ) { newDate in
+            self.onLogDateChange(newDate: newDate)
+        }
     }
     
     private func getNotesViewModel() -> CreateLogTextField.ViewModel {

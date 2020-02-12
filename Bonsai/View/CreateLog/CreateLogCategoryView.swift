@@ -1,14 +1,6 @@
-//
-//  PickCategoryView.swift
-//  HealthTrack
-//
-//  Created by Frank Jia on 2019-12-11.
-//  Copyright © 2019 Frank Jia. All rights reserved.
-//
-
 import SwiftUI
 
-struct LogCategoryView: View {
+struct CreateLogCategoryView: View {
     
     struct ViewModel {
         let categories: [String]
@@ -20,7 +12,7 @@ struct LogCategoryView: View {
         init(
             categories: [String],
             selectedCategory: Int,
-            selectedCategoryDidChange: @escaping (Int) -> (),
+            selectedCategoryDidChange: @escaping IntCallback,
             showPicker: Binding<Bool>
         ) {
             
@@ -28,8 +20,9 @@ struct LogCategoryView: View {
             self._selectedCategory = Binding<Int>(get: {
                 return selectedCategory
             }, set: { newVal in
-                selectedCategoryDidChange(newVal)
-                ViewHelpers.toggleWithAnimation(binding: showPicker)
+                if newVal != selectedCategory {
+                    selectedCategoryDidChange(newVal)
+                }
             })
             self._selectedCategoryString = Binding<String>(get: {
                 return categories[selectedCategory]
@@ -49,7 +42,7 @@ struct LogCategoryView: View {
     var body: some View {
         VStack(alignment: .center) {
             TappableRowView(viewModel: TappableRowView.ViewModel(
-                primaryText: .constant("Log Category"),
+                primaryText: .constant("Category"),
                 secondaryText: viewModel.$selectedCategoryString,
                 hasDisclosureIndicator: false)
             )
@@ -83,8 +76,8 @@ struct LogCategoryView: View {
 
 struct LogCategoryView_Previews: PreviewProvider {
     static var previews: some View {
-        LogCategoryView(
-            viewModel: LogCategoryView.ViewModel(
+        CreateLogCategoryView(
+            viewModel: CreateLogCategoryView.ViewModel(
                 categories: LogCategory.allCases.map{ $0.displayValue() },
                 selectedCategory: 0,
                 selectedCategoryDidChange: { _ in },

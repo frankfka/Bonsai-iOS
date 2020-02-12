@@ -53,6 +53,7 @@ struct CreateLogState {
         isFormValid()
     }
     var notes: String = ""
+    var date: Date = Date()
     var mood: MoodLogState = MoodLogState()
     var medication: MedicationLogState = MedicationLogState()
     var nutrition: NutritionLogState = NutritionLogState()

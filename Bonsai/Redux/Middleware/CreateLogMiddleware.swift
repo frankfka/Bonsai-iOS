@@ -146,8 +146,8 @@ struct CreateLogMiddleware {
     // Fetches state and creates the corresponding Loggable struct to save
     private static func createLogFromState(state: CreateLogState) -> Loggable? {
         let logId = UUID().uuidString
-        let logDate = Date()
         let logNotes = state.notes
+        let logDate = state.date
         switch state.selectedCategory {
         case .mood:
             guard let selectedMoodRankIndex = state.mood.selectedMoodRankIndex,

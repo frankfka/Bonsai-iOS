@@ -145,7 +145,7 @@ struct SettingsMiddleware {
     private static func unlinkGoogleAccountMiddleware(userService: UserService) -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
-            case .settings(action: let .unlinkGoogleAccount):
+            case .settings(action: .unlinkGoogleAccount):
                 // Check user exists
                 guard let user = state.global.user else {
                     fatalError("No user initialized when linking Google account")
