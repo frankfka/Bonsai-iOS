@@ -8,9 +8,7 @@ import Foundation
 struct CreateLogReducer {
     static func reduce(state: AppState, action: CreateLogAction) -> AppState {
         switch action {
-        case .screenDidShow:
-            return state
-        case .screenDidDismiss:
+        case .resetCreateLogState:
             return resetCreateLogState(state: state)
         case let .logCategoryDidChange(newIndex):
             return logCategoryDidChange(state: state, newIndex: newIndex)

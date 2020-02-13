@@ -27,19 +27,17 @@ struct ContentViewContainer: View {
         return ContentView.ViewModel(
             showCreateLogModal: $viewModel.showCreateLogModal,
             tabIndex: $viewModel.tabIndex,
-            tabBarViewModel: getTabBarViewModel(),
-            onCreateLogModalDismiss: onCreateLogModalDismiss
+            tabBarViewModel: getTabBarViewModel()
         )
-    }
-    
-    func onCreateLogModalDismiss() {
-        self.store.send(.createLog(action: .screenDidDismiss))
     }
     
     func getTabBarViewModel() -> TabBarView.ViewModel {
         return TabBarView.ViewModel(
                 tabIndex: $viewModel.tabIndex,
-                showCreateLogModal: $viewModel.showCreateLogModal
+                onCreateLogPressed: {
+                    self.store.send(.createLog(action: .resetCreateLogState))
+                    self.viewModel.showCreateLogModal.toggle()
+                }
         )
     }
 }
@@ -51,14 +49,11 @@ struct ContentView: View {
         @Binding var showCreateLogModal: Bool
         @Binding var tabIndex: Int
         let tabBarViewModel: TabBarView.ViewModel
-        let onCreateLogModalDismiss: VoidCallback?
         
-        init(showCreateLogModal: Binding<Bool>, tabIndex: Binding<Int>, tabBarViewModel: TabBarView.ViewModel,
-             onCreateLogModalDismiss: VoidCallback? = nil) {
+        init(showCreateLogModal: Binding<Bool>, tabIndex: Binding<Int>, tabBarViewModel: TabBarView.ViewModel) {
             self._showCreateLogModal = showCreateLogModal
             self._tabIndex = tabIndex
             self.tabBarViewModel = tabBarViewModel
-            self.onCreateLogModalDismiss = onCreateLogModalDismiss
         }
     }
     private var viewModel: ViewModel
@@ -81,10 +76,8 @@ struct ContentView: View {
         }
         .edgesIgnoringSafeArea(.bottom)
         .sheet(
-            isPresented: viewModel.$showCreateLogModal,
-            onDismiss: {
-                self.viewModel.onCreateLogModalDismiss?()
-        }) {
+            isPresented: viewModel.$showCreateLogModal
+        ) {
             CreateLogView(
                 viewModel: self.getCreateLogViewModel()
             ).environmentObject(self.store)

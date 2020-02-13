@@ -12,12 +12,12 @@ struct TabBarView: View {
     
     struct ViewModel {
         @Binding var tabIndex: Int
-        @Binding var showCreateLogModal: Bool
+        let onCreateLogPressed: VoidCallback?
         let onTabPressed: IntCallback?
         
-        init(tabIndex: Binding<Int>, showCreateLogModal: Binding<Bool>, onTabPressed: IntCallback? = nil) {
+        init(tabIndex: Binding<Int>, onCreateLogPressed: VoidCallback? = nil, onTabPressed: IntCallback? = nil) {
             self._tabIndex = tabIndex
-            self._showCreateLogModal = showCreateLogModal
+            self.onCreateLogPressed = onCreateLogPressed
             self.onTabPressed = onTabPressed
         }
     }
@@ -44,8 +44,8 @@ struct TabBarView: View {
                     .frame(height: CGFloat.Theme.Layout.tabItemHeight)
                     .foregroundColor(Color.Theme.primary)
                     .onTapGesture {
-                        self.viewModel.showCreateLogModal.toggle()
-                }
+                        self.viewModel.onCreateLogPressed?()
+                    }
                 Image(systemName: viewModel.tabIndex == 1 ? "chart.bar.fill" : "chart.bar")
                     .resizable()
                     .foregroundColor(viewModel.tabIndex == 1 ? Color.Theme.primary : Color.Theme.grayscalePrimary)
@@ -76,7 +76,7 @@ struct TabBarView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             Spacer()
-            TabBarView(viewModel: TabBarView.ViewModel(tabIndex: .constant(0), showCreateLogModal: .constant(true)))
+            TabBarView(viewModel: TabBarView.ViewModel(tabIndex: .constant(0)))
         }
     }
 }

@@ -76,8 +76,7 @@ enum SettingsAction {
 }
 
 enum CreateLogAction {
-    case screenDidShow
-    case screenDidDismiss
+    case resetCreateLogState
     case logCategoryDidChange(newIndex: Int)
     case noteDidUpdate(note: String)
     case dateDidChange(newDate: Date)

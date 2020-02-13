@@ -147,7 +147,7 @@ struct LogDetailView: View {
     }
 
     private func onCreateLogModalDismiss() {
-        store.send(.createLog(action: .screenDidDismiss))
+        store.send(.createLog(action: .resetCreateLogState))
     }
     
     private func onDeleteLogTapped() {

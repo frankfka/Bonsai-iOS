@@ -75,9 +75,6 @@ struct CreateLogView: View {
                 .disabled(viewModel.isSaveButtonDisabled)
         )
         .embedInNavigationView()
-        .onAppear() {
-            self.onAppear()
-        }
         .withLoadingPopup(show: .constant(self.viewModel.isLoading), text: "Saving")
         .withStandardPopup(show: .constant(self.viewModel.showSuccessDialog), type: .success, text: "Saved Successfully") {
             self.onSaveSuccessPopupDismiss()
@@ -85,10 +82,6 @@ struct CreateLogView: View {
         .withStandardPopup(show: .constant(self.viewModel.showErrorDialog), type: .failure, text: "Something Went Wrong") {
             self.onSaveErrorPopupDismiss()
         }
-    }
-
-    private func onAppear() {
-        self.store.send(.createLog(action: .screenDidShow))
     }
     
     private func onSave() {
