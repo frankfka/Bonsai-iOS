@@ -70,7 +70,7 @@
 		9E04B5ECE8A4C858E0D30AB7 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BC18297FF062E82106AC /* Utils.swift */; };
 		9E04B642138C647CA21FCBE5 /* AppInitMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B8C59601E362C76DAABD /* AppInitMiddleware.swift */; };
 		9E04B6BD53BC62CFB6CE2E1F /* CreateLogMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B5548FA5FE0689E72183 /* CreateLogMiddleware.swift */; };
-		9E04B6DD94E5A95F4D9DCA11 /* FirebaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B9C8FD3C64EAA23028B0 /* FirebaseConstants.swift */; };
+		9E04B6DD94E5A95F4D9DCA11 /* SerializationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B9C8FD3C64EAA23028B0 /* SerializationConstants.swift */; };
 		9E04B7090408200D01C3F015 /* Nutrition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B0FA059903598F57AE95 /* Nutrition.swift */; };
 		9E04B755EF3C338636399E89 /* GlobalState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BC484C03DA14EC33586F /* GlobalState.swift */; };
 		9E04B7C8274F27A34D900D11 /* SearchAddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BA16DE33AF23CFDC1835 /* SearchAddItemView.swift */; };
@@ -88,10 +88,12 @@
 		9E04BA0B391A9ECA68557B6E /* ViewLogsMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BB39F1BF4E0343249791 /* ViewLogsMiddleware.swift */; };
 		9E04BA2F6B0EAE778B64DAEC /* TappableRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BE968E2C57ED5F12F9BB /* TappableRowView.swift */; };
 		9E04BA3CE472D42D9248BDCC /* SettingsReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B63095D6F8938ED7D75C /* SettingsReducer.swift */; };
+		9E04BA491CB542F18FBA8D87 /* RealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B7F7DD619B388D674A6B /* RealmService.swift */; };
 		9E04BA76B3A26CF5EAF2AB58 /* FirebaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BDF894B8BF390969E233 /* FirebaseAuthService.swift */; };
 		9E04BAA1D418E7593D4D4FD8 /* LogDetailMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BEBBE15540376ABFCEBC /* LogDetailMiddleware.swift */; };
 		9E04BAB33DC97B591A4C4192 /* GlobalReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B17C034FABD17AEC4BFB /* GlobalReducer.swift */; };
 		9E04BAB3F139D3832AA46E46 /* SectionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B9D9B417E31F7195DE54 /* SectionViews.swift */; };
+		9E04BB0E6E3BD33CFAA6B415 /* RealmHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B1B02974744EBEDA469D /* RealmHelpers.swift */; };
 		9E04BB1C25373057C19F19B9 /* AppReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B11F0B3A84BA18DFF035 /* AppReducer.swift */; };
 		9E04BB25498F950A8D84B41E /* PreviewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BB43647F9802F581CE76 /* PreviewState.swift */; };
 		9E04BB30BD8E25713D8572AA /* CreateLogState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B2DF23C563EDE7C0BBEE /* CreateLogState.swift */; };
@@ -172,6 +174,7 @@
 		9E04B11F0B3A84BA18DFF035 /* AppReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppReducer.swift; sourceTree = "<group>"; };
 		9E04B158D38EBC0BEC5C2A77 /* ActivityLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityLogView.swift; sourceTree = "<group>"; };
 		9E04B17C034FABD17AEC4BFB /* GlobalReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalReducer.swift; sourceTree = "<group>"; };
+		9E04B1B02974744EBEDA469D /* RealmHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmHelpers.swift; sourceTree = "<group>"; };
 		9E04B2034124C63454F0CEDC /* HomeScreenState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeScreenState.swift; sourceTree = "<group>"; };
 		9E04B20C2645C58F9DEA417D /* ActivityLogDurationRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityLogDurationRowView.swift; sourceTree = "<group>"; };
 		9E04B2DF23C563EDE7C0BBEE /* CreateLogState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogState.swift; sourceTree = "<group>"; };
@@ -197,10 +200,11 @@
 		9E04B755AF0815DAF19D6FE2 /* AuthViewControllerRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthViewControllerRepresentable.swift; sourceTree = "<group>"; };
 		9E04B763E5A55C21C9EF3E57 /* SearchTextObservable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTextObservable.swift; sourceTree = "<group>"; };
 		9E04B7E1E4E86978635840E1 /* FirebaseHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseHelpers.swift; sourceTree = "<group>"; };
+		9E04B7F7DD619B388D674A6B /* RealmService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmService.swift; sourceTree = "<group>"; };
 		9E04B80416B6B7E5CB269041 /* SearchListResultsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchListResultsView.swift; sourceTree = "<group>"; };
 		9E04B80ECAC1F22023914602 /* DatabaseService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseService.swift; sourceTree = "<group>"; };
 		9E04B8C59601E362C76DAABD /* AppInitMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInitMiddleware.swift; sourceTree = "<group>"; };
-		9E04B9C8FD3C64EAA23028B0 /* FirebaseConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseConstants.swift; sourceTree = "<group>"; };
+		9E04B9C8FD3C64EAA23028B0 /* SerializationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerializationConstants.swift; sourceTree = "<group>"; };
 		9E04B9D9B417E31F7195DE54 /* SectionViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionViews.swift; sourceTree = "<group>"; };
 		9E04BA16DE33AF23CFDC1835 /* SearchAddItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchAddItemView.swift; sourceTree = "<group>"; };
 		9E04BA6AAC00E25E507C5764 /* SearchListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchListView.swift; sourceTree = "<group>"; };
@@ -499,7 +503,7 @@
 			isa = PBXGroup;
 			children = (
 				9E04B6C450860BE65AF311A7 /* UserConstants.swift */,
-				9E04B9C8FD3C64EAA23028B0 /* FirebaseConstants.swift */,
+				9E04B9C8FD3C64EAA23028B0 /* SerializationConstants.swift */,
 				9E04BC18297FF062E82106AC /* Utils.swift */,
 			);
 			path = Util;
@@ -539,6 +543,15 @@
 				9E04B66DB477D3F118D5DA41 /* SearchListViewContainer.swift */,
 			);
 			path = Search;
+			sourceTree = "<group>";
+		};
+		9E04B65FB06008D6F816C7A9 /* RealmDatabase */ = {
+			isa = PBXGroup;
+			children = (
+				9E04B7F7DD619B388D674A6B /* RealmService.swift */,
+				9E04B1B02974744EBEDA469D /* RealmHelpers.swift */,
+			);
+			path = RealmDatabase;
 			sourceTree = "<group>";
 		};
 		9E04B9B78B86AEE89E345406 /* Activity */ = {
@@ -590,6 +603,7 @@
 				9E04B62749DC92BF7454FC72 /* FirebaseDatabase */,
 				9E04BD42E217456E1AA1DA03 /* CacheService.swift */,
 				9E04B0D243CEC2F8CCB8B704 /* UserService */,
+				9E04B65FB06008D6F816C7A9 /* RealmDatabase */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -775,7 +789,7 @@
 				11B4311A23A6960500909D47 /* LoadingSpinner.swift in Sources */,
 				11B4311D23A6974C00909D47 /* LoadingSpinnerWrappers.swift in Sources */,
 				11B4313023AB211B00909D47 /* SearchBar.swift in Sources */,
-				9E04B6DD94E5A95F4D9DCA11 /* FirebaseConstants.swift in Sources */,
+				9E04B6DD94E5A95F4D9DCA11 /* SerializationConstants.swift in Sources */,
 				9E04BC93C6BC7E379AC5D5A7 /* Medication.swift in Sources */,
 				9E04B1DC07699EBE5C684C53 /* MedicationLogView.swift in Sources */,
 				9E04B513CC19B5E2DB63CED9 /* SearchTextObservable.swift in Sources */,
@@ -839,6 +853,8 @@
 				111D61B623F31F100025019F /* CreateLogDateView.swift in Sources */,
 				9E04B986D42B107ED18ED0E5 /* AuthViewControllerRepresentable.swift in Sources */,
 				9E04B19E91A48EB332B64267 /* KeyboardPadding.swift in Sources */,
+				9E04BA491CB542F18FBA8D87 /* RealmService.swift in Sources */,
+				9E04BB0E6E3BD33CFAA6B415 /* RealmHelpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 // Protocol that searchable log items conform to
 protocol LogSearchable {
@@ -24,6 +25,23 @@ protocol Loggable {
     var dateCreated: Date { get }
     var category: LogCategory { get }
     var notes: String { get }
+}
+
+// Stored by Realm - has references to additional information depending on the category
+class RealmLoggable: Object {
+    @objc dynamic var categoryRawValue: String = ""
+    @objc dynamic var id: String = ""
+    @objc dynamic var title: String = ""
+    @objc dynamic var dateCreated: Date = Date()
+    @objc dynamic var notes: String = ""
+    @objc dynamic var medicationLog: RealmMedicationLog?
+    @objc dynamic var moodLog: RealmMoodLog?
+    @objc dynamic var nutritionLog: RealmNutritionLog?
+    @objc dynamic var symptomLog: RealmSymptomLog?
+
+    override static func primaryKey() -> String? {
+        return "id"
+    }
 }
 
 enum LogCategory: CaseIterable {

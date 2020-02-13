@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 struct Medication: LogSearchable {
     let id: String
@@ -24,4 +25,14 @@ struct MedicationLog: Loggable {
     let medicationId: String
     let dosage: String
     var selectedMedication: Medication? = nil
+}
+
+class RealmMedicationLog: Object {
+    @objc dynamic var id: String = ""
+    @objc dynamic var medicationId: String = ""
+    @objc dynamic var dosage: String = ""
+
+    override static func primaryKey() -> String? {
+        return "id"
+    }
 }

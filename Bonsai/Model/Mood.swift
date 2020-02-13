@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 // Int values are used for encoding/decoding
 enum MoodRank: Int, CaseIterable {
@@ -40,4 +41,13 @@ struct MoodLog: Loggable {
     let dateCreated: Date
     let notes: String
     let moodRank: MoodRank
+}
+
+class RealmMoodLog: Object {
+    @objc dynamic var id: String = ""
+    @objc dynamic var moodRankRawValue: Int = 0
+
+    override static func primaryKey() -> String? {
+        return "id"
+    }
 }

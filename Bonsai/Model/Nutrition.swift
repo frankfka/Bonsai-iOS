@@ -1,4 +1,5 @@
 import Foundation
+import RealmSwift
 
 struct NutritionItem: LogSearchable {
     let id: String
@@ -16,4 +17,14 @@ struct NutritionLog: Loggable {
     let nutritionItemId: String
     let amount: String
     var selectedNutritionItem: NutritionItem? = nil
+}
+
+class RealmNutritionLog: Object {
+    @objc dynamic var id: String = ""
+    @objc dynamic var nutritionItemId: String = ""
+    @objc dynamic var amount: String = ""
+    
+    override static func primaryKey() -> String? {
+        return "id"
+    }
 }

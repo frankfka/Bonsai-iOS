@@ -5,7 +5,7 @@
 
 import Foundation
 
-struct FirebaseConstants {
+struct SerializationConstants {
 
     // Characteristics of searchable items (ex. medications, moods, etc.)
     struct Searchable {
