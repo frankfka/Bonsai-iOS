@@ -20,11 +20,12 @@ protocol DatabaseService {
 
     // Log functions
     func saveLog(log: Loggable, for user: User) -> ServicePublisher<Void>
-    func getLogs(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?) -> ServicePublisher<[Loggable]>
+    func getLogs(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?,
+                 limit: Int?) -> ServicePublisher<[Loggable]>
     func deleteLog(for user: User, with id: String) -> ServicePublisher<Void>
-    // TODO: need to add sync function for saved log searchable/logs on user connect
-    // this should upload all logs on first connect, or retrieve lots on resync
-    // On relink to existing account, need to clear realm, then add all records from firestore
+
+    // Local storage functions
+    func resetLocalStorage() -> ServicePublisher<Void> // Called when user restores, all local logs are to be cleared
 }
 
 class DatabaseServiceImpl: DatabaseService {
@@ -132,26 +133,31 @@ class DatabaseServiceImpl: DatabaseService {
         return AnyPublisher(future)
     }
 
-    func getLogs(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?) -> ServicePublisher<[Loggable]> {
+    func getLogs(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?,
+                 limit: Int?) -> ServicePublisher<[Loggable]> {
         /*
         Retrieve from Firebase, as it is the ground truth
         - If we have an error, attempt to retrieve from Realm
         - If we have a success, async retrieve from Realm then sync all records together
         */
         let future = ServiceFuture<[Loggable]> { promise in
-            self.firestoreService.getLogs(for: user, in: category, since: beginDate, toAndIncluding: endDate) { result in
+            self.firestoreService.getLogs(for: user, in: category, since: beginDate,
+                    toAndIncluding: endDate, limitedTo: limit) { result in
                 let logsFromRealm = self.realmService.getLogs(
                         for: user,
                         in: category,
                         since: beginDate,
-                        toAndIncluding: endDate
+                        toAndIncluding: endDate,
+                        limit: limit
                 )
                 // Run additional tasks after retrieving from firestore
                 let mappedResult = result
                         .flatMap { firebaseLogs -> Result<[Loggable], ServiceError> in
                             // Success retrieving from firebase, make sure that we update local logs
-                            self.updateLocalLogs(firebaseLogs: firebaseLogs, localLogs: logsFromRealm)
-                            return .success(firebaseLogs)
+                            self.updateLocalLogs(firebaseLogs: firebaseLogs)
+                            // Enforce reverse chronological order
+                            let sortedFirebaseLogs = firebaseLogs.sorted { first, second in first.dateCreated > second.dateCreated }
+                            return .success(sortedFirebaseLogs)
                         }.flatMapError { firestoreError -> Result<[Loggable], ServiceError> in
                             // Error retrieving from Firestore, get from Realm instead
                             AppLogging.error("Error retrieving logs from Firestore, defaulting to Realm: \(firestoreError)")
@@ -164,7 +170,10 @@ class DatabaseServiceImpl: DatabaseService {
         return AnyPublisher(future)
     }
 
-    private func updateLocalLogs(firebaseLogs: [Loggable], localLogs: [Loggable]) {
+    private func updateLocalLogs(firebaseLogs: [Loggable]) {
+        /*
+        Adds logs to local storage if they don't exist locally but were fetched from Firestore
+        */
         // TODO
     }
 
@@ -177,6 +186,18 @@ class DatabaseServiceImpl: DatabaseService {
             self.firestoreService.deleteLog(for: user, with: id) { result in
                 promise(result)
             }
+        }
+        return AnyPublisher(future)
+    }
+
+    func resetLocalStorage() -> ServicePublisher<Void> {
+        let future = ServiceFuture<Void> { promise in
+            let deletionErr = self.realmService.resetLocalStorage()
+            if let deletionErr = deletionErr {
+                promise(.failure(deletionErr))
+                return
+            }
+            promise(.success(()))
         }
         return AnyPublisher(future)
     }

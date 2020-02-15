@@ -50,7 +50,7 @@ extension FirebaseFirestoreService {
     func decode(data: [String: Any]) -> Loggable? {
         // Get Category
         guard let logCategoryName = data[SerializationConstants.Logs.CategoryField] as? String,
-              let logCategory = LogCategory.fromFirebaseLogCategoryName(logCategoryName) else {
+              let logCategory = LogCategory.fromSerializedLogCategoryName(logCategoryName) else {
             AppLogging.warn("No log category found in log data: \(data)")
             return nil
         }
@@ -205,7 +205,7 @@ extension Loggable {
             SerializationConstants.Logs.IdField: self.id,
             SerializationConstants.Logs.TitleField: self.title,
             SerializationConstants.Logs.DateCreatedField: self.dateCreated,
-            SerializationConstants.Logs.CategoryField: self.category.firebaseLogCategoryName(),
+            SerializationConstants.Logs.CategoryField: self.category.serializedLogCategoryName(),
             SerializationConstants.Logs.NotesField: self.notes
         ]
     }
@@ -268,22 +268,6 @@ extension LogCategory {
         AppLogging.warn("Attempted to retrieve non searchable collection \(self.displayValue())")
         return nil
     }
-    func firebaseLogCategoryName() -> String {
-        switch self {
-        case .mood:
-            return SerializationConstants.Logs.Mood.CategoryName
-        case .medication:
-            return SerializationConstants.Logs.Medication.CategoryName
-        case .nutrition:
-            return SerializationConstants.Logs.Nutrition.CategoryName
-        case .activity:
-            return SerializationConstants.Logs.Activity.CategoryName
-        case .symptom:
-            return SerializationConstants.Logs.Symptom.CategoryName
-        case .note:
-            return SerializationConstants.Logs.Note.CategoryName
-        }
-    }
 
     static func fromFirebaseCollectionName(_ name: String) -> LogCategory? {
         switch name {
@@ -299,26 +283,6 @@ extension LogCategory {
             break
         }
         AppLogging.warn("Attempt to retrieve Firebase collection name for non-searchable category")
-        return nil
-    }
-    static func fromFirebaseLogCategoryName(_ name: String) -> LogCategory? {
-        switch name {
-        case SerializationConstants.Logs.Medication.CategoryName:
-            return .medication
-        case SerializationConstants.Logs.Mood.CategoryName:
-            return .mood
-        case SerializationConstants.Logs.Nutrition.CategoryName:
-            return .nutrition
-        case SerializationConstants.Logs.Activity.CategoryName:
-            return .activity
-        case SerializationConstants.Logs.Symptom.CategoryName:
-            return .symptom
-        case SerializationConstants.Logs.Note.CategoryName:
-            return .note
-        default:
-            break
-        }
-        AppLogging.warn("Invalid firebase log category \(name)")
         return nil
     }
 }

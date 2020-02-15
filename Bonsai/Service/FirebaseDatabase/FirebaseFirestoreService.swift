@@ -10,7 +10,7 @@ import FirebaseFirestore
 class FirebaseFirestoreService {
 
     private let linkedGoogleAccountQueryLimit = 1 // Number of results to return when we look for a linked Google account
-    private let logQueryLimit = 10 // Number of results to return when user sees logs
+    private let logQueryLimit = 50 // Highest number of results to return when user sees logs
     private let logSearchableQueryLimit = 10  // Number of results to return when a user searches
     private let db: Firestore
 
@@ -191,12 +191,12 @@ class FirebaseFirestoreService {
     }
 
     func getLogs(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?,
-                         onComplete: @escaping ServiceCallback<[Loggable]>) {
+                 limitedTo: Int?, onComplete: @escaping ServiceCallback<[Loggable]>) {
         var q = self.db.collection(SerializationConstants.User.Collection)
                 .document(user.id)
                 .collection(SerializationConstants.Logs.Collection)
                 .order(by: SerializationConstants.Logs.DateCreatedField, descending: true)
-                .limit(to: logQueryLimit)
+                .limit(to: limitedTo ?? logQueryLimit)
         // Query by date if specified
         if let beginDate = beginDate {
             q = q.whereField(SerializationConstants.Logs.DateCreatedField, isGreaterThanOrEqualTo: beginDate)

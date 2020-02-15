@@ -38,6 +38,9 @@ class RealmLoggable: Object {
     @objc dynamic var moodLog: RealmMoodLog?
     @objc dynamic var nutritionLog: RealmNutritionLog?
     @objc dynamic var symptomLog: RealmSymptomLog?
+    @objc dynamic var activityLog: RealmActivityLog?
+
+    static let dateCreatedKey: String = "dateCreated"
 
     override static func primaryKey() -> String? {
         return "id"
@@ -68,4 +71,43 @@ enum LogCategory: CaseIterable {
             return "Medication" + (plural ? "s" : "")
         }
     }
+
+    func serializedLogCategoryName() -> String {
+        switch self {
+        case .mood:
+            return SerializationConstants.Logs.Mood.CategoryName
+        case .medication:
+            return SerializationConstants.Logs.Medication.CategoryName
+        case .nutrition:
+            return SerializationConstants.Logs.Nutrition.CategoryName
+        case .activity:
+            return SerializationConstants.Logs.Activity.CategoryName
+        case .symptom:
+            return SerializationConstants.Logs.Symptom.CategoryName
+        case .note:
+            return SerializationConstants.Logs.Note.CategoryName
+        }
+    }
+
+    static func fromSerializedLogCategoryName(_ name: String) -> LogCategory? {
+        switch name {
+        case SerializationConstants.Logs.Medication.CategoryName:
+            return .medication
+        case SerializationConstants.Logs.Mood.CategoryName:
+            return .mood
+        case SerializationConstants.Logs.Nutrition.CategoryName:
+            return .nutrition
+        case SerializationConstants.Logs.Activity.CategoryName:
+            return .activity
+        case SerializationConstants.Logs.Symptom.CategoryName:
+            return .symptom
+        case SerializationConstants.Logs.Note.CategoryName:
+            return .note
+        default:
+            break
+        }
+        AppLogging.warn("Invalid firebase log category \(name)")
+        return nil
+    }
+
 }
