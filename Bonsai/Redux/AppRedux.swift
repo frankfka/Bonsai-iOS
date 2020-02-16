@@ -23,9 +23,9 @@ class Services {
     let userService: UserService
     let logService: LogService
 
-    init() {
+    init() throws {
         // Init serves as dependency management
-        let db = FirebaseFirestoreService()
+        let db = try DatabaseServiceImpl()
         let cache = CacheServiceImpl()
         let firebaseAuthService = FirebaseAuthService()
         userService = UserServiceImpl(db: db, auth: firebaseAuthService)
@@ -58,12 +58,12 @@ struct AppState {
 }
 
 // Global services wrapper
-let globalServices = Services()
+let globalServices = try! Services()  // TODO: Figure out a place to gracefully handle this error
 // Global store
 let globalStore = AppStore(
         initialState: AppState(),
         reducer: AppReducer.reduce,
-        middleware: AppMiddleware.middleware(services: Services())
+        middleware: AppMiddleware.middleware(services: globalServices)
 )
 // Somewhat hacky way to send actions in our naive redux implementation
 func doInMiddleware(_ action: @escaping VoidCallback) {

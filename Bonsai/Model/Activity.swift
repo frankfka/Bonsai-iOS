@@ -1,4 +1,5 @@
 import Foundation
+import RealmSwift
 
 struct Activity: LogSearchable {
     let id: String
@@ -16,4 +17,14 @@ struct ActivityLog: Loggable {
     let activityId: String
     let duration: TimeInterval
     var selectedActivity: Activity? = nil
+}
+
+class RealmActivityLog: Object {
+    @objc dynamic var id: String = ""
+    @objc dynamic var activityId: String = ""
+    @objc dynamic var durationRawValue: Double = 0
+
+    override static func primaryKey() -> String? {
+        return "id"
+    }
 }

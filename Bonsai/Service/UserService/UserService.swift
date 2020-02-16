@@ -48,12 +48,14 @@ class UserServiceImpl: UserService {
     }
 
     func restoreUser(currentUser: User, userToRestore: User) -> ServicePublisher<Void> {
-        // Delete current user, then set local ID to the new user
-        self.db.deleteUser(user: currentUser).map {
-            AppLogging.info("Deleted user \(currentUser.id)")
+        // Delete all local logs and delete the userID from local storage
+        Publishers.CombineLatest(self.db.deleteUser(user: currentUser), self.db.resetLocalStorage()).map { _ in
+            AppLogging.info("Deleted user \(currentUser.id) and purged all local log records")
+            // Set local ID to the new user
             UserDefaults.standard.set(userToRestore.id, forKey: UserConstants.UserDefaultsUserIdKey)
             AppLogging.info("Set user \(userToRestore.id) as default user in UserDefaults")
-        }.eraseToAnyPublisher()
+        }
+        .eraseToAnyPublisher()
     }
 
     // MARK: Firebase Integrations

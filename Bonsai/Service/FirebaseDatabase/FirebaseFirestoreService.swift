@@ -7,10 +7,10 @@ import Foundation
 import Combine
 import FirebaseFirestore
 
-class FirebaseFirestoreService: DatabaseService {
+class FirebaseFirestoreService {
 
     private let linkedGoogleAccountQueryLimit = 1 // Number of results to return when we look for a linked Google account
-    private let logQueryLimit = 10 // Number of results to return when user sees logs
+    private let logQueryLimit = 50 // Highest number of results to return when user sees logs
     private let logSearchableQueryLimit = 10  // Number of results to return when a user searches
     private let db: Firestore
 
@@ -18,17 +18,8 @@ class FirebaseFirestoreService: DatabaseService {
         self.db = Firestore.firestore()
     }
 
-    func getUser(userId: String) -> ServicePublisher<User> {
-        let future = ServiceFuture<User> { promise in
-            self.get(userId: userId) { result in
-                promise(result)
-            }
-        }
-        return AnyPublisher(future)
-    }
-
-    private func get(userId: String, onComplete: @escaping ServiceCallback<User>) {
-        self.db.collection(FirebaseConstants.User.Collection).document(userId).getDocument { (doc, err) in
+    func getUser(userId: String, onComplete: @escaping ServiceCallback<User>) {
+        self.db.collection(SerializationConstants.User.Collection).document(userId).getDocument { (doc, err) in
             if let err = err {
                 AppLogging.error("Error getting user \(userId) \(err)")
                 onComplete(.failure(ServiceError(message: "Error retrieving user \(userId)", wrappedError: err)))
@@ -56,20 +47,8 @@ class FirebaseFirestoreService: DatabaseService {
         }
     }
 
-    func saveUser(user: User) -> ServicePublisher<Void> {
-        guard !user.id.isEmpty else {
-            return Fail(error: ServiceError(message: "User ID is empty")).eraseToAnyPublisher()
-        }
-        let future = ServiceFuture<Void> { promise in
-            self.save(user: user) { result in
-                promise(result)
-            }
-        }
-        return AnyPublisher(future)
-    }
-
-    private func save(user: User, onComplete: @escaping ServiceCallback<Void>) {
-        self.db.collection(FirebaseConstants.User.Collection)
+    func saveUser(user: User, onComplete: @escaping ServiceCallback<Void>) {
+        self.db.collection(SerializationConstants.User.Collection)
                 .document(user.id)
                 .setData(user.encode()) { err in
                     if let err = err {
@@ -82,18 +61,9 @@ class FirebaseFirestoreService: DatabaseService {
                 }
     }
 
-    func deleteUser(user: User) -> ServicePublisher<Void> {
-        let future = ServiceFuture<Void> { promise in
-            self.deleteUser(user: user) { result in
-                promise(result)
-            }
-        }
-        return AnyPublisher(future)
-    }
-
-    private func deleteUser(user: User, onComplete: @escaping ServiceCallback<Void>) {
+    func deleteUser(user: User, onComplete: @escaping ServiceCallback<Void>) {
         // TODO: This does not delete log subcollections
-        self.db.collection(FirebaseConstants.User.Collection).document(user.id).delete() { err in
+        self.db.collection(SerializationConstants.User.Collection).document(user.id).delete() { err in
             if let err = err {
                 let errorMessage = "Error deleting user \(user.id): \(err)"
                 AppLogging.error(errorMessage)
@@ -104,18 +74,9 @@ class FirebaseFirestoreService: DatabaseService {
         }
     }
 
-    func findExistingUserWithGoogleAccount(googleId: String) -> ServicePublisher<User?> {
-        let future = ServiceFuture<User?> { promise in
-            self.findExistingUserWithGoogleAccount(googleId: googleId) { result in
-                promise(result)
-            }
-        }
-        return AnyPublisher(future)
-    }
-
-    private func findExistingUserWithGoogleAccount(googleId: String, onComplete: @escaping ServiceCallback<User?>) {
-        self.db.collection(FirebaseConstants.User.Collection)
-                .whereField("\(FirebaseConstants.User.LinkedGoogleAccountField).\(FirebaseConstants.User.FirebaseGoogleAccount.IdField)", isEqualTo: googleId)
+    func findExistingUserWithGoogleAccount(googleId: String, onComplete: @escaping ServiceCallback<User?>) {
+        self.db.collection(SerializationConstants.User.Collection)
+                .whereField("\(SerializationConstants.User.LinkedGoogleAccountField).\(SerializationConstants.User.FirebaseGoogleAccount.IdField)", isEqualTo: googleId)
                 .limit(to: linkedGoogleAccountQueryLimit)  // Should not have more than 1 linked user
                 .getDocuments() { (querySnapshot, err) in
                     if let err = err {
@@ -134,16 +95,7 @@ class FirebaseFirestoreService: DatabaseService {
                 }
     }
 
-    func searchLogSearchables(query: String, by user: User, in category: LogCategory) -> ServicePublisher<[LogSearchable]> {
-        let future = Future<[LogSearchable], ServiceError> { promise in
-            self.search(query: query, by: user, in: category) { result in
-                promise(result)
-            }
-        }
-        return AnyPublisher(future)
-    }
-
-    private func search(query: String, by user: User, in category: LogCategory, onComplete: @escaping ServiceCallback<[LogSearchable]>) {
+    func searchLogSearchable(query: String, by user: User, in category: LogCategory, onComplete: @escaping ServiceCallback<[LogSearchable]>) {
         let searchQuery = query.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         guard let collectionName = category.firebaseLogSearchableCollectionName() else {
             onComplete(.failure(ServiceError(message: "Not a searchable category")))
@@ -151,13 +103,13 @@ class FirebaseFirestoreService: DatabaseService {
         }
         self.db.collection(collectionName)
                 // Search the searchTerms array for match
-                .whereField(FirebaseConstants.Searchable.SearchTermsField, arrayContains: searchQuery)
+                .whereField(SerializationConstants.Searchable.SearchTermsField, arrayContains: searchQuery)
                 // Limit to commonly available items + items created by user
                 .whereField(
-                        FirebaseConstants.Searchable.CreatedByField,
-                        in: [FirebaseConstants.Searchable.CreatedByMaster, user.id])
+                        SerializationConstants.Searchable.CreatedByField,
+                        in: [SerializationConstants.Searchable.CreatedByMaster, user.id])
                 // Order by name
-                .order(by: FirebaseConstants.Searchable.ItemNameField)
+                .order(by: SerializationConstants.Searchable.ItemNameField)
                 // Limit results
                 .limit(to: logSearchableQueryLimit)
                 .getDocuments() { [weak self] (querySnapshot, err) in
@@ -177,16 +129,7 @@ class FirebaseFirestoreService: DatabaseService {
                 }
     }
 
-    func getLogSearchable(with id: String, in category: LogCategory) -> ServicePublisher<LogSearchable> {
-        let future = Future<LogSearchable, ServiceError> { promise in
-            self.get(with: id, in: category) { result in
-                promise(result)
-            }
-        }
-        return AnyPublisher(future)
-    }
-
-    private func get(with id: String, in category: LogCategory, onComplete: @escaping ServiceCallback<LogSearchable>) {
+    func getLogSearchable(with id: String, in category: LogCategory, onComplete: @escaping ServiceCallback<LogSearchable>) {
         guard let collectionName = category.firebaseLogSearchableCollectionName() else {
             onComplete(.failure(ServiceError(message: "Invalid Log Searchable category \(category)")))
             return
@@ -209,16 +152,7 @@ class FirebaseFirestoreService: DatabaseService {
         }
     }
 
-    func saveLogSearchable(logItem: LogSearchable, for user: User) -> ServicePublisher<Void> {
-        let future = ServiceFuture<Void> { promise in
-            self.save(logItem: logItem, for: user) { result in
-                promise(result)
-            }
-        }
-        return AnyPublisher(future)
-    }
-
-    private func save(logItem: LogSearchable, for user: User, onComplete: @escaping ServiceCallback<Void>) {
+    func saveLogSearchable(logItem: LogSearchable, for user: User, onComplete: @escaping ServiceCallback<Void>) {
         guard let collectionName = logItem.parentCategory.firebaseLogSearchableCollectionName() else {
             onComplete(.failure(ServiceError(message: "Not a searchable category")))
             return
@@ -238,19 +172,10 @@ class FirebaseFirestoreService: DatabaseService {
                 }
     }
 
-    func saveLog(log: Loggable, for user: User) -> ServicePublisher<Void> {
-        let future = ServiceFuture<Void> { promise in
-            self.save(log: log, for: user) { result in
-                promise(result)
-            }
-        }
-        return AnyPublisher(future)
-    }
-
-    private func save(log: Loggable, for user: User, onComplete: @escaping ServiceCallback<Void>) {
-        self.db.collection(FirebaseConstants.User.Collection)
+    func saveLog(log: Loggable, for user: User, onComplete: @escaping ServiceCallback<Void>) {
+        self.db.collection(SerializationConstants.User.Collection)
                 .document(user.id)
-                .collection(FirebaseConstants.Logs.Collection)
+                .collection(SerializationConstants.Logs.Collection)
                 .document(log.id)
                 .setData(log.encode()) { err in
                     if let err = err {
@@ -265,28 +190,19 @@ class FirebaseFirestoreService: DatabaseService {
                 }
     }
 
-    func getLog(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?) -> ServicePublisher<[Loggable]> {
-        let future = ServiceFuture<[Loggable]> { promise in
-            self.get(for: user, in: category, since: beginDate, toAndIncluding: endDate) { result in
-                promise(result)
-            }
-        }
-        return AnyPublisher(future)
-    }
-
-    private func get(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?,
-                     onComplete: @escaping ServiceCallback<[Loggable]>) {
-        var q = self.db.collection(FirebaseConstants.User.Collection)
+    func getLogs(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?,
+                 limitedTo: Int?, onComplete: @escaping ServiceCallback<[Loggable]>) {
+        var q = self.db.collection(SerializationConstants.User.Collection)
                 .document(user.id)
-                .collection(FirebaseConstants.Logs.Collection)
-                .order(by: FirebaseConstants.Logs.DateCreatedField, descending: true)
-                .limit(to: logQueryLimit)
+                .collection(SerializationConstants.Logs.Collection)
+                .order(by: SerializationConstants.Logs.DateCreatedField, descending: true)
+                .limit(to: limitedTo ?? logQueryLimit)
         // Query by date if specified
         if let beginDate = beginDate {
-            q = q.whereField(FirebaseConstants.Logs.DateCreatedField, isGreaterThanOrEqualTo: beginDate)
+            q = q.whereField(SerializationConstants.Logs.DateCreatedField, isGreaterThanOrEqualTo: beginDate)
         }
         if let endDate = endDate {
-            q = q.whereField(FirebaseConstants.Logs.DateCreatedField, isLessThanOrEqualTo: endDate)
+            q = q.whereField(SerializationConstants.Logs.DateCreatedField, isLessThanOrEqualTo: endDate)
         }
         // Perform query
         q.getDocuments() { [weak self] (querySnapshot, err) in
@@ -315,18 +231,9 @@ class FirebaseFirestoreService: DatabaseService {
         }
     }
 
-    func deleteLog(for user: User, with id: String) -> ServicePublisher<Void> {
-        let future = ServiceFuture<Void> { promise in
-            self.deleteLog(for: user, with: id) { result in
-                promise(result)
-            }
-        }
-        return AnyPublisher(future)
-    }
-
-    private func deleteLog(for user: User, with id: String, onComplete: @escaping ServiceCallback<Void>) {
-        self.db.collection(FirebaseConstants.User.Collection).document(user.id)
-                .collection(FirebaseConstants.Logs.Collection).document(id).delete() { err in
+    func deleteLog(for user: User, with id: String, onComplete: @escaping ServiceCallback<Void>) {
+        self.db.collection(SerializationConstants.User.Collection).document(user.id)
+                .collection(SerializationConstants.Logs.Collection).document(id).delete() { err in
                     if let err = err {
                         onComplete(.failure(ServiceError(message: "Error deleting log \(id) for user \(user.id)", wrappedError: err)))
                     } else {

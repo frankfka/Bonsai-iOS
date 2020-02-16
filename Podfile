@@ -8,5 +8,6 @@ target 'Bonsai' do
   pod 'Firebase/Firestore'
   pod 'Firebase/Auth'
   pod 'GoogleSignIn'
+  pod 'RealmSwift'
 
 end

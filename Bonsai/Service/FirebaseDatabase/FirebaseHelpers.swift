@@ -11,32 +11,32 @@ import FirebaseFirestore
 extension FirebaseFirestoreService {
     func decode(data: [String: Any], parentCategory: LogCategory) -> LogSearchable? {
         // Common fields
-        guard let name = data[FirebaseConstants.Searchable.ItemNameField] as? String,
-              let createdBy = data[FirebaseConstants.Searchable.CreatedByField] as? String else {
+        guard let name = data[SerializationConstants.Searchable.ItemNameField] as? String,
+              let createdBy = data[SerializationConstants.Searchable.CreatedByField] as? String else {
             AppLogging.warn("Common log searchable fields not found")
             return nil
         }
         switch parentCategory {
         case .medication:
-            guard let id = data[FirebaseConstants.Searchable.Medication.IdField] as? String else {
+            guard let id = data[SerializationConstants.Searchable.Medication.IdField] as? String else {
                 AppLogging.warn("ID field not found")
                 return nil
             }
             return Medication(id: id, name: name, createdBy: createdBy)
         case .nutrition:
-            guard let id = data[FirebaseConstants.Searchable.Nutrition.IdField] as? String else {
+            guard let id = data[SerializationConstants.Searchable.Nutrition.IdField] as? String else {
                 AppLogging.warn("ID field not found")
                 return nil
             }
             return NutritionItem(id: id, name: name, createdBy: createdBy)
         case .symptom:
-            guard let id = data[FirebaseConstants.Searchable.Symptom.IdField] as? String else {
+            guard let id = data[SerializationConstants.Searchable.Symptom.IdField] as? String else {
                 AppLogging.warn("ID field not found")
                 return nil
             }
             return Symptom(id: id, name: name, createdBy: createdBy)
         case .activity:
-            guard let id = data[FirebaseConstants.Searchable.Activity.IdField] as? String else {
+            guard let id = data[SerializationConstants.Searchable.Activity.IdField] as? String else {
                 AppLogging.warn("ID field not found")
                 return nil
             }
@@ -49,46 +49,46 @@ extension FirebaseFirestoreService {
 
     func decode(data: [String: Any]) -> Loggable? {
         // Get Category
-        guard let logCategoryName = data[FirebaseConstants.Logs.CategoryField] as? String,
-              let logCategory = LogCategory.fromFirebaseLogCategoryName(logCategoryName) else {
+        guard let logCategoryName = data[SerializationConstants.Logs.CategoryField] as? String,
+              let logCategory = LogCategory.fromSerializedLogCategoryName(logCategoryName) else {
             AppLogging.warn("No log category found in log data: \(data)")
             return nil
         }
         // Get common fields
-        guard let id = data[FirebaseConstants.Logs.IdField] as? String,
-              let dateCreated = Date.fromFirebaseTimestamp(data[FirebaseConstants.Logs.DateCreatedField]),
-              let title = data[FirebaseConstants.Logs.TitleField] as? String,
-              let notes = data[FirebaseConstants.Logs.NotesField] as? String else {
+        guard let id = data[SerializationConstants.Logs.IdField] as? String,
+              let dateCreated = Date.fromFirebaseTimestamp(data[SerializationConstants.Logs.DateCreatedField]),
+              let title = data[SerializationConstants.Logs.TitleField] as? String,
+              let notes = data[SerializationConstants.Logs.NotesField] as? String else {
             AppLogging.warn("Could not decode common fields in log data: \(data)")
             return nil
         }
         switch logCategory {
         case .mood:
-            guard let moodRankEncoded = data[FirebaseConstants.Logs.Mood.MoodRankField] as? Int,
+            guard let moodRankEncoded = data[SerializationConstants.Logs.Mood.MoodRankField] as? Int,
                   let moodRank = MoodRank(rawValue: moodRankEncoded) else {
                 AppLogging.warn("Unable to decode mood rank with data \(data)")
                 return nil
             }
             return MoodLog(id: id, title: title, dateCreated: dateCreated, notes: notes, moodRank: moodRank)
         case .nutrition:
-            guard let nutritionItemId = data[FirebaseConstants.Logs.Nutrition.SelectedNutritionIdField] as? String,
-                  let amount = data[FirebaseConstants.Logs.Nutrition.AmountField] as? String else {
+            guard let nutritionItemId = data[SerializationConstants.Logs.Nutrition.SelectedNutritionIdField] as? String,
+                  let amount = data[SerializationConstants.Logs.Nutrition.AmountField] as? String else {
                 AppLogging.warn("Unable to decode nutrition log details with data \(data)")
                 return nil
             }
             return NutritionLog(id: id, title: title, dateCreated: dateCreated, notes: notes,
                     nutritionItemId: nutritionItemId, amount: amount)
         case .medication:
-            guard let medicationId = data[FirebaseConstants.Logs.Medication.SelectedMedicationIdField] as? String,
-                  let dosage = data[FirebaseConstants.Logs.Medication.DosageField] as? String else {
+            guard let medicationId = data[SerializationConstants.Logs.Medication.SelectedMedicationIdField] as? String,
+                  let dosage = data[SerializationConstants.Logs.Medication.DosageField] as? String else {
                 AppLogging.warn("Unable to decode medication log with data \(data)")
                 return nil
             }
             return MedicationLog(id: id, title: title, dateCreated: dateCreated, notes: notes,
                     medicationId: medicationId, dosage: dosage)
         case .symptom:
-            guard let symptomId = data[FirebaseConstants.Logs.Symptom.SelectedSymptomIdField] as? String,
-                  let encodedSeverity = data[FirebaseConstants.Logs.Symptom.SeverityField] as? Double,
+            guard let symptomId = data[SerializationConstants.Logs.Symptom.SelectedSymptomIdField] as? String,
+                  let encodedSeverity = data[SerializationConstants.Logs.Symptom.SeverityField] as? Double,
                   let severity = SymptomLog.Severity(rawValue: encodedSeverity) else {
                 AppLogging.warn("Unable to decode symptom log with data \(data)")
                 return nil
@@ -96,8 +96,8 @@ extension FirebaseFirestoreService {
             return SymptomLog(id: id, title: title, dateCreated: dateCreated, notes: notes,
                     symptomId: symptomId, severity: severity)
         case .activity:
-            guard let activityId = data[FirebaseConstants.Logs.Activity.SelectedActivityIdField] as? String,
-                  let intervalInSeconds = data[FirebaseConstants.Logs.Activity.DurationField] as? Double else {
+            guard let activityId = data[SerializationConstants.Logs.Activity.SelectedActivityIdField] as? String,
+                  let intervalInSeconds = data[SerializationConstants.Logs.Activity.DurationField] as? Double else {
                 AppLogging.warn("Unable to decode activity log with data \(data)")
                 return nil
             }
@@ -114,18 +114,18 @@ extension User {
 
     func encode() -> [String: Any] {
         return [
-            FirebaseConstants.User.IdField: self.id,
-            FirebaseConstants.User.DateCreatedField: self.dateCreated,
-            FirebaseConstants.User.LinkedGoogleAccountField: self.linkedFirebaseGoogleAccount?.encode() as Any
+            SerializationConstants.User.IdField: self.id,
+            SerializationConstants.User.DateCreatedField: self.dateCreated,
+            SerializationConstants.User.LinkedGoogleAccountField: self.linkedFirebaseGoogleAccount?.encode() as Any
         ]
     }
 
     static func decode(data: [String: Any]) -> User? {
-        let userId = data[FirebaseConstants.User.IdField] as? String
-        let dateCreated = Date.fromFirebaseTimestamp(data[FirebaseConstants.User.DateCreatedField])
+        let userId = data[SerializationConstants.User.IdField] as? String
+        let dateCreated = Date.fromFirebaseTimestamp(data[SerializationConstants.User.DateCreatedField])
         if let userId = userId, let dateCreated = dateCreated {
             var linkedFirebaseAccount: FirebaseGoogleAccount? = nil
-            if let linkedGoogleAccountData = data[FirebaseConstants.User.LinkedGoogleAccountField] as? [String: Any],
+            if let linkedGoogleAccountData = data[SerializationConstants.User.LinkedGoogleAccountField] as? [String: Any],
                let googleAccount = FirebaseGoogleAccount.decode(data: linkedGoogleAccountData) {
                 linkedFirebaseAccount = googleAccount
             }
@@ -137,17 +137,17 @@ extension User {
 extension User.FirebaseGoogleAccount {
     func encode() -> [String: Any] {
         return [
-            FirebaseConstants.User.FirebaseGoogleAccount.IdField: self.id,
-            FirebaseConstants.User.FirebaseGoogleAccount.NameField: self.name,
-            FirebaseConstants.User.FirebaseGoogleAccount.EmailField: self.email
+            SerializationConstants.User.FirebaseGoogleAccount.IdField: self.id,
+            SerializationConstants.User.FirebaseGoogleAccount.NameField: self.name,
+            SerializationConstants.User.FirebaseGoogleAccount.EmailField: self.email
         ]
     }
 
     static func decode(data: [String: Any]) -> User.FirebaseGoogleAccount? {
-        let googleId = data[FirebaseConstants.User.FirebaseGoogleAccount.IdField] as? String
-        let email = data[FirebaseConstants.User.FirebaseGoogleAccount.EmailField] as? String
+        let googleId = data[SerializationConstants.User.FirebaseGoogleAccount.IdField] as? String
+        let email = data[SerializationConstants.User.FirebaseGoogleAccount.EmailField] as? String
         // Name not currently needed
-        let name = data[FirebaseConstants.User.FirebaseGoogleAccount.NameField] as? String ?? ""
+        let name = data[SerializationConstants.User.FirebaseGoogleAccount.NameField] as? String ?? ""
         if let googleId = googleId, let email = email {
             return User.FirebaseGoogleAccount(id: googleId, name: name, email: email)
         }
@@ -165,9 +165,9 @@ extension Date {
 extension LogSearchable {
     func encodeCommonFields() -> [String: Any] {
         return [
-            FirebaseConstants.Searchable.CreatedByField: self.createdBy,
-            FirebaseConstants.Searchable.ItemNameField: self.name,
-            FirebaseConstants.Searchable.SearchTermsField: getSearchTerms(),
+            SerializationConstants.Searchable.CreatedByField: self.createdBy,
+            SerializationConstants.Searchable.ItemNameField: self.name,
+            SerializationConstants.Searchable.SearchTermsField: getSearchTerms(),
         ]
     }
 
@@ -185,13 +185,13 @@ extension LogSearchable {
         var data = encodeCommonFields()
         switch self.parentCategory {
         case .medication:
-            data[FirebaseConstants.Searchable.Medication.IdField] = self.id
+            data[SerializationConstants.Searchable.Medication.IdField] = self.id
         case .nutrition:
-            data[FirebaseConstants.Searchable.Nutrition.IdField] = self.id
+            data[SerializationConstants.Searchable.Nutrition.IdField] = self.id
         case .activity:
-            data[FirebaseConstants.Searchable.Activity.IdField] = self.id
+            data[SerializationConstants.Searchable.Activity.IdField] = self.id
         case .symptom:
-            data[FirebaseConstants.Searchable.Symptom.IdField] = self.id
+            data[SerializationConstants.Searchable.Symptom.IdField] = self.id
         default:
             break
         }
@@ -202,11 +202,11 @@ extension LogSearchable {
 extension Loggable {
     func encodeCommonFields() -> [String: Any] {
         return [
-            FirebaseConstants.Logs.IdField: self.id,
-            FirebaseConstants.Logs.TitleField: self.title,
-            FirebaseConstants.Logs.DateCreatedField: self.dateCreated,
-            FirebaseConstants.Logs.CategoryField: self.category.firebaseLogCategoryName(),
-            FirebaseConstants.Logs.NotesField: self.notes
+            SerializationConstants.Logs.IdField: self.id,
+            SerializationConstants.Logs.TitleField: self.title,
+            SerializationConstants.Logs.DateCreatedField: self.dateCreated,
+            SerializationConstants.Logs.CategoryField: self.category.serializedLogCategoryName(),
+            SerializationConstants.Logs.NotesField: self.notes
         ]
     }
 
@@ -217,31 +217,31 @@ extension Loggable {
             guard let moodLog = self as? MoodLog else {
                 fatalError("Not a mood log but category was mood")
             }
-            data[FirebaseConstants.Logs.Mood.MoodRankField] = moodLog.moodRank.rawValue
+            data[SerializationConstants.Logs.Mood.MoodRankField] = moodLog.moodRank.rawValue
         case .medication:
             guard let medicationLog = self as? MedicationLog else {
                 fatalError("Not a medication log but category was medication")
             }
-            data[FirebaseConstants.Logs.Medication.SelectedMedicationIdField] = medicationLog.medicationId
-            data[FirebaseConstants.Logs.Medication.DosageField] = medicationLog.dosage
+            data[SerializationConstants.Logs.Medication.SelectedMedicationIdField] = medicationLog.medicationId
+            data[SerializationConstants.Logs.Medication.DosageField] = medicationLog.dosage
         case .nutrition:
             guard let nutritionLog = self as? NutritionLog else {
                 fatalError("Not a nutrition log but category was nutrition")
             }
-            data[FirebaseConstants.Logs.Nutrition.SelectedNutritionIdField] = nutritionLog.nutritionItemId
-            data[FirebaseConstants.Logs.Nutrition.AmountField] = nutritionLog.amount
+            data[SerializationConstants.Logs.Nutrition.SelectedNutritionIdField] = nutritionLog.nutritionItemId
+            data[SerializationConstants.Logs.Nutrition.AmountField] = nutritionLog.amount
         case .activity:
             guard let activityLog = self as? ActivityLog else {
                 fatalError("Not an activity log but category was activity")
             }
-            data[FirebaseConstants.Logs.Activity.SelectedActivityIdField] = activityLog.activityId
-            data[FirebaseConstants.Logs.Activity.DurationField] = abs(activityLog.duration.magnitude)
+            data[SerializationConstants.Logs.Activity.SelectedActivityIdField] = activityLog.activityId
+            data[SerializationConstants.Logs.Activity.DurationField] = abs(activityLog.duration.magnitude)
         case .symptom:
             guard let symptomLog = self as? SymptomLog else {
                 fatalError("Not a symptom log but category was symptom")
             }
-            data[FirebaseConstants.Logs.Symptom.SelectedSymptomIdField] = symptomLog.symptomId
-            data[FirebaseConstants.Logs.Symptom.SeverityField] = symptomLog.severity.rawValue
+            data[SerializationConstants.Logs.Symptom.SelectedSymptomIdField] = symptomLog.symptomId
+            data[SerializationConstants.Logs.Symptom.SeverityField] = symptomLog.severity.rawValue
         case .note:
             // No additional fields
             break
@@ -255,70 +255,34 @@ extension LogCategory {
     func firebaseLogSearchableCollectionName() -> String? {
         switch self {
         case .medication:
-            return FirebaseConstants.Searchable.Medication.Collection
+            return SerializationConstants.Searchable.Medication.Collection
         case .nutrition:
-            return FirebaseConstants.Searchable.Nutrition.Collection
+            return SerializationConstants.Searchable.Nutrition.Collection
         case .symptom:
-            return FirebaseConstants.Searchable.Symptom.Collection
+            return SerializationConstants.Searchable.Symptom.Collection
         case .activity:
-            return FirebaseConstants.Searchable.Activity.Collection
+            return SerializationConstants.Searchable.Activity.Collection
         default:
             break
         }
         AppLogging.warn("Attempted to retrieve non searchable collection \(self.displayValue())")
         return nil
     }
-    func firebaseLogCategoryName() -> String {
-        switch self {
-        case .mood:
-            return FirebaseConstants.Logs.Mood.CategoryName
-        case .medication:
-            return FirebaseConstants.Logs.Medication.CategoryName
-        case .nutrition:
-            return FirebaseConstants.Logs.Nutrition.CategoryName
-        case .activity:
-            return FirebaseConstants.Logs.Activity.CategoryName
-        case .symptom:
-            return FirebaseConstants.Logs.Symptom.CategoryName
-        case .note:
-            return FirebaseConstants.Logs.Note.CategoryName
-        }
-    }
 
     static func fromFirebaseCollectionName(_ name: String) -> LogCategory? {
         switch name {
-        case FirebaseConstants.Searchable.Medication.Collection:
+        case SerializationConstants.Searchable.Medication.Collection:
             return .medication
-        case FirebaseConstants.Searchable.Nutrition.Collection:
+        case SerializationConstants.Searchable.Nutrition.Collection:
             return .nutrition
-        case FirebaseConstants.Searchable.Activity.Collection:
+        case SerializationConstants.Searchable.Activity.Collection:
             return .activity
-        case FirebaseConstants.Searchable.Symptom.Collection:
+        case SerializationConstants.Searchable.Symptom.Collection:
             return .symptom
         default:
             break
         }
         AppLogging.warn("Attempt to retrieve Firebase collection name for non-searchable category")
-        return nil
-    }
-    static func fromFirebaseLogCategoryName(_ name: String) -> LogCategory? {
-        switch name {
-        case FirebaseConstants.Logs.Medication.CategoryName:
-            return .medication
-        case FirebaseConstants.Logs.Mood.CategoryName:
-            return .mood
-        case FirebaseConstants.Logs.Nutrition.CategoryName:
-            return .nutrition
-        case FirebaseConstants.Logs.Activity.CategoryName:
-            return .activity
-        case FirebaseConstants.Logs.Symptom.CategoryName:
-            return .symptom
-        case FirebaseConstants.Logs.Note.CategoryName:
-            return .note
-        default:
-            break
-        }
-        AppLogging.warn("Invalid firebase log category \(name)")
         return nil
     }
 }

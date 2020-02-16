@@ -1,4 +1,5 @@
 import Foundation
+import RealmSwift
 
 struct Symptom: LogSearchable {
     let id: String
@@ -52,4 +53,14 @@ struct SymptomLog: Loggable {
     let symptomId: String
     let severity: Severity
     var selectedSymptom: Symptom? = nil
+}
+
+class RealmSymptomLog: Object {
+    @objc dynamic var id: String = ""
+    @objc dynamic var symptomId: String = ""
+    @objc dynamic var severityRawValue: Double = 0
+
+    override static func primaryKey() -> String? {
+        return "id"
+    }
 }

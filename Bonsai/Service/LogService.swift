@@ -10,7 +10,8 @@ import Combine
 
 protocol LogService {
     // CRUD on logs
-    func getLogs(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?) -> ServicePublisher<[Loggable]>
+    func getLogs(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?,
+                 limitedTo: Int?) -> ServicePublisher<[Loggable]>
     func saveLog(log: Loggable, for user: User) -> ServicePublisher<Void>
     func deleteLog(with id: String, for user: User) -> ServicePublisher<Void>
     // CRUD on log items (medications, nutrition, etc.)
@@ -28,8 +29,9 @@ class LogServiceImpl: LogService {
         self.cache = cache
     }
 
-    func getLogs(for user: User, in category: LogCategory? = nil, since beginDate: Date?, toAndIncluding endDate: Date?) -> ServicePublisher<[Loggable]> {
-        return self.db.getLog(for: user, in: category, since: beginDate, toAndIncluding: endDate)
+    func getLogs(for user: User, in category: LogCategory? = nil, since beginDate: Date?, toAndIncluding endDate: Date?,
+                 limitedTo: Int?) -> ServicePublisher<[Loggable]> {
+        return self.db.getLogs(for: user, in: category, since: beginDate, toAndIncluding: endDate, limit: limitedTo)
     }
 
     func saveLogSearchable(logItem: LogSearchable, for user: User) -> ServicePublisher<Void> {
