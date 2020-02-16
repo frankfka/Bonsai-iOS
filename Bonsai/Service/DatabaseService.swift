@@ -120,14 +120,15 @@ class DatabaseServiceImpl: DatabaseService {
         */
         let future = ServiceFuture<Void> { promise in
             self.firestoreService.saveLog(log: log, for: user) { result in
-                if case .success = result {
+                let mappedResult = result.flatMap { () -> Result<Void, ServiceError> in
                     // Save to Realm as well
                     let realmErr = self.realmService.saveLogs(logs: [log])
                     if let err = realmErr {
                         AppLogging.warn("Error saving log to Realm, silently swallowing: \(err)")
                     }
+                    return .success(())
                 }
-                promise(result)
+                promise(mappedResult)
             }
         }
         return AnyPublisher(future)
