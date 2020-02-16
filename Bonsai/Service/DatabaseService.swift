@@ -122,7 +122,7 @@ class DatabaseServiceImpl: DatabaseService {
             self.firestoreService.saveLog(log: log, for: user) { result in
                 if case .success = result {
                     // Save to Realm as well
-                    let realmErr = self.realmService.saveLog(log: log)
+                    let realmErr = self.realmService.saveLogs(logs: [log])
                     if let err = realmErr {
                         AppLogging.warn("Error saving log to Realm, silently swallowing: \(err)")
                     }
@@ -154,7 +154,7 @@ class DatabaseServiceImpl: DatabaseService {
                 let mappedResult = result
                         .flatMap { firebaseLogs -> Result<[Loggable], ServiceError> in
                             // Success retrieving from firebase, make sure that we update local logs
-                            self.updateLocalLogs(firebaseLogs: firebaseLogs)
+                            self.updateLocalLogs(firebaseLogs: firebaseLogs, realmLogs: logsFromRealm)
                             // Enforce reverse chronological order
                             let sortedFirebaseLogs = firebaseLogs.sorted { first, second in first.dateCreated > second.dateCreated }
                             return .success(sortedFirebaseLogs)
@@ -170,11 +170,48 @@ class DatabaseServiceImpl: DatabaseService {
         return AnyPublisher(future)
     }
 
-    private func updateLocalLogs(firebaseLogs: [Loggable]) {
+    private func updateLocalLogs(firebaseLogs: [Loggable], realmLogs: [Loggable]) {
         /*
         Adds logs to local storage if they don't exist locally but were fetched from Firestore
+        Delete logs from local storage if they were fetched but do not exist in Firestore
+        - IMPORTANT: This should only be called when we have the conditions on fetching from Firebase & Realm,
+          else we would unnecessarily delete/add logs
+        - This is not too performant, but since we're not dealing with large # logs each time, should be OK.
+          Since UI doesn't depend on this, we can do these operations asynchronously
+        - TODO: RealmService needs to support async operations
         */
-        // TODO
+        // Get logs to add
+        var logsToAdd: [Loggable] = []
+        for firebaseLog in firebaseLogs {
+            // Present in Firebase results but not Realm
+            if realmLogs.first(where: { realmLog in realmLog.id == firebaseLog.id }) == nil {
+                AppLogging.info("Could not find log \(firebaseLog.id) locally, adding to Realm")
+                logsToAdd.append(firebaseLog)
+            }
+        }
+        if !logsToAdd.isEmpty {
+            if let err = self.realmService.saveLogs(logs: logsToAdd) {
+                AppLogging.warn("Some logs weren't saved in local update: \(err)")
+            }
+        } else {
+            AppLogging.debug("Local Realm storage not missing any entries")
+        }
+        // Get logs to delete
+        var logIdsToDelete: [String] = []
+        for realmLog in realmLogs {
+            // Present in Realm but not Firebase
+            if firebaseLogs.first(where: { firebaseLog in firebaseLog.id == realmLog.id }) == nil {
+                AppLogging.info("Log \(realmLog.id) exists locally but not from Firebase, Deleting from Realm")
+                logIdsToDelete.append(realmLog.id)
+            }
+        }
+        if !logIdsToDelete.isEmpty {
+            if let err = self.realmService.deleteLogs(with: logIdsToDelete) {
+                AppLogging.warn("Some logs weren't deleted in local update: \(err)")
+            }
+        } else {
+            AppLogging.debug("Local Realm storage does not have any duplicate entries")
+        }
     }
 
     func deleteLog(for user: User, with id: String) -> ServicePublisher<Void> {
@@ -184,7 +221,14 @@ class DatabaseServiceImpl: DatabaseService {
         */
         let future = ServiceFuture<Void> { promise in
             self.firestoreService.deleteLog(for: user, with: id) { result in
-                promise(result)
+                // Delete locally if firestore succeeds
+                let mappedResult = result.flatMap { _ -> Result<Void, ServiceError> in
+                    if let err = self.realmService.deleteLogs(with: [id]) {
+                        AppLogging.warn("Error deleting Realm log \(id): \(err)")
+                    }
+                    return .success(())
+                }
+                promise(mappedResult)
             }
         }
         return AnyPublisher(future)
@@ -192,7 +236,7 @@ class DatabaseServiceImpl: DatabaseService {
 
     func resetLocalStorage() -> ServicePublisher<Void> {
         let future = ServiceFuture<Void> { promise in
-            let deletionErr = self.realmService.resetLocalStorage()
+            let deletionErr = self.realmService.deleteAllObjects()
             if let deletionErr = deletionErr {
                 promise(.failure(deletionErr))
                 return

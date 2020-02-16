@@ -14,19 +14,26 @@ class RealmService {
 
     init() throws {
         do {
+            // This is only specified for the main thread, calls to this realm from any other thread will throw
             db = try Realm()
         } catch let error as NSError {
             throw ServiceError(message: "Could not create Realm database", wrappedError: error)
         }
     }
 
-    func saveLog(log: Loggable) -> ServiceError? {
-        guard let realmLog = getRealmLog(from: log) else {
-            return ServiceError(message: "Could not create Realm log from loggable")
+    func saveLogs(logs: [Loggable]) -> ServiceError? {
+        let realmLogs = logs.compactMap { getRealmLog(from: $0) }
+        if realmLogs.count != logs.count {
+            return ServiceError(message: "Could not create one or more Realm logs from loggables")
         }
+        return saveRealmLogs(logs: realmLogs)
+    }
+
+    private func saveRealmLogs(logs: [RealmLoggable]) -> ServiceError? {
         do {
             try self.db.write {
-                self.db.add(realmLog)
+                // Allow overwrites
+                self.db.add(logs, update: .modified)
             }
         } catch let error as NSError {
             return ServiceError(message: "Error saving log", wrappedError: error)
@@ -60,20 +67,56 @@ class RealmService {
         return loggables
     }
 
-    func deleteLog(with id: String) -> ServiceError? {
-        // TODO
-        // Note: need to also delete the category specific log entry
+    func deleteLogs(with ids: [String]) -> ServiceError? {
+        do {
+            try self.db.write {
+                for id in ids {
+                    let objectsToDelete = getRealmLoggablesToDelete(for: id)
+                    if objectsToDelete.isEmpty {
+                        AppLogging.warn("Could not find Realm objects to delete")
+                    } else {
+                        self.db.delete(objectsToDelete)
+                    }
+                }
+            }
+        } catch let error as NSError {
+            return ServiceError(message: "Error deleting log from Realm", wrappedError: error)
+        }
         return nil
     }
 
-    func resetLocalStorage() -> ServiceError? {
+    // This returns the main loggable object, but also nested log objects
+    private func getRealmLoggablesToDelete(for loggableId: String) -> [Object] {
+        var objectsToDelete: [Object] = []
+        guard let loggableToDelete = self.db.object(ofType: RealmLoggable.self, forPrimaryKey: loggableId) else {
+            AppLogging.warn("Could not find loggable \(loggableId) to delete from Realm")
+            return objectsToDelete
+        }
+        objectsToDelete.append(loggableToDelete)
+        // Need to also delete the nested objects
+        if let realmMoodLog = loggableToDelete.moodLog {
+            objectsToDelete.append(realmMoodLog)
+        } else if let realmMedicationLog = loggableToDelete.medicationLog {
+            objectsToDelete.append(realmMedicationLog)
+        } else if let realmNutritionLog = loggableToDelete.nutritionLog {
+            objectsToDelete.append(realmNutritionLog)
+        } else if let realmActivityLog = loggableToDelete.activityLog {
+            objectsToDelete.append(realmActivityLog)
+        } else if let realmSymptomLog = loggableToDelete.symptomLog {
+            objectsToDelete.append(realmSymptomLog)
+        }
+        return objectsToDelete
+    }
+
+    func deleteAllObjects() -> ServiceError? {
         do {
             try self.db.write {
                 self.db.deleteAll()
             }
         } catch let error as NSError {
-            return ServiceError(message: "Error resetting local storage", wrappedError: error)
+            return ServiceError(message: "Error deleting all local objects", wrappedError: error)
         }
         return nil
     }
+
 }
