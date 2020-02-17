@@ -29,7 +29,6 @@ struct SettingsView: View {
     
     var body: some View {
         ScrollView {
-            // TODO: Scrollbar no longer works with header, figure out why
             VStack {
                 TitledSection(sectionTitle: "Account") {
                     VStack {
@@ -58,6 +57,7 @@ struct SettingsView: View {
                 .padding(.top, CGFloat.Theme.Layout.normal)
             }
         }
+        // TODO: Declaring background breaks scrollview collapse navigation title behavior
         .background(Color.Theme.backgroundPrimary)
         .withLoadingPopup(show: .constant(viewModel.showLoading), text: "Loading")
         .withStandardPopup(show: .constant(viewModel.showSuccess), type: .success, text: viewModel.successMessage) {
@@ -71,7 +71,7 @@ struct SettingsView: View {
             Alert(
                     title: Text("Existing User Found"),
                     message: Text("""
-                                  Another user is linked to this account. Do you want to restore the 
+                                  Another user is linked to this account. Do you want to restore the
                                   account? All current log data will no longer be accessible.
                                   """),
                     primaryButton: .default(
