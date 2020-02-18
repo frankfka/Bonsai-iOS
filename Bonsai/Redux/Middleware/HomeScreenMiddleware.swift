@@ -52,7 +52,8 @@ struct HomeScreenMiddleware {
 
     private static func initHomeScreen(logService: LogService, for user: User, in category: LogCategory?,
                                        since beginDate: Date?, toAndIncluding endDate: Date?) -> AnyPublisher<AppAction, Never> {
-        return logService.getLogs(for: user, in: category, since: beginDate, toAndIncluding: endDate, limitedTo: 5)
+        return logService.getLogs(for: user, in: category, since: beginDate,
+                        toAndIncluding: endDate, limitedTo: RecentLogSection.ViewModel.numToShow)
                 .map { result in
                     return AppAction.homeScreen(action: .dataLoadSuccess(recentLogs: result))
                 }.catch { (err) -> Just<AppAction> in

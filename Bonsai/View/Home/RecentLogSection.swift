@@ -12,6 +12,7 @@ struct RecentLogSection: View {
     @EnvironmentObject var store: AppStore
     
     struct ViewModel {
+        static let numToShow = 5  // Number of logs to show
         var showNoRecents: Bool {
             recentLogs.isEmpty
         }
@@ -19,7 +20,8 @@ struct RecentLogSection: View {
         @Binding var navigateToLogDetails: Bool?
 
         init(recentLogs: [LogRow.ViewModel], navigateToLogDetails: Binding<Bool?>) {
-            self.recentLogs = recentLogs
+            // Trim to specified length
+            self.recentLogs = Array(recentLogs.prefix(ViewModel.numToShow))
             self._navigateToLogDetails = navigateToLogDetails
         }
 

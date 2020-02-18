@@ -11,7 +11,7 @@ struct GlobalLogReducerUtil {
 
     static func add(state: inout AppState, newLog: Loggable) {
         // Home
-        state.homeScreen.recentLogs.insert(newLog, at: 0)
+        state.homeScreen.recentLogs.insert(newLog, at: 0) // View is responsible for limiting the number of results
         state.homeScreen.recentLogs.sort { first, second in first.dateCreated > second.dateCreated } // Descending (latest first)
         // View Logs
         let logsForDate = state.viewLogs.logsForDate(newLog.dateCreated)
