@@ -36,9 +36,18 @@ struct ViewLogsDateHeaderView: View {
             self.initialDate = initialDate
             self.onNewDateConfirmed = onNewDateConfirmed
         }
+        
+        // Slightly hacky way to interface with a @state variable
+        func isDateIncrementDisabled(selectedDate: Date) -> Bool {
+            // Date selection is today or it is later than the current time
+            return Calendar.current.isDateInToday(selectedDate) || selectedDate > Date()
+        }
     }
     @State var showDatePicker: Bool = false
     @State var selectedDate: Date = Date()
+    private var isDateIncrementDisabled: Bool {
+        viewModel.isDateIncrementDisabled(selectedDate: selectedDate)
+    }
     private let viewModel: ViewModel
     
     init(viewModel: ViewModel) {
@@ -52,16 +61,31 @@ struct ViewLogsDateHeaderView: View {
             Divider()
             // Top Bar view
             HStack {
-                // Left cancel button - show only when date picker is shown
-                if showDatePicker {
-                    Button(action: {
-                        self.onDateSelectionCancel()
-                    }) {
-                        Text("Cancel")
-                            .font(Font.Theme.normalText)
-                            .foregroundColor(Color.Theme.primary)
+                // Left bar item
+                Group {
+                    if showDatePicker {
+                        // Left cancel button - show only when date picker is shown
+                        Button(action: {
+                            self.onDateSelectionCancel()
+                        }) {
+                            Text("Cancel")
+                                .font(Font.Theme.normalText)
+                                .foregroundColor(Color.Theme.primary)
+                        }
+                    } else {
+                        // Left chevron - to decrement date
+                        Button(action: {
+                            self.onDecrementDateTapped()
+                        }) {
+                            Image(systemName: "chevron.left")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: CGFloat.Theme.Font.normalIcon, height: CGFloat.Theme.Font.normalIcon)
+                                .foregroundColor(Color.Theme.primary)
+                        }
                     }
                 }
+                .padding(CGFloat.Theme.Layout.small)
                 Spacer()
                 // Center date display
                 HStack(spacing: 0) {
@@ -72,32 +96,49 @@ struct ViewLogsDateHeaderView: View {
                     Image(systemName: showDatePicker ? "chevron.down" : "chevron.right")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: CGFloat.Theme.Font.smallIcon, height: CGFloat.Theme.Font.smallIcon).foregroundColor(Color.Theme.textDark)
+                        .frame(width: CGFloat.Theme.Font.smallIcon, height: CGFloat.Theme.Font.smallIcon)
+                        .foregroundColor(Color.Theme.textDark)
                 }
                 Spacer()
-                // Right confirmation button - show only when date picker is shown
-                if showDatePicker {
-                    Button(action: {
-                        self.onDateSelectionConfirmed()
-                    }) {
-                        Text("Done")
-                            .font(Font.Theme.boldNormalText)
-                            .foregroundColor(Color.Theme.primary)
+                // Right bar item
+                Group {
+                    if showDatePicker {
+                        // Right confirmation button - show only when date picker is shown
+                        Button(action: {
+                            self.onDateSelectionConfirmed()
+                        }) {
+                            Text("Done")
+                                .font(Font.Theme.boldNormalText)
+                                .foregroundColor(Color.Theme.primary)
+                        }
+                    } else {
+                        // Right chevron - to increment date
+                        Button(action: {
+                            self.onIncrementDateTapped()
+                        }) {
+                            Image(systemName: "chevron.right")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: CGFloat.Theme.Font.normalIcon, height: CGFloat.Theme.Font.normalIcon)
+                                .foregroundColor(isDateIncrementDisabled ? Color.Theme.grayscalePrimary : Color.Theme.primary)
+                        }
+                        .disabled(isDateIncrementDisabled)
                     }
                 }
+                .padding(CGFloat.Theme.Layout.small)
             }
-            .padding(.all, CGFloat.Theme.Layout.normal)
+            .padding(.vertical, CGFloat.Theme.Layout.small)
+            .padding(.horizontal, CGFloat.Theme.Layout.normal)
             .contentShape(Rectangle())
             .onTapGesture {
                 self.onDateViewTapped()
             }
-            Divider()
             // Calendar Picker View
             if showDatePicker {
                 // TODO: Top to bottom transition?
                 DatePickerView(viewModel: getDatePickerViewModel())
-                Divider()
             }
+            Divider()
         }
         .onAppear(perform: {
             self.onViewAppear()
@@ -107,6 +148,22 @@ struct ViewLogsDateHeaderView: View {
     
     private func getDatePickerViewModel() -> DatePickerView.ViewModel {
         return DatePickerView.ViewModel(selectedDate: $selectedDate)
+    }
+    
+    private func onDecrementDateTapped() {
+        let decrementedDate = selectedDate.addingTimeInterval(-TimeInterval.day)
+        // @State var doesn't update, so manually update it
+        selectedDate = decrementedDate
+        viewModel.onNewDateConfirmed?(decrementedDate)
+    }
+    
+    private func onIncrementDateTapped() {
+        let incrementedDate = selectedDate.addingTimeInterval(TimeInterval.day)
+        if incrementedDate <= Date() {
+            // @State var doesn't update, so manually update it
+            selectedDate = incrementedDate
+            viewModel.onNewDateConfirmed?(incrementedDate)
+        }
     }
     
     private func onDateViewTapped() {
