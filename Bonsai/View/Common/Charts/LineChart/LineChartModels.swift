@@ -5,6 +5,23 @@
 
 import SwiftUI
 
+// Data model for line charts
+struct LineChartData {
+    let dataPoints: [LineChartDataPoint]
+
+    init(dataPoints: [LineChartDataPoint]) {
+        self.dataPoints = dataPoints
+                // Sort by increasing relative x
+                .sorted { (a, b) in
+                    a.xRel < b.xRel
+                }
+                // Make sure coordinates are valid relative coordinates
+                .filter { coordinate in
+                    coordinate.isValid
+                }
+    }
+}
+
 struct LineChartDataPoint: Identifiable {
     let xRel: CGFloat
     let yRel: CGFloat
@@ -12,7 +29,7 @@ struct LineChartDataPoint: Identifiable {
 
     let id = UUID()
     // View-specific information
-    var isRelativeCoordinate: Bool {
+    var isValid: Bool {
         !(xRel < 0 || xRel > 1) || !(yRel < 0 || yRel > 1)
     }
     var displayX: CGFloat {
@@ -28,28 +45,9 @@ struct LineChartDataPoint: Identifiable {
         self.yRel = yRel
         self.marker = marker
     }
-
-}
-
-// Data model for line charts
-struct LineChartData {
-    let dataPoints: [LineChartDataPoint]
-
-    init(dataPoints: [LineChartDataPoint]) {
-        self.dataPoints = dataPoints
-                // Sort by increasing relative x
-                .sorted { (a, b) in
-                    a.xRel < b.xRel
-                }
-                // Make sure coordinates are valid relative coordinates
-                .filter { coordinate in
-                    coordinate.isRelativeCoordinate
-                }
-    }
 }
 
 struct LineChartStyle {
-
     let smoothed: Bool
     let lineColor: Color
     let lineStrokeStyle: StrokeStyle
@@ -59,5 +57,4 @@ struct LineChartStyle {
         self.lineColor = lineColor
         self.lineStrokeStyle = lineStrokeStyle
     }
-
 }

@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct LineChartComponent: View {
-
+struct LineChartComponent: ChartComponent {
+    
     private let data: LineChartData
     private let style: LineChartStyle
     private let marker: AnyView?
@@ -75,48 +75,26 @@ struct LineChartComponent: View {
 }
 
 struct LineChartComponent_Previews: PreviewProvider {
-
-    static var circleMarker: AnyView = Circle()
-            .foregroundColor(Color.Theme.neutral)
-            .frame(width: 4, height: 4)
-            .eraseToAnyView()
-
-    static var dynamicData: LineChartData = LineChartData(
-            dataPoints: [
-                LineChartDataPoint(xRel: 0, yRel: 0.1, marker: circleMarker),
-                LineChartDataPoint(xRel: 0.2, yRel: 0.4),
-                LineChartDataPoint(xRel: 0.4, yRel: 0.6),
-                LineChartDataPoint(xRel: 0.6, yRel: 0.2, marker: circleMarker),
-                LineChartDataPoint(xRel: 0.8, yRel: 1),
-                LineChartDataPoint(xRel: 1, yRel: 0.4)
-            ]
-    )
-
-    static var constantData: LineChartData = LineChartData(
-            dataPoints: [
-                LineChartDataPoint(xRel: 0, yRel: 0.5),
-                LineChartDataPoint(xRel: 1, yRel: 0.5)
-            ]
-    )
-
-    static var appLineChartStyle: LineChartStyle = LineChartStyle(
-        lineColor: Color.Theme.primary,
-        lineStrokeStyle: StrokeStyle(),
-        smoothed: true
-    )
     
     static var previews: some View {
         Group {
             LineChartComponent(
-                    data: dynamicData,
-                    style: appLineChartStyle
+                data: PreviewCharts.LineChartDynamicData,
+                style: PreviewCharts.AppLineChartStyle,
+                marker: PreviewCharts.LineChartMarker
             )
             .frame(width: 200, height: 200, alignment: .bottom)
             .previewLayout(.sizeThatFits)
 
             LineChartComponent(
-                    data: constantData,
-                    style: appLineChartStyle
+                data: PreviewCharts.LineChartConstantData
+            )
+            .frame(width: 200, height: 200, alignment: .bottom)
+            .previewLayout(.sizeThatFits)
+            
+            
+            LineChartComponent(
+                data: LineChartData(dataPoints: [])
             )
             .frame(width: 200, height: 200, alignment: .bottom)
             .previewLayout(.sizeThatFits)

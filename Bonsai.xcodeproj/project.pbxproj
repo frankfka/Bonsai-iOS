@@ -51,8 +51,11 @@
 		11FEACD223E2A5C800C22095 /* RoundedBorderButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FEACD123E2A5C800C22095 /* RoundedBorderButtonView.swift */; };
 		11FF402D23FB8C4C0058583C /* BarChartComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FF402C23FB8C4C0058583C /* BarChartComponent.swift */; };
 		11FF402F23FC5C9B0058583C /* LineChartComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FF402E23FC5C9B0058583C /* LineChartComponent.swift */; };
+		11FF403223FEFB490058583C /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FF403123FEFB490058583C /* ChartView.swift */; };
+		11FF403423FF277B0058583C /* PastWeekMoodChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FF403323FF277B0058583C /* PastWeekMoodChartView.swift */; };
 		9E04B066551BCEEF58E9DB5B /* HomeScreenMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B329C5305296C0C18D78 /* HomeScreenMiddleware.swift */; };
 		9E04B0E9C35B4A8C7F35725C /* LogRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B355F83BFA8404BC1206 /* LogRow.swift */; };
+		9E04B13EB0CE4F0B2F194268 /* PreviewCharts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B4D927FA1048319B793C /* PreviewCharts.swift */; };
 		9E04B19E91A48EB332B64267 /* KeyboardPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BBCE4CF1BE99C653BB69 /* KeyboardPadding.swift */; };
 		9E04B1DC07699EBE5C684C53 /* MedicationLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BC42FA01AF3C727FA0A7 /* MedicationLogView.swift */; };
 		9E04B1F285BD40EB2E48688C /* SymptomLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B359724D8C94ED1CFA37 /* SymptomLogView.swift */; };
@@ -65,6 +68,7 @@
 		9E04B43BF70AF74B23CE5CA1 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BE25078C4D1D66F8E42F /* Note.swift */; };
 		9E04B43EFE2FEC2099CB0364 /* SettingsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B03E2878B40603D16455 /* SettingsState.swift */; };
 		9E04B44B6BD1BCCE962BF217 /* LineChartHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BB810B6C11FBAAE8572E /* LineChartHelpers.swift */; };
+		9E04B48DD051003D11BEC39D /* BarChartModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BAC2E285A783EA206AED /* BarChartModels.swift */; };
 		9E04B50598E3E5F85D218185 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BCFAAF7B3D5C2A36CCA7 /* Activity.swift */; };
 		9E04B513CC19B5E2DB63CED9 /* SearchTextObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B763E5A55C21C9EF3E57 /* SearchTextObservable.swift */; };
 		9E04B5451F43ADCBD5CC72FA /* HomeScreenReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BF971048F9F4765391DA /* HomeScreenReducer.swift */; };
@@ -103,6 +107,7 @@
 		9E04BB25498F950A8D84B41E /* PreviewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BB43647F9802F581CE76 /* PreviewState.swift */; };
 		9E04BB30BD8E25713D8572AA /* CreateLogState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B2DF23C563EDE7C0BBEE /* CreateLogState.swift */; };
 		9E04BB66ECCD13C94DFBC8B1 /* Popup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BFB9FC87753455D68DDA /* Popup.swift */; };
+		9E04BB6ECC15FF7A01CF2DB5 /* ChartModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BD32195B26669D42A6AD /* ChartModels.swift */; };
 		9E04BBC2B2FF6C3F91B2FC86 /* ViewLogsReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B4F958CBB6E0E7260A21 /* ViewLogsReducer.swift */; };
 		9E04BBC70F549E1E51568666 /* DisableInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BD4984DDBAEC66B08A34 /* DisableInteraction.swift */; };
 		9E04BC228D55A2BFEEDF93F7 /* FirebaseFirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B116097027786675FBE7 /* FirebaseFirestoreService.swift */; };
@@ -170,6 +175,8 @@
 		11FEACD123E2A5C800C22095 /* RoundedBorderButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedBorderButtonView.swift; sourceTree = "<group>"; };
 		11FF402C23FB8C4C0058583C /* BarChartComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartComponent.swift; sourceTree = "<group>"; };
 		11FF402E23FC5C9B0058583C /* LineChartComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartComponent.swift; sourceTree = "<group>"; };
+		11FF403123FEFB490058583C /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
+		11FF403323FF277B0058583C /* PastWeekMoodChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastWeekMoodChartView.swift; sourceTree = "<group>"; };
 		5224D148B81081E7444187A6 /* Pods-HealthTrack.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthTrack.release.xcconfig"; path = "Target Support Files/Pods-HealthTrack/Pods-HealthTrack.release.xcconfig"; sourceTree = "<group>"; };
 		75E56A12C7431D234EDF9416 /* Pods-Bonsai.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bonsai.debug.xcconfig"; path = "Target Support Files/Pods-Bonsai/Pods-Bonsai.debug.xcconfig"; sourceTree = "<group>"; };
 		76CC4C0B881B5BDB7CBB1305 /* Pods_Bonsai.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bonsai.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -193,6 +200,7 @@
 		9E04B3D87A2D9D0DC0EFC30B /* ViewLogsState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewLogsState.swift; sourceTree = "<group>"; };
 		9E04B3E3FFB50A3920C79D37 /* LineChartModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineChartModels.swift; sourceTree = "<group>"; };
 		9E04B4A50B14B9F44D696289 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		9E04B4D927FA1048319B793C /* PreviewCharts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewCharts.swift; sourceTree = "<group>"; };
 		9E04B4F958CBB6E0E7260A21 /* ViewLogsReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewLogsReducer.swift; sourceTree = "<group>"; };
 		9E04B5273996AD629A11C11A /* CreateLogReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogReducer.swift; sourceTree = "<group>"; };
 		9E04B5548FA5FE0689E72183 /* CreateLogMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogMiddleware.swift; sourceTree = "<group>"; };
@@ -218,6 +226,7 @@
 		9E04BA16DE33AF23CFDC1835 /* SearchAddItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchAddItemView.swift; sourceTree = "<group>"; };
 		9E04BA6AAC00E25E507C5764 /* SearchListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchListView.swift; sourceTree = "<group>"; };
 		9E04BA6E51A6CDACF7C60F88 /* SearchListItemRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchListItemRow.swift; sourceTree = "<group>"; };
+		9E04BAC2E285A783EA206AED /* BarChartModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarChartModels.swift; sourceTree = "<group>"; };
 		9E04BB39F1BF4E0343249791 /* ViewLogsMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewLogsMiddleware.swift; sourceTree = "<group>"; };
 		9E04BB43647F9802F581CE76 /* PreviewState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewState.swift; sourceTree = "<group>"; };
 		9E04BB465D817C71E35F45EF /* LoggingMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggingMiddleware.swift; sourceTree = "<group>"; };
@@ -230,6 +239,7 @@
 		9E04BC48C0B7BB0F4682BE68 /* NutritionLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NutritionLogView.swift; sourceTree = "<group>"; };
 		9E04BCEA3FA0AEBDF8B13209 /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		9E04BCFAAF7B3D5C2A36CCA7 /* Activity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
+		9E04BD32195B26669D42A6AD /* ChartModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartModels.swift; sourceTree = "<group>"; };
 		9E04BD42E217456E1AA1DA03 /* CacheService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheService.swift; sourceTree = "<group>"; };
 		9E04BD4984DDBAEC66B08A34 /* DisableInteraction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisableInteraction.swift; sourceTree = "<group>"; };
 		9E04BD4AB903F6E3E687B8B6 /* SettingsMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsMiddleware.swift; sourceTree = "<group>"; };
@@ -272,6 +282,7 @@
 				11B4312423A73B3700909D47 /* TabBarView.swift */,
 				11B4311E23A69AC300909D47 /* ContentView.swift */,
 				9E04BB8BB056B5229D18E7A4 /* Debug */,
+				9E04B281F9FE1970BB809117 /* Insights */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -465,6 +476,9 @@
 			children = (
 				11FF403023FDA0B60058583C /* LineChart */,
 				11FF402B23FB8C1B0058583C /* BarChart */,
+				9E04BD32195B26669D42A6AD /* ChartModels.swift */,
+				11FF403123FEFB490058583C /* ChartView.swift */,
+				9E04B4D927FA1048319B793C /* PreviewCharts.swift */,
 			);
 			path = Charts;
 			sourceTree = "<group>";
@@ -473,6 +487,7 @@
 			isa = PBXGroup;
 			children = (
 				11FF402C23FB8C4C0058583C /* BarChartComponent.swift */,
+				9E04BAC2E285A783EA206AED /* BarChartModels.swift */,
 			);
 			path = BarChart;
 			sourceTree = "<group>";
@@ -535,6 +550,14 @@
 				9E04BD4AB903F6E3E687B8B6 /* SettingsMiddleware.swift */,
 			);
 			path = Middleware;
+			sourceTree = "<group>";
+		};
+		9E04B281F9FE1970BB809117 /* Insights */ = {
+			isa = PBXGroup;
+			children = (
+				11FF403323FF277B0058583C /* PastWeekMoodChartView.swift */,
+			);
+			path = Insights;
 			sourceTree = "<group>";
 		};
 		9E04B3920AAD10E938641431 /* Util */ = {
@@ -877,6 +900,7 @@
 				9E04BA2F6B0EAE778B64DAEC /* TappableRowView.swift in Sources */,
 				9E04B2A80CC13789F016F18C /* LogDetailBasicsView.swift in Sources */,
 				9E04BB25498F950A8D84B41E /* PreviewState.swift in Sources */,
+				11FF403223FEFB490058583C /* ChartView.swift in Sources */,
 				9E04B95B683A587ACED91D5F /* LogDetailState.swift in Sources */,
 				9E04BAA1D418E7593D4D4FD8 /* LogDetailMiddleware.swift in Sources */,
 				9E04BF8B0D0B677809F642FB /* LogDetailsReducer.swift in Sources */,
@@ -897,8 +921,12 @@
 				11FF402F23FC5C9B0058583C /* LineChartComponent.swift in Sources */,
 				9E04BB0E6E3BD33CFAA6B415 /* LoggableToRealm.swift in Sources */,
 				9E04B7336CCD3E3210FA713F /* RealmToLoggable.swift in Sources */,
+				11FF403423FF277B0058583C /* PastWeekMoodChartView.swift in Sources */,
 				9E04B44B6BD1BCCE962BF217 /* LineChartHelpers.swift in Sources */,
 				9E04B33DA4A87FE7E2ED790E /* LineChartModels.swift in Sources */,
+				9E04B48DD051003D11BEC39D /* BarChartModels.swift in Sources */,
+				9E04BB6ECC15FF7A01CF2DB5 /* ChartModels.swift in Sources */,
+				9E04B13EB0CE4F0B2F194268 /* PreviewCharts.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

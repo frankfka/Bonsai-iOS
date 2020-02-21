@@ -5,6 +5,7 @@ struct AppDimensions {
     
     let Font = AppFontSize()
     let Layout = AppLayout()
+    let Charts = AppCharts()
     let Misc = AppMisc()
     
     struct AppFontSize {
@@ -52,6 +53,15 @@ struct AppDimensions {
             navBarItemHeight = 24
             popupFrameSize = 96
         }
+    }
+
+    struct AppCharts {
+        // Bar
+        let barSpacing: CGFloat = 4
+        let barCornerRadius: CGFloat = 16
+
+        // Line
+        let lineWidth: CGFloat = 4
     }
     
     struct AppMisc {
