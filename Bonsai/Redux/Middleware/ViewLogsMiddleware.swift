@@ -12,7 +12,7 @@ extension Date {
         Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: self)!
     }
     func endOfDate() -> Date {
-        Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: self.addingTimeInterval(TimeInterval(86400)))!
+        Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: self.addingTimeInterval(TimeInterval.day))!
     }
 }
 

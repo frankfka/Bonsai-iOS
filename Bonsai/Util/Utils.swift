@@ -14,3 +14,8 @@ extension String {
         return self.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 }
+
+extension TimeInterval {
+    static let hour: TimeInterval = TimeInterval(3600)
+    static let day: TimeInterval = TimeInterval(86400)
+}
