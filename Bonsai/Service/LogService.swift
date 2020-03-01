@@ -31,7 +31,8 @@ class LogServiceImpl: LogService {
 
     func getLogs(for user: User, in category: LogCategory? = nil, since beginDate: Date?, toAndIncluding endDate: Date?,
                  limitedTo: Int?) -> ServicePublisher<[Loggable]> {
-        return self.db.getLogs(for: user, in: category, since: beginDate, toAndIncluding: endDate, limit: limitedTo)
+        return self.db.getLogs(for: user, in: category, since: beginDate,
+                toAndIncluding: endDate, limit: limitedTo, offline: false)
     }
 
     func saveLogSearchable(logItem: LogSearchable, for user: User) -> ServicePublisher<Void> {

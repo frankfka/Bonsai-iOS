@@ -22,6 +22,7 @@ struct AppError: Error {
 class Services {
     let userService: UserService
     let logService: LogService
+    let analyticsService: AnalyticsService
 
     init() throws {
         // Init serves as dependency management
@@ -30,6 +31,7 @@ class Services {
         let firebaseAuthService = FirebaseAuthService()
         userService = UserServiceImpl(db: db, auth: firebaseAuthService)
         logService = LogServiceImpl(db: db, cache: cache)
+        analyticsService = AnalyticsServiceImpl(db: db)
     }
 }
 

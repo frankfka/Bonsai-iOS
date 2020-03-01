@@ -16,14 +16,14 @@ struct ViewLogsState {
         logsForDate(dateForLogs)
     }
     func logsForDate(_ date: Date) -> [Loggable] {
-        return allLogs[date.beginningOfDate()] ?? []
+        return allLogs[date.beginningOfDate] ?? []
     }
     mutating func replaceLogs(_ logs: [Loggable], for date: Date? = nil) {
-        let selectedDate = (date ?? dateForLogs).beginningOfDate()
+        let selectedDate = (date ?? dateForLogs).beginningOfDate
         allLogs[selectedDate] = logs
     }
     mutating func addLog(log: Loggable, for date: Date? = nil) {
-        let selectedDate = (date ?? dateForLogs).beginningOfDate()
+        let selectedDate = (date ?? dateForLogs).beginningOfDate
         // Insert, then sort
         var newLogs: [Loggable] = allLogs[selectedDate] ?? []
         newLogs.append(log)

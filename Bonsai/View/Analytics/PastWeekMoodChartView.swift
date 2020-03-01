@@ -20,25 +20,6 @@ extension DateFormatter {
     }
 }
 
-struct MoodRankDaySummary {
-    let date: Date
-    let averageMoodRankValue: Double? // Nil if none exist for that date
-}
-
-struct MoodRankAnalytics {
-    let moodRankDays: [MoodRankDaySummary]
-    var averageMoodRankValue: Double? {
-        let values = moodRankDays.compactMap {
-            $0.averageMoodRankValue
-        }
-        let numValues = values.count
-        if numValues == 0 {
-            return nil
-        }
-        return values.reduce(0.0, +) / Double(numValues)
-    }
-}
-
 struct PastWeekMoodChartView: View {
     
     struct ViewModel {
@@ -57,8 +38,10 @@ struct PastWeekMoodChartView: View {
         let axisLabels: [String]
         let barChartData: [BarChartDataPoint]
         let lineChartData: LineChartData
+        let showNoDataText: Bool
         
         init(analytics: MoodRankAnalytics) {
+            var showNoDataText = true
             // Bar Chart
             var axisLabels: [String] = []
             var barChartDataPoints: [BarChartDataPoint] = []
@@ -73,6 +56,7 @@ struct PastWeekMoodChartView: View {
                 let relativeValue: CGFloat
                 if let averageValue = day.averageMoodRankValue {
                     relativeValue = (CGFloat(averageValue) - minValue) / range
+                    showNoDataText = false
                 } else {
                     relativeValue = 0
                 }
@@ -91,8 +75,8 @@ struct PastWeekMoodChartView: View {
             self.lineChartData = LineChartData(dataPoints: lineChartDataPoints)
             self.barChartData = barChartDataPoints
             self.axisLabels = axisLabels
+            self.showNoDataText = showNoDataText
         }
-        
     }
     
     private let viewModel: ViewModel
@@ -102,17 +86,26 @@ struct PastWeekMoodChartView: View {
     }
     
     var body: some View {
-        VStack {
-            ChartView {
-                BarChartComponent(
-                    data: self.viewModel.barChartData,
-                    style: ViewModel.barChartStyle
-                )
-                    .padding(.horizontal, ViewModel.barChartPadding)
-                LineChartComponent(
-                    data: self.viewModel.lineChartData,
-                    style: ViewModel.lineChartStyle
-                )
+        VStack(alignment: .center) {
+            if viewModel.showNoDataText {
+                // Show prompt if no data exists for past week
+                Text("No Mood Data")
+                    .font(Font.Theme.normalText)
+                    .foregroundColor(Color.Theme.text)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+                // Otherwise, show charts
+                ChartView {
+                    BarChartComponent(
+                        data: self.viewModel.barChartData,
+                        style: ViewModel.barChartStyle
+                    )
+                        .padding(.horizontal, ViewModel.barChartPadding)
+                    LineChartComponent(
+                        data: self.viewModel.lineChartData,
+                        style: ViewModel.lineChartStyle
+                    )
+                }
             }
             // Bottom Axis
             HStack {
@@ -134,21 +127,40 @@ struct PastWeekMoodChartView_Previews: PreviewProvider {
     private static var neutralMood: Double = Double(MoodRank.neutral.rawValue)
     private static var positiveMood: Double = Double(MoodRank.positive.rawValue)
     
-    static var pastWeekData: MoodRankAnalytics = MoodRankAnalytics(
+    static var pastWeekWithData: MoodRankAnalytics = MoodRankAnalytics(
         moodRankDays: [
-            MoodRankDaySummary(date: Date().addingTimeInterval(-604800), averageMoodRankValue: positiveMood),
-            MoodRankDaySummary(date: Date().addingTimeInterval(-518400), averageMoodRankValue: neutralMood),
-            MoodRankDaySummary(date: Date().addingTimeInterval(-432000), averageMoodRankValue: negativeMood),
-            MoodRankDaySummary(date: Date().addingTimeInterval(-345600), averageMoodRankValue: nil),
-            MoodRankDaySummary(date: Date().addingTimeInterval(-259200), averageMoodRankValue: neutralMood),
-            MoodRankDaySummary(date: Date().addingTimeInterval(-172800), averageMoodRankValue: (negativeMood + neutralMood) / 2.0),
-            MoodRankDaySummary(date: Date().addingTimeInterval(-86400), averageMoodRankValue: negativeMood)
+            MoodRankDaySummary(date: Date().addingTimeInterval(-7 * TimeInterval.day), averageMoodRankValue: positiveMood),
+            MoodRankDaySummary(date: Date().addingTimeInterval(-6 * TimeInterval.day), averageMoodRankValue: neutralMood),
+            MoodRankDaySummary(date: Date().addingTimeInterval(-5 * TimeInterval.day), averageMoodRankValue: negativeMood),
+            MoodRankDaySummary(date: Date().addingTimeInterval(-4 * TimeInterval.day), averageMoodRankValue: nil),
+            MoodRankDaySummary(date: Date().addingTimeInterval(-3 * TimeInterval.day), averageMoodRankValue: neutralMood),
+            MoodRankDaySummary(date: Date().addingTimeInterval(-2 * TimeInterval.day), averageMoodRankValue: (negativeMood + neutralMood) / 2.0),
+            MoodRankDaySummary(date: Date().addingTimeInterval(-TimeInterval.day), averageMoodRankValue: negativeMood)
+        ]
+    )
+    
+    static var pastWeekWithNoData: MoodRankAnalytics = MoodRankAnalytics(
+        moodRankDays: [
+            MoodRankDaySummary(date: Date().addingTimeInterval(-7 * TimeInterval.day), averageMoodRankValue: nil),
+            MoodRankDaySummary(date: Date().addingTimeInterval(-6 * TimeInterval.day), averageMoodRankValue: nil),
+            MoodRankDaySummary(date: Date().addingTimeInterval(-5 * TimeInterval.day), averageMoodRankValue: nil),
+            MoodRankDaySummary(date: Date().addingTimeInterval(-4 * TimeInterval.day), averageMoodRankValue: nil),
+            MoodRankDaySummary(date: Date().addingTimeInterval(-3 * TimeInterval.day), averageMoodRankValue: nil),
+            MoodRankDaySummary(date: Date().addingTimeInterval(-2 * TimeInterval.day), averageMoodRankValue: nil),
+            MoodRankDaySummary(date: Date().addingTimeInterval(-TimeInterval.day), averageMoodRankValue: nil)
         ]
     )
     
     static var previews: some View {
-        PastWeekMoodChartView(viewModel: PastWeekMoodChartView.ViewModel(analytics: pastWeekData))
-            .frame(width: 500, height: 300)
-            .previewLayout(.sizeThatFits)
+        Group {
+            PastWeekMoodChartView(viewModel: PastWeekMoodChartView.ViewModel(analytics: pastWeekWithData))
+                .frame(width: 500, height: 300)
+                .previewLayout(.sizeThatFits)
+            
+            
+            PastWeekMoodChartView(viewModel: PastWeekMoodChartView.ViewModel(analytics: pastWeekWithNoData))
+                .frame(width: 500, height: 300)
+                .previewLayout(.sizeThatFits)
+        }
     }
 }
