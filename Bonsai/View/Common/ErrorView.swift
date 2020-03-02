@@ -15,7 +15,7 @@ struct ErrorView: View {
             VStack(alignment: .center, spacing: CGFloat.Theme.Layout.normal) {
                 Spacer()
                 Image(systemName: "xmark.circle")
-                .resizable()
+                    .resizable()
                     .aspectRatio(1.0, contentMode: .fit)
                     .frame(width: geometry.size.width / 4, alignment: .center)
                     .foregroundColor(Color.Theme.primary)
@@ -34,6 +34,11 @@ struct ErrorView: View {
 
 struct ErrorView_Previews: PreviewProvider {
     static var previews: some View {
-        ErrorView()
+        Group {
+            ErrorView()
+                .frame(height: 300)
+                .previewLayout(.sizeThatFits)
+            ErrorView()
+        }
     }
 }

@@ -86,6 +86,7 @@
 		9E04B7D8552FA405AEC1E868 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B315B5D54A72FC7B7D71 /* Common.swift */; };
 		9E04B821E25A6B57FABBFC74 /* SearchListResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B80416B6B7E5CB269041 /* SearchListResultsView.swift */; };
 		9E04B83524FD1C31EBE1A9AE /* SearchListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BA6AAC00E25E507C5764 /* SearchListView.swift */; };
+		9E04B84BA6FC862AC60060D2 /* Previews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BDF41F15A3CC3EB991BA /* Previews.swift */; };
 		9E04B869A894D06C1A0F2BDA /* HomeScreenState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B2034124C63454F0CEDC /* HomeScreenState.swift */; };
 		9E04B885AE24CF4A17D9A873 /* LogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B6C42CD67CF8BEF300C2 /* LogService.swift */; };
 		9E04B885C9949CF44B529078 /* LogDetailActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B6982A1B96DB0D1B6D6F /* LogDetailActivityView.swift */; };
@@ -246,6 +247,7 @@
 		9E04BD42E217456E1AA1DA03 /* CacheService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheService.swift; sourceTree = "<group>"; };
 		9E04BD4984DDBAEC66B08A34 /* DisableInteraction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisableInteraction.swift; sourceTree = "<group>"; };
 		9E04BD4AB903F6E3E687B8B6 /* SettingsMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsMiddleware.swift; sourceTree = "<group>"; };
+		9E04BDF41F15A3CC3EB991BA /* Previews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Previews.swift; sourceTree = "<group>"; };
 		9E04BDF894B8BF390969E233 /* FirebaseAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseAuthService.swift; sourceTree = "<group>"; };
 		9E04BE18499AF88003242B88 /* StandardPopups.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardPopups.swift; sourceTree = "<group>"; };
 		9E04BE25078C4D1D66F8E42F /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
@@ -655,6 +657,7 @@
 			children = (
 				9E04B6B20E717222C1408967 /* PreviewLoggables.swift */,
 				9E04BB43647F9802F581CE76 /* PreviewState.swift */,
+				9E04BDF41F15A3CC3EB991BA /* Previews.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -955,6 +958,7 @@
 				9E04BFE01FD64DE0760E2C5E /* RealmToLoggable.swift in Sources */,
 				9E04BB192FBB0D8D9E0B836C /* AnalyticsService.swift in Sources */,
 				9E04B9C36603145118DD76D2 /* AnalyticsModels.swift in Sources */,
+				9E04B84BA6FC862AC60060D2 /* Previews.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

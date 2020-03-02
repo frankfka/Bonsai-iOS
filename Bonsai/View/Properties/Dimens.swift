@@ -42,6 +42,8 @@ struct AppDimensions {
         let tabItemHeight: CGFloat!
         let navBarItemHeight: CGFloat!
         let popupFrameSize: CGFloat!
+
+        let minSectionHeight: CGFloat = 150
         
         init() {
             normal = 16

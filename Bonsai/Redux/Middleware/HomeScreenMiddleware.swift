@@ -11,7 +11,8 @@ struct HomeScreenMiddleware {
     static func middleware(services: Services) -> [Middleware<AppState>] {
         return [
             homeScreenDidShowMiddleware(),
-            homeScreenInitMiddleware(logService: services.logService, analyticsService: services.analyticsService)
+            initDataMiddleware(logService: services.logService),
+            initAnalyticsMiddleware(analyticsService: services.analyticsService)
         ]
     }
 
@@ -19,8 +20,11 @@ struct HomeScreenMiddleware {
         return { state, action, cancellables, send in
             switch action {
             case .homeScreen(action: .screenDidShow):
+                // Init analytics
+                // TODO: We do this every time we show home screen, is there another way around it?
+                send(.homeScreen(action: .initializeAnalytics))
                 if state.homeScreen.initSuccess {
-                    // Do nothing, already initialized - other middlewares should add to the state
+                    // Do nothing else, already initialized - other middlewares should add to the state
                     return
                 }
                 // Send action to initialize data
@@ -31,8 +35,7 @@ struct HomeScreenMiddleware {
         }
     }
 
-    private static func homeScreenInitMiddleware(logService: LogService,
-                                                 analyticsService: AnalyticsService) -> Middleware<AppState> {
+    private static func initDataMiddleware(logService: LogService) -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
             case .homeScreen(action: .initializeData):
@@ -42,12 +45,6 @@ struct HomeScreenMiddleware {
                 }
                 // Init recent log section
                 initRecentLogs(logService: logService, for: user, in: nil, since: nil, toAndIncluding: nil)
-                        .sink(receiveValue: { newAction in
-                            send(newAction)
-                        })
-                        .store(in: &cancellables)
-                // Init analytics
-                initAnalytics(analyticsService: analyticsService, for: user)
                         .sink(receiveValue: { newAction in
                             send(newAction)
                         })
@@ -68,6 +65,26 @@ struct HomeScreenMiddleware {
                     return Just(AppAction.homeScreen(action: .dataLoadError(error: err)))
                 }
                 .eraseToAnyPublisher()
+    }
+
+    private static func initAnalyticsMiddleware(analyticsService: AnalyticsService) -> Middleware<AppState> {
+        return { state, action, cancellables, send in
+            switch action {
+            case .homeScreen(action: .initializeAnalytics):
+                // Check user exists
+                guard let user = state.global.user else {
+                    fatalError("No user initialized when searching")
+                }
+                // Init recent log section
+                initAnalytics(analyticsService: analyticsService, for: user)
+                        .sink(receiveValue: { newAction in
+                            send(newAction)
+                        })
+                        .store(in: &cancellables)
+            default:
+                break
+            }
+        }
     }
 
     private static func initAnalytics(analyticsService: AnalyticsService, for user: User) -> AnyPublisher<AppAction, Never> {

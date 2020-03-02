@@ -28,6 +28,7 @@ enum GlobalAction {
 enum HomeScreenAction {
     case screenDidShow
     case initializeData
+    case initializeAnalytics
     case dataLoadSuccess(recentLogs: [Loggable])
     case dataLoadError(error: Error)
     case analyticsLoadSuccess(analytics: LogAnalytics)

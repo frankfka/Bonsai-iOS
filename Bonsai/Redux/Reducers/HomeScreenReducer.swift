@@ -12,6 +12,8 @@ struct HomeScreenReducer {
             return state
         case .initializeData:
             return initializeData(state: state)
+        case .initializeAnalytics:
+            return initializeAnalytics(state: state)
         case .dataLoadSuccess(let recentLogs):
             return dataLoadSuccess(state: state, recentLogs: recentLogs)
         case .dataLoadError(let error):
@@ -26,6 +28,11 @@ struct HomeScreenReducer {
     static private func initializeData(state: AppState) -> AppState {
         var newState = state
         newState.homeScreen.isLoading = true
+        return newState
+    }
+
+    static private func initializeAnalytics(state: AppState) -> AppState {
+        var newState = state
         newState.homeScreen.isLoadingAnalytics = true
         return newState
     }

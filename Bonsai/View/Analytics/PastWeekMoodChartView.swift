@@ -48,7 +48,7 @@ struct PastWeekMoodChartView: View {
             var barChartDataPoints: [BarChartDataPoint] = []
             var minValue: CGFloat = CGFloat(MoodRank.negative.rawValue)
             var maxValue: CGFloat = CGFloat(MoodRank.positive.rawValue)
-            let buffer = (maxValue - minValue) * 0.1
+            let buffer = (maxValue - minValue) * 0.2
             minValue = minValue - buffer
             maxValue = maxValue + buffer
             let range = maxValue - minValue
@@ -79,7 +79,8 @@ struct PastWeekMoodChartView: View {
             self.showNoDataText = showNoDataText
         }
     }
-    
+
+    private static let minChartHeight: CGFloat = 200 // TODO: Somehow make this not a constant
     private let viewModel: ViewModel
     
     init(viewModel: ViewModel) {
@@ -118,48 +119,20 @@ struct PastWeekMoodChartView: View {
                 }
             }
             .padding(.horizontal, ViewModel.barChartPadding)
-        }
+        }.frame(minHeight: PastWeekMoodChartView.minChartHeight)
     }
 }
 
 struct PastWeekMoodChartView_Previews: PreviewProvider {
     
-    private static var negativeMood: Double = Double(MoodRank.negative.rawValue)
-    private static var neutralMood: Double = Double(MoodRank.neutral.rawValue)
-    private static var positiveMood: Double = Double(MoodRank.positive.rawValue)
-    
-    static var pastWeekWithData: MoodRankAnalytics = MoodRankAnalytics(
-        moodRankDays: [
-            MoodRankDaySummary(date: Date().addingTimeInterval(-7 * TimeInterval.day), averageMoodRankValue: positiveMood),
-            MoodRankDaySummary(date: Date().addingTimeInterval(-6 * TimeInterval.day), averageMoodRankValue: neutralMood),
-            MoodRankDaySummary(date: Date().addingTimeInterval(-5 * TimeInterval.day), averageMoodRankValue: negativeMood),
-            MoodRankDaySummary(date: Date().addingTimeInterval(-4 * TimeInterval.day), averageMoodRankValue: nil),
-            MoodRankDaySummary(date: Date().addingTimeInterval(-3 * TimeInterval.day), averageMoodRankValue: neutralMood),
-            MoodRankDaySummary(date: Date().addingTimeInterval(-2 * TimeInterval.day), averageMoodRankValue: (negativeMood + neutralMood) / 2.0),
-            MoodRankDaySummary(date: Date().addingTimeInterval(-TimeInterval.day), averageMoodRankValue: negativeMood)
-        ]
-    )
-    
-    static var pastWeekWithNoData: MoodRankAnalytics = MoodRankAnalytics(
-        moodRankDays: [
-            MoodRankDaySummary(date: Date().addingTimeInterval(-7 * TimeInterval.day), averageMoodRankValue: nil),
-            MoodRankDaySummary(date: Date().addingTimeInterval(-6 * TimeInterval.day), averageMoodRankValue: nil),
-            MoodRankDaySummary(date: Date().addingTimeInterval(-5 * TimeInterval.day), averageMoodRankValue: nil),
-            MoodRankDaySummary(date: Date().addingTimeInterval(-4 * TimeInterval.day), averageMoodRankValue: nil),
-            MoodRankDaySummary(date: Date().addingTimeInterval(-3 * TimeInterval.day), averageMoodRankValue: nil),
-            MoodRankDaySummary(date: Date().addingTimeInterval(-2 * TimeInterval.day), averageMoodRankValue: nil),
-            MoodRankDaySummary(date: Date().addingTimeInterval(-TimeInterval.day), averageMoodRankValue: nil)
-        ]
-    )
-    
     static var previews: some View {
         Group {
-            PastWeekMoodChartView(viewModel: PastWeekMoodChartView.ViewModel(analytics: pastWeekWithData))
+            PastWeekMoodChartView(viewModel: PastWeekMoodChartView.ViewModel(analytics: AnalyticsPreviews.PastWeekWithData))
                 .frame(width: 500, height: 300)
                 .previewLayout(.sizeThatFits)
             
             
-            PastWeekMoodChartView(viewModel: PastWeekMoodChartView.ViewModel(analytics: pastWeekWithNoData))
+            PastWeekMoodChartView(viewModel: PastWeekMoodChartView.ViewModel(analytics: AnalyticsPreviews.PastWeekWithNoData))
                 .frame(width: 500, height: 300)
                 .previewLayout(.sizeThatFits)
         }

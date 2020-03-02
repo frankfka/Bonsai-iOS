@@ -36,6 +36,7 @@ class Services {
 }
 
 struct AppState {
+    // TODO: consider a global logs store
     // General app related stuff
     var global: GlobalState
     // Home tab
