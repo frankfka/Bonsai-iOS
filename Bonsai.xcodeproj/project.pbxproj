@@ -41,6 +41,7 @@
 		11B7651523CEDAA100BC08CB /* LogDetailSymptomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B7651423CEDAA100BC08CB /* LogDetailSymptomView.swift */; };
 		11B7651923CF6D7100BC08CB /* LogDetailNotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B7651823CF6D7100BC08CB /* LogDetailNotesView.swift */; };
 		11EBB8E623DD39E400575CA1 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EBB8E523DD39E400575CA1 /* SettingsView.swift */; };
+		11EDAE4D240C5B340072B46F /* MoodAnalyticsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EDAE4C240C5B340072B46F /* MoodAnalyticsSection.swift */; };
 		11EDE0E823C6D17A00A54673 /* ViewLogsDateHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EDE0E723C6D17A00A54673 /* ViewLogsDateHeaderView.swift */; };
 		11EDE0EE23C6EE2E00A54673 /* DatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EDE0ED23C6EE2E00A54673 /* DatePickerView.swift */; };
 		11F445E4239A08CB00B501CD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F445E3239A08CB00B501CD /* AppDelegate.swift */; };
@@ -165,6 +166,7 @@
 		11B7651423CEDAA100BC08CB /* LogDetailSymptomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDetailSymptomView.swift; sourceTree = "<group>"; };
 		11B7651823CF6D7100BC08CB /* LogDetailNotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDetailNotesView.swift; sourceTree = "<group>"; };
 		11EBB8E523DD39E400575CA1 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		11EDAE4C240C5B340072B46F /* MoodAnalyticsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodAnalyticsSection.swift; sourceTree = "<group>"; };
 		11EDE0E723C6D17A00A54673 /* ViewLogsDateHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewLogsDateHeaderView.swift; sourceTree = "<group>"; };
 		11EDE0ED23C6EE2E00A54673 /* DatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerView.swift; sourceTree = "<group>"; };
 		11F445E0239A08CB00B501CD /* Bonsai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bonsai.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -309,6 +311,7 @@
 				110C63B0239D6E3800D904DE /* LogReminderRow.swift */,
 				110C63B6239E067500D904DE /* LogReminderSection.swift */,
 				114B7427239F549D0095D44B /* RecentLogSection.swift */,
+				11EDAE4C240C5B340072B46F /* MoodAnalyticsSection.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -900,6 +903,7 @@
 				9E04B8EC811016356918B8F3 /* SearchListViewContainer.swift in Sources */,
 				9E04B9DD062519A86C6F3CD9 /* NutritionLogView.swift in Sources */,
 				9E04B7090408200D01C3F015 /* Nutrition.swift in Sources */,
+				11EDAE4D240C5B340072B46F /* MoodAnalyticsSection.swift in Sources */,
 				9E04B1F285BD40EB2E48688C /* SymptomLogView.swift in Sources */,
 				9E04B20DF75F4ECBB16C6DBC /* Symptom.swift in Sources */,
 				9E04B50598E3E5F85D218185 /* Activity.swift in Sources */,

@@ -30,6 +30,8 @@ enum HomeScreenAction {
     case initializeData
     case dataLoadSuccess(recentLogs: [Loggable])
     case dataLoadError(error: Error)
+    case analyticsLoadSuccess(analytics: LogAnalytics)
+    case analyticsLoadError(error: Error)
 }
 
 enum ViewLogsAction {

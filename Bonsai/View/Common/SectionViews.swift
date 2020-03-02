@@ -11,8 +11,9 @@ struct RoundedBorderTitledSection<Content>: View where Content: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
             SectionTitle(text: sectionTitle)
+                    .padding(.leading, CGFloat.Theme.Layout.small)
             sectionView()
                 .frame(minWidth: 0, maxWidth: .infinity)
                 .modifier(RoundedBorderSection())

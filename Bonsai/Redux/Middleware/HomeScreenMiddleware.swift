@@ -11,7 +11,7 @@ struct HomeScreenMiddleware {
     static func middleware(services: Services) -> [Middleware<AppState>] {
         return [
             homeScreenDidShowMiddleware(),
-            homeScreenInitMiddleware(logService: services.logService)
+            homeScreenInitMiddleware(logService: services.logService, analyticsService: services.analyticsService)
         ]
     }
 
@@ -31,7 +31,8 @@ struct HomeScreenMiddleware {
         }
     }
 
-    private static func homeScreenInitMiddleware(logService: LogService) -> Middleware<AppState> {
+    private static func homeScreenInitMiddleware(logService: LogService,
+                                                 analyticsService: AnalyticsService) -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
             case .homeScreen(action: .initializeData):
@@ -39,7 +40,14 @@ struct HomeScreenMiddleware {
                 guard let user = state.global.user else {
                     fatalError("No user initialized when searching")
                 }
-                initHomeScreen(logService: logService, for: user, in: nil, since: nil, toAndIncluding: nil)
+                // Init recent log section
+                initRecentLogs(logService: logService, for: user, in: nil, since: nil, toAndIncluding: nil)
+                        .sink(receiveValue: { newAction in
+                            send(newAction)
+                        })
+                        .store(in: &cancellables)
+                // Init analytics
+                initAnalytics(analyticsService: analyticsService, for: user)
                         .sink(receiveValue: { newAction in
                             send(newAction)
                         })
@@ -50,7 +58,7 @@ struct HomeScreenMiddleware {
         }
     }
 
-    private static func initHomeScreen(logService: LogService, for user: User, in category: LogCategory?,
+    private static func initRecentLogs(logService: LogService, for user: User, in category: LogCategory?,
                                        since beginDate: Date?, toAndIncluding endDate: Date?) -> AnyPublisher<AppAction, Never> {
         return logService.getLogs(for: user, in: category, since: beginDate,
                         toAndIncluding: endDate, limitedTo: RecentLogSection.ViewModel.numToShow)
@@ -61,4 +69,13 @@ struct HomeScreenMiddleware {
                 }
                 .eraseToAnyPublisher()
     }
+
+    private static func initAnalytics(analyticsService: AnalyticsService, for user: User) -> AnyPublisher<AppAction, Never> {
+        return analyticsService.getAllAnalytics(for: user).map { result in
+            return AppAction.homeScreen(action: .analyticsLoadSuccess(analytics: result))
+        }.catch { (err) -> Just<AppAction> in
+            return Just(AppAction.homeScreen(action: .analyticsLoadError(error: err)))
+        }.eraseToAnyPublisher()
+    }
+
 }

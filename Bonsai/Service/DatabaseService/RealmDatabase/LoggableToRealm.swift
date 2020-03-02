@@ -75,16 +75,24 @@ extension RealmService {
 
     private func getRealmNutritionLog(from loggable: NutritionLog) -> RealmNutritionLog {
         let realmNutritionLog = RealmNutritionLog()
+        realmNutritionLog.id = loggable.id
+        realmNutritionLog.amount = loggable.amount
+        realmNutritionLog.nutritionItemId = loggable.nutritionItemId
         return realmNutritionLog
     }
 
     private func getRealmMedicationLog(from loggable: MedicationLog) -> RealmMedicationLog {
         let realmMedicationLog = RealmMedicationLog()
+        realmMedicationLog.id = loggable.id
+        realmMedicationLog.dosage = loggable.dosage
+        realmMedicationLog.medicationId = loggable.medicationId
         return realmMedicationLog
     }
 
     private func getRealmMoodLog(from loggable: MoodLog) -> RealmMoodLog {
         let realmMoodLog = RealmMoodLog()
+        realmMoodLog.id = loggable.id
+        realmMoodLog.moodRankRawValue = loggable.moodRank.rawValue
         return realmMoodLog
     }
 }

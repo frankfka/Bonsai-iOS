@@ -32,6 +32,7 @@ struct AppDimensions {
     
     struct AppLayout {
         // Padding
+        let large: CGFloat = 24
         let normal: CGFloat!
         let small: CGFloat!
         let rowSeparator: CGFloat! // Padding between elements aligned on left and right of the row

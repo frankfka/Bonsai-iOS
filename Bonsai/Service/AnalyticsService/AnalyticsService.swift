@@ -48,8 +48,8 @@ class AnalyticsServiceImpl: AnalyticsService {
     private func getPastWeekMoodRankAnalytics(from logs: [MoodLog]) -> MoodRankAnalytics {
         var moodRankDays: [MoodRankDaySummary] = []
         let now = Date()
-        // Calculate for the past 7 days
-        for daysInThePast in 0 ..< 7 {
+        // Calculate for the past 7 days, in reverse order
+        for daysInThePast in (0 ..< 7).reversed() {
             let date = now.addingTimeInterval(Double(-daysInThePast) * TimeInterval.day)
             // Get the date
             let moodLogsInDate = logs.filter {

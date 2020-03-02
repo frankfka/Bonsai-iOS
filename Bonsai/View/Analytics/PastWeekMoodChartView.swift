@@ -29,6 +29,7 @@ struct PastWeekMoodChartView: View {
             barRadius: CGFloat.Theme.Charts.barCornerRadius
         )
         static let barChartPadding: CGFloat = 8
+        // TODO: different color for different averages?
         static let lineChartStyle = LineChartStyle(
             lineColor: Color.Theme.accent.opacity(0.8),
             lineStrokeStyle: StrokeStyle(lineWidth: CGFloat.Theme.Charts.lineWidth),
@@ -100,7 +101,7 @@ struct PastWeekMoodChartView: View {
                         data: self.viewModel.barChartData,
                         style: ViewModel.barChartStyle
                     )
-                        .padding(.horizontal, ViewModel.barChartPadding)
+                    .padding(.horizontal, ViewModel.barChartPadding)
                     LineChartComponent(
                         data: self.viewModel.lineChartData,
                         style: ViewModel.lineChartStyle
