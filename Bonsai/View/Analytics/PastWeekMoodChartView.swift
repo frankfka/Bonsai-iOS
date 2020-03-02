@@ -113,7 +113,7 @@ struct PastWeekMoodChartView: View {
             HStack {
                 ForEach(viewModel.axisLabels, id: \.self) { label in
                     Text(label)
-                        .font(Font.Theme.normalText)
+                        .font(Font.Theme.subtext)
                         .foregroundColor(Color.Theme.text)
                         .frame(maxWidth: .infinity)
                 }
