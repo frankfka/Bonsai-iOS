@@ -74,7 +74,6 @@ struct HomeTab: View {
                 RoundedBorderTitledSection(sectionTitle: "Recent") {
                     RecentLogSection(viewModel: self.getRecentLogSectionViewModel())
                 }
-                // TODO: still need to make sure this updates on new log entry
                 RoundedBorderTitledSection(sectionTitle: "Your Mood") {
                     MoodAnalyticsSection(viewModel: self.getMoodAnalyticsSectionViewModel())
                 }

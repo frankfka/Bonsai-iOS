@@ -41,7 +41,7 @@ struct HomeScreenMiddleware {
             case .homeScreen(action: .initializeData):
                 // Check user exists
                 guard let user = state.global.user else {
-                    fatalError("No user initialized when searching")
+                    fatalError("No user initialized when initializing home screen data")
                 }
                 // Init recent log section
                 initRecentLogs(logService: logService, for: user, in: nil, since: nil, toAndIncluding: nil)
@@ -58,7 +58,7 @@ struct HomeScreenMiddleware {
     private static func initRecentLogs(logService: LogService, for user: User, in category: LogCategory?,
                                        since beginDate: Date?, toAndIncluding endDate: Date?) -> AnyPublisher<AppAction, Never> {
         return logService.getLogs(for: user, in: category, since: beginDate,
-                        toAndIncluding: endDate, limitedTo: RecentLogSection.ViewModel.numToShow)
+                                  toAndIncluding: endDate, limitedTo: RecentLogSection.ViewModel.numToShow, offline: false)
                 .map { result in
                     return AppAction.homeScreen(action: .dataLoadSuccess(recentLogs: result))
                 }.catch { (err) -> Just<AppAction> in
@@ -73,7 +73,7 @@ struct HomeScreenMiddleware {
             case .homeScreen(action: .initializeAnalytics):
                 // Check user exists
                 guard let user = state.global.user else {
-                    fatalError("No user initialized when searching")
+                    fatalError("No user initialized when initializing analytics")
                 }
                 // Init recent log section
                 initAnalytics(analyticsService: analyticsService, for: user)

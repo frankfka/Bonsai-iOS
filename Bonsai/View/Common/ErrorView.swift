@@ -17,7 +17,7 @@ struct ErrorView: View {
                 Image(systemName: "xmark.circle")
                     .resizable()
                     .aspectRatio(1.0, contentMode: .fit)
-                    .frame(width: geometry.size.width / 4, alignment: .center)
+                    .frame(maxWidth: geometry.size.width / 4, alignment: .center)
                     .foregroundColor(Color.Theme.primary)
                 Text("Something isn't Right")
                     .font(Font.Theme.heading)
