@@ -5,6 +5,7 @@ struct AppDimensions {
     
     let Font = AppFontSize()
     let Layout = AppLayout()
+    let Charts = AppCharts()
     let Misc = AppMisc()
     
     struct AppFontSize {
@@ -31,6 +32,7 @@ struct AppDimensions {
     
     struct AppLayout {
         // Padding
+        let large: CGFloat = 24
         let normal: CGFloat!
         let small: CGFloat!
         let rowSeparator: CGFloat! // Padding between elements aligned on left and right of the row
@@ -40,6 +42,8 @@ struct AppDimensions {
         let tabItemHeight: CGFloat!
         let navBarItemHeight: CGFloat!
         let popupFrameSize: CGFloat!
+
+        let minSectionHeight: CGFloat = 150
         
         init() {
             normal = 16
@@ -52,6 +56,15 @@ struct AppDimensions {
             navBarItemHeight = 24
             popupFrameSize = 96
         }
+    }
+
+    struct AppCharts {
+        // Bar
+        let barSpacing: CGFloat = 4
+        let barCornerRadius: CGFloat = 16
+
+        // Line
+        let lineWidth: CGFloat = 4
     }
     
     struct AppMisc {

@@ -11,6 +11,7 @@ struct AppColors {
     // Primary theme colors
     let primaryUIColor: UIColor!
     let primary: Color!
+    let accent: Color = .orange
     let grayscalePrimary: Color!
     let grayscaleSecondary: Color!
     

@@ -70,9 +70,12 @@ struct HomeTab: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: CGFloat.Theme.Layout.large) {
                 RoundedBorderTitledSection(sectionTitle: "Recent") {
                     RecentLogSection(viewModel: self.getRecentLogSectionViewModel())
+                }
+                RoundedBorderTitledSection(sectionTitle: "Your Mood") {
+                    MoodAnalyticsSection(viewModel: self.getMoodAnalyticsSectionViewModel())
                 }
             }
             .padding(.all, CGFloat.Theme.Layout.normal)
@@ -86,6 +89,23 @@ struct HomeTab: View {
                 navigateToLogDetails: $navigateToLogDetails
         )
     }
+
+    private func getMoodAnalyticsSectionViewModel() -> MoodAnalyticsSection.ViewModel {
+        let pastWeekChartViewModel: PastWeekMoodChartView.ViewModel?
+        if let moodRankAnalytics = store.state.homeScreen.analytics?.pastWeekMoodRank {
+            pastWeekChartViewModel = PastWeekMoodChartView.ViewModel(analytics: moodRankAnalytics)
+        } else {
+            pastWeekChartViewModel = nil
+        }
+        let isLoading = store.state.homeScreen.isLoadingAnalytics
+        let loadError = store.state.homeScreen.loadAnalyticsError != nil
+        return MoodAnalyticsSection.ViewModel(
+                chartViewModel: pastWeekChartViewModel,
+                isLoading: isLoading,
+                loadError: loadError
+        )
+    }
+
 }
 
 //struct HomeTab_Previews: PreviewProvider {

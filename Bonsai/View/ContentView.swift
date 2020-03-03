@@ -76,7 +76,11 @@ struct ContentView: View {
         }
         .edgesIgnoringSafeArea(.bottom)
         .sheet(
-            isPresented: viewModel.$showCreateLogModal
+            isPresented: viewModel.$showCreateLogModal,
+            onDismiss: {
+                // TODO: This is a hack to get screenDidShow to fire
+                self.onShowHomeTab()
+            }
         ) {
             CreateLogView(
                 viewModel: self.getCreateLogViewModel()
