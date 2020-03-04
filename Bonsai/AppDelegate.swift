@@ -24,6 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
 
         let navigationBarAppearace = UINavigationBar.appearance()
         // TODO: Using unmonitored UIColor here
+        // TODO: Dark mode nav bar is a bit weird
         navigationBarAppearace.backgroundColor = .secondarySystemGroupedBackground
         navigationBarAppearace.barTintColor = .secondarySystemGroupedBackground
         navigationBarAppearace.tintColor = Color.Theme.primaryUIColor

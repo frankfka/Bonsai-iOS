@@ -29,6 +29,11 @@ struct PastWeekMoodChartView: View {
             barSpacing: CGFloat.Theme.Charts.barSpacing,
             barRadius: CGFloat.Theme.Charts.barCornerRadius
         )
+        static let barChartBackgroundStyle = BarChartStyle(
+            barColor: Color.white,
+            barSpacing: CGFloat.Theme.Charts.barSpacing,
+            barRadius: CGFloat.Theme.Charts.barCornerRadius
+        )
         static let barChartPadding: CGFloat = 8
         // TODO: different color for different averages?
         static let averageMoodLineChartStyle = LineChartStyle(
@@ -38,7 +43,7 @@ struct PastWeekMoodChartView: View {
         )
         // Used for background axis lines
         static let axisLineChartStyle = LineChartStyle(
-                lineColor: Color.Theme.grayscalePrimary.opacity(0.4),
+                lineColor: Color.Theme.grayscalePrimary.opacity(0.2),
                 lineStrokeStyle: StrokeStyle(lineWidth: CGFloat.Theme.Charts.thinLineWidth),
                 smoothed: false
         )
@@ -133,11 +138,18 @@ struct PastWeekMoodChartView: View {
                             data: ViewModel.negativeMoodAxisLineChartData,
                             style: ViewModel.axisLineChartStyle
                     )
-                    // Computed components
-                    BarChartComponent(
-                        data: self.viewModel.dailyMoodBarChartData,
-                        style: ViewModel.barChartStyle
-                    )
+                    // Bar chart values per day
+                    Group {
+                        // Background so that the foreground bar chart can be somewhat transparent
+                        BarChartComponent(
+                            data: self.viewModel.dailyMoodBarChartData,
+                            style: ViewModel.barChartBackgroundStyle
+                        )
+                        BarChartComponent(
+                            data: self.viewModel.dailyMoodBarChartData,
+                            style: ViewModel.barChartStyle
+                        )
+                    }
                     .padding(.horizontal, ViewModel.barChartPadding)
                     LineChartComponent(
                         data: self.viewModel.avgMoodLineChartData,
@@ -164,13 +176,14 @@ struct PastWeekMoodChartView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             PastWeekMoodChartView(viewModel: PastWeekMoodChartView.ViewModel(analytics: AnalyticsPreviews.PastWeekWithData))
-                .frame(width: 500, height: 300)
-                .previewLayout(.sizeThatFits)
             
+            PastWeekMoodChartView(viewModel: PastWeekMoodChartView.ViewModel(analytics: AnalyticsPreviews.PastWeekWithData))
+                .environment(\.colorScheme, .dark)
             
             PastWeekMoodChartView(viewModel: PastWeekMoodChartView.ViewModel(analytics: AnalyticsPreviews.PastWeekWithNoData))
-                .frame(width: 500, height: 300)
-                .previewLayout(.sizeThatFits)
         }
+        .frame(width: 500, height: 300)
+        .background(Color.Theme.backgroundSecondary)
+        .previewLayout(.sizeThatFits)
     }
 }
