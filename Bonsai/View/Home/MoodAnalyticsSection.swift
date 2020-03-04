@@ -37,6 +37,7 @@ struct MoodAnalyticsSection: View {
             } else {
                 self.viewModel.chartViewModel.map {
                     PastWeekMoodChartView(viewModel: $0)
+                            .padding(CGFloat.Theme.Layout.small)
                 }
             }
         }

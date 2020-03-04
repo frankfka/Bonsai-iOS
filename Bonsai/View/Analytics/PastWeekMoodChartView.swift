@@ -23,6 +23,7 @@ extension DateFormatter {
 struct PastWeekMoodChartView: View {
     
     struct ViewModel {
+        static let minChartHeight: CGFloat = 200 // TODO: Somehow make this not a constant
         static let barChartStyle = BarChartStyle(
             barColor: Color.Theme.positive.opacity(0.8),
             barSpacing: CGFloat.Theme.Charts.barSpacing,
@@ -30,15 +31,43 @@ struct PastWeekMoodChartView: View {
         )
         static let barChartPadding: CGFloat = 8
         // TODO: different color for different averages?
-        static let lineChartStyle = LineChartStyle(
+        static let averageMoodLineChartStyle = LineChartStyle(
             lineColor: Color.Theme.accent.opacity(0.8),
-            lineStrokeStyle: StrokeStyle(lineWidth: CGFloat.Theme.Charts.lineWidth),
+            lineStrokeStyle: StrokeStyle(lineWidth: CGFloat.Theme.Charts.normalLineWidth),
             smoothed: false
         )
+        // Used for background axis lines
+        static let axisLineChartStyle = LineChartStyle(
+                lineColor: Color.Theme.grayscalePrimary.opacity(0.4),
+                lineStrokeStyle: StrokeStyle(lineWidth: CGFloat.Theme.Charts.thinLineWidth),
+                smoothed: false
+        )
+
+        // For calculation of relative values
+        static private let maxMoodRankValue = CGFloat(MoodRank.positive.rawValue)
+        static private let minMoodRankValue = CGFloat(MoodRank.negative.rawValue)
+        static private let buffer: CGFloat = (maxMoodRankValue - minMoodRankValue) * 0.2
+        static private let minChartValue: CGFloat = minMoodRankValue - buffer
+        static private let maxChartValue: CGFloat = maxMoodRankValue + buffer
+        static private let chartRange: CGFloat = maxChartValue - minChartValue
+        static private func getRelativeValue(_ val: CGFloat) -> CGFloat { (val - minChartValue) / chartRange }
+        // Axis Lines
+        static let positiveMoodAxisLineChartData = LineChartData(dataPoints: [
+            LineChartDataPoint(xRel: 0, yRel: getRelativeValue(CGFloat(MoodRank.positive.rawValue))),
+            LineChartDataPoint(xRel: 1, yRel: getRelativeValue(CGFloat(MoodRank.positive.rawValue)))
+        ])
+        static let neutralMoodAxisLineChartData = LineChartData(dataPoints: [
+            LineChartDataPoint(xRel: 0, yRel: getRelativeValue(CGFloat(MoodRank.neutral.rawValue))),
+            LineChartDataPoint(xRel: 1, yRel: getRelativeValue(CGFloat(MoodRank.neutral.rawValue)))
+        ])
+        static let negativeMoodAxisLineChartData = LineChartData(dataPoints: [
+            LineChartDataPoint(xRel: 0, yRel: getRelativeValue(CGFloat(MoodRank.negative.rawValue))),
+            LineChartDataPoint(xRel: 1, yRel: getRelativeValue(CGFloat(MoodRank.negative.rawValue)))
+        ])
         
         let axisLabels: [String]
-        let barChartData: [BarChartDataPoint]
-        let lineChartData: LineChartData
+        let dailyMoodBarChartData: [BarChartDataPoint]
+        let avgMoodLineChartData: LineChartData
         let showNoDataText: Bool
         
         init(analytics: MoodRankAnalytics) {
@@ -46,17 +75,11 @@ struct PastWeekMoodChartView: View {
             // Bar Chart
             var axisLabels: [String] = []
             var barChartDataPoints: [BarChartDataPoint] = []
-            var minValue: CGFloat = CGFloat(MoodRank.negative.rawValue)
-            var maxValue: CGFloat = CGFloat(MoodRank.positive.rawValue)
-            let buffer = (maxValue - minValue) * 0.2
-            minValue = minValue - buffer
-            maxValue = maxValue + buffer
-            let range = maxValue - minValue
             for day in analytics.moodRankDays {
                 axisLabels.append(DateFormatter.stringForMoodAnalyticsAxis(from: day.date))
                 let relativeValue: CGFloat
                 if let averageValue = day.averageMoodRankValue {
-                    relativeValue = (CGFloat(averageValue) - minValue) / range
+                    relativeValue = ViewModel.getRelativeValue(CGFloat(averageValue))
                     showNoDataText = false
                 } else {
                     relativeValue = 0
@@ -67,20 +90,19 @@ struct PastWeekMoodChartView: View {
             // Line Chart
             var lineChartDataPoints: [LineChartDataPoint] = []
             if let averageMood = analytics.averageMoodRankValue {
-                let relMoodValue = (CGFloat(averageMood) - minValue) / range
+                let relMoodValue = ViewModel.getRelativeValue(CGFloat(averageMood))
                 lineChartDataPoints = [LineChartDataPoint(xRel: 0, yRel: relMoodValue),
                                        LineChartDataPoint(xRel: 1, yRel: relMoodValue)]
             }
             
             // Initialize
-            self.lineChartData = LineChartData(dataPoints: lineChartDataPoints)
-            self.barChartData = barChartDataPoints
+            self.avgMoodLineChartData = LineChartData(dataPoints: lineChartDataPoints)
+            self.dailyMoodBarChartData = barChartDataPoints
             self.axisLabels = axisLabels
             self.showNoDataText = showNoDataText
         }
     }
 
-    private static let minChartHeight: CGFloat = 200 // TODO: Somehow make this not a constant
     private let viewModel: ViewModel
     
     init(viewModel: ViewModel) {
@@ -98,14 +120,28 @@ struct PastWeekMoodChartView: View {
             } else {
                 // Otherwise, show charts
                 ChartView {
+                    // Background axes
+                    LineChartComponent(
+                            data: ViewModel.positiveMoodAxisLineChartData,
+                            style: ViewModel.axisLineChartStyle
+                    )
+                    LineChartComponent(
+                            data: ViewModel.neutralMoodAxisLineChartData,
+                            style: ViewModel.axisLineChartStyle
+                    )
+                    LineChartComponent(
+                            data: ViewModel.negativeMoodAxisLineChartData,
+                            style: ViewModel.axisLineChartStyle
+                    )
+                    // Computed components
                     BarChartComponent(
-                        data: self.viewModel.barChartData,
+                        data: self.viewModel.dailyMoodBarChartData,
                         style: ViewModel.barChartStyle
                     )
                     .padding(.horizontal, ViewModel.barChartPadding)
                     LineChartComponent(
-                        data: self.viewModel.lineChartData,
-                        style: ViewModel.lineChartStyle
+                        data: self.viewModel.avgMoodLineChartData,
+                        style: ViewModel.averageMoodLineChartStyle
                     )
                 }
             }
@@ -119,7 +155,7 @@ struct PastWeekMoodChartView: View {
                 }
             }
             .padding(.horizontal, ViewModel.barChartPadding)
-        }.frame(minHeight: PastWeekMoodChartView.minChartHeight)
+        }.frame(minHeight: ViewModel.minChartHeight)
     }
 }
 

@@ -64,7 +64,8 @@ struct AppDimensions {
         let barCornerRadius: CGFloat = 16
 
         // Line
-        let lineWidth: CGFloat = 4
+        let thinLineWidth: CGFloat = 1
+        let normalLineWidth: CGFloat = 4
     }
     
     struct AppMisc {
