@@ -301,7 +301,6 @@ struct CreateLogReducer {
         var newState = state
         newState.createLog.isCreatingLog = false
         newState.createLog.createSuccess = true
-        GlobalLogReducerUtil.add(state: &newState, newLog: newLog)
         return newState
     }
 

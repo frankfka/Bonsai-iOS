@@ -37,9 +37,11 @@ struct ViewLogsMiddleware {
                 guard let user = state.global.user else {
                     fatalError("No user initialized when fetching logs")
                 }
-                // Don't fetch if we already have data
-                let logsForDate = state.viewLogs.logsForDate(date)
-                guard logsForDate.isEmpty else {
+                // Don't fetch if we have already initialized
+                let isInitialized = state.globalLogs.hasBeenRetrieved(date)
+                let logsForDate = state.globalLogs.getLogs(for: date)
+                if isInitialized {
+                    // TODO: Consider a separate action - this will trigger global logs middleware
                     AppLogging.info("Logs already exist for this date, not retrieving from service")
                     send(AppAction.viewLog(action: .dataLoadSuccess(logs: logsForDate, date: date)))
                     return

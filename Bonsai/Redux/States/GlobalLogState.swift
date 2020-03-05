@@ -21,6 +21,15 @@ struct GlobalLogState {
     // Specifies whether we have retrieved all the logs for a specific date
     private var retrieved: Set<Date> = []
 
+    func getLogs(for date: Date) -> [Loggable] {
+        if let logs = logsByDate[date.beginningOfDate] {
+            return logs
+        }
+        // This is currently a non-issue, as we retrieve from global logs, but the action to update log state
+        // might not have fired yet. This method will be called again when the log store is reinitialized
+        return []
+    }
+
     // TODO: place these in reducer?
 
     // Determine whether logs for a certain date has been retrieved
