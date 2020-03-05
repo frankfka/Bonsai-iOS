@@ -36,9 +36,10 @@ class Services {
 }
 
 struct AppState {
-    // TODO: consider a global logs store
     // General app related stuff
     var global: GlobalState
+    // All logs
+    var globalLogs: GlobalLogState
     // Home tab
     var homeScreen: HomeScreenState
     // View logs tab
@@ -52,6 +53,7 @@ struct AppState {
 
     init() {
         global = GlobalState()
+        globalLogs = GlobalLogState()
         homeScreen = HomeScreenState()
         viewLogs = ViewLogsState()
         logDetails = LogDetailState()
@@ -81,6 +83,8 @@ struct AppMiddleware {
         middleware.append(loggingMiddleware())
         // App init
         middleware.append(contentsOf: AppInitMiddleware.middleware(services: services))
+        // Global Logs
+        middleware.append(contentsOf: GlobalLogsMiddleware.middleware(services: services))
         // Home screen
         middleware.append(contentsOf: HomeScreenMiddleware.middleware(services: services))
         // View logs

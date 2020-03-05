@@ -10,9 +10,6 @@ import Foundation
 struct GlobalLogReducerUtil {
 
     static func add(state: inout AppState, newLog: Loggable) {
-        // Home
-        state.homeScreen.recentLogs.insert(newLog, at: 0) // View is responsible for limiting the number of results
-        state.homeScreen.recentLogs.sort { first, second in first.dateCreated > second.dateCreated } // Descending (latest first)
         // View Logs
         let logsForDate = state.viewLogs.logsForDate(newLog.dateCreated)
         if !logsForDate.isEmpty {
@@ -22,8 +19,6 @@ struct GlobalLogReducerUtil {
     }
 
     static func delete(state: inout AppState, deletedLog: Loggable) {
-        // Home
-        state.homeScreen.recentLogs.removeAll { loggable in loggable.id == deletedLog.id }
         // View Logs
         var logsForDate = state.viewLogs.logsForDate(deletedLog.dateCreated)
         // No need to check for existence - will just be empty if not initialized

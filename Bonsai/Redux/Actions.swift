@@ -11,6 +11,7 @@ import UIKit
 
 enum AppAction {
     case global(action: GlobalAction)
+    case globalLog(action: GlobalLogAction)
     case homeScreen(action: HomeScreenAction)
     case viewLog(action: ViewLogsAction)
     case logDetails(action: LogDetailsAction)
@@ -25,6 +26,17 @@ enum GlobalAction {
     case initFailure(error: Error)
 }
 
+enum GlobalLogAction {
+    // Dispatched to change global store of logs
+    case insert(log: Loggable)
+    case insertMany(logs: [Loggable])
+    case replace(logs: [Loggable], date: Date)
+    case delete(log: Loggable)
+    case markAsRetrieved(date: Date)
+}
+
+// TODO: Middleware to catch any relevant actions -> map them to global log action
+// TODO: Middleware for global log action -> reload analytics
 enum HomeScreenAction {
     case screenDidShow
     case initializeData
@@ -39,7 +51,7 @@ enum ViewLogsAction {
     case screenDidShow
     case fetchData(date: Date)
     case selectedDateChanged(date: Date) // Only support 1 day for now
-    case dataLoadSuccess(logs: [Loggable])
+    case dataLoadSuccess(logs: [Loggable], date: Date)
     case dataLoadError(error: Error)
 }
 

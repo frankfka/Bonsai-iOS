@@ -41,7 +41,7 @@ struct ViewLogsMiddleware {
                 let logsForDate = state.viewLogs.logsForDate(date)
                 guard logsForDate.isEmpty else {
                     AppLogging.info("Logs already exist for this date, not retrieving from service")
-                    send(AppAction.viewLog(action: .dataLoadSuccess(logs: logsForDate)))
+                    send(AppAction.viewLog(action: .dataLoadSuccess(logs: logsForDate, date: date)))
                     return
                 }
                 fetchLogData(for: date, with: user, logService: logService)
@@ -59,7 +59,7 @@ struct ViewLogsMiddleware {
     private static func fetchLogData(for date: Date, with user: User, logService: LogService) -> AnyPublisher<AppAction, Never> {
         logService.getLogs(for: user, in: nil, since: date.beginningOfDate, toAndIncluding: date.endOfDate, limitedTo: nil, offline: false)
                 .map { logData in
-                    return AppAction.viewLog(action: .dataLoadSuccess(logs: logData))
+                    return AppAction.viewLog(action: .dataLoadSuccess(logs: logData, date: date))
                 }.catch { (err) -> Just<AppAction> in
                     return Just(AppAction.viewLog(action: .dataLoadError(error: err)))
                 }

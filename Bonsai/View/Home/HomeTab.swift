@@ -83,7 +83,8 @@ struct HomeTab: View {
     }
     
     private func getRecentLogSectionViewModel() -> RecentLogSection.ViewModel {
-        let logViewModels = store.state.homeScreen.recentLogs.map { LogRow.ViewModel(loggable: $0) }
+        let logViewModels = Array(store.state.globalLogs.sortedLogs.prefix(RecentLogSection.ViewModel.numToShow))
+                .map { LogRow.ViewModel(loggable: $0) }
         return RecentLogSection.ViewModel(
                 recentLogs: logViewModels,
                 navigateToLogDetails: $navigateToLogDetails

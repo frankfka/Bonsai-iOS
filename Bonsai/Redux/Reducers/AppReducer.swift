@@ -10,6 +10,8 @@ struct AppReducer {
         switch action {
         case let .global(action):
             return GlobalReducer.reduce(state: state, action: action)
+        case let .globalLog(action):
+            return GlobalLogReducer.reduce(state: state, action: action)
         case let .homeScreen(action):
             return HomeScreenReducer.reduce(state: state, action: action)
         case let .viewLog(action):

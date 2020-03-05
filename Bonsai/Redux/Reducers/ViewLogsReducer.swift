@@ -15,7 +15,7 @@ struct ViewLogsReducer {
             return fetchData(state: state)
         case let .selectedDateChanged(date):
             return dateForLogsChanged(state: state, newDate: date)
-        case let .dataLoadSuccess(logs):
+        case let .dataLoadSuccess(logs, _):
             return dataLoadSuccess(state: state, logs: logs)
         case let .dataLoadError(error):
             return dataLoadError(state: state, error: error)

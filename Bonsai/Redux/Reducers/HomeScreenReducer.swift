@@ -39,7 +39,6 @@ struct HomeScreenReducer {
 
     static private func dataLoadSuccess(state: AppState, recentLogs: [Loggable]) -> AppState {
         var newState = state
-        newState.homeScreen.recentLogs = recentLogs
         newState.homeScreen.isLoading = false
         newState.homeScreen.initSuccess = true
         return newState
@@ -48,7 +47,6 @@ struct HomeScreenReducer {
     static private func dataLoadError(state: AppState, error: Error) -> AppState {
         AppLogging.error("Failure Action: \(error)")
         var newState = state
-        newState.homeScreen.recentLogs = []
         newState.homeScreen.isLoading = false
         newState.homeScreen.initFailure = error
         return newState
