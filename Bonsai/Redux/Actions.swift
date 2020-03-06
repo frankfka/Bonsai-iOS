@@ -33,18 +33,16 @@ enum GlobalLogAction {
     case replace(logs: [Loggable], date: Date)
     case delete(log: Loggable)
     case markAsRetrieved(date: Date)
+    case updateAnalytics
+    case analyticsLoadSuccess(analytics: LogAnalytics)
+    case analyticsLoadError(error: Error)
 }
 
-// TODO: Middleware to catch any relevant actions -> map them to global log action
-// TODO: Middleware for global log action -> reload analytics
 enum HomeScreenAction {
     case screenDidShow
     case initializeData
-    case initializeAnalytics
     case dataLoadSuccess(recentLogs: [Loggable])
     case dataLoadError(error: Error)
-    case analyticsLoadSuccess(analytics: LogAnalytics)
-    case analyticsLoadError(error: Error)
 }
 
 enum ViewLogsAction {

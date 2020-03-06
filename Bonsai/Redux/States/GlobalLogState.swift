@@ -6,6 +6,10 @@
 import Foundation
 
 struct GlobalLogState {
+    // Analytics - global object so this is accessible by all views
+    var analytics: LogAnalytics? = nil
+    var isLoadingAnalytics: Bool = false
+    var loadAnalyticsError: Error? = nil
     // All logs by date
     var logsByDate: [Date: [Loggable]] = [:]
     var sortedLogs: [Loggable] {
@@ -29,8 +33,6 @@ struct GlobalLogState {
         // might not have fired yet. This method will be called again when the log store is reinitialized
         return []
     }
-
-    // TODO: place these in reducer?
 
     // Determine whether logs for a certain date has been retrieved
     func hasBeenRetrieved(_ date: Date) -> Bool {

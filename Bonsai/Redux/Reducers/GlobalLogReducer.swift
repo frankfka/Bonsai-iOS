@@ -8,6 +8,7 @@ import Foundation
 struct GlobalLogReducer {
     static func reduce(state: AppState, action: GlobalLogAction) -> AppState {
         switch action {
+        // Log Actions
         case .insert(let log):
             return insert(state: state, log: log)
         case .insertMany(let logs):
@@ -18,6 +19,13 @@ struct GlobalLogReducer {
             return delete(state: state, log: log)
         case .markAsRetrieved(let date):
             return markAsRetrieved(state: state, date: date)
+        // Analytics
+        case .updateAnalytics:
+            return updateAnalytics(state: state)
+        case .analyticsLoadSuccess(let analytics):
+            return analyticsLoadSuccess(state: state, analytics: analytics)
+        case .analyticsLoadError(let error):
+            return analyticsLoadError(state: state, error: error)
         }
     }
 
@@ -50,6 +58,29 @@ struct GlobalLogReducer {
     static private func markAsRetrieved(state: AppState, date: Date) -> AppState {
         var newState = state
         newState.globalLogs.markAsRetrieved(for: date)
+        return newState
+    }
+    
+    static private func updateAnalytics(state: AppState) -> AppState {
+        var newState = state
+        newState.globalLogs.isLoadingAnalytics = true
+        newState.globalLogs.loadAnalyticsError = nil
+        return newState
+    }
+    
+    static private func analyticsLoadSuccess(state: AppState, analytics: LogAnalytics) -> AppState {
+        var newState = state
+        newState.globalLogs.isLoadingAnalytics = false
+        newState.globalLogs.analytics = analytics
+        newState.globalLogs.loadAnalyticsError = nil
+        return newState
+    }
+
+    static private func analyticsLoadError(state: AppState, error: Error) -> AppState {
+        var newState = state
+        newState.globalLogs.isLoadingAnalytics = false
+        newState.globalLogs.analytics = nil
+        newState.globalLogs.loadAnalyticsError = error
         return newState
     }
 

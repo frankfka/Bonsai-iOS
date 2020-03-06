@@ -93,13 +93,13 @@ struct HomeTab: View {
 
     private func getMoodAnalyticsSectionViewModel() -> MoodAnalyticsSection.ViewModel {
         let pastWeekChartViewModel: PastWeekMoodChartView.ViewModel?
-        if let moodRankAnalytics = store.state.homeScreen.analytics?.pastWeekMoodRank {
+        if let moodRankAnalytics = store.state.globalLogs.analytics?.pastWeekMoodRank {
             pastWeekChartViewModel = PastWeekMoodChartView.ViewModel(analytics: moodRankAnalytics)
         } else {
             pastWeekChartViewModel = nil
         }
-        let isLoading = store.state.homeScreen.isLoadingAnalytics
-        let loadError = store.state.homeScreen.loadAnalyticsError != nil
+        let isLoading = store.state.globalLogs.isLoadingAnalytics
+        let loadError = store.state.globalLogs.loadAnalyticsError != nil
         return MoodAnalyticsSection.ViewModel(
                 chartViewModel: pastWeekChartViewModel,
                 isLoading: isLoading,

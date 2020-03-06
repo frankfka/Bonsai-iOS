@@ -10,7 +10,9 @@ struct GlobalLogsMiddleware {
 
     static func middleware(services: Services) -> [Middleware<AppState>] {
         return [
-            mapActionsToGlobalLogActionMiddleware()
+            mapActionsToGlobalLogActionMiddleware(),
+            mapLogActionsToUpdateAnalyticsMiddleware(),
+            updateAnalyticsMiddleware(analyticsService: services.analyticsService)
         ]
     }
 
@@ -36,4 +38,49 @@ struct GlobalLogsMiddleware {
             }
         }
     }
+
+    // MARK: Analytics
+    private static func mapLogActionsToUpdateAnalyticsMiddleware() -> Middleware<AppState> {
+        return { state, action, cancellables, send in
+            switch action {
+            case .globalLog(action: .insert):
+                send(.globalLog(action: .updateAnalytics))
+            case .globalLog(action: .insertMany):
+                send(.globalLog(action: .updateAnalytics))
+            case .globalLog(action: .delete):
+                send(.globalLog(action: .updateAnalytics))
+            default:
+                break
+            }
+        }
+    }
+
+    private static func updateAnalyticsMiddleware(analyticsService: AnalyticsService) -> Middleware<AppState> {
+        return { state, action, cancellables, send in
+            switch action {
+            case .globalLog(action: .updateAnalytics):
+                // Check user exists
+                guard let user = state.global.user else {
+                    fatalError("No user initialized when initializing analytics")
+                }
+                // TODO: have this cancel any in-flight operations?
+                updateAnalytics(analyticsService: analyticsService, for: user)
+                        .sink(receiveValue: { newAction in
+                            send(newAction)
+                        })
+                        .store(in: &cancellables)
+            default:
+                break
+            }
+        }
+    }
+
+    private static func updateAnalytics(analyticsService: AnalyticsService, for user: User) -> AnyPublisher<AppAction, Never> {
+        return analyticsService.getAllAnalytics(for: user).map { result in
+            return AppAction.globalLog(action: .analyticsLoadSuccess(analytics: result))
+        }.catch { (err) -> Just<AppAction> in
+            return Just(AppAction.globalLog(action: .analyticsLoadError(error: err)))
+        }.eraseToAnyPublisher()
+    }
+
 }
