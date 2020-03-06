@@ -68,7 +68,6 @@ struct LogDetailsReducer {
         var newState = state
         newState.logDetails.isDeleting = false
         newState.logDetails.deleteSuccess = true
-        GlobalLogReducerUtil.delete(state: &newState, deletedLog: deletedLog)
         return newState
     }
     

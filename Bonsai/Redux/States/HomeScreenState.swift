@@ -9,8 +9,6 @@ struct HomeScreenState {
     var isLoading: Bool = false
     var initSuccess: Bool = false
     var initFailure: Error? = nil
-    // Recent Logs
-    var recentLogs: [Loggable] = []
     // Analytics
     var isLoadingAnalytics: Bool = false
     var loadAnalyticsError: Error? = nil

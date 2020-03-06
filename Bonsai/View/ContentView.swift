@@ -76,11 +76,7 @@ struct ContentView: View {
         }
         .edgesIgnoringSafeArea(.bottom)
         .sheet(
-            isPresented: viewModel.$showCreateLogModal,
-            onDismiss: {
-                // TODO: This is a hack to get screenDidShow to fire
-                self.onShowHomeTab()
-            }
+            isPresented: viewModel.$showCreateLogModal
         ) {
             CreateLogView(
                 viewModel: self.getCreateLogViewModel()
@@ -106,6 +102,8 @@ struct ContentView: View {
     }
 
     private func getLogsTabViewModel() -> ViewLogsTabContainer.ViewModel {
+        let dateForLogs = store.state.viewLogs.dateForLogs
+        let logsForDate = store.state.globalLogs.getLogs(for: dateForLogs)
         return ViewLogsTabContainer.ViewModel(
                 isLoading: store.state.viewLogs.isLoading,
                 loadError: store.state.viewLogs.loadError != nil,
@@ -113,8 +111,8 @@ struct ContentView: View {
                     self.store.send(.viewLog(action: .screenDidShow))
                     self.store.send(.viewLog(action: .fetchData(date: self.store.state.viewLogs.dateForLogs)))
                 },
-                dateForLogs: store.state.viewLogs.dateForLogs,
-                logs: store.state.viewLogs.logsForSelectedDate.map { LogRow.ViewModel(loggable: $0) }
+                dateForLogs: dateForLogs,
+                logs: logsForDate.map { LogRow.ViewModel(loggable: $0) }
         )
     }
 

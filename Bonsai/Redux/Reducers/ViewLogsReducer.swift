@@ -15,7 +15,7 @@ struct ViewLogsReducer {
             return fetchData(state: state)
         case let .selectedDateChanged(date):
             return dateForLogsChanged(state: state, newDate: date)
-        case let .dataLoadSuccess(logs):
+        case let .dataLoadSuccess(logs, _):
             return dataLoadSuccess(state: state, logs: logs)
         case let .dataLoadError(error):
             return dataLoadError(state: state, error: error)
@@ -39,13 +39,11 @@ struct ViewLogsReducer {
         var newState = state
         newState.viewLogs.isLoading = false
         newState.viewLogs.loadError = nil
-        newState.viewLogs.replaceLogs(logs)
         return newState
     }
 
     static private func dataLoadError(state: AppState, error: Error) -> AppState {
         var newState = state
-        newState.viewLogs.replaceLogs([])
         newState.viewLogs.isLoading = false
         newState.viewLogs.loadError = error
         return newState

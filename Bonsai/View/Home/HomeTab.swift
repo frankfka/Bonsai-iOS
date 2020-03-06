@@ -83,7 +83,8 @@ struct HomeTab: View {
     }
     
     private func getRecentLogSectionViewModel() -> RecentLogSection.ViewModel {
-        let logViewModels = store.state.homeScreen.recentLogs.map { LogRow.ViewModel(loggable: $0) }
+        let logViewModels = Array(store.state.globalLogs.sortedLogs.prefix(RecentLogSection.ViewModel.numToShow))
+                .map { LogRow.ViewModel(loggable: $0) }
         return RecentLogSection.ViewModel(
                 recentLogs: logViewModels,
                 navigateToLogDetails: $navigateToLogDetails
@@ -92,13 +93,13 @@ struct HomeTab: View {
 
     private func getMoodAnalyticsSectionViewModel() -> MoodAnalyticsSection.ViewModel {
         let pastWeekChartViewModel: PastWeekMoodChartView.ViewModel?
-        if let moodRankAnalytics = store.state.homeScreen.analytics?.pastWeekMoodRank {
+        if let moodRankAnalytics = store.state.globalLogs.analytics?.pastWeekMoodRank {
             pastWeekChartViewModel = PastWeekMoodChartView.ViewModel(analytics: moodRankAnalytics)
         } else {
             pastWeekChartViewModel = nil
         }
-        let isLoading = store.state.homeScreen.isLoadingAnalytics
-        let loadError = store.state.homeScreen.loadAnalyticsError != nil
+        let isLoading = store.state.globalLogs.isLoadingAnalytics
+        let loadError = store.state.globalLogs.loadAnalyticsError != nil
         return MoodAnalyticsSection.ViewModel(
                 chartViewModel: pastWeekChartViewModel,
                 isLoading: isLoading,

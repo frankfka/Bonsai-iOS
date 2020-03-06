@@ -8,6 +8,10 @@ import Foundation
 // MARK: Master object for analytics
 struct LogAnalytics {
     let pastWeekMoodRank: MoodRankAnalytics?
+
+    init(pastWeekMoodRank: MoodRankAnalytics? = nil) {
+        self.pastWeekMoodRank = pastWeekMoodRank
+    }
 }
 
 // MARK: Mood Rank History
