@@ -21,19 +21,16 @@ class RealmService {
         }
     }
 
+    // MARK: Logs
     func saveLogs(logs: [Loggable]) -> ServiceError? {
         let realmLogs = logs.compactMap { getRealmLog(from: $0) }
         if realmLogs.count != logs.count {
             return ServiceError(message: "Could not create one or more Realm logs from loggables")
         }
-        return saveRealmLogs(logs: realmLogs)
-    }
-
-    private func saveRealmLogs(logs: [RealmLoggable]) -> ServiceError? {
         do {
             try self.db.write {
                 // Allow overwrites
-                self.db.add(logs, update: .modified)
+                self.db.add(realmLogs, update: .modified)
             }
         } catch let error as NSError {
             return ServiceError(message: "Error saving log", wrappedError: error)
@@ -106,6 +103,19 @@ class RealmService {
             objectsToDelete.append(realmSymptomLog)
         }
         return objectsToDelete
+    }
+
+    // MARK: Log Reminders
+    func getLogReminders() -> [LogReminder] {
+        // TODO
+    }
+
+    func saveLogReminder(_ logReminder: LogReminder) -> ServiceError? {
+        // TODO
+    }
+
+    func deleteLogReminder(_ logReminder: LogReminder) -> ServiceError? {
+        // TODO
     }
 
     func deleteAllObjects() -> ServiceError? {

@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+// TODO: Shift these to use the newly declared models
 struct LogReminderSection: View {
     
     struct ViewModel {

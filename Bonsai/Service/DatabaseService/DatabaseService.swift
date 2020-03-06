@@ -43,6 +43,16 @@ class DatabaseServiceImpl: DatabaseService {
         }
     }
 
+    // MARK: User Functions
+    func getUser(userId: String) -> ServicePublisher<User> {
+        let future = ServiceFuture<User> { promise in
+            self.firestoreService.getUser(userId: userId) { result in
+                promise(result)
+            }
+        }
+        return AnyPublisher(future)
+    }
+
     func saveUser(user: User) -> ServicePublisher<Void> {
         guard !user.id.isEmpty else {
             return Fail(error: ServiceError(message: "User ID is empty")).eraseToAnyPublisher()
@@ -73,7 +83,7 @@ class DatabaseServiceImpl: DatabaseService {
         return AnyPublisher(future)
     }
 
-
+    // MARK: Log Searchable functions
     func searchLogSearchables(query: String, by user: User, in category: LogCategory) -> ServicePublisher<[LogSearchable]> {
         let future = Future<[LogSearchable], ServiceError> { promise in
             self.firestoreService.searchLogSearchable(query: query, by: user, in: category) { result in
@@ -101,17 +111,7 @@ class DatabaseServiceImpl: DatabaseService {
         return AnyPublisher(future)
     }
 
-
-    func getUser(userId: String) -> ServicePublisher<User> {
-        let future = ServiceFuture<User> { promise in
-            self.firestoreService.getUser(userId: userId) { result in
-                promise(result)
-            }
-        }
-        return AnyPublisher(future)
-    }
-
-
+    // MARK: Log functions
     func saveLog(log: Loggable, for user: User) -> ServicePublisher<Void> {
         /*
         Saves the loggable for the user both locally and in Firebase
@@ -237,6 +237,19 @@ class DatabaseServiceImpl: DatabaseService {
             }
         }
         return AnyPublisher(future)
+    }
+
+    // MARK: Log Reminder Functions
+    func getLogReminders() -> ServicePublisher<[LogReminder]> {
+        // TODO
+    }
+
+    func saveLogReminder(_ logReminder: LogReminder) -> ServicePublisher<Void> {
+        // TODO
+    }
+
+    func deleteLogReminder(_ logReminder: LogReminder) -> ServicePublisher<Void> {
+        // TODO
     }
 
     func resetLocalStorage() -> ServicePublisher<Void> {
