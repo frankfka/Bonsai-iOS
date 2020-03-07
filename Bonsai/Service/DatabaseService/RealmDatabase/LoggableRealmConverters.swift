@@ -7,10 +7,11 @@ import Foundation
 
 // MARK: Loggable to Realm
 extension RealmService {
-    func getRealmLog(from loggable: Loggable) -> RealmLoggable? {
+    func getRealmLog(from loggable: Loggable, isTemplate: Bool = false) -> RealmLoggable? {
         let newRealmLoggable = RealmLoggable()
         // Initialize common fields
-        newRealmLoggable.id = loggable.id
+        newRealmLoggable.id = isTemplate ? UUID().uuidString : loggable.id  // Generate a new ID if it is a template
+        newRealmLoggable.isTemplate = isTemplate
         newRealmLoggable.title = loggable.title
         newRealmLoggable.dateCreated = loggable.dateCreated
         newRealmLoggable.categoryRawValue = loggable.category.serializedLogCategoryName()

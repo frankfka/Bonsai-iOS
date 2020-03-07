@@ -93,6 +93,7 @@
 		9E04B8EC811016356918B8F3 /* SearchListViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B66DB477D3F118D5DA41 /* SearchListViewContainer.swift */; };
 		9E04B95B683A587ACED91D5F /* LogDetailState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B0F0135005B16E61B8A4 /* LogDetailState.swift */; };
 		9E04B986D42B107ED18ED0E5 /* AuthViewControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B755AF0815DAF19D6FE2 /* AuthViewControllerRepresentable.swift */; };
+		9E04B9894EED8D8491CD685D /* RealmConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B51F7FCA5C02F7EDE359 /* RealmConfig.swift */; };
 		9E04B9C36603145118DD76D2 /* AnalyticsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BEC8DC37D9435D894317 /* AnalyticsModels.swift */; };
 		9E04B9CCE5B730A6CD36D39A /* LogDetailMedicationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BB72735E65800D5B71ED /* LogDetailMedicationView.swift */; };
 		9E04B9CD1E062D99206851B7 /* GlobalLogsMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B2DD597DD9644E6A1EB8 /* GlobalLogsMiddleware.swift */; };
@@ -214,6 +215,7 @@
 		9E04B4A50B14B9F44D696289 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		9E04B4D927FA1048319B793C /* PreviewCharts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewCharts.swift; sourceTree = "<group>"; };
 		9E04B4F958CBB6E0E7260A21 /* ViewLogsReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewLogsReducer.swift; sourceTree = "<group>"; };
+		9E04B51F7FCA5C02F7EDE359 /* RealmConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmConfig.swift; sourceTree = "<group>"; };
 		9E04B5273996AD629A11C11A /* CreateLogReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogReducer.swift; sourceTree = "<group>"; };
 		9E04B5548FA5FE0689E72183 /* CreateLogMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogMiddleware.swift; sourceTree = "<group>"; };
 		9E04B5D9DCFF8D0157D8B57A /* Medication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Medication.swift; sourceTree = "<group>"; };
@@ -690,6 +692,7 @@
 				9E04B2B1F511308872F893EB /* RealmService.swift */,
 				9E04B2B35634D7EB1023FCB1 /* LoggableRealmConverters.swift */,
 				9E04B76872034B69E6F59084 /* LogReminderRealmConverters.swift */,
+				9E04B51F7FCA5C02F7EDE359 /* RealmConfig.swift */,
 			);
 			path = RealmDatabase;
 			sourceTree = "<group>";
@@ -971,6 +974,7 @@
 				9E04B9CD1E062D99206851B7 /* GlobalLogsMiddleware.swift in Sources */,
 				9E04B1039F9BC785A128368E /* LogReminder.swift in Sources */,
 				9E04BACB64E973DA12876E60 /* LogReminderRealmConverters.swift in Sources */,
+				9E04B9894EED8D8491CD685D /* RealmConfig.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

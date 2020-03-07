@@ -10,9 +10,12 @@ class RealmService {
 
     private let db: Realm
 
+    // Limits as Realm returns everything, we wouldn't want to map all the objects
     private let logQueryLimit = 50 // Maximum logs to return at a given time
+    private let logReminderLimit = 50 // Maximum reminders to return at a given time
 
     init() throws {
+        Realm.Configuration.defaultConfiguration = RealmService.AppRealmConfiguration
         do {
             // This is only specified for the main thread, calls to this realm from any other thread will throw
             db = try Realm()
@@ -27,20 +30,14 @@ class RealmService {
         if realmLogs.count != logs.count {
             return ServiceError(message: "Could not create one or more Realm logs from loggables")
         }
-        do {
-            try self.db.write {
-                // Allow overwrites
-                self.db.add(realmLogs, update: .modified)
-            }
-        } catch let error as NSError {
-            return ServiceError(message: "Error saving log", wrappedError: error)
-        }
-        return nil
+        return save(realmLogs)
     }
 
     func getLogs(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?,
                  limit: Int?) -> [Loggable] {
         var realmLogs = self.db.objects(RealmLoggable.self)
+        // Filter out templates used in log reminders
+        realmLogs = realmLogs.filter("\(RealmLoggable.isTemplateKey) == FALSE")
         if let beginDate = beginDate {
             realmLogs = realmLogs.filter("\(RealmLoggable.dateCreatedKey) >= %@", beginDate)
         }
@@ -65,21 +62,16 @@ class RealmService {
     }
 
     func deleteLogs(with ids: [String]) -> ServiceError? {
-        do {
-            try self.db.write {
-                for id in ids {
-                    let objectsToDelete = getRealmLoggablesToDelete(for: id)
-                    if objectsToDelete.isEmpty {
-                        AppLogging.warn("Could not find Realm objects to delete")
-                    } else {
-                        self.db.delete(objectsToDelete)
-                    }
-                }
+        var toDelete: [Object] = []
+        for id in ids {
+            let objectsToDeleteForId = getRealmLoggablesToDelete(for: id)
+            if objectsToDeleteForId.isEmpty {
+                AppLogging.warn("Could not find Realm objects to delete")
+            } else {
+                toDelete.append(contentsOf: objectsToDeleteForId)
             }
-        } catch let error as NSError {
-            return ServiceError(message: "Error deleting log from Realm", wrappedError: error)
         }
-        return nil
+        return delete(toDelete)
     }
 
     // This returns the main loggable object, but also nested log objects
@@ -107,15 +99,38 @@ class RealmService {
 
     // MARK: Log Reminders
     func getLogReminders() -> [LogReminder] {
-        // TODO
+        var realmLogReminders = self.db.objects(RealmLogReminder.self)
+        // Sort by chronological order (earliest reminders first)
+        realmLogReminders = realmLogReminders.sorted(byKeyPath: RealmLogReminder.reminderDateKey, ascending: true)
+        // Enforce limit - Realm lazy-reads items
+        var logReminders: [LogReminder] = []
+        let endIndex = logReminderLimit <= realmLogReminders.endIndex ? logReminderLimit : realmLogReminders.endIndex
+        for index in 0 ..< endIndex {
+            if let logReminder = getLogReminder(from: realmLogReminders[index]) {
+                logReminders.append(logReminder)
+            } else {
+                AppLogging.warn("Could not get log reminder from Realm Object")
+            }
+        }
+        return logReminders
     }
 
     func saveLogReminder(_ logReminder: LogReminder) -> ServiceError? {
-        // TODO
+        guard let realmLogReminder = getRealmLogReminder(from: logReminder) else {
+            return ServiceError(message: "Could not create Realm log reminder")
+        }
+        return save([realmLogReminder])
     }
 
     func deleteLogReminder(_ logReminder: LogReminder) -> ServiceError? {
-        // TODO
+        var objectsToDelete: [Object] = []
+        guard let logReminderToDelete = self.db.object(ofType: RealmLogReminder.self, forPrimaryKey: logReminder.id) else {
+            return ServiceError(message: "Could not find log reminder \(logReminder.id) to delete from Realm")
+        }
+        objectsToDelete.append(logReminderToDelete)
+        // Get all loggables to delete that are associated with the reminder
+        objectsToDelete.append(contentsOf: getRealmLoggablesToDelete(for: logReminder.templateLoggable.id))
+        return delete(objectsToDelete)
     }
 
     func deleteAllObjects() -> ServiceError? {
@@ -125,6 +140,30 @@ class RealmService {
             }
         } catch let error as NSError {
             return ServiceError(message: "Error deleting all local objects", wrappedError: error)
+        }
+        return nil
+    }
+
+    // MARK: Helpers
+    private func save(_ objects: [Object]) -> ServiceError? {
+        do {
+            try self.db.write {
+                // Allow overwrites
+                self.db.add(objects, update: .modified)
+            }
+        } catch let error as NSError {
+            return ServiceError(message: "Error saving log", wrappedError: error)
+        }
+        return nil
+    }
+
+    private func delete(_ objects: [Object]) -> ServiceError? {
+        do {
+            try self.db.write {
+                self.db.delete(objects)
+            }
+        } catch let error as NSError {
+            return ServiceError(message: "Error deleting log from Realm", wrappedError: error)
         }
         return nil
     }
