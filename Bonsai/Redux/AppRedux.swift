@@ -50,6 +50,8 @@ struct AppState {
     var settings: SettingsState
     // Create log
     var createLog: CreateLogState
+    // Create log reminder
+    var createLogReminder: CreateLogReminderState
 
     init() {
         global = GlobalState()
@@ -59,6 +61,7 @@ struct AppState {
         logDetails = LogDetailState()
         settings = SettingsState()
         createLog = CreateLogState()
+        createLogReminder = CreateLogReminderState()
     }
 }
 

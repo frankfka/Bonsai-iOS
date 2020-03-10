@@ -22,6 +22,8 @@ struct AppReducer {
             return SettingsReducer.reduce(state: state, action: action)
         case let .createLog(action):
             return CreateLogReducer.reduce(state: state, action: action)
+        case let .createLogReminder(action):
+            return CreateLogReminderReducer.reduce(state: state, action: action)
         }
     }
 }

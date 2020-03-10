@@ -45,9 +45,7 @@ struct TappableRowView: View {
                     .padding(.leading, CGFloat.Theme.Layout.small)
             }
         }
-        .contentShape(Rectangle())
-        .padding(CGFloat.Theme.Layout.normal)
-        .background(Color.Theme.backgroundSecondary)
+        .modifier(FormRowModifier())
     }
 }
 

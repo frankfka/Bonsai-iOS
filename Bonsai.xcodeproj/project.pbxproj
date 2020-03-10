@@ -13,7 +13,6 @@
 		110C63B3239D6FA100D904DE /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110C63B2239D6FA100D904DE /* Icon.swift */; };
 		110C63B5239DDCA500D904DE /* Dimens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110C63B4239DDCA500D904DE /* Dimens.swift */; };
 		110C63B7239E067500D904DE /* LogReminderSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 110C63B6239E067500D904DE /* LogReminderSection.swift */; };
-		111D61B623F31F100025019F /* CreateLogDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111D61B523F31F100025019F /* CreateLogDateView.swift */; };
 		1120F7BC23C24BF900287337 /* ActivityLogDurationPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1120F7BB23C24BF900287337 /* ActivityLogDurationPickerView.swift */; };
 		114B7426239F4CA10095D44B /* HomeTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114B7425239F4CA10095D44B /* HomeTab.swift */; };
 		114B7428239F549D0095D44B /* RecentLogSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114B7427239F549D0095D44B /* RecentLogSection.swift */; };
@@ -40,6 +39,8 @@
 		11B7651323CEDA5F00BC08CB /* LogDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B7651223CEDA5F00BC08CB /* LogDetailView.swift */; };
 		11B7651523CEDAA100BC08CB /* LogDetailSymptomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B7651423CEDAA100BC08CB /* LogDetailSymptomView.swift */; };
 		11B7651923CF6D7100BC08CB /* LogDetailNotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B7651823CF6D7100BC08CB /* LogDetailNotesView.swift */; };
+		11E521982414A05F00990945 /* DateTimeFormPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E521972414A05F00990945 /* DateTimeFormPickerView.swift */; };
+		11E5219A2414B8ED00990945 /* LogReminderIntervalPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E521992414B8ED00990945 /* LogReminderIntervalPickerView.swift */; };
 		11EBB8E623DD39E400575CA1 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EBB8E523DD39E400575CA1 /* SettingsView.swift */; };
 		11EDAE4D240C5B340072B46F /* MoodAnalyticsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EDAE4C240C5B340072B46F /* MoodAnalyticsSection.swift */; };
 		11EDE0E823C6D17A00A54673 /* ViewLogsDateHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EDE0E723C6D17A00A54673 /* ViewLogsDateHeaderView.swift */; };
@@ -66,6 +67,8 @@
 		9E04B2A80CC13789F016F18C /* LogDetailBasicsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BF258092F6829380B3A0 /* LogDetailBasicsView.swift */; };
 		9E04B2AB822789B9206A8765 /* CreateLogReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B5273996AD629A11C11A /* CreateLogReducer.swift */; };
 		9E04B33DA4A87FE7E2ED790E /* LineChartModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B3E3FFB50A3920C79D37 /* LineChartModels.swift */; };
+		9E04B3E0B5BAAB9C1A6F8740 /* CreateLogReminderState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B0CFE13E319478B957F2 /* CreateLogReminderState.swift */; };
+		9E04B4372C1F43E0CC818854 /* ToggleRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BE0625874C6959AF46B4 /* ToggleRowView.swift */; };
 		9E04B43BF70AF74B23CE5CA1 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BE25078C4D1D66F8E42F /* Note.swift */; };
 		9E04B43EFE2FEC2099CB0364 /* SettingsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B03E2878B40603D16455 /* SettingsState.swift */; };
 		9E04B44B6BD1BCCE962BF217 /* LineChartHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BB810B6C11FBAAE8572E /* LineChartHelpers.swift */; };
@@ -129,7 +132,9 @@
 		9E04BEB7D91AD8C615C84D77 /* ActivityLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B158D38EBC0BEC5C2A77 /* ActivityLogView.swift */; };
 		9E04BEEF5C7968E0AAD57AEB /* GlobalLogState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B2E5D1742A91F37DD955 /* GlobalLogState.swift */; };
 		9E04BF009A3FCEC39D6F0D59 /* StandardPopups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BE18499AF88003242B88 /* StandardPopups.swift */; };
+		9E04BF149C8FF56CE8A54980 /* CreateLogReminderReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BD3BB3217EB7C0EB444B /* CreateLogReminderReducer.swift */; };
 		9E04BF52352D5864E885244A /* FirebaseHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B83EBE19C3CBCF07427F /* FirebaseHelpers.swift */; };
+		9E04BF87AB3C156D207A098D /* CreateLogReminderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B0A6D27AD7C9EAE30280 /* CreateLogReminderView.swift */; };
 		9E04BF8B0D0B677809F642FB /* LogDetailsReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B636D29C54C7BDCD27A7 /* LogDetailsReducer.swift */; };
 		9E04BF9D42BED6CD1B95E47A /* UserConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B6C450860BE65AF311A7 /* UserConstants.swift */; };
 		9E04BFCF9C45BB3FCE40FFE3 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B4A50B14B9F44D696289 /* User.swift */; };
@@ -143,7 +148,6 @@
 		110C63B2239D6FA100D904DE /* Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icon.swift; sourceTree = "<group>"; };
 		110C63B4239DDCA500D904DE /* Dimens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dimens.swift; sourceTree = "<group>"; };
 		110C63B6239E067500D904DE /* LogReminderSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogReminderSection.swift; sourceTree = "<group>"; };
-		111D61B523F31F100025019F /* CreateLogDateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateLogDateView.swift; sourceTree = "<group>"; };
 		1120F7BB23C24BF900287337 /* ActivityLogDurationPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLogDurationPickerView.swift; sourceTree = "<group>"; };
 		114B7425239F4CA10095D44B /* HomeTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTab.swift; sourceTree = "<group>"; };
 		114B7427239F549D0095D44B /* RecentLogSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentLogSection.swift; sourceTree = "<group>"; };
@@ -170,6 +174,8 @@
 		11B7651223CEDA5F00BC08CB /* LogDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDetailView.swift; sourceTree = "<group>"; };
 		11B7651423CEDAA100BC08CB /* LogDetailSymptomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDetailSymptomView.swift; sourceTree = "<group>"; };
 		11B7651823CF6D7100BC08CB /* LogDetailNotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDetailNotesView.swift; sourceTree = "<group>"; };
+		11E521972414A05F00990945 /* DateTimeFormPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimeFormPickerView.swift; sourceTree = "<group>"; };
+		11E521992414B8ED00990945 /* LogReminderIntervalPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogReminderIntervalPickerView.swift; sourceTree = "<group>"; };
 		11EBB8E523DD39E400575CA1 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		11EDAE4C240C5B340072B46F /* MoodAnalyticsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodAnalyticsSection.swift; sourceTree = "<group>"; };
 		11EDE0E723C6D17A00A54673 /* ViewLogsDateHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewLogsDateHeaderView.swift; sourceTree = "<group>"; };
@@ -190,6 +196,8 @@
 		75E56A12C7431D234EDF9416 /* Pods-Bonsai.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bonsai.debug.xcconfig"; path = "Target Support Files/Pods-Bonsai/Pods-Bonsai.debug.xcconfig"; sourceTree = "<group>"; };
 		76CC4C0B881B5BDB7CBB1305 /* Pods_Bonsai.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bonsai.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E04B03E2878B40603D16455 /* SettingsState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsState.swift; sourceTree = "<group>"; };
+		9E04B0A6D27AD7C9EAE30280 /* CreateLogReminderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogReminderView.swift; sourceTree = "<group>"; };
+		9E04B0CFE13E319478B957F2 /* CreateLogReminderState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogReminderState.swift; sourceTree = "<group>"; };
 		9E04B0E20E298722B690F1C4 /* LogDetailNutritionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogDetailNutritionView.swift; sourceTree = "<group>"; };
 		9E04B0F0135005B16E61B8A4 /* LogDetailState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogDetailState.swift; sourceTree = "<group>"; };
 		9E04B0FA059903598F57AE95 /* Nutrition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Nutrition.swift; sourceTree = "<group>"; };
@@ -254,11 +262,13 @@
 		9E04BCEA3FA0AEBDF8B13209 /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		9E04BCFAAF7B3D5C2A36CCA7 /* Activity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
 		9E04BD32195B26669D42A6AD /* ChartModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartModels.swift; sourceTree = "<group>"; };
+		9E04BD3BB3217EB7C0EB444B /* CreateLogReminderReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogReminderReducer.swift; sourceTree = "<group>"; };
 		9E04BD42E217456E1AA1DA03 /* CacheService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheService.swift; sourceTree = "<group>"; };
 		9E04BD4984DDBAEC66B08A34 /* DisableInteraction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisableInteraction.swift; sourceTree = "<group>"; };
 		9E04BD4AB903F6E3E687B8B6 /* SettingsMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsMiddleware.swift; sourceTree = "<group>"; };
 		9E04BDF41F15A3CC3EB991BA /* Previews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Previews.swift; sourceTree = "<group>"; };
 		9E04BDF894B8BF390969E233 /* FirebaseAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseAuthService.swift; sourceTree = "<group>"; };
+		9E04BE0625874C6959AF46B4 /* ToggleRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleRowView.swift; sourceTree = "<group>"; };
 		9E04BE18499AF88003242B88 /* StandardPopups.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardPopups.swift; sourceTree = "<group>"; };
 		9E04BE25078C4D1D66F8E42F /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		9E04BE968E2C57ED5F12F9BB /* TappableRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TappableRowView.swift; sourceTree = "<group>"; };
@@ -299,6 +309,7 @@
 				11B4311E23A69AC300909D47 /* ContentView.swift */,
 				9E04BB8BB056B5229D18E7A4 /* Debug */,
 				9E04B281F9FE1970BB809117 /* Analytics */,
+				9E04B10ED981318B93DD1EFB /* CreateLogReminder */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -334,7 +345,6 @@
 				11B4312C23A9F43600909D47 /* Mood */,
 				114B742B23A0B2E40095D44B /* CreateLogView.swift */,
 				114B742E23A1E3D40095D44B /* CreateLogCategoryView.swift */,
-				111D61B523F31F100025019F /* CreateLogDateView.swift */,
 				11B4313123AE919B00909D47 /* CreateLogTextField.swift */,
 				9E04B05F86D13F8DFC4D8D71 /* Nutrition */,
 				9E04BEF2F4F338929AA338D9 /* Symptom */,
@@ -391,6 +401,8 @@
 				9E04BE968E2C57ED5F12F9BB /* TappableRowView.swift */,
 				11FEACD123E2A5C800C22095 /* RoundedBorderButtonView.swift */,
 				9E04BBCE4CF1BE99C653BB69 /* KeyboardPadding.swift */,
+				11E521972414A05F00990945 /* DateTimeFormPickerView.swift */,
+				9E04BE0625874C6959AF46B4 /* ToggleRowView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -566,6 +578,15 @@
 			path = UserService;
 			sourceTree = "<group>";
 		};
+		9E04B10ED981318B93DD1EFB /* CreateLogReminder */ = {
+			isa = PBXGroup;
+			children = (
+				11E521992414B8ED00990945 /* LogReminderIntervalPickerView.swift */,
+				9E04B0A6D27AD7C9EAE30280 /* CreateLogReminderView.swift */,
+			);
+			path = CreateLogReminder;
+			sourceTree = "<group>";
+		};
 		9E04B14B7D6624B5C4342B28 /* Middleware */ = {
 			isa = PBXGroup;
 			children = (
@@ -619,6 +640,7 @@
 				9E04B636D29C54C7BDCD27A7 /* LogDetailsReducer.swift */,
 				9E04B63095D6F8938ED7D75C /* SettingsReducer.swift */,
 				9E04B7DC39527088D3529BB7 /* GlobalLogReducer.swift */,
+				9E04BD3BB3217EB7C0EB444B /* CreateLogReminderReducer.swift */,
 			);
 			path = Reducers;
 			sourceTree = "<group>";
@@ -682,6 +704,7 @@
 				9E04B0F0135005B16E61B8A4 /* LogDetailState.swift */,
 				9E04B03E2878B40603D16455 /* SettingsState.swift */,
 				9E04B2E5D1742A91F37DD955 /* GlobalLogState.swift */,
+				9E04B0CFE13E319478B957F2 /* CreateLogReminderState.swift */,
 			);
 			path = States;
 			sourceTree = "<group>";
@@ -878,6 +901,7 @@
 				11F445E6239A08CB00B501CD /* SceneDelegate.swift in Sources */,
 				110C63B1239D6E3800D904DE /* LogReminderRow.swift in Sources */,
 				11B4313223AE919B00909D47 /* CreateLogTextField.swift in Sources */,
+				11E521982414A05F00990945 /* DateTimeFormPickerView.swift in Sources */,
 				114B742A239FE9E20095D44B /* RootView.swift in Sources */,
 				110C63B7239E067500D904DE /* LogReminderSection.swift in Sources */,
 				114B743D23A20D120095D44B /* Actions.swift in Sources */,
@@ -951,7 +975,6 @@
 				9E04B43EFE2FEC2099CB0364 /* SettingsState.swift in Sources */,
 				9E04BA3CE472D42D9248BDCC /* SettingsReducer.swift in Sources */,
 				9E04BDBDF506B0CB3069CA8E /* SettingsMiddleware.swift in Sources */,
-				111D61B623F31F100025019F /* CreateLogDateView.swift in Sources */,
 				9E04B986D42B107ED18ED0E5 /* AuthViewControllerRepresentable.swift in Sources */,
 				9E04B19E91A48EB332B64267 /* KeyboardPadding.swift in Sources */,
 				11FF402F23FC5C9B0058583C /* LineChartComponent.swift in Sources */,
@@ -959,6 +982,7 @@
 				9E04B44B6BD1BCCE962BF217 /* LineChartHelpers.swift in Sources */,
 				9E04B33DA4A87FE7E2ED790E /* LineChartModels.swift in Sources */,
 				9E04B48DD051003D11BEC39D /* BarChartModels.swift in Sources */,
+				11E5219A2414B8ED00990945 /* LogReminderIntervalPickerView.swift in Sources */,
 				9E04BB6ECC15FF7A01CF2DB5 /* ChartModels.swift in Sources */,
 				9E04B13EB0CE4F0B2F194268 /* PreviewCharts.swift in Sources */,
 				9E04B6B177FA9FB7A80BAC4E /* DatabaseService.swift in Sources */,
@@ -975,6 +999,10 @@
 				9E04B1039F9BC785A128368E /* LogReminder.swift in Sources */,
 				9E04BACB64E973DA12876E60 /* LogReminderRealmConverters.swift in Sources */,
 				9E04B9894EED8D8491CD685D /* RealmConfig.swift in Sources */,
+				9E04BF87AB3C156D207A098D /* CreateLogReminderView.swift in Sources */,
+				9E04B3E0B5BAAB9C1A6F8740 /* CreateLogReminderState.swift in Sources */,
+				9E04B4372C1F43E0CC818854 /* ToggleRowView.swift in Sources */,
+				9E04BF149C8FF56CE8A54980 /* CreateLogReminderReducer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

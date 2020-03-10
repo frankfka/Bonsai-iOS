@@ -24,7 +24,7 @@ struct GlobalLogsMiddleware {
             case .homeScreen(action: let .dataLoadSuccess(recentLogs)):
                 send(.globalLog(action: .insertMany(logs: recentLogs)))
             // Create Log
-            case .createLog(action: let .onCreateLogSuccess(newLog)):
+            case .createLog(action: let .onSaveSuccess(newLog)):
                 send(.globalLog(action: .insert(log: newLog)))
             // View Logs
             case .viewLog(action: let .dataLoadSuccess(logs, date)):

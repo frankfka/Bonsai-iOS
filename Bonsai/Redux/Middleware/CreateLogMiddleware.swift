@@ -112,14 +112,14 @@ struct CreateLogMiddleware {
     private static func createLogOnSaveMiddleware(logService: LogService) -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
-            case .createLog(action: .onCreateLogPressed):
+            case .createLog(action: .onSavePressed):
                 // Check user exists
                 guard let user = state.global.user else {
                     fatalError("No user initialized when searching")
                 }
                 // Check that the log state is valid
                 guard let newLog = createLogFromState(state: state.createLog) else {
-                    send(.createLog(action: .onCreateLogFailure(error: AppError(message: "Could not parse log state"))))
+                    send(.createLog(action: .onSaveFailure(error: AppError(message: "Could not parse log state"))))
                     return
                 }
                 save(logService: logService, log: newLog, for: user)
@@ -136,9 +136,9 @@ struct CreateLogMiddleware {
     private static func save(logService: LogService, log: Loggable, for user: User) -> AnyPublisher<AppAction, Never> {
         return logService.saveLog(log: log, for: user)
                 .map { result in
-                    return AppAction.createLog(action: .onCreateLogSuccess(newLog: log))
+                    return AppAction.createLog(action: .onSaveSuccess(newLog: log))
                 }.catch { (err) -> Just<AppAction> in
-                    return Just(AppAction.createLog(action: .onCreateLogFailure(error: err)))
+                    return Just(AppAction.createLog(action: .onSaveFailure(error: err)))
                 }
                 .eraseToAnyPublisher()
     }

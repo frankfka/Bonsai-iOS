@@ -29,6 +29,8 @@ extension AppAction {
             return "Settings: \(action.actionName)"
         case let.createLog(action):
             return "Create Log: \(action.actionName)"
+        case let.createLogReminder(action):
+            return "Create Log Reminder: \(action.actionName)"
         }
     }
 }
@@ -96,6 +98,16 @@ extension SettingsAction {
     }
 }
 extension CreateLogAction {
+    var actionName: String {
+        let mirror = Mirror(reflecting: self)
+        if let label = mirror.children.first?.label {
+            return label
+        } else {
+            return String(describing: self)
+        }
+    }
+}
+extension CreateLogReminderAction {
     var actionName: String {
         let mirror = Mirror(reflecting: self)
         if let label = mirror.children.first?.label {

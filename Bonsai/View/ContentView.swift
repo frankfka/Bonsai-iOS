@@ -87,7 +87,7 @@ struct ContentView: View {
     private func getCreateLogViewModel() -> CreateLogView.ViewModel {
         return CreateLogView.ViewModel(
             showModal: viewModel.$showCreateLogModal,
-            createLogState: store.state.createLog
+            state: store.state.createLog
         )
     }
 

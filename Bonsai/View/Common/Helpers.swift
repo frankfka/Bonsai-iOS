@@ -14,6 +14,7 @@ typealias IntCallback = (Int) -> ()
 typealias DoubleCallback = (Double) -> ()
 typealias StringCallback = (String) -> ()
 typealias DateCallback = (Date) -> ()
+typealias TimeIntervalCallback = (TimeInterval) -> ()
 
 struct ViewHelpers {
     
@@ -42,7 +43,7 @@ extension View {
     }
 }
 
-struct RoundedBorderSection: ViewModifier {
+struct RoundedBorderSectionModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .padding(.all, CGFloat.Theme.Layout.small)
@@ -50,6 +51,15 @@ struct RoundedBorderSection: ViewModifier {
                 RoundedRectangle(cornerRadius: CGFloat.Theme.Layout.cornerRadius)
                     .foregroundColor(Color.Theme.backgroundSecondary)
         )
+    }
+}
+
+struct FormRowModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .contentShape(Rectangle())
+            .padding(CGFloat.Theme.Layout.normal)
+            .background(Color.Theme.backgroundSecondary)
     }
 }
 

@@ -17,6 +17,7 @@ enum AppAction {
     case logDetails(action: LogDetailsAction)
     case settings(action: SettingsAction)
     case createLog(action: CreateLogAction)
+    case createLogReminder(action: CreateLogReminderAction)
 }
 
 enum GlobalAction {
@@ -123,8 +124,22 @@ enum CreateLogAction {
     case activityDurationDidChange(newDuration: TimeInterval)
 
     // Save
-    case onCreateLogPressed
-    case onCreateLogSuccess(newLog: Loggable)
-    case onCreateLogFailure(error: Error)
-    case createErrorShown
+    case onSavePressed
+    case onSaveSuccess(newLog: Loggable)
+    case onSaveFailure(error: Error)
+    case saveErrorShown
+}
+
+enum CreateLogReminderAction {
+    case initCreateLogReminder(template: Loggable)
+    // User Edit Actions
+    case isRecurringDidChange(isRecurring: Bool)
+    case reminderDateDidChange(newDate: Date)
+    case reminderIntervalDidChange(newInterval: TimeInterval)
+    // State Actions
+    case resetState
+    case onSavePressed
+    case onSaveSuccess
+    case onSaveFailure(error: Error)
+    case saveErrorShown
 }

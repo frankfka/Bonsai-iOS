@@ -6,7 +6,6 @@
 import Foundation
 import RealmSwift
 
-// TODO: recurring bool
 struct LogReminder {
     let id: String
     let reminderDate: Date // This is the date on which we should add reminderInterval to get the next reminder

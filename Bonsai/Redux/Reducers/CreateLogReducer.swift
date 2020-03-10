@@ -59,13 +59,13 @@ struct CreateLogReducer {
             return activityDurationDidChange(state: state, newDuration: newDuration)
 
         // Save
-        case .onCreateLogPressed:
+        case .onSavePressed:
             return onCreateLogPressed(state: state)
-        case let .onCreateLogSuccess(newLog):
+        case let .onSaveSuccess(newLog):
             return onCreateLogSuccess(state: state, newLog: newLog)
-        case let .onCreateLogFailure(error):
+        case let .onSaveFailure(error):
             return onCreateLogFailure(state: state, error: error)
-        case .createErrorShown:
+        case .saveErrorShown:
             return createErrorShown(state: state)
         }
     }

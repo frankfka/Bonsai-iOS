@@ -62,7 +62,7 @@ struct ViewLogsTabContainer: View {
                             }
                         }
                     }
-                    .modifier(RoundedBorderSection())
+                    .modifier(RoundedBorderSectionModifier())
                     .padding(.all, CGFloat.Theme.Layout.normal)
                 }
             }
