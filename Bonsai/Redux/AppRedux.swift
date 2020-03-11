@@ -22,6 +22,7 @@ struct AppError: Error {
 class Services {
     let userService: UserService
     let logService: LogService
+    let logReminderService: LogReminderService
     let analyticsService: AnalyticsService
 
     init() throws {
@@ -31,6 +32,7 @@ class Services {
         let firebaseAuthService = FirebaseAuthService()
         userService = UserServiceImpl(db: db, auth: firebaseAuthService)
         logService = LogServiceImpl(db: db, cache: cache)
+        logReminderService = LogReminderServiceImpl(db: db)
         analyticsService = AnalyticsServiceImpl(db: db)
     }
 }
@@ -98,6 +100,8 @@ struct AppMiddleware {
         middleware.append(contentsOf: SettingsMiddleware.middleware(services: services))
         // Create log
         middleware.append(contentsOf: CreateLogMiddleware.middleware(services: services))
+        // Create log reminder
+        middleware.append(contentsOf: CreateLogReminderMiddleware.middleware(services: services))
         
         return middleware
     }

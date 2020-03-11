@@ -140,10 +140,7 @@ struct LogDetailView: View {
                     EmptyView()
                     // Create Log Reminder Modal
                     .sheet(
-                        isPresented: $showCreateLogReminderModal,
-                        onDismiss: {
-                            self.onCreateLogReminderModalDismiss()
-                        }) {
+                        isPresented: $showCreateLogReminderModal) {
                             CreateLogReminderView(
                                     viewModel: self.getCreateLogReminderModalViewModel()
                             ).environmentObject(self.store)
@@ -179,9 +176,6 @@ struct LogDetailView: View {
         // Dispatch an action for creating a reminder with the given log
         store.send(.createLogReminder(action: .initCreateLogReminder(template: self.viewModel.loggable)))
         showCreateLogReminderModal.toggle()
-    }
-    private func onCreateLogReminderModalDismiss() {
-        store.send(.createLogReminder(action: .resetState))
     }
 
     private func onDeleteLogTapped() {

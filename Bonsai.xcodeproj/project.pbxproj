@@ -66,6 +66,7 @@
 		9E04B25F7C690817E09E203E /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BCEA3FA0AEBDF8B13209 /* UserService.swift */; };
 		9E04B2A80CC13789F016F18C /* LogDetailBasicsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BF258092F6829380B3A0 /* LogDetailBasicsView.swift */; };
 		9E04B2AB822789B9206A8765 /* CreateLogReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B5273996AD629A11C11A /* CreateLogReducer.swift */; };
+		9E04B32693ECDC7E5C451511 /* CreateLogReminderMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B9BE368E5810A4DA264A /* CreateLogReminderMiddleware.swift */; };
 		9E04B33DA4A87FE7E2ED790E /* LineChartModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B3E3FFB50A3920C79D37 /* LineChartModels.swift */; };
 		9E04B3E0B5BAAB9C1A6F8740 /* CreateLogReminderState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B0CFE13E319478B957F2 /* CreateLogReminderState.swift */; };
 		9E04B4372C1F43E0CC818854 /* ToggleRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BE0625874C6959AF46B4 /* ToggleRowView.swift */; };
@@ -82,6 +83,7 @@
 		9E04B642138C647CA21FCBE5 /* AppInitMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B8C59601E362C76DAABD /* AppInitMiddleware.swift */; };
 		9E04B6B177FA9FB7A80BAC4E /* DatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BF7E09883F4AD3733212 /* DatabaseService.swift */; };
 		9E04B6BD53BC62CFB6CE2E1F /* CreateLogMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B5548FA5FE0689E72183 /* CreateLogMiddleware.swift */; };
+		9E04B6BF3C7D7FB63498CBC7 /* LogReminderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BCB108A60AC967332E25 /* LogReminderService.swift */; };
 		9E04B6DD94E5A95F4D9DCA11 /* SerializationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B9C8FD3C64EAA23028B0 /* SerializationConstants.swift */; };
 		9E04B7090408200D01C3F015 /* Nutrition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B0FA059903598F57AE95 /* Nutrition.swift */; };
 		9E04B755EF3C338636399E89 /* GlobalState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BC484C03DA14EC33586F /* GlobalState.swift */; };
@@ -242,6 +244,7 @@
 		9E04B80416B6B7E5CB269041 /* SearchListResultsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchListResultsView.swift; sourceTree = "<group>"; };
 		9E04B83EBE19C3CBCF07427F /* FirebaseHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseHelpers.swift; sourceTree = "<group>"; };
 		9E04B8C59601E362C76DAABD /* AppInitMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInitMiddleware.swift; sourceTree = "<group>"; };
+		9E04B9BE368E5810A4DA264A /* CreateLogReminderMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogReminderMiddleware.swift; sourceTree = "<group>"; };
 		9E04B9C8FD3C64EAA23028B0 /* SerializationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerializationConstants.swift; sourceTree = "<group>"; };
 		9E04B9D9B417E31F7195DE54 /* SectionViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionViews.swift; sourceTree = "<group>"; };
 		9E04BA16DE33AF23CFDC1835 /* SearchAddItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchAddItemView.swift; sourceTree = "<group>"; };
@@ -259,6 +262,7 @@
 		9E04BC42FA01AF3C727FA0A7 /* MedicationLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MedicationLogView.swift; sourceTree = "<group>"; };
 		9E04BC484C03DA14EC33586F /* GlobalState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalState.swift; sourceTree = "<group>"; };
 		9E04BC48C0B7BB0F4682BE68 /* NutritionLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NutritionLogView.swift; sourceTree = "<group>"; };
+		9E04BCB108A60AC967332E25 /* LogReminderService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogReminderService.swift; sourceTree = "<group>"; };
 		9E04BCEA3FA0AEBDF8B13209 /* UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		9E04BCFAAF7B3D5C2A36CCA7 /* Activity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
 		9E04BD32195B26669D42A6AD /* ChartModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartModels.swift; sourceTree = "<group>"; };
@@ -598,6 +602,7 @@
 				9E04BEBBE15540376ABFCEBC /* LogDetailMiddleware.swift */,
 				9E04BD4AB903F6E3E687B8B6 /* SettingsMiddleware.swift */,
 				9E04B2DD597DD9644E6A1EB8 /* GlobalLogsMiddleware.swift */,
+				9E04B9BE368E5810A4DA264A /* CreateLogReminderMiddleware.swift */,
 			);
 			path = Middleware;
 			sourceTree = "<group>";
@@ -729,6 +734,7 @@
 				9E04B0D243CEC2F8CCB8B704 /* UserService */,
 				9E04B06A3829C4D6FD042168 /* DatabaseService */,
 				9E04B55A8BE0A69208646B1E /* AnalyticsService */,
+				9E04BCB108A60AC967332E25 /* LogReminderService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -1003,6 +1009,8 @@
 				9E04B3E0B5BAAB9C1A6F8740 /* CreateLogReminderState.swift in Sources */,
 				9E04B4372C1F43E0CC818854 /* ToggleRowView.swift in Sources */,
 				9E04BF149C8FF56CE8A54980 /* CreateLogReminderReducer.swift in Sources */,
+				9E04B32693ECDC7E5C451511 /* CreateLogReminderMiddleware.swift in Sources */,
+				9E04B6BF3C7D7FB63498CBC7 /* LogReminderService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
