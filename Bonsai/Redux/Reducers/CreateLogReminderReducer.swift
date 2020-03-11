@@ -17,7 +17,7 @@ struct CreateLogReminderReducer {
         case .reminderIntervalDidChange(let newInterval):
             return reminderIntervalDidChange(state: state, newInterval: newInterval)
         case .onSavePressed:
-            return onSaveSuccess(state: state)
+            return onSavePressed(state: state)
         case .onSaveSuccess:
             return onSaveSuccess(state: state)
         case .onSaveFailure(let error):
