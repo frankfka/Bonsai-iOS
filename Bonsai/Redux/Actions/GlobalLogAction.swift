@@ -5,7 +5,7 @@
 
 import Foundation
 
-enum GlobalLogAction {
+enum GlobalLogAction: LoggableAction {
     // Dispatched to change global store of logs
     case insert(log: Loggable)
     case insertMany(logs: [Loggable])

@@ -5,7 +5,7 @@
 
 import Foundation
 
-enum CreateLogReminderAction {
+enum CreateLogReminderAction: LoggableAction {
     case initCreateLogReminder(template: Loggable)
     // User Edit Actions
     case isRecurringDidChange(isRecurring: Bool)

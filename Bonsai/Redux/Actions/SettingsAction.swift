@@ -6,7 +6,7 @@
 import Foundation
 import UIKit
 
-enum SettingsAction {
+enum SettingsAction: LoggableAction {
     case linkGoogleAccountPressed(presentingVc: UIViewController)
     // User first signs in with Google
     case googleSignedIn(googleAccount: User.FirebaseGoogleAccount)

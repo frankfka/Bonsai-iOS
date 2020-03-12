@@ -5,7 +5,7 @@
 
 import Foundation
 
-enum GlobalLogReminderAction {
+enum GlobalLogReminderAction: LoggableAction {
     case addOrUpdate(_ logReminder: LogReminder)
     case addOrUpdateMany(_ logReminders: [LogReminder])
     case remove(_ logReminder: LogReminder)

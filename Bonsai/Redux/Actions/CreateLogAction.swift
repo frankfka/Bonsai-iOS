@@ -5,7 +5,7 @@
 
 import Foundation
 
-enum CreateLogAction {
+enum CreateLogAction: LoggableAction {
     case resetCreateLogState
     case logCategoryDidChange(newIndex: Int)
     case noteDidUpdate(note: String)

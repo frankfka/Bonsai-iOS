@@ -5,7 +5,7 @@
 
 import Foundation
 
-enum GlobalAction {
+enum GlobalAction: LoggableAction {
     // On app launch
     case appDidLaunch
     case initSuccess(user: User)

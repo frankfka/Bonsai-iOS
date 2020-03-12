@@ -5,7 +5,7 @@
 
 import Foundation
 
-enum ViewLogsAction {
+enum ViewLogsAction: LoggableAction {
     case screenDidShow
     case fetchData(date: Date)
     case selectedDateChanged(date: Date) // Only support 1 day for now

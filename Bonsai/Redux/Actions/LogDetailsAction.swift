@@ -5,7 +5,7 @@
 
 import Foundation
 
-enum LogDetailsAction {
+enum LogDetailsAction: LoggableAction {
     case initState(loggable: Loggable)
     case fetchLogDataSuccess(loggable: Loggable)
     case fetchLogDataError(error: Error)

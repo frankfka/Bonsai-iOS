@@ -5,7 +5,7 @@
 
 import Foundation
 
-enum HomeScreenAction {
+enum HomeScreenAction: LoggableAction {
     case screenDidShow
     case initializeData
     case dataLoadSuccess(recentLogs: [Loggable], logReminders: [LogReminder])
