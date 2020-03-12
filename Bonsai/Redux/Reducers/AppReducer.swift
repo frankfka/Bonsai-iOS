@@ -12,6 +12,8 @@ struct AppReducer {
             return GlobalReducer.reduce(state: state, action: action)
         case let .globalLog(action):
             return GlobalLogReducer.reduce(state: state, action: action)
+        case let .globalLogReminder(action):
+            return GlobalLogReminderReducer.reduce(state: state, action: action)
         case let .homeScreen(action):
             return HomeScreenReducer.reduce(state: state, action: action)
         case let .viewLog(action):

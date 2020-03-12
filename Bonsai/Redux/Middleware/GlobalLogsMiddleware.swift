@@ -21,7 +21,7 @@ struct GlobalLogsMiddleware {
         return { state, action, cancellables, send in
             switch action {
             // Home Screen
-            case .homeScreen(action: let .dataLoadSuccess(recentLogs)):
+            case .homeScreen(action: let .dataLoadSuccess(recentLogs, _)):
                 send(.globalLog(action: .insertMany(logs: recentLogs)))
             // Create Log
             case .createLog(action: let .onSaveSuccess(newLog)):

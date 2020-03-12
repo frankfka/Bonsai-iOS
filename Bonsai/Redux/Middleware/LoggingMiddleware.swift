@@ -19,6 +19,8 @@ extension AppAction {
             return "Global: \(action.actionName)"
         case let .globalLog(action):
             return "GlobalLog: \(action.actionName)"
+        case let .globalLogReminder(action):
+            return "GlobalLogReminder: \(action.actionName)"
         case let .homeScreen(action):
             return "Home Screen: \(action.actionName)"
         case let .viewLog(action):
@@ -48,6 +50,16 @@ extension GlobalAction {
     }
 }
 extension GlobalLogAction {
+    var actionName: String {
+        let mirror = Mirror(reflecting: self)
+        if let label = mirror.children.first?.label {
+            return label
+        } else {
+            return String(describing: self)
+        }
+    }
+}
+extension GlobalLogReminderAction {
     var actionName: String {
         let mirror = Mirror(reflecting: self)
         if let label = mirror.children.first?.label {

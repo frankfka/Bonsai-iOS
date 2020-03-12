@@ -52,10 +52,7 @@ struct LogReminderRow: View {
                 Text(viewModel.recurringTimestamp)
                     .font(Font.Theme.subtext)
                     .padding(.trailing, CGFloat.Theme.Layout.small)
-                    .foregroundColor(Color.Theme.primary)
-                Image.Icons.info
-                .font(Font.Theme.normalIcon)
-                    .foregroundColor(viewModel.isTimestampOverdue ? Color.Theme.positive : Color.Theme.negative)
+                    .foregroundColor(viewModel.isTimestampOverdue ? Color.Theme.accent : Color.Theme.primary)
             }
         }
         .padding(.vertical, CGFloat.Theme.Layout.small)

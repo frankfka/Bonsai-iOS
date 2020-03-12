@@ -11,7 +11,7 @@ struct HomeScreenMiddleware {
     static func middleware(services: Services) -> [Middleware<AppState>] {
         return [
             homeScreenDidShowMiddleware(),
-            initDataMiddleware(logService: services.logService),
+            initHomeScreenMiddleware(logService: services.logService, logReminderService: services.logReminderService)
         ]
     }
 
@@ -31,7 +31,8 @@ struct HomeScreenMiddleware {
         }
     }
 
-    private static func initDataMiddleware(logService: LogService) -> Middleware<AppState> {
+    private static func initHomeScreenMiddleware(logService: LogService, logReminderService: LogReminderService)
+                    -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
             case .homeScreen(action: .initializeData):
@@ -40,7 +41,7 @@ struct HomeScreenMiddleware {
                     fatalError("No user initialized when initializing home screen data")
                 }
                 // Init recent log section
-                initRecentLogs(logService: logService, for: user, in: nil, since: nil, toAndIncluding: nil)
+                initHomeScreen(logService: logService, logReminderService: logReminderService, for: user)
                         .sink(receiveValue: { newAction in
                             send(newAction)
                         })
@@ -51,12 +52,17 @@ struct HomeScreenMiddleware {
         }
     }
 
-    private static func initRecentLogs(logService: LogService, for user: User, in category: LogCategory?,
-                                       since beginDate: Date?, toAndIncluding endDate: Date?) -> AnyPublisher<AppAction, Never> {
-        return logService.getLogs(for: user, in: category, since: beginDate,
-                                  toAndIncluding: endDate, limitedTo: RecentLogSection.ViewModel.numToShow, offline: false)
-                .map { result in
-                    return AppAction.homeScreen(action: .dataLoadSuccess(recentLogs: result))
+    private static func initHomeScreen(logService: LogService, logReminderService: LogReminderService, for user: User)
+                    -> AnyPublisher<AppAction, Never> {
+        // Get recent logs
+        let recentLogsPublisher = logService.getLogs(for: user, in: nil, since: nil, toAndIncluding: nil,
+                        limitedTo: RecentLogSection.ViewModel.numToShow, offline: false)
+        // Get log reminders
+        let logRemindersPublisher = logReminderService.getLogReminders()
+        let combinedPublisher = Publishers.Zip(recentLogsPublisher, logRemindersPublisher)
+        return combinedPublisher
+                .map { recentLogs, logReminders in
+                    return AppAction.homeScreen(action: .dataLoadSuccess(recentLogs: recentLogs, logReminders: logReminders))
                 }.catch { (err) -> Just<AppAction> in
                     return Just(AppAction.homeScreen(action: .dataLoadError(error: err)))
                 }

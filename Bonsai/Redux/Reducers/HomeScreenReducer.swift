@@ -12,8 +12,8 @@ struct HomeScreenReducer {
             return state
         case .initializeData:
             return initializeData(state: state)
-        case .dataLoadSuccess(let recentLogs):
-            return dataLoadSuccess(state: state, recentLogs: recentLogs)
+        case .dataLoadSuccess:
+            return dataLoadSuccess(state: state)
         case .dataLoadError(let error):
             return dataLoadError(state: state, error: error)
         }
@@ -25,7 +25,7 @@ struct HomeScreenReducer {
         return newState
     }
 
-    static private func dataLoadSuccess(state: AppState, recentLogs: [Loggable]) -> AppState {
+    static private func dataLoadSuccess(state: AppState) -> AppState {
         var newState = state
         newState.homeScreen.isLoading = false
         newState.homeScreen.initSuccess = true

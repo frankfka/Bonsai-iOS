@@ -42,6 +42,8 @@ struct AppState {
     var global: GlobalState
     // All logs
     var globalLogs: GlobalLogState
+    // All log reminders
+    var globalLogReminders: GlobalLogReminderState
     // Home tab
     var homeScreen: HomeScreenState
     // View logs tab
@@ -58,6 +60,7 @@ struct AppState {
     init() {
         global = GlobalState()
         globalLogs = GlobalLogState()
+        globalLogReminders = GlobalLogReminderState()
         homeScreen = HomeScreenState()
         viewLogs = ViewLogsState()
         logDetails = LogDetailState()
@@ -90,6 +93,8 @@ struct AppMiddleware {
         middleware.append(contentsOf: AppInitMiddleware.middleware(services: services))
         // Global Logs
         middleware.append(contentsOf: GlobalLogsMiddleware.middleware(services: services))
+        // Global Log Reminders
+        middleware.append(contentsOf: GlobalLogRemindersMiddleware.middleware(services: services))
         // Home screen
         middleware.append(contentsOf: HomeScreenMiddleware.middleware(services: services))
         // View logs

@@ -19,14 +19,14 @@ protocol DatabaseService {
     func saveLogSearchable(logItem: LogSearchable, for user: User) -> ServicePublisher<Void>
 
     // Log functions
-    func saveLog(log: Loggable, for user: User) -> ServicePublisher<Void>
+    func saveOrUpdateLog(log: Loggable, for user: User) -> ServicePublisher<Void>
     func getLogs(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?,
                  limit: Int?, offline: Bool) -> ServicePublisher<[Loggable]>
     func deleteLog(for user: User, with id: String) -> ServicePublisher<Void>
 
     // Log Reminder functions
     func getLogReminders() -> ServicePublisher<[LogReminder]>
-    func saveLogReminder(_ logReminder: LogReminder) -> ServicePublisher<Void>
+    func saveOrUpdateLogReminder(_ logReminder: LogReminder) -> ServicePublisher<Void>
     func deleteLogReminder(_ logReminder: LogReminder) -> ServicePublisher<Void>
 
     // Local storage functions
@@ -117,7 +117,7 @@ class DatabaseServiceImpl: DatabaseService {
     }
 
     // MARK: Log functions
-    func saveLog(log: Loggable, for user: User) -> ServicePublisher<Void> {
+    func saveOrUpdateLog(log: Loggable, for user: User) -> ServicePublisher<Void> {
         /*
         Saves the loggable for the user both locally and in Firebase
         - Save in Firebase first, as that is most likely to fail
@@ -253,7 +253,7 @@ class DatabaseServiceImpl: DatabaseService {
         return AnyPublisher(future)
     }
 
-    func saveLogReminder(_ logReminder: LogReminder) -> ServicePublisher<Void> {
+    func saveOrUpdateLogReminder(_ logReminder: LogReminder) -> ServicePublisher<Void> {
         let future = ServiceFuture<Void> { promise in
             let err = self.realmService.saveLogReminder(logReminder)
             if let err = err {
