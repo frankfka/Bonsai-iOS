@@ -48,7 +48,6 @@ struct CreateLogView: View {
                     .padding(.top, CGFloat.Theme.Layout.normal)
                 DateTimeFormPickerView(viewModel: getCreateLogDateTimePickerViewModel())
                 getCategorySpecificView()
-                    .environmentObject(self.store)
                 CreateLogTextField(viewModel: getNotesViewModel())
                 Spacer()
             }

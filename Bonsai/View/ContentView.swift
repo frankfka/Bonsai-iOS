@@ -20,7 +20,7 @@ struct ContentViewContainer: View {
     @State(initialValue: ViewModel()) private var viewModel: ViewModel
     
     var body: some View {
-        ContentView(viewModel: getContentViewModel()).environmentObject(self.store)
+        ContentView(viewModel: getContentViewModel())
     }
     
     func getContentViewModel() -> ContentView.ViewModel {
@@ -67,10 +67,8 @@ struct ContentView: View {
         VStack(spacing: 0) {
             if viewModel.tabIndex == 0 {
                 HomeTabContainer(viewModel: getHomeTabViewModel())
-                    .environmentObject(self.store)
             } else {
                 ViewLogsTabContainer(viewModel: getLogsTabViewModel())
-                    .environmentObject(self.store)
             }
             TabBarView(viewModel: viewModel.tabBarViewModel)
         }
@@ -80,7 +78,7 @@ struct ContentView: View {
         ) {
             CreateLogView(
                 viewModel: self.getCreateLogViewModel()
-            ).environmentObject(self.store)
+            )
         }
     }
     
@@ -129,6 +127,6 @@ struct ContentView_Previews: PreviewProvider {
                 .environment(\.colorScheme, .dark)
             ContentViewContainer()
         }
-        .environmentObject(AppStore(initialState: AppState(), reducer: AppReducer.reduce))
+        .environmentObject(PreviewRedux.initialStore)
     }
 }

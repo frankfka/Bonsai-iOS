@@ -38,7 +38,7 @@ struct HomeTabContainer: View {
         .background(Color.Theme.backgroundPrimary)
         .navigationBarTitle("Home")
         .navigationBarItems(
-                trailing: NavigationLink(destination: SettingsView().environmentObject(store)) {
+                trailing: NavigationLink(destination: SettingsView()) {
                     Image(systemName: "person.crop.circle")
                             .resizable()
                             .aspectRatio(1, contentMode: .fit)
@@ -109,8 +109,8 @@ struct HomeTab: View {
 
 }
 
-//struct HomeTab_Previews: PreviewProvider {
-//    static var previews: some View {
-//        HomeTab().environmentObject(AppStore(initialState: AppState(), reducer: AppReducer.reduce))
-//    }
-//}
+struct HomeTab_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeTab(viewModel: HomeTab.ViewModel()).environmentObject(PreviewRedux.initialStore)
+    }
+}
