@@ -108,16 +108,15 @@ struct HomeTab: View {
     }
 
     private func getLogReminderSectionViewModel() -> LogReminderSection.ViewModel {
-        let reminderViewModels =
-                Array(store.state.globalLogReminders.sortedLogReminders.prefix(LogReminderSection.ViewModel.numToShow))
-                        .map { LogReminderRow.ViewModel(logReminder: $0) }
         return LogReminderSection.ViewModel(
-                logReminders: reminderViewModels,
-                navigateToLogReminderDetails: $navigateToLogDetails
+                logReminders: store.state.globalLogReminders.sortedLogReminders,
+                navigateToLogReminderDetails: .constant(false),
+                showCreateLogModal: viewModel.$showCreateLogModal
         )
     }
     
     private func getRecentLogSectionViewModel() -> RecentLogSection.ViewModel {
+        // TODO: make init to just take in a list of logs in state
         let logViewModels =
                 Array(store.state.globalLogs.sortedLogs.prefix(RecentLogSection.ViewModel.numToShow))
                         .map { LogRow.ViewModel(loggable: $0) }

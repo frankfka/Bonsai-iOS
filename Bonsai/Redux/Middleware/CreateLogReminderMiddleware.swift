@@ -45,7 +45,7 @@ struct CreateLogReminderMiddleware {
                     -> AnyPublisher<AppAction, Never> {
         return logReminderService.saveLogReminder(logReminder: logReminder)
                 .map { results in
-                    return AppAction.createLogReminder(action: .onSaveSuccess)
+                    return AppAction.createLogReminder(action: .onSaveSuccess(logReminder: logReminder))
                 }.catch { (err) -> Just<AppAction> in
                     return Just(AppAction.createLogReminder(action: .onSaveFailure(error: err)))
                 }

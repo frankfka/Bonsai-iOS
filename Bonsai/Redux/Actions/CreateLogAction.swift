@@ -11,7 +11,7 @@ enum CreateLogAction: LoggableAction {
     case noteDidUpdate(note: String)
     case dateDidChange(newDate: Date)
 
-    // Occurs when "Create Again" is pressed in details
+    // Occurs when "Create Again" is pressed in details, or when user completes a reminder
     case initFromPreviousLog(loggable: Loggable)
 
     // Search

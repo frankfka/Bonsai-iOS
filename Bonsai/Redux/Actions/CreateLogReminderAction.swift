@@ -14,7 +14,7 @@ enum CreateLogReminderAction: LoggableAction {
     // State Actions
     case resetState
     case onSavePressed
-    case onSaveSuccess
+    case onSaveSuccess(logReminder: LogReminder)
     case onSaveFailure(error: Error)
     case saveErrorShown
 }

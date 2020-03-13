@@ -6,7 +6,7 @@
 import Foundation
 import RealmSwift
 
-struct LogReminder: Hashable, Equatable {
+struct LogReminder {
     let id: String
     var reminderDate: Date // This is the date on which we should add reminderInterval to get the next reminder
     let reminderInterval: TimeInterval?
@@ -17,7 +17,8 @@ struct LogReminder: Hashable, Equatable {
         reminderDate < Date()
     }
     let templateLoggable: Loggable
-
+}
+extension LogReminder: Hashable, Equatable, Identifiable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
