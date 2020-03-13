@@ -48,7 +48,7 @@ struct RecentLogSection: View {
                             .onTapGesture {
                                 self.onLogRowTapped(loggable: logVm.loggable)
                             }
-                        if self.showDivider(after: logVm) {
+                        if ViewHelpers.showDivider(after: logVm, in: self.viewModel.recentLogs) {
                             Divider()
                         }
                     }
@@ -67,15 +67,6 @@ struct RecentLogSection: View {
         store.send(.logDetails(action: .initState(loggable: loggable)))
         viewModel.navigateToLogDetails = true
     }
-
-    private func showDivider(after vm: LogRow.ViewModel) -> Bool {
-        if let index = viewModel.recentLogs.firstIndex(where: { log in log.id == vm.id }),
-           index < self.viewModel.recentLogs.count - 1 {
-            return true
-        }
-        return false
-    }
-
 }
 
 struct NoRecentLogsView: View {

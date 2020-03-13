@@ -133,7 +133,7 @@ struct LogDetailView: View {
                         }) {
                             CreateLogView(
                                     viewModel: self.getCreateLogModalViewModel()
-                            )
+                            ).environmentObject(self.store)
                     }
                 )
                 .background(
@@ -143,7 +143,7 @@ struct LogDetailView: View {
                         isPresented: $showCreateLogReminderModal) {
                             CreateLogReminderView(
                                     viewModel: self.getCreateLogReminderModalViewModel()
-                            )
+                            ).environmentObject(self.store)
                     }
                 )
                 // Popups

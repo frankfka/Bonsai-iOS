@@ -8,10 +8,10 @@ import Foundation
 struct GlobalLogReminderState {
     // All log reminders
     var logReminders: Set<LogReminder> = []
-    // All log reminders sorted by reverse chronological order
+    // All log reminders sorted by chronological order (earliest reminder first)
     var sortedLogReminders: [LogReminder] {
         logReminders.sorted { one, other in
-            one.reminderDate > other.reminderDate
+            one.reminderDate < other.reminderDate
         }
     }
 }

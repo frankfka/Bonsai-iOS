@@ -78,7 +78,7 @@ struct ContentView: View {
         ) {
             CreateLogView(
                 viewModel: self.getCreateLogViewModel()
-            )
+            ).environmentObject(self.store)
         }
     }
     
@@ -95,6 +95,7 @@ struct ContentView: View {
         return HomeTabContainer.ViewModel(
                 isLoading: isLoading,
                 loadError: loadError,
+                showCreateLogModal: viewModel.$showCreateLogModal,
                 homeTabDidAppear: onShowHomeTab
         )
     }

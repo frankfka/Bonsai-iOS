@@ -13,6 +13,9 @@ struct LogReminder: Hashable, Equatable {
     var isRecurring: Bool {
         reminderInterval != nil
     }
+    var isOverdue: Bool {
+        reminderDate < Date()
+    }
     let templateLoggable: Loggable
 
     func hash(into hasher: inout Hasher) {

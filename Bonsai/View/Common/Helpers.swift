@@ -30,6 +30,14 @@ struct ViewHelpers {
             onToggle()
         }
     }
+
+    static func showDivider<T: Identifiable>(after vm: T, in list: [T]) -> Bool {
+        if let index = list.firstIndex(where: { list in list.id == vm.id }),
+           index < list.count - 1 {
+            return true
+        }
+        return false
+    }
     
 }
 
@@ -40,26 +48,6 @@ extension View {
     }
     func embedInNavigationView() -> some View {
         NavigationView { self }
-    }
-}
-
-struct RoundedBorderSectionModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .padding(.all, CGFloat.Theme.Layout.small)
-            .background(
-                RoundedRectangle(cornerRadius: CGFloat.Theme.Layout.cornerRadius)
-                    .foregroundColor(Color.Theme.backgroundSecondary)
-        )
-    }
-}
-
-struct FormRowModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .contentShape(Rectangle())
-            .padding(CGFloat.Theme.Layout.normal)
-            .background(Color.Theme.backgroundSecondary)
     }
 }
 

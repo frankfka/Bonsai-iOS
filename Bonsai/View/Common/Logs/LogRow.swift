@@ -65,9 +65,7 @@ struct LogRow: View {
                     .font(Font.Theme.subtext)
                     .foregroundColor(Color.Theme.primary)
         }
-        .padding(.vertical, CGFloat.Theme.Layout.small)
-        .padding(.horizontal, CGFloat.Theme.Layout.normal)
-        .contentShape(Rectangle())
+        .modifier(RowModifier())
     }
 }
 
