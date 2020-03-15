@@ -88,72 +88,72 @@ struct LogDetailView: View {
                 }
                         .disabled(self.viewModel.disableActions)
             }
-                    .padding(.vertical, CGFloat.Theme.Layout.normal)
+            .padding(.vertical, CGFloat.Theme.Layout.normal)
         }
-                .background(Color.Theme.backgroundPrimary)
-                .navigationBarItems(
-                        trailing: Button(action: {
-                            self.onDeleteLogTapped()
-                        }, label: {
-                            Image(systemName: "trash")
-                                    .resizable()
-                                    .aspectRatio(1, contentMode: .fit)
-                                    .frame(height: CGFloat.Theme.Layout.navBarItemHeight)
-                                    .foregroundColor(
-                                            self.viewModel.disableDelete ?
-                                                    Color.Theme.grayscalePrimary : Color.Theme.primary
-                                    )
-                        })
-                                .disabled(self.viewModel.disableDelete)
+        .background(Color.Theme.backgroundPrimary)
+        .navigationBarItems(
+                trailing: Button(action: {
+                    self.onDeleteLogTapped()
+                }, label: {
+                    Image(systemName: "trash")
+                            .resizable()
+                            .aspectRatio(1, contentMode: .fit)
+                            .frame(height: CGFloat.Theme.Layout.navBarItemHeight)
+                            .foregroundColor(
+                                    self.viewModel.disableDelete ?
+                                            Color.Theme.grayscalePrimary : Color.Theme.primary
+                            )
+                })
+                        .disabled(self.viewModel.disableDelete)
+        )
+        .navigationBarTitle("Log Details", displayMode: .inline)
+        // Delete Log Confirmation
+        .alert(isPresented: $showDeleteLogConfirmation) {
+            Alert(
+                title: Text("Delete Log"),
+                message: Text("Are you sure you want to delete this log?"),
+                primaryButton: .destructive(
+                        Text("Confirm"),
+                        action: {
+                            self.onDeleteLogConfirmed()
+                        }),
+                secondaryButton: .cancel(
+                        Text("Cancel")
                 )
-                .navigationBarTitle("Log Details", displayMode: .inline)
-                // Delete Log Confirmation
-                .alert(isPresented: $showDeleteLogConfirmation) {
-                    Alert(
-                        title: Text("Delete Log"),
-                        message: Text("Are you sure you want to delete this log?"),
-                        primaryButton: .destructive(
-                                Text("Confirm"),
-                                action: {
-                                    self.onDeleteLogConfirmed()
-                                }),
-                        secondaryButton: .cancel(
-                                Text("Cancel")
-                        )
-                    )
-                }
-                // Modals - using backgrounds is a workaround to allow multiple modal presentation blocks
-                .background(
-                    EmptyView()
-                    // Create Log Modal
-                    .sheet(
-                        isPresented: $showCreateLogModal,
-                        onDismiss: {
-                            self.onCreateLogModalDismiss()
-                        }) {
-                            CreateLogView(
-                                    viewModel: self.getCreateLogModalViewModel()
-                            ).environmentObject(self.store)
-                    }
-                )
-                .background(
-                    EmptyView()
-                    // Create Log Reminder Modal
-                    .sheet(
-                        isPresented: $showCreateLogReminderModal) {
-                            CreateLogReminderView(
-                                    viewModel: self.getCreateLogReminderModalViewModel()
-                            ).environmentObject(self.store)
-                    }
-                )
-                // Popups
-                .withLoadingPopup(show: .constant(self.viewModel.isLoading), text: self.viewModel.loadingMessage)
-                .withStandardPopup(show: .constant(self.viewModel.showError), type: .failure, text: self.viewModel.errorMessage) {
-                    self.onErrorPopupDismiss()
-                }
-                .withStandardPopup(show: .constant(self.viewModel.showDeleteSuccess), type: .success, text: "Deleted Successfully") {
-                    self.onDeleteSuccessPopupDismiss()
-                }
+            )
+        }
+        // Modals - using backgrounds is a workaround to allow multiple modal presentation blocks
+        .background(
+            EmptyView()
+            // Create Log Modal
+            .sheet(
+                isPresented: $showCreateLogModal,
+                onDismiss: {
+                    self.onCreateLogModalDismiss()
+                }) {
+                    CreateLogView(
+                            viewModel: self.getCreateLogModalViewModel()
+                    ).environmentObject(self.store)
+            }
+        )
+        .background(
+            EmptyView()
+            // Create Log Reminder Modal
+            .sheet(
+                isPresented: $showCreateLogReminderModal) {
+                    CreateLogReminderView(
+                            viewModel: self.getCreateLogReminderModalViewModel()
+                    ).environmentObject(self.store)
+            }
+        )
+        // Popups
+        .withLoadingPopup(show: .constant(self.viewModel.isLoading), text: self.viewModel.loadingMessage)
+        .withStandardPopup(show: .constant(self.viewModel.showError), type: .failure, text: self.viewModel.errorMessage) {
+            self.onErrorPopupDismiss()
+        }
+        .withStandardPopup(show: .constant(self.viewModel.showDeleteSuccess), type: .success, text: "Deleted Successfully") {
+            self.onDeleteSuccessPopupDismiss()
+        }
     }
 
     // MARK: Actions

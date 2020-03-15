@@ -14,13 +14,13 @@ struct LogReminderSection: View {
     struct ViewModel {
         static let numToShow = 5  // Number of reminders to show
         let reminders: [LogReminder]
-        @Binding var navigateToLogReminderDetails: Bool?
+        @Binding var navigationState: HomeTab.NavigationState?
         @Binding var showCreateLogModal: Bool
 
-        init(logReminders: [LogReminder], navigateToLogReminderDetails: Binding<Bool?>,
+        init(logReminders: [LogReminder], navigationState: Binding<HomeTab.NavigationState?>,
              showCreateLogModal: Binding<Bool>) {
             self.reminders = Array(logReminders.prefix(ViewModel.numToShow))
-            self._navigateToLogReminderDetails = navigateToLogReminderDetails
+            self._navigationState = navigationState
             self._showCreateLogModal = showCreateLogModal
         }
     }
@@ -34,8 +34,10 @@ struct LogReminderSection: View {
     var body: some View {
         VStack {
             // Conditional pushing of navigation views, see RecentLogSection
-            NavigationLink(destination: EmptyView(), tag: true, selection: viewModel.$navigateToLogReminderDetails) {
-                // TODO: replace destination
+            NavigationLink(
+                    destination: LogReminderDetailView(),
+                    tag: HomeTab.NavigationState.logReminderDetail,
+                    selection: viewModel.$navigationState) {
                 EmptyView()
             }
             ForEach(viewModel.reminders) { reminder in
@@ -61,19 +63,15 @@ struct LogReminderSection: View {
         )
     }
 
-    private func onAppear() {
-        viewModel.navigateToLogReminderDetails = nil // Resets navigation state
-    }
-
     private func onTodoTapped(_ logReminder: LogReminder) {
+        // TODO: init state to complete log reminder after creation
         store.send(.createLog(action: .initFromPreviousLog(loggable: logReminder.templateLoggable)))
         viewModel.showCreateLogModal.toggle()
     }
 
     private func onLogRowTapped(_ logReminder: LogReminder) {
-        // TODO: send action to initialize log reminder view state
-//        store.send(.logDetails(action: .initState(loggable: loggable)))
-//        viewModel.navigateToLogReminderDetails = true
+        store.send(.logReminderDetails(action: .initState(logReminder: logReminder)))
+        viewModel.navigationState = HomeTab.NavigationState.logReminderDetail
     }
 }
 
@@ -84,7 +82,7 @@ struct LogReminderSection_Previews: PreviewProvider {
                 PreviewLogReminders.overdue,
                 PreviewLogReminders.notOverdue,
             ],
-            navigateToLogReminderDetails: .constant(nil),
+            navigationState: .constant(nil),
             showCreateLogModal: .constant(false)
     )
 

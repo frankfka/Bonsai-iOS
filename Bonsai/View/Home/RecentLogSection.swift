@@ -17,12 +17,12 @@ struct RecentLogSection: View {
             recentLogs.isEmpty
         }
         let recentLogs: [LogRow.ViewModel]
-        @Binding var navigateToLogDetails: Bool?
+        @Binding var navigationState: HomeTab.NavigationState?
 
-        init(recentLogs: [LogRow.ViewModel], navigateToLogDetails: Binding<Bool?>) {
+        init(recentLogs: [LogRow.ViewModel], navigateToLogDetails: Binding<HomeTab.NavigationState?>) {
             // Trim to specified length
             self.recentLogs = Array(recentLogs.prefix(ViewModel.numToShow))
-            self._navigateToLogDetails = navigateToLogDetails
+            self._navigationState = navigateToLogDetails
         }
 
     }
@@ -39,7 +39,7 @@ struct RecentLogSection: View {
             } else {
                 // Using the tag allows us to conditionally trigger navigation within an onTap method
                 // This is useful because we can dispatch an action to initialize the redux state
-                NavigationLink(destination: LogDetailView(), tag: true, selection: viewModel.$navigateToLogDetails) {
+                NavigationLink(destination: LogDetailView(), tag: HomeTab.NavigationState.logDetail, selection: viewModel.$navigationState) {
                     EmptyView()
                 }
                 ForEach(viewModel.recentLogs) { logVm in
@@ -54,18 +54,12 @@ struct RecentLogSection: View {
                     }
                 }
             }
-        }.onAppear {
-            self.onAppear()
         }
-    }
-
-    private func onAppear() {
-        viewModel.navigateToLogDetails = nil // Resets navigation state
     }
 
     private func onLogRowTapped(loggable: Loggable) {
         store.send(.logDetails(action: .initState(loggable: loggable)))
-        viewModel.navigateToLogDetails = true
+        viewModel.navigationState = HomeTab.NavigationState.logDetail
     }
 }
 

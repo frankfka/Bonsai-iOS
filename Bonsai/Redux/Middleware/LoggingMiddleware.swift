@@ -27,6 +27,8 @@ extension AppAction {
             return "View Log: \(action.loggableActionName)"
         case let .logDetails(action):
             return "Log Details: \(action.loggableActionName)"
+        case let .logReminderDetails(action):
+            return "Log Reminder Details: \(action.loggableActionName)"
         case let .settings(action):
             return "Settings: \(action.loggableActionName)"
         case let.createLog(action):

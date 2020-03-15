@@ -82,7 +82,12 @@ struct HomeTab: View {
         }
     }
     private let viewModel: ViewModel
-    @State(initialValue: false) var navigateToLogDetails: Bool? // Allows conditional pushing of navigation views
+
+    @State(initialValue: nil) var navigationState: NavigationState? // Allows conditional pushing of navigation views
+    enum NavigationState {
+        case logDetail
+        case logReminderDetail
+    }
     
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -104,13 +109,15 @@ struct HomeTab: View {
                 }
             }
             .padding(.all, CGFloat.Theme.Layout.normal)
+        }.onAppear {
+//            self.navigationState = nil
         }
     }
 
     private func getLogReminderSectionViewModel() -> LogReminderSection.ViewModel {
         return LogReminderSection.ViewModel(
                 logReminders: store.state.globalLogReminders.sortedLogReminders,
-                navigateToLogReminderDetails: .constant(false),
+                navigationState: self.$navigationState,
                 showCreateLogModal: viewModel.$showCreateLogModal
         )
     }
@@ -122,7 +129,7 @@ struct HomeTab: View {
                         .map { LogRow.ViewModel(loggable: $0) }
         return RecentLogSection.ViewModel(
                 recentLogs: logViewModels,
-                navigateToLogDetails: $navigateToLogDetails
+                navigateToLogDetails: $navigationState
         )
     }
 

@@ -50,6 +50,8 @@ struct AppState {
     var viewLogs: ViewLogsState
     // Log Details page
     var logDetails: LogDetailState
+    // Log Reminder Details page
+    var logReminderDetails: LogReminderDetailState
     // Settings page
     var settings: SettingsState
     // Create log
@@ -57,16 +59,28 @@ struct AppState {
     // Create log reminder
     var createLogReminder: CreateLogReminderState
 
-    init() {
-        global = GlobalState()
-        globalLogs = GlobalLogState()
-        globalLogReminders = GlobalLogReminderState()
-        homeScreen = HomeScreenState()
-        viewLogs = ViewLogsState()
-        logDetails = LogDetailState()
-        settings = SettingsState()
-        createLog = CreateLogState()
-        createLogReminder = CreateLogReminderState()
+    init(
+        global: GlobalState = GlobalState(),
+        globalLogs: GlobalLogState = GlobalLogState(),
+        globalLogReminders: GlobalLogReminderState = GlobalLogReminderState(),
+        homeScreen: HomeScreenState = HomeScreenState(),
+        viewLogs: ViewLogsState = ViewLogsState(),
+        logDetails: LogDetailState = LogDetailState(),
+        logReminderDetails: LogReminderDetailState = LogReminderDetailState(),
+        settings: SettingsState = SettingsState(),
+        createLog: CreateLogState = CreateLogState(),
+        createLogReminder: CreateLogReminderState = CreateLogReminderState()
+    ) {
+        self.global = global
+        self.globalLogs = globalLogs
+        self.globalLogReminders = globalLogReminders
+        self.homeScreen = homeScreen
+        self.viewLogs = viewLogs
+        self.logDetails = logDetails
+        self.logReminderDetails = logReminderDetails
+        self.settings = settings
+        self.createLog = createLog
+        self.createLogReminder = createLogReminder
     }
 }
 

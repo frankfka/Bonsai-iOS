@@ -25,6 +25,7 @@
 		114B743F23A28A800095D44B /* AppRedux.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114B743E23A28A800095D44B /* AppRedux.swift */; };
 		1162466D23C1390500788BA5 /* SymptomSeveritySliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1162466C23C1390400788BA5 /* SymptomSeveritySliderView.swift */; };
 		117F128D23E137990036C055 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 117F128C23E137980036C055 /* GoogleService-Info.plist */; };
+		1191FCB1241D41870056D5C8 /* LogReminderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1191FCB0241D41870056D5C8 /* LogReminderDetailView.swift */; };
 		11929D1123CC358400B06B99 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11929D1023CC358400B06B99 /* ErrorView.swift */; };
 		11B4311823A5BBB700909D47 /* Mood.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B4311723A5BBB700909D47 /* Mood.swift */; };
 		11B4311A23A6960500909D47 /* LoadingSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B4311923A6960500909D47 /* LoadingSpinner.swift */; };
@@ -90,6 +91,7 @@
 		9E04B6BF3C7D7FB63498CBC7 /* LogReminderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BCB108A60AC967332E25 /* LogReminderService.swift */; };
 		9E04B6DD94E5A95F4D9DCA11 /* SerializationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B9C8FD3C64EAA23028B0 /* SerializationConstants.swift */; };
 		9E04B7090408200D01C3F015 /* Nutrition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B0FA059903598F57AE95 /* Nutrition.swift */; };
+		9E04B71020ED396EBE9BD1A7 /* LogReminderDetailsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B3EA4D75E254AF7F9626 /* LogReminderDetailsAction.swift */; };
 		9E04B74A28FA0EEBB4BC3CB0 /* GlobalLogReminderReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BE7166946BCB95501BAA /* GlobalLogReminderReducer.swift */; };
 		9E04B755EF3C338636399E89 /* GlobalState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BC484C03DA14EC33586F /* GlobalState.swift */; };
 		9E04B79908F30010E6B5C073 /* LogDetailsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BE9767AC25E6DB2946D9 /* LogDetailsAction.swift */; };
@@ -106,6 +108,7 @@
 		9E04B95B683A587ACED91D5F /* LogDetailState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B0F0135005B16E61B8A4 /* LogDetailState.swift */; };
 		9E04B986D42B107ED18ED0E5 /* AuthViewControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B755AF0815DAF19D6FE2 /* AuthViewControllerRepresentable.swift */; };
 		9E04B9894EED8D8491CD685D /* RealmConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B51F7FCA5C02F7EDE359 /* RealmConfig.swift */; };
+		9E04B997388679D8492B0BB3 /* LogReminderDetailsReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B121E14284A3051053EB /* LogReminderDetailsReducer.swift */; };
 		9E04B9AD3D8A89DF7EEDC6BC /* CreateLogAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BAB921A890EC2BB62579 /* CreateLogAction.swift */; };
 		9E04B9C36603145118DD76D2 /* AnalyticsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BEC8DC37D9435D894317 /* AnalyticsModels.swift */; };
 		9E04B9CCE5B730A6CD36D39A /* LogDetailMedicationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BB72735E65800D5B71ED /* LogDetailMedicationView.swift */; };
@@ -124,6 +127,7 @@
 		9E04BB1C25373057C19F19B9 /* AppReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B11F0B3A84BA18DFF035 /* AppReducer.swift */; };
 		9E04BB25498F950A8D84B41E /* PreviewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BB43647F9802F581CE76 /* PreviewState.swift */; };
 		9E04BB30BD8E25713D8572AA /* CreateLogState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B2DF23C563EDE7C0BBEE /* CreateLogState.swift */; };
+		9E04BB5F815F2059A05E1063 /* LogReminderDetailState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B3759A6239F5572D3C9E /* LogReminderDetailState.swift */; };
 		9E04BB66ECCD13C94DFBC8B1 /* Popup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BFB9FC87753455D68DDA /* Popup.swift */; };
 		9E04BB6ECC15FF7A01CF2DB5 /* ChartModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BD32195B26669D42A6AD /* ChartModels.swift */; };
 		9E04BBC2B2FF6C3F91B2FC86 /* ViewLogsReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B4F958CBB6E0E7260A21 /* ViewLogsReducer.swift */; };
@@ -176,6 +180,7 @@
 		114B743E23A28A800095D44B /* AppRedux.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRedux.swift; sourceTree = "<group>"; };
 		1162466C23C1390400788BA5 /* SymptomSeveritySliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomSeveritySliderView.swift; sourceTree = "<group>"; };
 		117F128C23E137980036C055 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		1191FCB0241D41870056D5C8 /* LogReminderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogReminderDetailView.swift; sourceTree = "<group>"; };
 		11929D1023CC358400B06B99 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		11B4311723A5BBB700909D47 /* Mood.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mood.swift; sourceTree = "<group>"; };
 		11B4311923A6960500909D47 /* LoadingSpinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingSpinner.swift; sourceTree = "<group>"; };
@@ -219,6 +224,7 @@
 		9E04B0FA059903598F57AE95 /* Nutrition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Nutrition.swift; sourceTree = "<group>"; };
 		9E04B11F0B3A84BA18DFF035 /* AppReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppReducer.swift; sourceTree = "<group>"; };
 		9E04B1218B164F2EF7864104 /* LogReminder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogReminder.swift; sourceTree = "<group>"; };
+		9E04B121E14284A3051053EB /* LogReminderDetailsReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogReminderDetailsReducer.swift; sourceTree = "<group>"; };
 		9E04B158D38EBC0BEC5C2A77 /* ActivityLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityLogView.swift; sourceTree = "<group>"; };
 		9E04B17C034FABD17AEC4BFB /* GlobalReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalReducer.swift; sourceTree = "<group>"; };
 		9E04B2034124C63454F0CEDC /* HomeScreenState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeScreenState.swift; sourceTree = "<group>"; };
@@ -234,9 +240,11 @@
 		9E04B345F9A5313B154DC745 /* ViewLogsTab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewLogsTab.swift; sourceTree = "<group>"; };
 		9E04B355F83BFA8404BC1206 /* LogRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogRow.swift; sourceTree = "<group>"; };
 		9E04B359724D8C94ED1CFA37 /* SymptomLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SymptomLogView.swift; sourceTree = "<group>"; };
+		9E04B3759A6239F5572D3C9E /* LogReminderDetailState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogReminderDetailState.swift; sourceTree = "<group>"; };
 		9E04B39256857F5BF15DB44F /* AnalyticsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		9E04B3D87A2D9D0DC0EFC30B /* ViewLogsState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewLogsState.swift; sourceTree = "<group>"; };
 		9E04B3E3FFB50A3920C79D37 /* LineChartModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineChartModels.swift; sourceTree = "<group>"; };
+		9E04B3EA4D75E254AF7F9626 /* LogReminderDetailsAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogReminderDetailsAction.swift; sourceTree = "<group>"; };
 		9E04B3FDF3F88060449B537B /* ViewModifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
 		9E04B41C35F8E9303DE177BA /* CreateLogReminderAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogReminderAction.swift; sourceTree = "<group>"; };
 		9E04B4A50B14B9F44D696289 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -342,6 +350,7 @@
 				9E04BB8BB056B5229D18E7A4 /* Debug */,
 				9E04B281F9FE1970BB809117 /* Analytics */,
 				9E04B10ED981318B93DD1EFB /* CreateLogReminder */,
+				9E04B38985C6BFE91B1FD69C /* LogReminderDetail */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -646,6 +655,14 @@
 			path = Analytics;
 			sourceTree = "<group>";
 		};
+		9E04B38985C6BFE91B1FD69C /* LogReminderDetail */ = {
+			isa = PBXGroup;
+			children = (
+				1191FCB0241D41870056D5C8 /* LogReminderDetailView.swift */,
+			);
+			path = LogReminderDetail;
+			sourceTree = "<group>";
+		};
 		9E04B3920AAD10E938641431 /* Util */ = {
 			isa = PBXGroup;
 			children = (
@@ -678,6 +695,7 @@
 				9E04B7DC39527088D3529BB7 /* GlobalLogReducer.swift */,
 				9E04BD3BB3217EB7C0EB444B /* CreateLogReminderReducer.swift */,
 				9E04BE7166946BCB95501BAA /* GlobalLogReminderReducer.swift */,
+				9E04B121E14284A3051053EB /* LogReminderDetailsReducer.swift */,
 			);
 			path = Reducers;
 			sourceTree = "<group>";
@@ -706,6 +724,7 @@
 				9E04BAB921A890EC2BB62579 /* CreateLogAction.swift */,
 				9E04B41C35F8E9303DE177BA /* CreateLogReminderAction.swift */,
 				9E04B8529DCEEB464FAAB365 /* GlobalLogReminderAction.swift */,
+				9E04B3EA4D75E254AF7F9626 /* LogReminderDetailsAction.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -760,6 +779,7 @@
 				9E04B2E5D1742A91F37DD955 /* GlobalLogState.swift */,
 				9E04B0CFE13E319478B957F2 /* CreateLogReminderState.swift */,
 				9E04BB4F20C6D54D087E7864 /* GlobalLogReminderState.swift */,
+				9E04B3759A6239F5572D3C9E /* LogReminderDetailState.swift */,
 			);
 			path = States;
 			sourceTree = "<group>";
@@ -967,6 +987,7 @@
 				9E04B885AE24CF4A17D9A873 /* LogService.swift in Sources */,
 				9E04BFCF9C45BB3FCE40FFE3 /* User.swift in Sources */,
 				9E04BF9D42BED6CD1B95E47A /* UserConstants.swift in Sources */,
+				1191FCB1241D41870056D5C8 /* LogReminderDetailView.swift in Sources */,
 				9E04B7D8552FA405AEC1E868 /* Common.swift in Sources */,
 				11B4311A23A6960500909D47 /* LoadingSpinner.swift in Sources */,
 				11B4311D23A6974C00909D47 /* LoadingSpinnerWrappers.swift in Sources */,
@@ -1075,6 +1096,9 @@
 				9E04B74A28FA0EEBB4BC3CB0 /* GlobalLogReminderReducer.swift in Sources */,
 				9E04B3738FE95370CC048068 /* ViewModifiers.swift in Sources */,
 				9E04BE3A73C2699CA8E60CAD /* PreviewLogReminders.swift in Sources */,
+				9E04BB5F815F2059A05E1063 /* LogReminderDetailState.swift in Sources */,
+				9E04B71020ED396EBE9BD1A7 /* LogReminderDetailsAction.swift in Sources */,
+				9E04B997388679D8492B0BB3 /* LogReminderDetailsReducer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

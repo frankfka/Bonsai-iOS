@@ -9,7 +9,7 @@ struct LogDetailsReducer {
     static func reduce(state: AppState, action: LogDetailsAction) -> AppState {
         switch action {
         case let .initState(loggable):
-            return screenDidShow(state: state, loggable: loggable)
+            return initState(state: state, loggable: loggable)
         case let .fetchLogDataSuccess(loggable):
             return fetchLogDataSuccess(state: state, loggable: loggable)
         case let .fetchLogDataError(error):
@@ -27,7 +27,7 @@ struct LogDetailsReducer {
         }
     }
 
-    static private func screenDidShow(state: AppState, loggable: Loggable) -> AppState {
+    static private func initState(state: AppState, loggable: Loggable) -> AppState {
         var newState = state
         // Start in loading with a fresh state
         var logDetailState = LogDetailState()
