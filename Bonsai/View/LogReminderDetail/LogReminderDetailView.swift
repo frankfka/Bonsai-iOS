@@ -29,11 +29,24 @@ struct LogReminderDetailView: View {
     struct ViewModel {
         // Default Log Reminder so we don't have nullables
         private static let EmptyLogReminder: LogReminder = LogReminder(
-                id: "",
-                reminderDate: Date(),
-                reminderInterval: nil,
-                templateLoggable: NoteLog(id: "", title: "", dateCreated: Date(),notes: "")
+            id: "",
+            reminderDate: Date(),
+            reminderInterval: nil,
+            templateLoggable: NoteLog(id: "", title: "", dateCreated: Date(),notes: "")
         )
+        private static func getTimeIntervalString(_ interval: TimeInterval) -> String {
+            let (valIdx, typeIdx) = TimeInterval.reminderIntervalToSelection(interval)
+            let val = TimeInterval.reminderIntervalValueSelections[valIdx]
+            let type = TimeInterval.reminderIntervalTypeSelections[typeIdx]
+            let typeStr: String
+            let valStr = val.strValue
+            if val.val > 1 {
+                typeStr = type.pluralStrValue
+            } else {
+                typeStr = type.strValue
+            }
+            return "\(valStr) \(typeStr)"
+        }
         // State
         let isLoading: Bool
         let showDeleteSuccess: Bool
@@ -66,9 +79,8 @@ struct LogReminderDetailView: View {
             self.logTitle = logReminder.templateLoggable.title
             self.logCategory = logReminder.templateLoggable.category.displayValue()
             if let interval = logReminder.reminderInterval {
-                // TODO
                 self.showReminderInterval = true
-                self.reminderInterval = "\(interval)"
+                self.reminderInterval = ViewModel.getTimeIntervalString(interval)
             } else {
                 self.showReminderInterval = false
                 self.reminderInterval = ""
@@ -140,8 +152,7 @@ struct LogReminderDetailView: View {
         }
         .navigationBarItems(
             trailing: Button(action: {
-                // TODO
-                print("delete")
+                self.onDeleteReminderTapped()
             }, label: {
                 Image(systemName: "trash")
                     .resizable()
@@ -163,13 +174,43 @@ struct LogReminderDetailView: View {
                 primaryButton: .destructive(
                     Text("Confirm"),
                     action: {
-                        print("Confirm delete")
+                        self.onDeleteReminderConfirmed()
                     }),
                 secondaryButton: .cancel(
                     Text("Cancel")
                 )
             )
         }
+        // Popups
+        .withLoadingPopup(show: .constant(self.viewModel.isLoading), text: "Deleting")
+        .withStandardPopup(show: .constant(self.viewModel.showDeleteError), type: .failure, text: "Something Went Wrong") {
+            self.onErrorPopupDismiss()
+        }
+        .withStandardPopup(show: .constant(self.viewModel.showDeleteSuccess), type: .success, text: "Deleted Successfully") {
+            self.onDeleteSuccessPopupDismiss()
+        }
+    }
+
+    private func onDeleteReminderTapped() {
+        showDeleteReminderConfirmation.toggle()
+    }
+
+    private func onDeleteReminderConfirmed() {
+        store.send(.logReminderDetails(action: .deleteCurrentReminder))
+    }
+
+    private func onErrorPopupDismiss() {
+        store.send(.logReminderDetails(action: .errorPopupShown))
+    }
+
+    private func onDeleteSuccessPopupDismiss() {
+        // Only shown when log is deleted successfully, so we're safe to dismiss
+        dismissView()
+    }
+
+    private func dismissView() {
+        self.presentationMode.wrappedValue.dismiss()
+        store.send(.logReminderDetails(action: .screenDidDismiss))
     }
 }
 

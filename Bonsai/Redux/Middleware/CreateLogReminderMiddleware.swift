@@ -14,9 +14,6 @@ struct CreateLogReminderMiddleware {
         ]
     }
 
-    // MARK: Retrieve
-    // TODO
-
     // MARK: Create
     private static func createLogReminderFromLogReminderStateMiddleware
             (logReminderService: LogReminderService) -> Middleware<AppState> {
@@ -29,7 +26,7 @@ struct CreateLogReminderMiddleware {
                     .onSaveFailure(error: ServiceError(message: "Could not create log reminder from state"))))
                     return
                 }
-                // Perform search
+                // Perform save
                 save(logReminderService: logReminderService, logReminder: logReminder)
                         .sink(receiveValue: { newAction in
                             send(newAction)

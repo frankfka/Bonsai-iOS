@@ -7,8 +7,8 @@ import Foundation
 
 enum LogReminderDetailsAction: LoggableAction {
     case initState(logReminder: LogReminder)
-    case deleteCurrentLog
-    case deleteSuccess(deletedLog: Loggable)
+    case deleteCurrentReminder
+    case deleteSuccess(deletedReminder: LogReminder)
     case deleteError(error: Error)
     case errorPopupShown
     case screenDidDismiss

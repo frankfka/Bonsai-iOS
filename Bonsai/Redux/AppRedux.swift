@@ -115,6 +115,8 @@ struct AppMiddleware {
         middleware.append(contentsOf: ViewLogsMiddleware.middleware(services: services))
         // Log Detail
         middleware.append(contentsOf: LogDetailMiddleware.middleware(services: services))
+        // Log Reminder Detail
+        middleware.append(contentsOf: LogReminderDetailMiddleware.middleware(services: services))
         // Settings
         middleware.append(contentsOf: SettingsMiddleware.middleware(services: services))
         // Create log

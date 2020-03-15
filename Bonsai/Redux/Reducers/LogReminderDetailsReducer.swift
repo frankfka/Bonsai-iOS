@@ -5,10 +5,10 @@ struct LogReminderDetailsReducer {
         switch action {
         case let .initState(logReminder):
             return initState(state: state, logReminder: logReminder)
-        case .deleteCurrentLog:
-            return deleteLog(state: state)
-        case let .deleteSuccess(deletedLog):
-            return deleteSuccess(state: state, deletedLog: deletedLog)
+        case .deleteCurrentReminder:
+            return deleteReminder(state: state)
+        case .deleteSuccess:
+            return deleteSuccess(state: state)
         case let .deleteError(error):
             return deleteError(state: state, error: error)
         case .errorPopupShown:
@@ -27,13 +27,13 @@ struct LogReminderDetailsReducer {
         return newState
     }
     
-    static private func deleteLog(state: AppState) -> AppState {
+    static private func deleteReminder(state: AppState) -> AppState {
         var newState = state
         newState.logReminderDetails.isDeleting = true
         return newState
     }
 
-    static private func deleteSuccess(state: AppState, deletedLog: Loggable) -> AppState {
+    static private func deleteSuccess(state: AppState) -> AppState {
         var newState = state
         newState.logReminderDetails.isDeleting = false
         newState.logReminderDetails.deleteSuccess = true

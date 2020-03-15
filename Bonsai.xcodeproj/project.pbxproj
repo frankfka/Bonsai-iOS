@@ -84,6 +84,7 @@
 		9E04B5451F43ADCBD5CC72FA /* HomeScreenReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BF971048F9F4765391DA /* HomeScreenReducer.swift */; };
 		9E04B548CF6C4197ED8E871C /* ActivityLogDurationRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B20C2645C58F9DEA417D /* ActivityLogDurationRowView.swift */; };
 		9E04B5AFF3ADE20F1639D10D /* SearchListItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BA6E51A6CDACF7C60F88 /* SearchListItemRow.swift */; };
+		9E04B5B84D479D940A47410A /* LogReminderDetailMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BDE701392FDFBCF183E3 /* LogReminderDetailMiddleware.swift */; };
 		9E04B5ECE8A4C858E0D30AB7 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BC18297FF062E82106AC /* Utils.swift */; };
 		9E04B642138C647CA21FCBE5 /* AppInitMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B8C59601E362C76DAABD /* AppInitMiddleware.swift */; };
 		9E04B6B177FA9FB7A80BAC4E /* DatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BF7E09883F4AD3733212 /* DatabaseService.swift */; };
@@ -303,6 +304,7 @@
 		9E04BD42E217456E1AA1DA03 /* CacheService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheService.swift; sourceTree = "<group>"; };
 		9E04BD4984DDBAEC66B08A34 /* DisableInteraction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisableInteraction.swift; sourceTree = "<group>"; };
 		9E04BD4AB903F6E3E687B8B6 /* SettingsMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsMiddleware.swift; sourceTree = "<group>"; };
+		9E04BDE701392FDFBCF183E3 /* LogReminderDetailMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogReminderDetailMiddleware.swift; sourceTree = "<group>"; };
 		9E04BDF41F15A3CC3EB991BA /* Previews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Previews.swift; sourceTree = "<group>"; };
 		9E04BDF894B8BF390969E233 /* FirebaseAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseAuthService.swift; sourceTree = "<group>"; };
 		9E04BE0625874C6959AF46B4 /* ToggleRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleRowView.swift; sourceTree = "<group>"; };
@@ -643,6 +645,7 @@
 				9E04B2DD597DD9644E6A1EB8 /* GlobalLogsMiddleware.swift */,
 				9E04B9BE368E5810A4DA264A /* CreateLogReminderMiddleware.swift */,
 				9E04B7D200ED57FC399C8F5F /* GlobalLogRemindersMiddleware.swift */,
+				9E04BDE701392FDFBCF183E3 /* LogReminderDetailMiddleware.swift */,
 			);
 			path = Middleware;
 			sourceTree = "<group>";
@@ -1099,6 +1102,7 @@
 				9E04BB5F815F2059A05E1063 /* LogReminderDetailState.swift in Sources */,
 				9E04B71020ED396EBE9BD1A7 /* LogReminderDetailsAction.swift in Sources */,
 				9E04B997388679D8492B0BB3 /* LogReminderDetailsReducer.swift in Sources */,
+				9E04B5B84D479D940A47410A /* LogReminderDetailMiddleware.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

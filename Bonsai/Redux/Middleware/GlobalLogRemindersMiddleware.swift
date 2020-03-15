@@ -20,8 +20,12 @@ struct GlobalLogRemindersMiddleware {
             // Home Screen
             case .homeScreen(action: let .dataLoadSuccess(_, logReminders)):
                 send(.globalLogReminder(action: .addOrUpdateMany(logReminders)))
+            // Create Log Reminder
             case .createLogReminder(action: let .onSaveSuccess(logReminder)):
                 send(.globalLogReminder(action: .addOrUpdate(logReminder)))
+            // Log Reminder Details
+            case .logReminderDetails(action: let .deleteSuccess(deletedReminder)):
+                send(.globalLogReminder(action: .remove(deletedReminder)))
             default:
                 break
             }

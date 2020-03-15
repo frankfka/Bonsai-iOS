@@ -104,7 +104,7 @@ struct LogDetailView: View {
                                             Color.Theme.grayscalePrimary : Color.Theme.primary
                             )
                 })
-                        .disabled(self.viewModel.disableDelete)
+                .disabled(self.viewModel.disableDelete)
         )
         .navigationBarTitle("Log Details", displayMode: .inline)
         // Delete Log Confirmation
@@ -157,10 +157,6 @@ struct LogDetailView: View {
     }
 
     // MARK: Actions
-    private func onBackTapped() {
-        dismissView()
-    }
-
     // Log Again
     private func onLogAgainTapped() {
         // Dispatch an action for logging that will initialize the state

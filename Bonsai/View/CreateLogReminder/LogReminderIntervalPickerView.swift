@@ -8,78 +8,83 @@
 
 import SwiftUI
 
+// TODO: There's some weird behavior with 24 hours automatically converting to 1 day, but not a big deal
+extension TimeInterval {
+    static let reminderIntervalValueSelections: [(strValue: String, val: Int)] = Array(1...24).map {
+        ("\($0)", $0)
+    }
+    static let reminderIntervalTypeSelections: [(strValue: String, pluralStrValue: String, val: TimeInterval)] = [
+        ("Hour", "Hours", TimeInterval.hour),
+        ("Day", "Days", TimeInterval.day),
+        ("Week", "Weeks", TimeInterval.week)
+    ]
+    static func reminderIntervalToSelection(_ interval: TimeInterval) -> (valueIdx: Int, typeIdx: Int) {
+        // This will always return the biggest time interval (something saved as 7 days -> 1 week after reload)
+        let valueIdx: Int?
+        let typeIdx: Int?
+        if interval.truncatingRemainder(dividingBy: TimeInterval.week) == 0 {
+            valueIdx = reminderIntervalValueSelections.firstIndex { _, val in val == Int(interval / TimeInterval.week) }
+            typeIdx = reminderIntervalTypeSelections.firstIndex { _, _, timeInterval in timeInterval == TimeInterval.week }
+        } else if interval.truncatingRemainder(dividingBy: TimeInterval.day) == 0 {
+            valueIdx = reminderIntervalValueSelections.firstIndex { _, val in val == Int(interval / TimeInterval.day) }
+            typeIdx = reminderIntervalTypeSelections.firstIndex { _, _, timeInterval in timeInterval == TimeInterval.day }
+        } else {
+            valueIdx = reminderIntervalValueSelections.firstIndex { _, val in val == Int(interval / TimeInterval.hour) }
+            typeIdx = reminderIntervalTypeSelections.firstIndex { _, _, timeInterval in timeInterval == TimeInterval.hour }
+        }
+        if let valueIdx = valueIdx, let typeIdx = typeIdx {
+            return (valueIdx, typeIdx)
+        }
+        // Default to first selection
+        AppLogging.warn("Could not convert time interval \(interval) to picker selection")
+        return (0, 0)
+    }
+    static func reminderSelectionToInterval(_ selection: (valueIdx: Int, typeIdx: Int)) -> TimeInterval {
+        guard selection.valueIdx < reminderIntervalValueSelections.count
+                      && selection.typeIdx < reminderIntervalTypeSelections.count else {
+            AppLogging.warn("Selection out of bounds!")
+            return .week
+        }
+        let selectedValue = reminderIntervalValueSelections[selection.valueIdx].val
+        let selectedType = reminderIntervalTypeSelections[selection.typeIdx].val
+        return TimeInterval(selectedType * Double(selectedValue))
+    }
+}
+
 struct LogReminderIntervalPickerView: View {
     
     struct ViewModel {
-        static let intervalValueSelection: [(strValue: String, val: Int)] = Array(1...24).map {
-            ("\($0)", $0)
-        }
-        static let intervalTypeSelection: [(strValue: String, pluralStrValue: String, val: TimeInterval)] = [
-            ("Hour", "Hours", TimeInterval.hour),
-            ("Day", "Days", TimeInterval.day),
-            ("Week", "Weeks", TimeInterval.week)
-        ]
-        static func intervalToSelection(_ interval: TimeInterval) -> (valueIdx: Int, typeIdx: Int) {
-            // This will always return the biggest time interval (something saved as 7 days -> 1 week after reload)
-            let valueIdx: Int?
-            let typeIdx: Int?
-            if interval.truncatingRemainder(dividingBy: TimeInterval.week) == 0 {
-                valueIdx = intervalValueSelection.firstIndex { _, val in val == Int(interval / TimeInterval.week) }
-                typeIdx = intervalTypeSelection.firstIndex { _, _, timeInterval in timeInterval == TimeInterval.week }
-            } else if interval.truncatingRemainder(dividingBy: TimeInterval.day) == 0 {
-                valueIdx = intervalValueSelection.firstIndex { _, val in val == Int(interval / TimeInterval.day) }
-                typeIdx = intervalTypeSelection.firstIndex { _, _, timeInterval in timeInterval == TimeInterval.day }
-            } else {
-                valueIdx = intervalValueSelection.firstIndex { _, val in val == Int(interval / TimeInterval.hour) }
-                typeIdx = intervalTypeSelection.firstIndex { _, _, timeInterval in timeInterval == TimeInterval.hour }
-            }
-            if let valueIdx = valueIdx, let typeIdx = typeIdx {
-                return (valueIdx, typeIdx)
-            }
-            // Default to first selection
-            AppLogging.warn("Could not convert time interval \(interval) to picker selection")
-            return (0, 0)
-        }
-        static func selectionToInterval(_ selection: (valueIdx: Int, typeIdx: Int)) -> TimeInterval {
-            guard selection.valueIdx < ViewModel.intervalValueSelection.count
-                          && selection.typeIdx < ViewModel.intervalTypeSelection.count else {
-                AppLogging.warn("Selection out of bounds!")
-                return .week
-            }
-            let selectedValue = ViewModel.intervalValueSelection[selection.valueIdx].val
-            let selectedType = ViewModel.intervalTypeSelection[selection.typeIdx].val
-            return TimeInterval(selectedType * Double(selectedValue))
-        }
-
+        static let intervalValueSelections = TimeInterval.reminderIntervalValueSelections
+        static let intervalTypeSelections = TimeInterval.reminderIntervalTypeSelections
         @Binding var showPicker: Bool
         let valuePickerSelection: Binding<Int>
         let typePickerSelection: Binding<Int>
         var rowDisplay: String {
-            let selectedValue = ViewModel.intervalValueSelection[valuePickerSelection.wrappedValue].val
-            let selectedValueStr = ViewModel.intervalValueSelection[valuePickerSelection.wrappedValue].strValue
+            let selectedValue = TimeInterval.reminderIntervalValueSelections[valuePickerSelection.wrappedValue].val
+            let selectedValueStr = TimeInterval.reminderIntervalValueSelections[valuePickerSelection.wrappedValue].strValue
             let selectedTypeStr: String
             if selectedValue > 1 {
-                selectedTypeStr = ViewModel.intervalTypeSelection[typePickerSelection.wrappedValue].pluralStrValue
+                selectedTypeStr = TimeInterval.reminderIntervalTypeSelections[typePickerSelection.wrappedValue].pluralStrValue
             } else {
-                selectedTypeStr = ViewModel.intervalTypeSelection[typePickerSelection.wrappedValue].strValue
+                selectedTypeStr = TimeInterval.reminderIntervalTypeSelections[typePickerSelection.wrappedValue].strValue
             }
             return "\(selectedValueStr) \(selectedTypeStr)"
         }
         
         init(selectedInterval: TimeInterval, showPicker: Binding<Bool>, onIntervalSelect: TimeIntervalCallback? = nil) {
-            let initialSelection = ViewModel.intervalToSelection(selectedInterval)
+            let initialSelection = TimeInterval.reminderIntervalToSelection(selectedInterval)
             self.valuePickerSelection = Binding(get: {
                 initialSelection.valueIdx
             }, set: { (newValueSelection) in
                 if newValueSelection != initialSelection.valueIdx {
-                    onIntervalSelect?(ViewModel.selectionToInterval((newValueSelection, initialSelection.typeIdx)))
+                    onIntervalSelect?(TimeInterval.reminderSelectionToInterval((newValueSelection, initialSelection.typeIdx)))
                 }
             })
             self.typePickerSelection = Binding(get: {
                 initialSelection.typeIdx
             }, set: { (newTypeSelection) in
                 if newTypeSelection != initialSelection.typeIdx {
-                    onIntervalSelect?(ViewModel.selectionToInterval((initialSelection.valueIdx, newTypeSelection)))
+                    onIntervalSelect?(TimeInterval.reminderSelectionToInterval((initialSelection.valueIdx, newTypeSelection)))
                 }
             })
             self._showPicker = showPicker
@@ -108,8 +113,8 @@ struct LogReminderIntervalPickerView: View {
                             selection: self.viewModel.valuePickerSelection,
                             label: Text("")
                         ) {
-                            ForEach(0..<ViewModel.intervalValueSelection.count) { index in
-                                Text(ViewModel.intervalValueSelection[index].0)
+                            ForEach(0..<ViewModel.intervalValueSelections.count) { index in
+                                Text(ViewModel.intervalValueSelections[index].0)
                                         .tag(index)
                                         .font(Font.Theme.normalText)
                                         .foregroundColor(Color.Theme.textDark)
@@ -120,8 +125,8 @@ struct LogReminderIntervalPickerView: View {
                             selection: self.viewModel.typePickerSelection,
                             label: Text("")
                         ) {
-                            ForEach(0..<ViewModel.intervalTypeSelection.count) { index in
-                                Text(ViewModel.intervalTypeSelection[index].0)
+                            ForEach(0..<ViewModel.intervalTypeSelections.count) { index in
+                                Text(ViewModel.intervalTypeSelections[index].0)
                                         .tag(index)
                                         .font(Font.Theme.normalText)
                                         .foregroundColor(Color.Theme.textDark)
