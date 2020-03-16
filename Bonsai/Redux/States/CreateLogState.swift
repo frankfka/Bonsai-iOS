@@ -59,6 +59,7 @@ struct CreateLogState {
     var nutrition: NutritionLogState = NutritionLogState()
     var symptom: SymptomLogState = SymptomLogState()
     var activity: ActivityLogState = ActivityLogState()
+    var associatedReminder: LogReminder? = nil
 }
 
 // Helper functions

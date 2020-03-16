@@ -26,8 +26,8 @@ protocol DatabaseService {
 
     // Log Reminder functions
     func getLogReminders() -> ServicePublisher<[LogReminder]>
-    func saveOrUpdateLogReminder(_ logReminder: LogReminder) -> ServicePublisher<Void>
-    func deleteLogReminder(_ logReminder: LogReminder) -> ServicePublisher<Void>
+    func saveOrUpdateLogReminder(_ logReminder: LogReminder) -> ServicePublisher<LogReminder>
+    func deleteLogReminder(_ logReminder: LogReminder) -> ServicePublisher<LogReminder>
 
     // Local storage functions
     func resetLocalStorage() -> ServicePublisher<Void> // Called when user restores, all local logs are to be cleared
@@ -253,25 +253,25 @@ class DatabaseServiceImpl: DatabaseService {
         return AnyPublisher(future)
     }
 
-    func saveOrUpdateLogReminder(_ logReminder: LogReminder) -> ServicePublisher<Void> {
-        let future = ServiceFuture<Void> { promise in
+    func saveOrUpdateLogReminder(_ logReminder: LogReminder) -> ServicePublisher<LogReminder> {
+        let future = ServiceFuture<LogReminder> { promise in
             let err = self.realmService.saveLogReminder(logReminder)
             if let err = err {
                 promise(.failure(err))
             } else {
-                promise(.success(()))
+                promise(.success(logReminder))
             }
         }
         return AnyPublisher(future)
     }
 
-    func deleteLogReminder(_ logReminder: LogReminder) -> ServicePublisher<Void> {
-        let future = ServiceFuture<Void> { promise in
+    func deleteLogReminder(_ logReminder: LogReminder) -> ServicePublisher<LogReminder> {
+        let future = ServiceFuture<LogReminder> { promise in
             let err = self.realmService.deleteLogReminder(logReminder)
             if let err = err {
                 promise(.failure(err))
             } else {
-                promise(.success(()))
+                promise(.success(logReminder))
             }
         }
         return AnyPublisher(future)

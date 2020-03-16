@@ -64,8 +64,7 @@ struct LogReminderSection: View {
     }
 
     private func onTodoTapped(_ logReminder: LogReminder) {
-        // TODO: init state to complete log reminder after creation
-        store.send(.createLog(action: .initFromPreviousLog(loggable: logReminder.templateLoggable)))
+        store.send(.createLog(action: .initFromLogReminder(logReminder: logReminder)))
         viewModel.showCreateLogModal.toggle()
     }
 

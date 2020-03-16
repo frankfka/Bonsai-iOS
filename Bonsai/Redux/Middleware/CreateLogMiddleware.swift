@@ -12,10 +12,12 @@ struct CreateLogMiddleware {
         return [
             createLogSearchMiddleware(logService: services.logService),
             createLogAddNewItemMiddleware(logService: services.logService),
-            createLogOnSaveMiddleware(logService: services.logService)
+            createLogOnSaveMiddleware(logService: services.logService),
+            completeLogReminderMiddleware(logReminderService: services.logReminderService)
         ]
     }
 
+    // MARK: Log Item Search
     private static func createLogSearchMiddleware(logService: LogService) -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
@@ -51,6 +53,7 @@ struct CreateLogMiddleware {
                 .eraseToAnyPublisher()
     }
 
+    // MARK: Add Log Item
     private static func createLogAddNewItemMiddleware(logService: LogService) -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
@@ -109,6 +112,7 @@ struct CreateLogMiddleware {
         return nil
     }
 
+    // MARK: Save Log
     private static func createLogOnSaveMiddleware(logService: LogService) -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
@@ -122,7 +126,7 @@ struct CreateLogMiddleware {
                     send(.createLog(action: .onSaveFailure(error: AppError(message: "Could not parse log state"))))
                     return
                 }
-                save(logService: logService, log: newLog, for: user)
+                save(logService: logService, log: newLog, for: user, with: state.createLog.associatedReminder)
                         .sink(receiveValue: { newAction in
                             send(newAction)
                         })
@@ -133,14 +137,48 @@ struct CreateLogMiddleware {
         }
     }
 
-    private static func save(logService: LogService, log: Loggable, for user: User) -> AnyPublisher<AppAction, Never> {
+    private static func save(logService: LogService, log: Loggable, for user: User,
+                             with associatedReminder: LogReminder?) -> AnyPublisher<AppAction, Never> {
         return logService.saveLog(log: log, for: user)
                 .map { result in
-                    return AppAction.createLog(action: .onSaveSuccess(newLog: log))
+                    return AppAction.createLog(action: .onSaveSuccess(newLog: log, associatedLogReminder: associatedReminder))
                 }.catch { (err) -> Just<AppAction> in
                     return Just(AppAction.createLog(action: .onSaveFailure(error: err)))
                 }
                 .eraseToAnyPublisher()
+    }
+
+    // Middleware to complete log reminder if needed
+    private static func completeLogReminderMiddleware(logReminderService: LogReminderService) -> Middleware<AppState> {
+        return { state, action, cancellables, send in
+            switch action {
+            case .createLog(action: let .onSaveSuccess(_, associatedLogReminder)):
+                if let reminder = associatedLogReminder {
+                    completeLogReminder(logReminderService: logReminderService, logReminder: reminder)
+                            .sink(receiveValue: { newAction in
+                                send(newAction)
+                            })
+                            .store(in: &cancellables)
+                }
+            default:
+                break
+            }
+        }
+    }
+
+    private static func completeLogReminder(logReminderService: LogReminderService,
+                                            logReminder: LogReminder) -> AnyPublisher<AppAction, Never> {
+        let completeResult = logReminderService.completeLogReminder(logReminder: logReminder)
+        return completeResult
+                .publisher
+                .map { updatedReminder in
+                    AppAction.createLog(
+                        action: .onLogReminderComplete(logReminder: updatedReminder, didDelete: completeResult.didDelete)
+                    )
+                }.catch { (err) -> Empty<AppAction, Never> in
+                    AppLogging.error("Error completing log reminder: \(err)")
+                    return Empty<AppAction, Never>()
+                }.eraseToAnyPublisher()
     }
 
     // Fetches state and creates the corresponding Loggable struct to save

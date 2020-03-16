@@ -38,8 +38,8 @@ struct LogReminderDetailMiddleware {
     private static func delete(logReminderService: LogReminderService, logReminder: LogReminder)
                     -> AnyPublisher<AppAction, Never> {
         return logReminderService.deleteLogReminder(logReminder: logReminder)
-                .map { _ in
-                    return AppAction.logReminderDetails(action: .deleteSuccess(deletedReminder: logReminder))
+                .map { deletedReminder in
+                    return AppAction.logReminderDetails(action: .deleteSuccess(deletedReminder: deletedReminder))
                 }.catch { (err) -> Just<AppAction> in
                     return Just(AppAction.logReminderDetails(action: .deleteError(error: err)))
                 }

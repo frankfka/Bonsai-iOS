@@ -13,6 +13,7 @@ enum CreateLogAction: LoggableAction {
 
     // Occurs when "Create Again" is pressed in details, or when user completes a reminder
     case initFromPreviousLog(loggable: Loggable)
+    case initFromLogReminder(logReminder: LogReminder)
 
     // Search
     case searchQueryDidChange(query: String)
@@ -41,7 +42,8 @@ enum CreateLogAction: LoggableAction {
 
     // Save
     case onSavePressed
-    case onSaveSuccess(newLog: Loggable)
+    case onSaveSuccess(newLog: Loggable, associatedLogReminder: LogReminder?)
     case onSaveFailure(error: Error)
+    case onLogReminderComplete(logReminder: LogReminder, didDelete: Bool)
     case saveErrorShown
 }

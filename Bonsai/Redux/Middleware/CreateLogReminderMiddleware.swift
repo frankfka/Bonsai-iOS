@@ -41,8 +41,8 @@ struct CreateLogReminderMiddleware {
     private static func save(logReminderService: LogReminderService, logReminder: LogReminder)
                     -> AnyPublisher<AppAction, Never> {
         return logReminderService.saveLogReminder(logReminder: logReminder)
-                .map { results in
-                    return AppAction.createLogReminder(action: .onSaveSuccess(logReminder: logReminder))
+                .map { savedLogReminder in
+                    return AppAction.createLogReminder(action: .onSaveSuccess(logReminder: savedLogReminder))
                 }.catch { (err) -> Just<AppAction> in
                     return Just(AppAction.createLogReminder(action: .onSaveFailure(error: err)))
                 }

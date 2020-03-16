@@ -8,9 +8,9 @@ import Foundation
 protocol LogReminderService {
     func getLogReminders() -> ServicePublisher<[LogReminder]>
     // Called when user completes a log reminder
-    func completeLogReminder(logReminder: LogReminder) -> ServicePublisher<Void>
-    func saveLogReminder(logReminder: LogReminder) -> ServicePublisher<Void>
-    func deleteLogReminder(logReminder: LogReminder) -> ServicePublisher<Void>
+    func completeLogReminder(logReminder: LogReminder) -> (publisher: ServicePublisher<LogReminder>, didDelete: Bool)
+    func saveLogReminder(logReminder: LogReminder) -> ServicePublisher<LogReminder>
+    func deleteLogReminder(logReminder: LogReminder) -> ServicePublisher<LogReminder>
 }
 
 class LogReminderServiceImpl: LogReminderService {
@@ -25,23 +25,23 @@ class LogReminderServiceImpl: LogReminderService {
         return self.db.getLogReminders()
     }
 
-    func completeLogReminder(logReminder: LogReminder) -> ServicePublisher<Void> {
+    func completeLogReminder(logReminder: LogReminder) -> (publisher: ServicePublisher<LogReminder>, didDelete: Bool) {
         if let recurringInterval = logReminder.reminderInterval {
             // Update the log reminder
             var newLogReminder = logReminder
             newLogReminder.reminderDate = newLogReminder.reminderDate.addingTimeInterval(recurringInterval)
-            return self.db.saveOrUpdateLogReminder(newLogReminder)
+            return (self.db.saveOrUpdateLogReminder(newLogReminder), false)
         } else {
             // Not recurring, just delete
-            return self.db.deleteLogReminder(logReminder)
+            return (self.db.deleteLogReminder(logReminder), true)
         }
     }
 
-    func saveLogReminder(logReminder: LogReminder) -> ServicePublisher<Void> {
+    func saveLogReminder(logReminder: LogReminder) -> ServicePublisher<LogReminder> {
         return self.db.saveOrUpdateLogReminder(logReminder)
     }
 
-    func deleteLogReminder(logReminder: LogReminder) -> ServicePublisher<Void> {
+    func deleteLogReminder(logReminder: LogReminder) -> ServicePublisher<LogReminder> {
         return self.db.deleteLogReminder(logReminder)
     }
 
