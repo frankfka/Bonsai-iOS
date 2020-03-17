@@ -19,6 +19,8 @@ struct CreateLogReducer {
 
         case let .initFromPreviousLog(loggable):
             return initFromPreviousLog(state: state, loggable: loggable)
+        case let .initFromLogReminder(logReminder):
+            return initFromLogReminder(state: state, logReminder: logReminder)
 
         // Search
         case .searchQueryDidChange:
@@ -59,14 +61,18 @@ struct CreateLogReducer {
             return activityDurationDidChange(state: state, newDuration: newDuration)
 
         // Save
-        case .onCreateLogPressed:
+        case .onSavePressed:
             return onCreateLogPressed(state: state)
-        case let .onCreateLogSuccess(newLog):
+        case let .onSaveSuccess(newLog, _):
             return onCreateLogSuccess(state: state, newLog: newLog)
-        case let .onCreateLogFailure(error):
+        case let .onSaveFailure(error):
             return onCreateLogFailure(state: state, error: error)
-        case .createErrorShown:
+        case .saveErrorShown:
             return createErrorShown(state: state)
+
+        // Log Reminder
+        case .onLogReminderComplete:
+            return state
         }
     }
 
@@ -99,10 +105,23 @@ struct CreateLogReducer {
     // MARK: Init from previous
     private static func initFromPreviousLog(state: AppState, loggable: Loggable) -> AppState {
         var newState = state
+        newState.createLog = getCreateLogStateFromLoggable(loggable: loggable)
+        return newState
+    }
+
+    private static func initFromLogReminder(state: AppState, logReminder: LogReminder) -> AppState {
+        var newState = state
+        newState.createLog = getCreateLogStateFromLoggable(loggable: logReminder.templateLoggable)
+        newState.createLog.associatedReminder = logReminder
+        return newState
+    }
+
+    // Helper function to create state with the loggable
+    private static func getCreateLogStateFromLoggable(loggable: Loggable) -> CreateLogState {
         var newCreateLogState = CreateLogState()
         guard let loggableCategoryIndex = newCreateLogState.allCategories.firstIndex(of: loggable.category) else {
             AppLogging.warn("Category of loggable not found in state")
-            return newState
+            return newCreateLogState
         }
         newCreateLogState.selectedCategoryIndex = loggableCategoryIndex
         newCreateLogState.notes = loggable.notes
@@ -110,51 +129,49 @@ struct CreateLogReducer {
         case .symptom:
             guard let symptomLog = loggable as? SymptomLog else {
                 AppLogging.warn("Could not cast loggable as symptom log")
-                return newState
+                break
             }
             newCreateLogState.symptom.selectedSymptom = symptomLog.selectedSymptom
             newCreateLogState.symptom.severity = symptomLog.severity
         case .medication:
             guard let medicationLog = loggable as? MedicationLog else {
                 AppLogging.warn("Could not cast loggable as medication log")
-                return newState
+                break
             }
             newCreateLogState.medication.selectedMedication = medicationLog.selectedMedication
             newCreateLogState.medication.dosage = medicationLog.dosage
         case .activity:
             guard let activityLog = loggable as? ActivityLog else {
                 AppLogging.warn("Could not cast loggable as activity log")
-                return newState
+                break
             }
             newCreateLogState.activity.selectedActivity = activityLog.selectedActivity
             newCreateLogState.activity.duration = activityLog.duration
         case .nutrition:
             guard let nutritionLog = loggable as? NutritionLog else {
                 AppLogging.warn("Could not cast loggable as nutrition log")
-                return newState
+                break
             }
             newCreateLogState.nutrition.selectedItem = nutritionLog.selectedNutritionItem
             newCreateLogState.nutrition.amount = nutritionLog.amount
         case .mood:
             guard let moodLog = loggable as? MoodLog else {
                 AppLogging.warn("Could not cast loggable as mood log")
-                return newState
+                break
             }
             guard let moodRankIndex = newCreateLogState.mood.allMoodRanks.firstIndex(of: moodLog.moodRank) else {
                 AppLogging.warn("Category of loggable not found in state")
-                return newState
+                break
             }
             newCreateLogState.mood.selectedMoodRankIndex = moodRankIndex
         case .note:
             guard let noteLog = loggable as? NoteLog else {
                 AppLogging.warn("Could not cast loggable as note log")
-                return newState
+                break
             }
             newCreateLogState.notes = noteLog.notes
         }
-
-        newState.createLog = newCreateLogState
-        return newState
+        return newCreateLogState
     }
 
     // MARK: Search

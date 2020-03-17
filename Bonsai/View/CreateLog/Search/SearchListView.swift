@@ -108,7 +108,7 @@ struct SearchListView: View {
             ScrollView {
                 if viewModel.showAddNew {
                     AddNewListItemView(viewModel: getAddNewListItemViewModel())
-                        .modifier(RoundedBorderSection())
+                        .modifier(RoundedBorderSectionModifier())
                         .padding(.horizontal, CGFloat.Theme.Layout.normal)
                         .padding(.top, CGFloat.Theme.Layout.normal)
                 }
@@ -121,7 +121,7 @@ struct SearchListView: View {
                         Spacer()
                     }
                     getResultView()
-                        .modifier(RoundedBorderSection())
+                        .modifier(RoundedBorderSectionModifier())
                 }
                 .padding(.all, CGFloat.Theme.Layout.normal)
             }

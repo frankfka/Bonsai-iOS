@@ -32,7 +32,7 @@ struct RootView: View {
                 ErrorView()
             } else {
                 // The content view for all of the app
-                ContentViewContainer().environmentObject(self.store)
+                ContentViewContainer()
             }
         }
     }
@@ -40,6 +40,6 @@ struct RootView: View {
 
 struct RootView_Previews: PreviewProvider {
     static var previews: some View {
-        RootView().environmentObject(AppStore(initialState: AppState(), reducer: AppReducer.reduce))
+        RootView().environmentObject(PreviewRedux.initialStore)
     }
 }

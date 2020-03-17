@@ -9,9 +9,20 @@
 import SwiftUI
 
 struct LogReminderSection: View {
+    @EnvironmentObject var store: AppStore
     
     struct ViewModel {
-        let reminders: [LogReminderRow.ViewModel]
+        static let numToShow = 5  // Number of reminders to show
+        let reminders: [LogReminder]
+        @Binding var navigationState: HomeTab.NavigationState?
+        @Binding var showCreateLogModal: Bool
+
+        init(logReminders: [LogReminder], navigationState: Binding<HomeTab.NavigationState?>,
+             showCreateLogModal: Binding<Bool>) {
+            self.reminders = Array(logReminders.prefix(ViewModel.numToShow))
+            self._navigationState = navigationState
+            self._showCreateLogModal = showCreateLogModal
+        }
     }
     
     let viewModel: ViewModel
@@ -21,20 +32,62 @@ struct LogReminderSection: View {
     }
     
     var body: some View {
-        List(viewModel.reminders) { reminder in
-            LogReminderRow(viewModel: reminder)
+        VStack {
+            // Conditional pushing of navigation views, see RecentLogSection
+            NavigationLink(
+                    destination: LogReminderDetailView(),
+                    tag: HomeTab.NavigationState.logReminderDetail,
+                    selection: viewModel.$navigationState) {
+                EmptyView()
+            }
+            ForEach(viewModel.reminders) { reminder in
+                Group {
+                    LogReminderRow(viewModel: self.getLogReminderViewModel(from: reminder))
+                    if ViewHelpers.showDivider(after: reminder, in: self.viewModel.reminders) {
+                        Divider()
+                    }
+                }
+            }
         }
-        .listStyle(GroupedListStyle())
+    }
+
+    private func getLogReminderViewModel(from logReminder: LogReminder) -> LogReminderRow.ViewModel {
+        return LogReminderRow.ViewModel(
+                logReminder: logReminder,
+                onTodoTapped: {
+                    self.onTodoTapped(logReminder)
+                },
+                onRowTapped: {
+                    self.onLogRowTapped(logReminder)
+                }
+        )
+    }
+
+    private func onTodoTapped(_ logReminder: LogReminder) {
+        store.send(.createLog(action: .initFromLogReminder(logReminder: logReminder)))
+        viewModel.showCreateLogModal.toggle()
+    }
+
+    private func onLogRowTapped(_ logReminder: LogReminder) {
+        store.send(.logReminderDetails(action: .initState(logReminder: logReminder)))
+        viewModel.navigationState = HomeTab.NavigationState.logReminderDetail
     }
 }
 
 struct LogReminderSection_Previews: PreviewProvider {
+
+    static private let viewModel: LogReminderSection.ViewModel = LogReminderSection.ViewModel(
+            logReminders: [
+                PreviewLogReminders.overdue,
+                PreviewLogReminders.notOverdue,
+            ],
+            navigationState: .constant(nil),
+            showCreateLogModal: .constant(false)
+    )
+
     static var previews: some View {
         Group {
-            LogReminderSection(viewModel: LogReminderSection.ViewModel(reminders: [
-                LogReminderRow.ViewModel.init(title: "Multivitamins", subtitle: "1 Capsule", recurringTimestamp: "8:00AM, Every Day", overdue: true),
-                LogReminderRow.ViewModel.init(title: "Fish Oil", subtitle: "1 Capsule", recurringTimestamp: "7:00AM, Every Day", overdue: false)
-            ]))
+            LogReminderSection(viewModel: viewModel)
         }.previewLayout(.sizeThatFits)
     }
 }

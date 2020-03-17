@@ -6,7 +6,7 @@
 import SwiftUI
 
 extension DateFormatter {
-    // Full Date * Time
+    // Full Date & Time
     private static var logDetailDateFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "h:mm a, MMM d, yyyy"

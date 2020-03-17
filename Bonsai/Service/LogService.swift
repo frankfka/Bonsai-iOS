@@ -40,7 +40,7 @@ class LogServiceImpl: LogService {
     }
 
     func saveLog(log: Loggable, for user: User) -> ServicePublisher<Void> {
-        return self.db.saveLog(log: log, for: user)
+        return self.db.saveOrUpdateLog(log: log, for: user)
     }
 
 

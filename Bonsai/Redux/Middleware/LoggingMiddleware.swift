@@ -16,87 +16,33 @@ extension AppAction {
     var logName: String {
         switch self {
         case let .global(action):
-            return "Global: \(action.actionName)"
+            return "Global: \(action.loggableActionName)"
         case let .globalLog(action):
-            return "GlobalLog: \(action.actionName)"
+            return "Global Log: \(action.loggableActionName)"
+        case let .globalLogReminder(action):
+            return "Global Log Reminder: \(action.loggableActionName)"
         case let .homeScreen(action):
-            return "Home Screen: \(action.actionName)"
+            return "Home Screen: \(action.loggableActionName)"
         case let .viewLog(action):
-            return "View Log: \(action.actionName)"
+            return "View Log: \(action.loggableActionName)"
         case let .logDetails(action):
-            return "Log Details: \(action.actionName)"
+            return "Log Details: \(action.loggableActionName)"
+        case let .logReminderDetails(action):
+            return "Log Reminder Details: \(action.loggableActionName)"
         case let .settings(action):
-            return "Settings: \(action.actionName)"
+            return "Settings: \(action.loggableActionName)"
         case let.createLog(action):
-            return "Create Log: \(action.actionName)"
+            return "Create Log: \(action.loggableActionName)"
+        case let.createLogReminder(action):
+            return "Create Log Reminder: \(action.loggableActionName)"
         }
     }
 }
 
-// TODO: get this simpler/figured out
 // https://stackoverflow.com/questions/35374588/get-enumeration-name-when-using-associated-values
-extension GlobalAction {
-    var actionName: String {
-        let mirror = Mirror(reflecting: self)
-        if let label = mirror.children.first?.label {
-            return label
-        } else {
-            return String(describing: self)
-        }
-    }
-}
-extension GlobalLogAction {
-    var actionName: String {
-        let mirror = Mirror(reflecting: self)
-        if let label = mirror.children.first?.label {
-            return label
-        } else {
-            return String(describing: self)
-        }
-    }
-}
-extension HomeScreenAction {
-    var actionName: String {
-        let mirror = Mirror(reflecting: self)
-        if let label = mirror.children.first?.label {
-            return label
-        } else {
-            return String(describing: self)
-        }
-    }
-}
-extension ViewLogsAction {
-    var actionName: String {
-        let mirror = Mirror(reflecting: self)
-        if let label = mirror.children.first?.label {
-            return label
-        } else {
-            return String(describing: self)
-        }
-    }
-}
-extension LogDetailsAction {
-    var actionName: String {
-        let mirror = Mirror(reflecting: self)
-        if let label = mirror.children.first?.label {
-            return label
-        } else {
-            return String(describing: self)
-        }
-    }
-}
-extension SettingsAction {
-    var actionName: String {
-        let mirror = Mirror(reflecting: self)
-        if let label = mirror.children.first?.label {
-            return label
-        } else {
-            return String(describing: self)
-        }
-    }
-}
-extension CreateLogAction {
-    var actionName: String {
+protocol LoggableAction {}
+extension LoggableAction {
+    var loggableActionName: String {
         let mirror = Mirror(reflecting: self)
         if let label = mirror.children.first?.label {
             return label

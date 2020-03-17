@@ -1,51 +1,58 @@
 //
-//  CreateLogDateView.swift
+//  DateTimeFormPickerView.swift
 //  Bonsai
 //
-//  Created by Frank Jia on 2020-02-11.
+//  Created by Frank Jia on 2020-03-07.
 //  Copyright © 2020 Frank Jia. All rights reserved.
 //
 
 import SwiftUI
 
+
 extension DateFormatter {
-    // Date, time shown in create log view rows
-    private static var createLogDateOnlyFormatter: DateFormatter {
+    private static var datePickerDateOnlyFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
         dateFormatter.timeStyle = .none
         dateFormatter.dateStyle = .medium
         return dateFormatter
     }
-    private static var createLogTimeOnlyFormatter: DateFormatter {
+    private static var datePickerTimeOnlyFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
         dateFormatter.timeStyle = .short
         dateFormatter.dateStyle = .none
         return dateFormatter
     }
     
-    static func stringForCreateLogDate(from date: Date) -> String {
-        return createLogDateOnlyFormatter.string(from: date)
+    static func stringForDatePickerDate(from date: Date) -> String {
+        return datePickerDateOnlyFormatter.string(from: date)
     }
-    static func stringForCreateLogTime(from date: Date) -> String {
-        return createLogTimeOnlyFormatter.string(from: date)
+    static func stringForDatePickerTime(from date: Date) -> String {
+        return datePickerTimeOnlyFormatter.string(from: date)
     }
 }
 
 
-struct CreateLogDateView: View {
-    
+struct DateTimeFormPickerView: View {
+
     struct ViewModel {
         @Binding var selectedDate: Date
         @Binding var showDatePicker: Bool
         @Binding var showTimePicker: Bool
         var dateString: String {
-            DateFormatter.stringForCreateLogDate(from: selectedDate)
+            DateFormatter.stringForDatePickerDate(from: selectedDate)
         }
         var timeString: String {
-            DateFormatter.stringForCreateLogTime(from: selectedDate)
+            DateFormatter.stringForDatePickerTime(from: selectedDate)
         }
-        
-        init(selectedDate: Date, showDatePicker: Binding<Bool>, showTimePicker: Binding<Bool>, onDateChange: DateCallback? = nil) {
+
+        let datePickerLabel: String
+        let timePickerLabel: String
+        let isForwardLookingRange: Bool
+        let rangeBoundDate: Date
+
+        init(selectedDate: Date, showDatePicker: Binding<Bool>, showTimePicker: Binding<Bool>,
+             isForwardLookingRange: Bool, rangeBoundDate: Date = Date(), datePickerLabel: String = "Date",
+             timePickerLabel: String = "Time", onDateChange: DateCallback? = nil) {
             self._selectedDate = Binding<Date>(get: {
                 return selectedDate
             }, set: { newDate in
@@ -56,6 +63,10 @@ struct CreateLogDateView: View {
             })
             self._showDatePicker = showDatePicker
             self._showTimePicker = showTimePicker
+            self.isForwardLookingRange = isForwardLookingRange
+            self.rangeBoundDate = rangeBoundDate
+            self.datePickerLabel = datePickerLabel
+            self.timePickerLabel = timePickerLabel
         }
     }
     private let viewModel: ViewModel
@@ -72,13 +83,8 @@ struct CreateLogDateView: View {
                     self.datePickerRowTapped()
             }
             if viewModel.showDatePicker {
-                DatePicker(
-                    selection: self.viewModel.$selectedDate,
-                    in: ...Date(),
-                    displayedComponents: .date) {
-                        Text("")
-                }
-                .labelsHidden()
+                getDatePicker(with: .date)
+                    .labelsHidden()
             }
             Divider()
             // Time Selection
@@ -87,18 +93,32 @@ struct CreateLogDateView: View {
                     self.timePickerRowTapped()
             }
             if viewModel.showTimePicker {
-                DatePicker(
-                    selection: self.viewModel.$selectedDate,
-                    in: ...Date(),
-                    displayedComponents: .hourAndMinute) {
-                        Text("")
-                }
-                .labelsHidden()
-                .font(Font.Theme.normalText)
-                .foregroundColor(Color.Theme.textDark)
+                getDatePicker(with: .hourAndMinute)
+                    .labelsHidden()
             }
         }
         .background(Color.Theme.backgroundSecondary)
+    }
+
+    // Helper to get the correct Datepicker
+    private func getDatePicker(with displayedComponents: DatePickerComponents) -> DatePicker<Text> {
+        if viewModel.isForwardLookingRange {
+            return DatePicker(
+                    selection: self.viewModel.$selectedDate,
+                    in: viewModel.rangeBoundDate...,
+                    displayedComponents: displayedComponents
+            ) {
+                Text("")
+            }
+        } else {
+            return DatePicker(
+                    selection: self.viewModel.$selectedDate,
+                    in: ...viewModel.rangeBoundDate,
+                    displayedComponents: displayedComponents
+            ) {
+                Text("")
+            }
+        }
     }
     
     // Actions
@@ -113,7 +133,7 @@ struct CreateLogDateView: View {
     // View models
     private func getLogDateRowViewModel() -> TappableRowView.ViewModel {
         return TappableRowView.ViewModel(
-            primaryText: .constant("Date"),
+            primaryText: .constant(viewModel.datePickerLabel),
             secondaryText: .constant(viewModel.dateString),
             hasDisclosureIndicator: false
         )
@@ -121,23 +141,23 @@ struct CreateLogDateView: View {
     
     private func getLogTimeRowViewModel() -> TappableRowView.ViewModel {
         return TappableRowView.ViewModel(
-            primaryText: .constant("Time"),
+            primaryText: .constant(viewModel.timePickerLabel),
             secondaryText: .constant(viewModel.timeString),
             hasDisclosureIndicator: false
         )
     }
-    
 }
 
-struct CreateLogDateView_Previews: PreviewProvider {
+struct DateTimeFormPickerView_Previews: PreviewProvider {
     
-    private static let viewModel: CreateLogDateView.ViewModel = CreateLogDateView.ViewModel(
+    private static let viewModel: DateTimeFormPickerView.ViewModel = DateTimeFormPickerView.ViewModel(
         selectedDate: Date(),
         showDatePicker: .constant(false),
-        showTimePicker: .constant(false)
+        showTimePicker: .constant(false),
+        isForwardLookingRange: false
     )
     
     static var previews: some View {
-        CreateLogDateView(viewModel: viewModel)
+        DateTimeFormPickerView(viewModel: viewModel)
     }
 }

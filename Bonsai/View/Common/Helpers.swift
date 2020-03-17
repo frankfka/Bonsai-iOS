@@ -14,6 +14,7 @@ typealias IntCallback = (Int) -> ()
 typealias DoubleCallback = (Double) -> ()
 typealias StringCallback = (String) -> ()
 typealias DateCallback = (Date) -> ()
+typealias TimeIntervalCallback = (TimeInterval) -> ()
 
 struct ViewHelpers {
     
@@ -29,6 +30,14 @@ struct ViewHelpers {
             onToggle()
         }
     }
+
+    static func showDivider<T: Identifiable>(after vm: T, in list: [T]) -> Bool {
+        if let index = list.firstIndex(where: { list in list.id == vm.id }),
+           index < list.count - 1 {
+            return true
+        }
+        return false
+    }
     
 }
 
@@ -39,17 +48,6 @@ extension View {
     }
     func embedInNavigationView() -> some View {
         NavigationView { self }
-    }
-}
-
-struct RoundedBorderSection: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .padding(.all, CGFloat.Theme.Layout.small)
-            .background(
-                RoundedRectangle(cornerRadius: CGFloat.Theme.Layout.cornerRadius)
-                    .foregroundColor(Color.Theme.backgroundSecondary)
-        )
     }
 }
 

@@ -38,7 +38,7 @@ struct RoundedBorderButtonView: View {
                 .padding(.horizontal, CGFloat.Theme.Layout.normal)
                 .padding(.vertical, CGFloat.Theme.Layout.small)
         }
-        .modifier(RoundedBorderSection())
+        .modifier(RoundedBorderSectionModifier())
     }
 }
 

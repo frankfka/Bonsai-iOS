@@ -16,7 +16,7 @@ struct RoundedBorderTitledSection<Content>: View where Content: View {
                     .padding(.leading, CGFloat.Theme.Layout.small)
             sectionView()
                 .frame(minWidth: 0, maxWidth: .infinity)
-                .modifier(RoundedBorderSection())
+                .modifier(RoundedBorderSectionModifier())
         }
     }
 }

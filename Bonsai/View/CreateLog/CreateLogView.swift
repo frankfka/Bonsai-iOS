@@ -24,12 +24,12 @@ struct CreateLogView: View {
             isLoading || showSuccessDialog || showErrorDialog
         }
         
-        init(showModal: Binding<Bool>, createLogState: CreateLogState) {
+        init(showModal: Binding<Bool>, state: CreateLogState) {
             self._showModal = showModal
-            self.isFormValid = createLogState.isFormValid()
-            self.showSuccessDialog = createLogState.createSuccess
-            self.showErrorDialog = createLogState.createError != nil
-            self.isLoading = createLogState.isCreatingLog
+            self.isFormValid = state.isValidated
+            self.showSuccessDialog = state.createSuccess
+            self.showErrorDialog = state.createError != nil
+            self.isLoading = state.isCreatingLog
         }
     }
     @State(initialValue: false) private var showCategoryPicker
@@ -46,9 +46,8 @@ struct CreateLogView: View {
             VStack(spacing: CGFloat.Theme.Layout.normal) {
                 CreateLogCategoryView(viewModel: getCategoryPickerViewModel())
                     .padding(.top, CGFloat.Theme.Layout.normal)
-                CreateLogDateView(viewModel: getCreateLogDateViewModel())
+                DateTimeFormPickerView(viewModel: getCreateLogDateTimePickerViewModel())
                 getCategorySpecificView()
-                    .environmentObject(self.store)
                 CreateLogTextField(viewModel: getNotesViewModel())
                 Spacer()
             }
@@ -87,7 +86,7 @@ struct CreateLogView: View {
     private func onSave() {
         // Hide the keyboard
         UIApplication.shared.hideKeyboard()
-        self.store.send(.createLog(action: .onCreateLogPressed))
+        self.store.send(.createLog(action: .onSavePressed))
     }
     
     private func onSaveSuccessPopupDismiss() {
@@ -95,7 +94,7 @@ struct CreateLogView: View {
     }
     
     private func onSaveErrorPopupDismiss() {
-        self.store.send(.createLog(action: .createErrorShown))
+        self.store.send(.createLog(action: .saveErrorShown))
     }
     
     private func onCancel() {
@@ -143,14 +142,16 @@ struct CreateLogView: View {
         )
     }
 
-    private func getCreateLogDateViewModel() -> CreateLogDateView.ViewModel {
-        return CreateLogDateView.ViewModel(
+    private func getCreateLogDateTimePickerViewModel() -> DateTimeFormPickerView.ViewModel {
+        return DateTimeFormPickerView.ViewModel(
                 selectedDate: store.state.createLog.date,
                 showDatePicker: $showDatePicker,
-                showTimePicker: $showTimePicker
-        ) { newDate in
-            self.onLogDateChange(newDate: newDate)
-        }
+                showTimePicker: $showTimePicker,
+                isForwardLookingRange: false,
+                onDateChange:  { newDate in
+                    self.onLogDateChange(newDate: newDate)
+                }
+        )
     }
     
     private func getNotesViewModel() -> CreateLogTextField.ViewModel {
@@ -164,17 +165,17 @@ struct CreateLogView: View {
 }
 
 struct CreateLogView_Previews: PreviewProvider {
-    
+
     static let viewModel = CreateLogView.ViewModel(
         showModal: .constant(true),
-        createLogState: PreviewRedux.initialStore.state.createLog
+        state: PreviewRedux.initialStore.state.createLog
     )
-    
+
     static var previews: some View {
         Group {
             CreateLogView(viewModel: viewModel)
                 .environmentObject(PreviewRedux.initialStore)
-            
+
             CreateLogView(viewModel: viewModel)
                 .environmentObject(PreviewRedux.initialStore)
                 .environment(\.colorScheme, .dark)

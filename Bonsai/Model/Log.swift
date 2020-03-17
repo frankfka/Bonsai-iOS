@@ -39,8 +39,10 @@ class RealmLoggable: Object {
     @objc dynamic var nutritionLog: RealmNutritionLog?
     @objc dynamic var symptomLog: RealmSymptomLog?
     @objc dynamic var activityLog: RealmActivityLog?
+    @objc dynamic var isTemplate: Bool = false // Used for reminders
 
     static let dateCreatedKey: String = "dateCreated"
+    static let isTemplateKey: String = "isTemplate"
 
     override static func primaryKey() -> String? {
         return "id"

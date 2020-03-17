@@ -15,6 +15,14 @@ struct HomeTabContainer: View {
         let isLoading: Bool
         let loadError: Bool
         let homeTabDidAppear: VoidCallback?
+        @Binding var showCreateLogModal: Bool
+
+        init(isLoading: Bool, loadError: Bool, showCreateLogModal: Binding<Bool>, homeTabDidAppear: VoidCallback? = nil) {
+            self.isLoading = isLoading
+            self.loadError = loadError
+            self._showCreateLogModal = showCreateLogModal
+            self.homeTabDidAppear = homeTabDidAppear
+        }
     }
     private let viewModel: ViewModel
     
@@ -38,7 +46,7 @@ struct HomeTabContainer: View {
         .background(Color.Theme.backgroundPrimary)
         .navigationBarTitle("Home")
         .navigationBarItems(
-                trailing: NavigationLink(destination: SettingsView().environmentObject(store)) {
+                trailing: NavigationLink(destination: SettingsView()) {
                     Image(systemName: "person.crop.circle")
                             .resizable()
                             .aspectRatio(1, contentMode: .fit)
@@ -51,7 +59,13 @@ struct HomeTabContainer: View {
     }
     
     func getHomeTabViewModel() -> HomeTab.ViewModel {
-        return HomeTab.ViewModel()
+        // TODO: Show empty text instead?
+        // TODO: Limit to only today?
+        let showReminders = !store.state.globalLogReminders.sortedLogReminders.isEmpty
+        return HomeTab.ViewModel(
+            showReminders: showReminders,
+            showCreateLogModal: viewModel.$showCreateLogModal
+        )
     }
 }
 
@@ -59,10 +73,21 @@ struct HomeTab: View {
     @EnvironmentObject var store: AppStore
     
     struct ViewModel {
-        
+       let showReminders: Bool
+        @Binding var showCreateLogModal: Bool
+
+        init(showReminders: Bool, showCreateLogModal: Binding<Bool>) {
+            self.showReminders = showReminders
+            self._showCreateLogModal = showCreateLogModal
+        }
     }
     private let viewModel: ViewModel
-    @State(initialValue: false) var navigateToLogDetails: Bool? // Allows conditional pushing of navigation views
+
+    @State(initialValue: nil) var navigationState: NavigationState? // Allows conditional pushing of navigation views
+    enum NavigationState {
+        case logDetail
+        case logReminderDetail
+    }
     
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -71,6 +96,11 @@ struct HomeTab: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: CGFloat.Theme.Layout.large) {
+                if viewModel.showReminders {
+                    RoundedBorderTitledSection(sectionTitle: "Reminders") {
+                        LogReminderSection(viewModel: self.getLogReminderSectionViewModel())
+                    }
+                }
                 RoundedBorderTitledSection(sectionTitle: "Recent") {
                     RecentLogSection(viewModel: self.getRecentLogSectionViewModel())
                 }
@@ -81,13 +111,23 @@ struct HomeTab: View {
             .padding(.all, CGFloat.Theme.Layout.normal)
         }
     }
+
+    private func getLogReminderSectionViewModel() -> LogReminderSection.ViewModel {
+        return LogReminderSection.ViewModel(
+                logReminders: store.state.globalLogReminders.sortedLogReminders,
+                navigationState: self.$navigationState,
+                showCreateLogModal: viewModel.$showCreateLogModal
+        )
+    }
     
     private func getRecentLogSectionViewModel() -> RecentLogSection.ViewModel {
-        let logViewModels = Array(store.state.globalLogs.sortedLogs.prefix(RecentLogSection.ViewModel.numToShow))
-                .map { LogRow.ViewModel(loggable: $0) }
+        // TODO: make init to just take in a list of logs in state
+        let logViewModels =
+                Array(store.state.globalLogs.sortedLogs.prefix(RecentLogSection.ViewModel.numToShow))
+                        .map { LogRow.ViewModel(loggable: $0) }
         return RecentLogSection.ViewModel(
                 recentLogs: logViewModels,
-                navigateToLogDetails: $navigateToLogDetails
+                navigateToLogDetails: $navigationState
         )
     }
 
@@ -109,8 +149,11 @@ struct HomeTab: View {
 
 }
 
-//struct HomeTab_Previews: PreviewProvider {
-//    static var previews: some View {
-//        HomeTab().environmentObject(AppStore(initialState: AppState(), reducer: AppReducer.reduce))
-//    }
-//}
+struct HomeTab_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeTab(viewModel: HomeTab.ViewModel(
+                showReminders: true,
+                showCreateLogModal: .constant(false)
+        )).environmentObject(PreviewRedux.initialStore)
+    }
+}

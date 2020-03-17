@@ -15,7 +15,7 @@ struct LogDetailView: View {
 
     @EnvironmentObject var store: AppStore
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    
+
     struct ViewModel {
         let loggable: Loggable
         let logDate: String
@@ -47,6 +47,7 @@ struct LogDetailView: View {
             self.showError = showError
         }
     }
+
     private var viewModel: ViewModel {
         if let loggable = store.state.logDetails.loggable {
             let isLoading = store.state.logDetails.isLoading || store.state.logDetails.isDeleting
@@ -67,6 +68,7 @@ struct LogDetailView: View {
         }
     }
     @State(initialValue: false) var showCreateLogModal: Bool
+    @State(initialValue: false) var showCreateLogReminderModal: Bool
     @State(initialValue: false) var showDeleteLogConfirmation: Bool
 
     var body: some View {
@@ -76,28 +78,33 @@ struct LogDetailView: View {
                 LogDetailBasicsView(viewModel: getBasicDetailsViewModel())
                 getCategorySpecificView()
                 LogDetailNotesView(viewModel: getNotesViewModel())
-                // Quick Re-log button
-                RoundedBorderButtonView(viewModel: getLogAgainButtonViewModel())
-                    .padding(.top, CGFloat.Theme.Layout.normal)
-                    .disabled(self.viewModel.disableActions)
+                        .padding(.bottom, CGFloat.Theme.Layout.normal)
+                Group {
+                    // Quick Re-log button
+                    RoundedBorderButtonView(viewModel: getLogAgainButtonViewModel())
+                            .disabled(self.viewModel.disableActions)
+                    // Create Reminder Button
+                    RoundedBorderButtonView(viewModel: getCreateLogReminderButtonViewModel())
+                }
+                        .disabled(self.viewModel.disableActions)
             }
             .padding(.vertical, CGFloat.Theme.Layout.normal)
         }
         .background(Color.Theme.backgroundPrimary)
         .navigationBarItems(
                 trailing: Button(action: {
-                        self.onDeleteLogTapped()
-                    }, label: {
-                        Image(systemName: "trash")
-                                .resizable()
-                                .aspectRatio(1, contentMode: .fit)
-                                .frame(height: CGFloat.Theme.Layout.navBarItemHeight)
-                                .foregroundColor(
-                                        self.viewModel.disableDelete ?
-                                        Color.Theme.grayscalePrimary : Color.Theme.primary
-                                )
-                    })
-                    .disabled(self.viewModel.disableDelete)
+                    self.onDeleteLogTapped()
+                }, label: {
+                    Image(systemName: "trash")
+                            .resizable()
+                            .aspectRatio(1, contentMode: .fit)
+                            .frame(height: CGFloat.Theme.Layout.navBarItemHeight)
+                            .foregroundColor(
+                                    self.viewModel.disableDelete ?
+                                            Color.Theme.grayscalePrimary : Color.Theme.primary
+                            )
+                })
+                .disabled(self.viewModel.disableDelete)
         )
         .navigationBarTitle("Log Details", displayMode: .inline)
         // Delete Log Confirmation
@@ -106,25 +113,39 @@ struct LogDetailView: View {
                 title: Text("Delete Log"),
                 message: Text("Are you sure you want to delete this log?"),
                 primaryButton: .destructive(
-                    Text("Confirm"),
-                    action: {
-                        self.onDeleteLogConfirmed()
-                }),
+                        Text("Confirm"),
+                        action: {
+                            self.onDeleteLogConfirmed()
+                        }),
                 secondaryButton: .cancel(
-                    Text("Cancel")
+                        Text("Cancel")
                 )
             )
         }
-        // Create Log Modal
-        .sheet(
-            isPresented: $showCreateLogModal,
-            onDismiss: {
-                self.onCreateLogModalDismiss()
-            }) {
-                CreateLogView(
-                        viewModel: self.getCreateLogModalViewModel()
-                ).environmentObject(self.store)
-        }
+        // Modals - using backgrounds is a workaround to allow multiple modal presentation blocks
+        .background(
+            EmptyView()
+            // Create Log Modal
+            .sheet(
+                isPresented: $showCreateLogModal,
+                onDismiss: {
+                    self.onCreateLogModalDismiss()
+                }) {
+                    CreateLogView(
+                            viewModel: self.getCreateLogModalViewModel()
+                    ).environmentObject(self.store)
+            }
+        )
+        .background(
+            EmptyView()
+            // Create Log Reminder Modal
+            .sheet(
+                isPresented: $showCreateLogReminderModal) {
+                    CreateLogReminderView(
+                            viewModel: self.getCreateLogReminderModalViewModel()
+                    ).environmentObject(self.store)
+            }
+        )
         // Popups
         .withLoadingPopup(show: .constant(self.viewModel.isLoading), text: self.viewModel.loadingMessage)
         .withStandardPopup(show: .constant(self.viewModel.showError), type: .failure, text: self.viewModel.errorMessage) {
@@ -134,27 +155,30 @@ struct LogDetailView: View {
             self.onDeleteSuccessPopupDismiss()
         }
     }
-    
-    // MARK: Actions
-    private func onBackTapped() {
-        dismissView()
-    }
 
+    // MARK: Actions
+    // Log Again
     private func onLogAgainTapped() {
         // Dispatch an action for logging that will initialize the state
         store.send(.createLog(action: .initFromPreviousLog(loggable: self.viewModel.loggable)))
         showCreateLogModal.toggle()
     }
-
     private func onCreateLogModalDismiss() {
         store.send(.createLog(action: .resetCreateLogState))
     }
-    
+
+    // Create Reminder
+    private func onCreateLogReminderTapped() {
+        // Dispatch an action for creating a reminder with the given log
+        store.send(.createLogReminder(action: .initCreateLogReminder(template: self.viewModel.loggable)))
+        showCreateLogReminderModal.toggle()
+    }
+
     private func onDeleteLogTapped() {
         // Show alert
         showDeleteLogConfirmation.toggle()
     }
-    
+
     private func onDeleteLogConfirmed() {
         // Dispatch action to delete the log
         store.send(.logDetails(action: .deleteCurrentLog))
@@ -174,12 +198,12 @@ struct LogDetailView: View {
         store.send(.logDetails(action: .screenDidDismiss))
         self.presentationMode.wrappedValue.dismiss()
     }
-    
+
     // MARK: Rendered for all logs
     private func getBasicDetailsViewModel() -> LogDetailBasicsView.ViewModel {
         return LogDetailBasicsView.ViewModel(loggable: self.viewModel.loggable)
     }
-    
+
     private func getNotesViewModel() -> LogDetailNotesView.ViewModel {
         return LogDetailNotesView.ViewModel(notes: self.viewModel.loggable.notes)
     }
@@ -192,10 +216,22 @@ struct LogDetailView: View {
         )
     }
 
-    private func getCreateLogModalViewModel() -> CreateLogView.ViewModel {
-        return CreateLogView.ViewModel(showModal: $showCreateLogModal, createLogState: store.state.createLog)
+    private func getCreateLogReminderButtonViewModel() -> RoundedBorderButtonView.ViewModel {
+        return RoundedBorderButtonView.ViewModel(
+                text: "Create Reminder",
+                textColor: self.viewModel.disableActions ? Color.Theme.text : Color.Theme.primary,
+                onTap: self.onCreateLogReminderTapped
+        )
     }
-    
+
+    private func getCreateLogModalViewModel() -> CreateLogView.ViewModel {
+        return CreateLogView.ViewModel(showModal: $showCreateLogModal, state: store.state.createLog)
+    }
+
+    private func getCreateLogReminderModalViewModel() -> CreateLogReminderView.ViewModel {
+        return CreateLogReminderView.ViewModel(showModal: $showCreateLogReminderModal, state: store.state.createLogReminder)
+    }
+
     // MARK: Category-specific views
     private func getCategorySpecificView() -> AnyView {
         switch self.viewModel.loggable.category {
@@ -228,7 +264,7 @@ struct LogDetailView: View {
         }
         return EmptyView().eraseToAnyView()
     }
-    
+
     func getSymptomDetailViewModel() -> LogDetailSymptomView.ViewModel? {
         let loggable = viewModel.loggable
         guard loggable.category == .symptom, let symptomLog = loggable as? SymptomLog else {

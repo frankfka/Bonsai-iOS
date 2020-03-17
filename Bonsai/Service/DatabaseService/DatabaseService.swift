@@ -19,10 +19,15 @@ protocol DatabaseService {
     func saveLogSearchable(logItem: LogSearchable, for user: User) -> ServicePublisher<Void>
 
     // Log functions
-    func saveLog(log: Loggable, for user: User) -> ServicePublisher<Void>
+    func saveOrUpdateLog(log: Loggable, for user: User) -> ServicePublisher<Void>
     func getLogs(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?,
                  limit: Int?, offline: Bool) -> ServicePublisher<[Loggable]>
     func deleteLog(for user: User, with id: String) -> ServicePublisher<Void>
+
+    // Log Reminder functions
+    func getLogReminders() -> ServicePublisher<[LogReminder]>
+    func saveOrUpdateLogReminder(_ logReminder: LogReminder) -> ServicePublisher<LogReminder>
+    func deleteLogReminder(_ logReminder: LogReminder) -> ServicePublisher<LogReminder>
 
     // Local storage functions
     func resetLocalStorage() -> ServicePublisher<Void> // Called when user restores, all local logs are to be cleared
@@ -41,6 +46,16 @@ class DatabaseServiceImpl: DatabaseService {
         } catch let error as ServiceError {
             throw error
         }
+    }
+
+    // MARK: User Functions
+    func getUser(userId: String) -> ServicePublisher<User> {
+        let future = ServiceFuture<User> { promise in
+            self.firestoreService.getUser(userId: userId) { result in
+                promise(result)
+            }
+        }
+        return AnyPublisher(future)
     }
 
     func saveUser(user: User) -> ServicePublisher<Void> {
@@ -73,7 +88,7 @@ class DatabaseServiceImpl: DatabaseService {
         return AnyPublisher(future)
     }
 
-
+    // MARK: Log Searchable functions
     func searchLogSearchables(query: String, by user: User, in category: LogCategory) -> ServicePublisher<[LogSearchable]> {
         let future = Future<[LogSearchable], ServiceError> { promise in
             self.firestoreService.searchLogSearchable(query: query, by: user, in: category) { result in
@@ -101,18 +116,8 @@ class DatabaseServiceImpl: DatabaseService {
         return AnyPublisher(future)
     }
 
-
-    func getUser(userId: String) -> ServicePublisher<User> {
-        let future = ServiceFuture<User> { promise in
-            self.firestoreService.getUser(userId: userId) { result in
-                promise(result)
-            }
-        }
-        return AnyPublisher(future)
-    }
-
-
-    func saveLog(log: Loggable, for user: User) -> ServicePublisher<Void> {
+    // MARK: Log functions
+    func saveOrUpdateLog(log: Loggable, for user: User) -> ServicePublisher<Void> {
         /*
         Saves the loggable for the user both locally and in Firebase
         - Save in Firebase first, as that is most likely to fail
@@ -234,6 +239,39 @@ class DatabaseServiceImpl: DatabaseService {
                     return .success(())
                 }
                 promise(mappedResult)
+            }
+        }
+        return AnyPublisher(future)
+    }
+
+    // MARK: Log Reminder Functions
+    func getLogReminders() -> ServicePublisher<[LogReminder]> {
+        let future = ServiceFuture<[LogReminder]> { promise in
+            let retrievedLogReminders = self.realmService.getLogReminders()
+            promise(.success((retrievedLogReminders)))
+        }
+        return AnyPublisher(future)
+    }
+
+    func saveOrUpdateLogReminder(_ logReminder: LogReminder) -> ServicePublisher<LogReminder> {
+        let future = ServiceFuture<LogReminder> { promise in
+            let err = self.realmService.saveLogReminder(logReminder)
+            if let err = err {
+                promise(.failure(err))
+            } else {
+                promise(.success(logReminder))
+            }
+        }
+        return AnyPublisher(future)
+    }
+
+    func deleteLogReminder(_ logReminder: LogReminder) -> ServicePublisher<LogReminder> {
+        let future = ServiceFuture<LogReminder> { promise in
+            let err = self.realmService.deleteLogReminder(logReminder)
+            if let err = err {
+                promise(.failure(err))
+            } else {
+                promise(.success(logReminder))
             }
         }
         return AnyPublisher(future)

@@ -12,16 +12,22 @@ struct AppReducer {
             return GlobalReducer.reduce(state: state, action: action)
         case let .globalLog(action):
             return GlobalLogReducer.reduce(state: state, action: action)
+        case let .globalLogReminder(action):
+            return GlobalLogReminderReducer.reduce(state: state, action: action)
         case let .homeScreen(action):
             return HomeScreenReducer.reduce(state: state, action: action)
         case let .viewLog(action):
             return ViewLogsReducer.reduce(state: state, action: action)
         case let .logDetails(action):
             return LogDetailsReducer.reduce(state: state, action: action)
+        case let .logReminderDetails(action):
+            return LogReminderDetailsReducer.reduce(state: state, action: action)
         case let .settings(action):
             return SettingsReducer.reduce(state: state, action: action)
         case let .createLog(action):
             return CreateLogReducer.reduce(state: state, action: action)
+        case let .createLogReminder(action):
+            return CreateLogReminderReducer.reduce(state: state, action: action)
         }
     }
 }

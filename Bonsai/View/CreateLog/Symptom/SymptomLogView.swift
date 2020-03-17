@@ -21,7 +21,6 @@ struct SymptomLogView: View {
                     destination: SearchListViewContainer(
                             onUpdateQueryDebounced: onUpdateQueryDebounced
                     )
-                    .environmentObject(store)
             ) {
                 TappableRowView(
                         viewModel: TappableRowView.ViewModel(
