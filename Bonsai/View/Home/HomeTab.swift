@@ -109,8 +109,6 @@ struct HomeTab: View {
                 }
             }
             .padding(.all, CGFloat.Theme.Layout.normal)
-        }.onAppear {
-//            self.navigationState = nil
         }
     }
 
