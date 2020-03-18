@@ -17,10 +17,14 @@ struct CreateLogReducer {
         case let .dateDidChange(newDate):
             return dateDidChange(state: state, newDate: newDate)
 
+        // No log searchable (associated symptom, etc.) needs to be fetched as this is accessible only from LogDetails screen
         case let .initFromPreviousLog(loggable):
             return initFromPreviousLog(state: state, loggable: loggable)
-        case let .initFromLogReminder(logReminder):
-            return initFromLogReminder(state: state, logReminder: logReminder)
+        // In this case, middleware is in place to fetch the associated log searchable
+        case let .beginInitFromLogReminder(logReminder):
+            return beginInitFromLogReminder(state: state, logReminder: logReminder)
+        case let .completedInitFromLogReminder(logReminder):
+            return completedInitFromLogReminder(state: state, logReminder: logReminder)
 
         // Search
         case .searchQueryDidChange:
@@ -109,10 +113,20 @@ struct CreateLogReducer {
         return newState
     }
 
-    private static func initFromLogReminder(state: AppState, logReminder: LogReminder) -> AppState {
+    private static func beginInitFromLogReminder(state: AppState, logReminder: LogReminder) -> AppState {
+        var newState = state
+        // The loggable might be incomplete, but fill in the state as much as possible
+        newState.createLog = getCreateLogStateFromLoggable(loggable: logReminder.templateLoggable)
+        newState.createLog.associatedReminder = logReminder
+        newState.createLog.isLoading = true
+        return newState
+    }
+
+    private static func completedInitFromLogReminder(state: AppState, logReminder: LogReminder) -> AppState {
         var newState = state
         newState.createLog = getCreateLogStateFromLoggable(loggable: logReminder.templateLoggable)
         newState.createLog.associatedReminder = logReminder
+        newState.createLog.isLoading = false
         return newState
     }
 

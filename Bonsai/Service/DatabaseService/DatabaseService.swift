@@ -156,6 +156,7 @@ class DatabaseServiceImpl: DatabaseService {
             )
             if offline {
                 // Don't attempt to retrieve from Firebase
+                // NOTE: this will not fill the associated nutrition/activity/etc. item
                 return promise(.success(logsFromRealm))
             }
             self.firestoreService.getLogs(for: user, in: category, since: beginDate,

@@ -10,11 +10,41 @@ struct CreateLogMiddleware {
 
     static func middleware(services: Services) -> [Middleware<AppState>] {
         return [
+            initFromReminderMiddleware(logService: services.logService),
             createLogSearchMiddleware(logService: services.logService),
             createLogAddNewItemMiddleware(logService: services.logService),
             createLogOnSaveMiddleware(logService: services.logService),
             completeLogReminderMiddleware(logReminderService: services.logReminderService)
         ]
+    }
+
+    // MARK: Init from Reminder
+    private static func initFromReminderMiddleware(logService: LogService) -> Middleware<AppState> {
+        return { state, action, cancellables, send in
+            switch action {
+            case let .createLog(action: .beginInitFromLogReminder(logReminder)):
+                initLoggableForReminder(logService: logService, reminder: logReminder)
+                        .sink(receiveValue: { newAction in
+                            send(newAction)
+                        })
+                        .store(in: &cancellables)
+            default:
+                break
+            }
+        }
+    }
+
+    private static func initLoggableForReminder(logService: LogService, reminder: LogReminder) -> AnyPublisher<AppAction, Never> {
+        return logService.initLogDetails(for: reminder.templateLoggable)
+                .map { initializedLoggable in
+                    var newReminder = reminder
+                    newReminder.templateLoggable = initializedLoggable
+                    return AppAction.createLog(action: .completedInitFromLogReminder(logReminder: newReminder))
+                }.catch { (err) -> Just<AppAction> in
+                    AppLogging.error("Error initializing loggable for log reminder: \(err)")
+                    return Just(AppAction.createLog(action: .completedInitFromLogReminder(logReminder: reminder)))
+                }
+                .eraseToAnyPublisher()
     }
 
     // MARK: Log Item Search

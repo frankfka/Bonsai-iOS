@@ -165,7 +165,7 @@ struct LogReminderDetailView: View {
             })
             .disabled(self.viewModel.disableDelete)
         )
-        .navigationBarTitle("Log Details", displayMode: .inline)
+        .navigationBarTitle("Reminder Details", displayMode: .inline)
         // Delete Reminder Confirmation
         .alert(isPresented: $showDeleteReminderConfirmation) {
             Alert(

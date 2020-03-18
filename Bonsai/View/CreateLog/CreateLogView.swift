@@ -15,6 +15,7 @@ struct CreateLogView: View {
         @Binding var showModal: Bool
         private let isFormValid: Bool
         let isLoading: Bool
+        let loadMessage: String
         let showSuccessDialog: Bool
         let showErrorDialog: Bool
         var isSaveButtonDisabled: Bool {
@@ -29,7 +30,12 @@ struct CreateLogView: View {
             self.isFormValid = state.isValidated
             self.showSuccessDialog = state.createSuccess
             self.showErrorDialog = state.createError != nil
-            self.isLoading = state.isCreatingLog
+            self.isLoading = state.isCreatingLog || state.isLoading
+            var loadMessage: String = "Loading"
+            if state.isCreatingLog {
+                loadMessage = "Saving"
+            }
+            self.loadMessage = loadMessage
         }
     }
     @State(initialValue: false) private var showCategoryPicker
@@ -74,7 +80,7 @@ struct CreateLogView: View {
                 .disabled(viewModel.isSaveButtonDisabled)
         )
         .embedInNavigationView()
-        .withLoadingPopup(show: .constant(self.viewModel.isLoading), text: "Saving")
+        .withLoadingPopup(show: .constant(self.viewModel.isLoading), text: self.viewModel.loadMessage)
         .withStandardPopup(show: .constant(self.viewModel.showSuccessDialog), type: .success, text: "Saved Successfully") {
             self.onSaveSuccessPopupDismiss()
         }

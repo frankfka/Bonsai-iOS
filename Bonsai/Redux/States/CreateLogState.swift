@@ -29,6 +29,7 @@ struct CreateLogState {
         var duration: TimeInterval? = nil
     }
 
+    var isLoading: Bool = false
     let allCategories: [LogCategory] = LogCategory.allCases
     var selectedCategoryIndex: Int = 0
     var selectedCategory: LogCategory {

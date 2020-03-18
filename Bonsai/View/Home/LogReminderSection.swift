@@ -64,7 +64,7 @@ struct LogReminderSection: View {
     }
 
     private func onTodoTapped(_ logReminder: LogReminder) {
-        store.send(.createLog(action: .initFromLogReminder(logReminder: logReminder)))
+        store.send(.createLog(action: .beginInitFromLogReminder(logReminder: logReminder)))
         viewModel.showCreateLogModal.toggle()
     }
 

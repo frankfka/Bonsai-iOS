@@ -16,7 +16,7 @@ struct LogReminder {
     var isOverdue: Bool {
         reminderDate < Date()
     }
-    let templateLoggable: Loggable
+    var templateLoggable: Loggable
 }
 extension LogReminder: Hashable, Equatable, Identifiable {
     func hash(into hasher: inout Hasher) {
