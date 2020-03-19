@@ -33,6 +33,7 @@ class RealmService {
         return save(realmLogs)
     }
 
+    // TODO: pagination
     func getLogs(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?,
                  limit: Int?) -> [Loggable] {
         var realmLogs = self.db.objects(RealmLoggable.self)

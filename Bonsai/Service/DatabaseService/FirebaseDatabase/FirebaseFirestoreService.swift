@@ -191,12 +191,36 @@ class FirebaseFirestoreService {
     }
 
     func getLogs(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?,
-                 limitedTo: Int?, onComplete: @escaping ServiceCallback<[Loggable]>) {
+                 limitedTo: Int?, startingAfterLog: Loggable?, onComplete: @escaping ServiceCallback<[Loggable]>) {
+        // If we want to paginate, get the document snapshot first
+        if let startingAfterLog = startingAfterLog {
+            getLogDocumentSnapshot(for: user, with: startingAfterLog) { result in
+                switch result {
+                case .success(let snapshot):
+                    // Call private func with the snapshot
+                    self.getLogs(for: user, in: category, since: beginDate, toAndIncluding: endDate, limitedTo: limitedTo,
+                            startingAfterDoc: snapshot, onComplete: onComplete)
+                case .failure(let err):
+                    onComplete(.failure(err))
+                }
+            }
+        } else {
+            // No pagination, call private func directly
+            getLogs(for: user, in: category, since: beginDate, toAndIncluding: endDate, limitedTo: limitedTo,
+                    startingAfterDoc: nil, onComplete: onComplete)
+        }
+    }
+
+    private func getLogs(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?,
+                         limitedTo: Int?, startingAfterDoc: DocumentSnapshot?, onComplete: @escaping ServiceCallback<[Loggable]>) {
         var q = self.db.collection(SerializationConstants.User.Collection)
                 .document(user.id)
                 .collection(SerializationConstants.Logs.Collection)
                 .order(by: SerializationConstants.Logs.DateCreatedField, descending: true)
-                .limit(to: limitedTo ?? logQueryLimit)
+        // Query starting at a snapshot if specified
+        if let startingAfterDoc = startingAfterDoc {
+            q = q.start(afterDocument: startingAfterDoc)
+        }
         // Query by date if specified
         if let beginDate = beginDate {
             q = q.whereField(SerializationConstants.Logs.DateCreatedField, isGreaterThanOrEqualTo: beginDate)
@@ -204,17 +228,18 @@ class FirebaseFirestoreService {
         if let endDate = endDate {
             q = q.whereField(SerializationConstants.Logs.DateCreatedField, isLessThanOrEqualTo: endDate)
         }
+        q = q.limit(to: limitedTo ?? logQueryLimit)
         // Perform query
         q.getDocuments() { [weak self] (querySnapshot, err) in
             if let err = err {
                 AppLogging.error("Error in fetching logs for user \(user.id): \(err)")
                 onComplete(
-                        .failure(
-                                ServiceError(
-                                        message: "Error in fetching logs for user \(user.id): \(err)",
-                                        wrappedError: err
-                                )
+                    .failure(
+                        ServiceError(
+                            message: "Error in fetching logs for user \(user.id): \(err)",
+                            wrappedError: err
                         )
+                    )
                 )
             } else {
                 var fetchedLogs: [Loggable] = []
@@ -229,6 +254,43 @@ class FirebaseFirestoreService {
                 onComplete(.success(fetchedLogs))
             }
         }
+    }
+
+    // Retrieve a document snapshot for pagination
+    private func getLogDocumentSnapshot(for user: User, with loggable: Loggable, onComplete: @escaping ServiceCallback<DocumentSnapshot>) {
+        self.db.collection(SerializationConstants.User.Collection)
+                .document(user.id)
+                .collection(SerializationConstants.Logs.Collection)
+                .document(loggable.id)
+                .addSnapshotListener { (doc, err) in
+                    guard err == nil else {
+                        let errMsg = "Error from Firebase for retrieving snapshot for Loggable \(loggable.id)"
+                        AppLogging.error(errMsg)
+                        onComplete(
+                            .failure(
+                                ServiceError(
+                                        message: errMsg,
+                                        wrappedError: err
+                                )
+                            )
+                        )
+                        return
+                    }
+                    guard let doc = doc, doc.exists else {
+                        let errMsg = "Could not retrieve snapshot document for Loggable \(loggable.id)"
+                        AppLogging.error(errMsg)
+                        onComplete(
+                            .failure(
+                                ServiceError(
+                                    message: errMsg,
+                                    wrappedError: err
+                                )
+                            )
+                        )
+                        return
+                    }
+                    onComplete(.success(doc))
+                }
     }
 
     func deleteLog(for user: User, with id: String, onComplete: @escaping ServiceCallback<Void>) {
