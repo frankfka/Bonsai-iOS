@@ -52,10 +52,11 @@ class RealmService {
         let fetchLimit = limit ?? logQueryLimit
         let endIndex = fetchLimit <= realmLogs.endIndex ? fetchLimit : realmLogs.endIndex
         for index in 0 ..< endIndex {
-            if let loggable = getLoggable(from: realmLogs[index]) {
+            let realmLog = realmLogs[index]
+            if let loggable = getLoggable(from: realmLog) {
                 loggables.append(loggable)
             } else {
-                AppLogging.warn("Could not get Loggable from Realm Object")
+                AppLogging.warn("Could not get Loggable from Realm object \(realmLog.id) created on \(realmLog.dateCreated)")
             }
         }
         return loggables
