@@ -25,7 +25,7 @@ class AnalyticsServiceImpl: AnalyticsService {
         // Map the retrieved logs into analytics
         return self.db.getLogs(
             for: user, in: nil, since: beginDate,
-            toAndIncluding: now, limit: nil, startingAfter: nil, offline: true
+            toAndIncluding: now, limit: nil, startingAfterLog: nil, offline: true
         ).map { fetchedLogs in
             return self.getAllAnalytics(from: fetchedLogs)
         }.mapError { err in

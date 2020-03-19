@@ -56,7 +56,7 @@ struct HomeScreenMiddleware {
                     -> AnyPublisher<AppAction, Never> {
         // Get recent logs
         let recentLogsPublisher = logService.getLogs(for: user, in: nil, since: nil, toAndIncluding: nil,
-                        limitedTo: RecentLogSection.ViewModel.numToShow, startingAfter: nil, offline: false)
+                        limitedTo: RecentLogSection.ViewModel.numToShow, startingAfterLog: nil, offline: false)
         // Get log reminders
         let logRemindersPublisher = logReminderService.getLogReminders()
         let combinedPublisher = Publishers.Zip(recentLogsPublisher, logRemindersPublisher)

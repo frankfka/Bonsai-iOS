@@ -60,7 +60,7 @@ struct ViewLogsMiddleware {
     // This just supports 1 day now
     private static func fetchLogData(for date: Date, with user: User, logService: LogService) -> AnyPublisher<AppAction, Never> {
         logService.getLogs(for: user, in: nil, since: date.beginningOfDate, toAndIncluding: date.endOfDate,
-                        limitedTo: nil, startingAfter: nil, offline: false)
+                        limitedTo: nil, startingAfterLog: nil, offline: false)
                 .map { logData in
                     return AppAction.viewLog(action: .dataLoadSuccess(logs: logData, date: date))
                 }.catch { (err) -> Just<AppAction> in
