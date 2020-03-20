@@ -28,20 +28,20 @@ struct RecentLogSection: View {
         func getBottomButtonViewModel(currentDisplayNum: Binding<Int>) -> BottomButtonViewModel {
             if currentDisplayNum.wrappedValue > ViewModel.numToShowIncrement {
                 // Display show less
-                return BottomButtonViewModel(disabled: false, text: "Show Less", onTap: {
+                return BottomButtonViewModel(showButton: true, text: "Show Less", onTap: {
                     currentDisplayNum.wrappedValue = currentDisplayNum.wrappedValue - ViewModel.numToShowIncrement
                 })
             } else {
                 // Display show more
-                let isDisabled = recentLogs.count <= currentDisplayNum.wrappedValue
-                return BottomButtonViewModel(disabled: isDisabled, text: "Show More", onTap: {
+                let showButton = recentLogs.count > currentDisplayNum.wrappedValue
+                return BottomButtonViewModel(showButton: showButton, text: "Show More", onTap: {
                     currentDisplayNum.wrappedValue = currentDisplayNum.wrappedValue + ViewModel.numToShowIncrement
                 })
             }
         }
 
         struct BottomButtonViewModel {
-            let disabled: Bool
+            let showButton: Bool
             let text: String
             let onTap: VoidCallback?
         }
@@ -77,16 +77,17 @@ struct RecentLogSection: View {
                         }
                     }
                 }
-                Button(action: {
-                    self.bottomButtonViewModel.onTap?()
-                }, label: {
-                    Text(self.bottomButtonViewModel.text)
-                        .font(Font.Theme.normalText)
-                        .foregroundColor(self.bottomButtonViewModel.disabled ?
-                                Color.Theme.grayscalePrimary : Color.Theme.primary)
-                        .padding(CGFloat.Theme.Layout.small)
-                })
-                .disabled(self.bottomButtonViewModel.disabled)
+                if self.bottomButtonViewModel.showButton {
+                    Button(action: {
+                        self.bottomButtonViewModel.onTap?()
+                    }, label: {
+                        Text(self.bottomButtonViewModel.text)
+                            .font(Font.Theme.normalText)
+                            .foregroundColor(Color.Theme.primary)
+                            .padding(.vertical, CGFloat.Theme.Layout.extraSmall)
+                            .padding(.horizontal, CGFloat.Theme.Layout.normal)
+                    })
+                }
             }
         }
     }

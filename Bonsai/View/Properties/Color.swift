@@ -23,7 +23,7 @@ struct AppColors {
     let backgroundPrimary: Color = Color.init(.systemGroupedBackground)
     let backgroundSecondary: Color = Color.init(.secondarySystemGroupedBackground)
     let overlay: Color = Color.init(.systemGray3).opacity(0.5)
-    let popupBackground: Color = Color.init(.systemGray3)
+    let popupBackground: Color = Color.init(.secondarySystemGroupedBackground)
 }
 
 extension Color {
