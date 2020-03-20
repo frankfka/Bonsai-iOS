@@ -26,7 +26,9 @@ class RealmService {
 
     // MARK: Logs
     func saveLogs(logs: [Loggable]) -> ServiceError? {
-        let realmLogs = logs.compactMap { getRealmLog(from: $0) }
+        let realmLogs = logs.compactMap {
+            getRealmLog(from: $0)
+        }
         if realmLogs.count != logs.count {
             return ServiceError(message: "Could not create one or more Realm logs from loggables")
         }
@@ -34,7 +36,7 @@ class RealmService {
     }
 
     func getLogs(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?,
-                 limit: Int?) -> [Loggable] {
+                 limit: Int?, startingAfterLog: Loggable?) -> [Loggable] {
         var realmLogs = self.db.objects(RealmLoggable.self)
         // Filter out templates used in log reminders
         realmLogs = realmLogs.filter("\(RealmLoggable.isTemplateKey) == FALSE")
@@ -49,14 +51,23 @@ class RealmService {
         // Enforce limit - Realm lazy-reads items
         var loggables: [Loggable] = []
         // Only return a set # of results, these are in reverse chronological order now
+        var beginAddingLogs: Bool = startingAfterLog == nil
         let fetchLimit = limit ?? logQueryLimit
-        let endIndex = fetchLimit <= realmLogs.endIndex ? fetchLimit : realmLogs.endIndex
-        for index in 0 ..< endIndex {
-            let realmLog = realmLogs[index]
-            if let loggable = getLoggable(from: realmLog) {
-                loggables.append(loggable)
-            } else {
-                AppLogging.warn("Could not get Loggable from Realm object \(realmLog.id) created on \(realmLog.dateCreated)")
+        for realmLog in realmLogs {
+            // We have the correct #
+            if loggables.count == fetchLimit {
+                break
+            }
+            if beginAddingLogs {
+                // Add logs as usual
+                if let loggable = getLoggable(from: realmLog) {
+                    loggables.append(loggable)
+                } else {
+                    AppLogging.warn("Could not get Loggable from Realm object \(realmLog.id) created on \(realmLog.dateCreated)")
+                }
+            } else if let startingAfterLog = startingAfterLog, realmLog.id == startingAfterLog.id {
+                // Found the beginning loggable, start adding on next interation
+                beginAddingLogs = true
             }
         }
         return loggables
@@ -106,7 +117,7 @@ class RealmService {
         // Enforce limit - Realm lazy-reads items
         var logReminders: [LogReminder] = []
         let endIndex = logReminderLimit <= realmLogReminders.endIndex ? logReminderLimit : realmLogReminders.endIndex
-        for index in 0 ..< endIndex {
+        for index in 0..<endIndex {
             if let logReminder = getLogReminder(from: realmLogReminders[index]) {
                 logReminders.append(logReminder)
             } else {

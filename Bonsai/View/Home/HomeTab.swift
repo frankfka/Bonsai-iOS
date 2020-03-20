@@ -121,13 +121,9 @@ struct HomeTab: View {
     }
     
     private func getRecentLogSectionViewModel() -> RecentLogSection.ViewModel {
-        // TODO: make init to just take in a list of logs in state
-        let logViewModels =
-                Array(store.state.globalLogs.sortedLogs.prefix(RecentLogSection.ViewModel.numToShow))
-                        .map { LogRow.ViewModel(loggable: $0) }
         return RecentLogSection.ViewModel(
-                recentLogs: logViewModels,
-                navigateToLogDetails: $navigationState
+                recentLogs: store.state.globalLogs.sortedLogs,
+                navigationState: $navigationState
         )
     }
 

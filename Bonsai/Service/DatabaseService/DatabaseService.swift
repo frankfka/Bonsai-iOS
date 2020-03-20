@@ -21,7 +21,7 @@ protocol DatabaseService {
     // Log functions
     func saveOrUpdateLog(log: Loggable, for user: User) -> ServicePublisher<Void>
     func getLogs(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?,
-                 limit: Int?, offline: Bool) -> ServicePublisher<[Loggable]>
+                 limit: Int?, startingAfterLog: Loggable?, offline: Bool) -> ServicePublisher<[Loggable]>
     func deleteLog(for user: User, with id: String) -> ServicePublisher<Void>
 
     // Log Reminder functions
@@ -140,7 +140,7 @@ class DatabaseServiceImpl: DatabaseService {
     }
 
     func getLogs(for user: User, in category: LogCategory?, since beginDate: Date?, toAndIncluding endDate: Date?,
-                 limit: Int?, offline: Bool) -> ServicePublisher<[Loggable]> {
+                 limit: Int?, startingAfterLog: Loggable?, offline: Bool) -> ServicePublisher<[Loggable]> {
         /*
         Retrieve from Firebase, as it is the ground truth
         - If we have an error, attempt to retrieve from Realm
@@ -152,15 +152,16 @@ class DatabaseServiceImpl: DatabaseService {
                     in: category,
                     since: beginDate,
                     toAndIncluding: endDate,
-                    limit: limit
+                    limit: limit,
+                    startingAfterLog: startingAfterLog
             )
             if offline {
                 // Don't attempt to retrieve from Firebase
                 // NOTE: this will not fill the associated nutrition/activity/etc. item
                 return promise(.success(logsFromRealm))
             }
-            self.firestoreService.getLogs(for: user, in: category, since: beginDate,
-                    toAndIncluding: endDate, limitedTo: limit) { result in
+            self.firestoreService.getLogs(for: user, in: category, since: beginDate, toAndIncluding: endDate,
+                    limitedTo: limit, startingAfterLog: startingAfterLog) { result in
                 // Run additional tasks after retrieving from firestore
                 let mappedResult = result
                         .flatMap { firebaseLogs -> Result<[Loggable], ServiceError> in
