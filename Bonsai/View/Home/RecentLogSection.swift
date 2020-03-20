@@ -12,28 +12,52 @@ struct RecentLogSection: View {
     @EnvironmentObject var store: AppStore
     
     struct ViewModel {
-        static let numToShow = 5  // Number of logs to show
+        static let numToShowIncrement = 5  // Number of logs to show
         var showNoRecents: Bool {
             recentLogs.isEmpty
         }
         let recentLogs: [LogRow.ViewModel]
         @Binding var navigationState: HomeTab.NavigationState?
 
-        init(recentLogs: [LogRow.ViewModel], navigateToLogDetails: Binding<HomeTab.NavigationState?>) {
-            // Trim to specified length
-            self.recentLogs = Array(recentLogs.prefix(ViewModel.numToShow))
-            self._navigationState = navigateToLogDetails
+        init(recentLogs: [Loggable], navigationState: Binding<HomeTab.NavigationState?>) {
+            self.recentLogs = recentLogs.map { LogRow.ViewModel(loggable: $0) }
+            self._navigationState = navigationState
         }
 
+        // Get view model for the bottom button that displays "Show More/Less"
+        func getBottomButtonViewModel(currentDisplayNum: Binding<Int>) -> BottomButtonViewModel {
+            if currentDisplayNum.wrappedValue > ViewModel.numToShowIncrement {
+                // Display show less
+                return BottomButtonViewModel(disabled: false, text: "Show Less", onTap: {
+                    currentDisplayNum.wrappedValue = currentDisplayNum.wrappedValue - ViewModel.numToShowIncrement
+                })
+            } else {
+                // Display show more
+                let isDisabled = recentLogs.count <= currentDisplayNum.wrappedValue
+                return BottomButtonViewModel(disabled: isDisabled, text: "Show More", onTap: {
+                    currentDisplayNum.wrappedValue = currentDisplayNum.wrappedValue + ViewModel.numToShowIncrement
+                })
+            }
+        }
+
+        struct BottomButtonViewModel {
+            let disabled: Bool
+            let text: String
+            let onTap: VoidCallback?
+        }
     }
     private let viewModel: ViewModel
+    private var bottomButtonViewModel: ViewModel.BottomButtonViewModel {
+        viewModel.getBottomButtonViewModel(currentDisplayNum: $numToShow)
+    }
+    @State(initialValue: ViewModel.numToShowIncrement) private var numToShow: Int
 
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
     }
 
     var body: some View {
-        VStack {
+        VStack(alignment: .center) {
             if self.viewModel.showNoRecents {
                 NoRecentLogsView()
             } else {
@@ -42,17 +66,27 @@ struct RecentLogSection: View {
                 NavigationLink(destination: LogDetailView(), tag: HomeTab.NavigationState.logDetail, selection: viewModel.$navigationState) {
                     EmptyView()
                 }
-                ForEach(viewModel.recentLogs) { logVm in
+                ForEach(viewModel.recentLogs.prefix(numToShow)) { logVm in
                     Group {
                         LogRow(viewModel: logVm)
                             .onTapGesture {
                                 self.onLogRowTapped(loggable: logVm.loggable)
                             }
-                        if ViewHelpers.showDivider(after: logVm, in: self.viewModel.recentLogs) {
+                        if ViewHelpers.showDivider(after: logVm, in: self.viewModel.recentLogs, withDisplayLimit: self.numToShow) {
                             Divider()
                         }
                     }
                 }
+                Button(action: {
+                    self.bottomButtonViewModel.onTap?()
+                }, label: {
+                    Text(self.bottomButtonViewModel.text)
+                        .font(Font.Theme.normalText)
+                        .foregroundColor(self.bottomButtonViewModel.disabled ?
+                                Color.Theme.grayscalePrimary : Color.Theme.primary)
+                        .padding(CGFloat.Theme.Layout.small)
+                })
+                .disabled(self.bottomButtonViewModel.disabled)
             }
         }
     }
@@ -88,10 +122,10 @@ struct RecentLogSection_Previews: PreviewProvider {
             RecentLogSection(
                     viewModel: RecentLogSection.ViewModel(
                             recentLogs: [
-                                LogRow.ViewModel(loggable: PreviewLoggables.medication),
-                                LogRow.ViewModel(loggable: PreviewLoggables.notes)
+                                PreviewLoggables.medication,
+                                PreviewLoggables.notes
                             ],
-                            navigateToLogDetails: .constant(nil)
+                            navigationState: .constant(nil)
                     )
             )
         }.previewLayout(.sizeThatFits)

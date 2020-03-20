@@ -31,9 +31,13 @@ struct ViewHelpers {
         }
     }
 
-    static func showDivider<T: Identifiable>(after vm: T, in list: [T]) -> Bool {
+    static func showDivider<T: Identifiable>(after vm: T, in list: [T], withDisplayLimit: Int? = nil) -> Bool {
         if let index = list.firstIndex(where: { list in list.id == vm.id }),
            index < list.count - 1 {
+            if let withDisplayLimit = withDisplayLimit,
+               withDisplayLimit <= index + 1 {
+                return false
+            }
             return true
         }
         return false
