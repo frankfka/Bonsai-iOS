@@ -9,53 +9,30 @@ struct AppDimensions {
     let Misc = AppMisc()
     
     struct AppFontSize {
-        let small: CGFloat!
-        let normal: CGFloat!
-        let large: CGFloat!
+        let small: CGFloat = 12
+        let normal: CGFloat = 16
+        let large: CGFloat = 20
 
-        let popupIcon: CGFloat!
-        let largeIcon: CGFloat!
-        let normalIcon: CGFloat!
-        let smallIcon: CGFloat!
-        
-        init() {
-            small = 12
-            normal = 16
-            large = 20
-
-            popupIcon = 48
-            largeIcon = 24
-            normalIcon = 16
-            smallIcon = 12
-        }
+        let popupIcon: CGFloat = 48
+        let largeIcon: CGFloat = 24
+        let normalIcon: CGFloat = 16
+        let smallIcon: CGFloat = 12
     }
     
     struct AppLayout {
         // Padding
         let large: CGFloat = 24
-        let normal: CGFloat!
-        let small: CGFloat!
-        let rowSeparator: CGFloat! // Padding between elements aligned on left and right of the row
+        let normal: CGFloat = 16
+        let small: CGFloat = 8
+        let rowSeparator: CGFloat = 16 // Padding between elements aligned on left and right of the row
         
-        let cornerRadius: CGFloat!
+        let cornerRadius: CGFloat = 24
         
-        let tabItemHeight: CGFloat!
-        let navBarItemHeight: CGFloat!
-        let popupFrameSize: CGFloat!
+        let tabItemHeight: CGFloat = 60
+        let navBarItemHeight: CGFloat = 24
+        let popupFrameSize: CGFloat = 96
 
         let minSectionHeight: CGFloat = 150
-        
-        init() {
-            normal = 16
-            small = 8
-            rowSeparator = 16
-            
-            cornerRadius = 24
-            
-            tabItemHeight = 60
-            navBarItemHeight = 24
-            popupFrameSize = 96
-        }
     }
 
     struct AppCharts {
@@ -70,13 +47,8 @@ struct AppDimensions {
     
     struct AppMisc {
         // Spinner
-        let spinnerSizeSmall: CGFloat!
-        let spinnerSizeNormal: CGFloat!
-        
-        init() {
-            spinnerSizeSmall = 24
-            spinnerSizeNormal = 48
-        }
+        let spinnerSizeSmall: CGFloat = 24
+        let spinnerSizeNormal: CGFloat = 48
     }
     
 }

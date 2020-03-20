@@ -31,8 +31,8 @@ extension View {
                 Image(systemName: imageName)
                 .resizable()
                 .frame(
-                        width: CGFloat.Theme.Font.popupIcon,
-                        height: CGFloat.Theme.Font.popupIcon
+                    width: CGFloat.Theme.Font.popupIcon,
+                    height: CGFloat.Theme.Font.popupIcon
                 )
                 .foregroundColor(Color.Theme.primary)
                 .padding(.bottom, CGFloat.Theme.Layout.small)

@@ -3,18 +3,10 @@ import SwiftUI
 
 struct AppIcons {
 
-    let todoEmpty: Image
-    let todoFilled: Image
+    let todoEmpty: Image = Image(systemName: "circle")
+    let todoFilled: Image = Image(systemName: "circle.fill")
     
-    let info: Image
-    
-    init() {
-        todoEmpty = Image(systemName: "circle")
-        todoFilled = Image(systemName: "circle.fill")
-        
-        info = Image(systemName: "info.circle.fill")
-    }
-    
+    let info: Image = Image(systemName: "info.circle.fill")
 }
 
 extension Image {

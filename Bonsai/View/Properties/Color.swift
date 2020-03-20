@@ -2,49 +2,28 @@ import Foundation
 import SwiftUI
 
 struct AppColors {
-    
     // Text colors
-    let textDark: Color!
-    let text: Color!
-    let textLight: Color!
+    let textDark: Color = Color.init(.label)
+    let text: Color = Color.init(.secondaryLabel)
+    let textLight: Color = Color.init(.tertiaryLabel)
     
     // Primary theme colors
-    let primaryUIColor: UIColor!
-    let primary: Color!
+    let primaryUIColor: UIColor = .systemGreen
+    let primary: Color = Color.init(.systemGreen)
     let accent: Color = .orange
-    let grayscalePrimary: Color!
-    let grayscaleSecondary: Color!
+    let grayscalePrimary: Color = Color.init(.systemGray)
+    let grayscaleSecondary: Color = Color.init(.systemGray3)
     
     // Generic conditional colors
-    let positive: Color!
-    let neutral: Color!
-    let negative: Color!
+    let positive: Color = Color.init(.systemGreen)
+    let neutral: Color = Color.init(.systemOrange)
+    let negative: Color = Color.init(.systemRed)
     
     // Background colors
-    let backgroundPrimary: Color!
-    let backgroundSecondary: Color!
-    let overlay: Color!
-    let popupBackground: Color!
-    
-    init() {
-        textDark = Color.init(.label)
-        text = Color.init(.secondaryLabel)
-        textLight = Color.init(.tertiaryLabel)
-        
-        primaryUIColor = .systemGreen
-        primary = Color.init(.systemGreen)
-        grayscalePrimary = Color.init(.systemGray)
-        grayscaleSecondary = Color.init(.systemGray3)
-        
-        positive = Color.init(.systemGreen)
-        neutral = Color.init(.systemOrange)
-        negative = Color.init(.systemRed)
-        
-        backgroundPrimary = Color.init(.systemGroupedBackground)
-        backgroundSecondary = Color.init(.secondarySystemGroupedBackground)
-        overlay = grayscaleSecondary.opacity(0.5)
-        popupBackground = backgroundSecondary
-    }
+    let backgroundPrimary: Color = Color.init(.systemGroupedBackground)
+    let backgroundSecondary: Color = Color.init(.secondarySystemGroupedBackground)
+    let overlay: Color = Color.init(.systemGray3).opacity(0.5)
+    let popupBackground: Color = Color.init(.systemGray3)
 }
 
 extension Color {
