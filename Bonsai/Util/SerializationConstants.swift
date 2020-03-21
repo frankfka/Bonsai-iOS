@@ -47,11 +47,17 @@ struct SerializationConstants {
         static let IdField = "userId"
         static let DateCreatedField = "dateCreated"
         static let LinkedGoogleAccountField = "linkedGoogleAccount"
+        static let SettingsField = "settings"
 
         struct FirebaseGoogleAccount {
             static let IdField = "googleId"
             static let NameField = "name"
             static let EmailField = "email"
+        }
+
+        struct Settings {
+            // Analytics
+            static let AnalyticsMoodRankDays = "analyticsMoodRankDays"
         }
     }
 

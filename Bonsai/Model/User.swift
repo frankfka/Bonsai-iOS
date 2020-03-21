@@ -8,6 +8,7 @@ import Foundation
 struct User {
     let id: String
     let dateCreated: Date
+    var settings: Settings
     var linkedFirebaseGoogleAccount: FirebaseGoogleAccount?
 
     struct FirebaseGoogleAccount {
@@ -16,9 +17,21 @@ struct User {
         let email: String
     }
 
-    init(id: String, dateCreated: Date, linkedFirebaseGoogleAccount: FirebaseGoogleAccount? = nil) {
+    struct Settings {
+        static let DefaultAnalyticsMoodRankDays: Int = 7
+
+        // Analytics
+        var analyticsMoodRankDays: Int
+
+        init(analyticsMoodRankDays: Int? = nil) {
+            self.analyticsMoodRankDays = analyticsMoodRankDays ?? Settings.DefaultAnalyticsMoodRankDays
+        }
+    }
+
+    init(id: String, dateCreated: Date, settings: Settings, linkedFirebaseGoogleAccount: FirebaseGoogleAccount? = nil) {
         self.id = id
         self.dateCreated = dateCreated
+        self.settings = settings
         self.linkedFirebaseGoogleAccount = linkedFirebaseGoogleAccount
     }
 }
