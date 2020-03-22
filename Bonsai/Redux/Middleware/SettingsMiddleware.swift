@@ -10,6 +10,7 @@ struct SettingsMiddleware {
 
     static func middleware(services: Services) -> [Middleware<AppState>] {
         return [
+            mapUserInitToSettingsInitMiddleware(),
             linkGoogleAccountPressedMiddleware(userService: services.userService),
             linkGoogleAccountSuccessMiddleware(userService: services.userService),
             searchForExistingUsersSuccessMiddleware(),
@@ -19,6 +20,20 @@ struct SettingsMiddleware {
         ]
     }
 
+    // MARK: User Settings
+    private static func mapUserInitToSettingsInitMiddleware() -> Middleware<AppState> {
+        return { state, action, cancellables, send in
+            switch action {
+            case .global(action: let .initSuccess(user)):
+                // Dispatch action to initialize settings state
+                    send(.settings(action: .initSavedSettings(settings: user.settings)))
+            default:
+                break
+            }
+        }
+    }
+
+    // MARK: Link Google Account
     // User initiated flow for linking Google account - send the presentingVC to show the Google Sign In modal
     private static func linkGoogleAccountPressedMiddleware(userService: UserService) -> Middleware<AppState> {
         return { state, action, cancellables, send in

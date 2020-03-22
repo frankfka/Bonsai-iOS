@@ -27,6 +27,7 @@
 		117F128D23E137990036C055 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 117F128C23E137980036C055 /* GoogleService-Info.plist */; };
 		1191FCB1241D41870056D5C8 /* LogReminderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1191FCB0241D41870056D5C8 /* LogReminderDetailView.swift */; };
 		11929D1123CC358400B06B99 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11929D1023CC358400B06B99 /* ErrorView.swift */; };
+		11B246C5242702C500AAC632 /* AccountSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B246C4242702C500AAC632 /* AccountSettingsView.swift */; };
 		11B4311823A5BBB700909D47 /* Mood.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B4311723A5BBB700909D47 /* Mood.swift */; };
 		11B4311A23A6960500909D47 /* LoadingSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B4311923A6960500909D47 /* LoadingSpinner.swift */; };
 		11B4311D23A6974C00909D47 /* LoadingSpinnerWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B4311C23A6974C00909D47 /* LoadingSpinnerWrappers.swift */; };
@@ -186,6 +187,7 @@
 		117F128C23E137980036C055 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1191FCB0241D41870056D5C8 /* LogReminderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogReminderDetailView.swift; sourceTree = "<group>"; };
 		11929D1023CC358400B06B99 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
+		11B246C4242702C500AAC632 /* AccountSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSettingsView.swift; sourceTree = "<group>"; };
 		11B4311723A5BBB700909D47 /* Mood.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mood.swift; sourceTree = "<group>"; };
 		11B4311923A6960500909D47 /* LoadingSpinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingSpinner.swift; sourceTree = "<group>"; };
 		11B4311C23A6974C00909D47 /* LoadingSpinnerWrappers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingSpinnerWrappers.swift; sourceTree = "<group>"; };
@@ -494,6 +496,7 @@
 			children = (
 				11EBB8E523DD39E400575CA1 /* SettingsView.swift */,
 				9E04B755AF0815DAF19D6FE2 /* AuthViewControllerRepresentable.swift */,
+				11B246C4242702C500AAC632 /* AccountSettingsView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -985,6 +988,7 @@
 				11EDE0E823C6D17A00A54673 /* ViewLogsDateHeaderView.swift in Sources */,
 				11FEACD223E2A5C800C22095 /* RoundedBorderButtonView.swift in Sources */,
 				11929D1123CC358400B06B99 /* ErrorView.swift in Sources */,
+				11B246C5242702C500AAC632 /* AccountSettingsView.swift in Sources */,
 				11B4312723A8A03D00909D47 /* MoodLogView.swift in Sources */,
 				11F445E6239A08CB00B501CD /* SceneDelegate.swift in Sources */,
 				110C63B1239D6E3800D904DE /* LogReminderRow.swift in Sources */,

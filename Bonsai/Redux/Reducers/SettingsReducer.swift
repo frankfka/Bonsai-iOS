@@ -8,7 +8,10 @@ import Foundation
 struct SettingsReducer {
     static func reduce(state: AppState, action: SettingsAction) -> AppState {
         switch action {
-        // Social Linking
+        // MARK: User Settings
+        case .initSavedSettings(let settings):
+            return initSavedSettings(state: state, savedSettings: settings)
+        // MARK: Link Google Account
         case .linkGoogleAccountPressed:
             return linkGoogleAccountPressed(state: state)
         case .googleSignedIn:
@@ -47,6 +50,13 @@ struct SettingsReducer {
         case .errorPopupShown:
             return errorPopupShown(state: state)
     }
+    }
+
+    static private func initSavedSettings(state: AppState, savedSettings: User.Settings) -> AppState {
+        var newState = state
+        newState.settings.savedSettings = savedSettings
+        newState.settings.settingsDidChange = false
+        return newState
     }
 
     static private func linkGoogleAccountPressed(state: AppState) -> AppState {
