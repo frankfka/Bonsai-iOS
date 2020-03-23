@@ -50,7 +50,7 @@ struct CreateLogView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: CGFloat.Theme.Layout.normal) {
-                CreateLogCategoryView(viewModel: getCategoryPickerViewModel())
+                CreateLogCategoryPicker(viewModel: getCategoryPickerViewModel())
                     .padding(.top, CGFloat.Theme.Layout.normal)
                 DateTimeFormPickerView(viewModel: getCreateLogDateTimePickerViewModel())
                 getCategorySpecificView()
@@ -137,8 +137,8 @@ struct CreateLogView: View {
         }
     }
     
-    private func getCategoryPickerViewModel() -> CreateLogCategoryView.ViewModel {
-        return CreateLogCategoryView.ViewModel(
+    private func getCategoryPickerViewModel() -> CreateLogCategoryPicker.ViewModel {
+        return CreateLogCategoryPicker.ViewModel(
             categories: store.state.createLog.allCategories.map {
                 $0.displayValue()
             },

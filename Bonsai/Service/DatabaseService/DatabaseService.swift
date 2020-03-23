@@ -63,7 +63,7 @@ class DatabaseServiceImpl: DatabaseService {
             return Fail(error: ServiceError(message: "User ID is empty")).eraseToAnyPublisher()
         }
         let future = ServiceFuture<Void> { promise in
-            self.firestoreService.saveUser(user: user) { result in
+            self.firestoreService.saveOrUpdateUser(user: user) { result in
                 promise(result)
             }
         }

@@ -1,6 +1,7 @@
 import SwiftUI
 
-struct CreateLogCategoryView: View {
+// TODO: Switch to generic picker
+struct CreateLogCategoryPicker: View {
     
     struct ViewModel {
         let categories: [String]
@@ -74,10 +75,10 @@ struct CreateLogCategoryView: View {
     
 }
 
-struct LogCategoryView_Previews: PreviewProvider {
+struct CreateLogCategoryPicker_Previews: PreviewProvider {
     static var previews: some View {
-        CreateLogCategoryView(
-            viewModel: CreateLogCategoryView.ViewModel(
+        CreateLogCategoryPicker(
+            viewModel: CreateLogCategoryPicker.ViewModel(
                 categories: LogCategory.allCases.map{ $0.displayValue() },
                 selectedCategory: 0,
                 selectedCategoryDidChange: { _ in },

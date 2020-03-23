@@ -47,13 +47,13 @@ class FirebaseFirestoreService {
         }
     }
 
-    func saveUser(user: User, onComplete: @escaping ServiceCallback<Void>) {
+    func saveOrUpdateUser(user: User, onComplete: @escaping ServiceCallback<Void>) {
         self.db.collection(SerializationConstants.User.Collection)
                 .document(user.id)
                 .setData(user.encode()) { err in
                     if let err = err {
-                        AppLogging.error("Error creating new user: \(err)")
-                        onComplete(.failure(ServiceError(message: "Error creating user", wrappedError: err)))
+                        AppLogging.error("Error saving user: \(err)")
+                        onComplete(.failure(ServiceError(message: "Error saving user", wrappedError: err)))
                     } else {
                         AppLogging.debug("User \(user.id) saved successfully")
                         onComplete(.success(()))

@@ -7,6 +7,11 @@ import Foundation
 import UIKit
 
 enum SettingsAction: LoggableAction {
+    // MARK: Screen States
+    case errorPopupShown
+    case successPopupShown
+
+    // MARK: Link Google Account
     case linkGoogleAccountPressed(presentingVc: UIViewController)
     // User first signs in with Google
     case googleSignedIn(googleAccount: User.FirebaseGoogleAccount)
@@ -26,6 +31,11 @@ enum SettingsAction: LoggableAction {
     case unlinkGoogleAccountSuccess(newUser: User)
     case unlinkGoogleAccountError(error: Error)
     case cancelRestoreLinkedAccount
-    case errorPopupShown
-    case successPopupShown
+
+    // MARK: User Settings
+    case initSavedSettings(settings: User.Settings)
+    case settingsDidChange(newSettings: User.Settings)
+    case saveSettingsPressed
+    case saveSettingsSuccess
+    case saveSettingsError(error: Error)
 }

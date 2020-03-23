@@ -32,7 +32,7 @@ class UserServiceImpl: UserService {
 
     func createUser() -> User {
         let id = UUID().uuidString
-        return User(id: id, dateCreated: Date())
+        return User(id: id, dateCreated: Date(), settings: User.Settings())
     }
 
     func save(user: User) -> ServicePublisher<Void> {
