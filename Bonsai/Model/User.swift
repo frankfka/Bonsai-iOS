@@ -23,8 +23,8 @@ struct User {
         // Analytics
         var analyticsMoodRankDays: Int
 
-        init(analyticsMoodRankDays: Int? = nil) {
-            self.analyticsMoodRankDays = analyticsMoodRankDays ?? Settings.DefaultAnalyticsMoodRankDays
+        init(analyticsMoodRankDays: Int = Settings.DefaultAnalyticsMoodRankDays) {
+            self.analyticsMoodRankDays = analyticsMoodRankDays
         }
     }
 
