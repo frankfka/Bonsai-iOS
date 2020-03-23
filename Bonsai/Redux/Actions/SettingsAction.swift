@@ -35,4 +35,7 @@ enum SettingsAction: LoggableAction {
     // MARK: User Settings
     case initSavedSettings(settings: User.Settings)
     case settingsDidChange(newSettings: User.Settings)
+    case saveSettingsPressed
+    case saveSettingsSuccess
+    case saveSettingsError(error: Error)
 }

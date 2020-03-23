@@ -20,4 +20,6 @@ struct SettingsState {
     // User Preferences
     var settingsDidChange: Bool = false // Indicates whether user settings have changed
     var settings: User.Settings = User.Settings() // Current state of settings in the view
+    var saveSettingsSuccess: Bool = false
+    var saveSettingsError: Error? = nil
 }

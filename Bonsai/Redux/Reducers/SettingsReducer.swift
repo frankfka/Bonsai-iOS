@@ -13,6 +13,12 @@ struct SettingsReducer {
             return initSavedSettings(state: state, savedSettings: settings)
         case .settingsDidChange(let newSettings):
             return settingsDidChange(state: state, newSettings: newSettings)
+        case .saveSettingsPressed:
+            return saveSettingsPressed(state: state)
+        case .saveSettingsSuccess:
+            return saveSettingsSuccess(state: state)
+        case .saveSettingsError(let error):
+            return saveSettingsError(state: state, error: error)
         // MARK: Link Google Account
         case .linkGoogleAccountPressed:
             return linkGoogleAccountPressed(state: state)
@@ -65,6 +71,28 @@ struct SettingsReducer {
         var newState = state
         newState.settings.settings = newSettings
         newState.settings.settingsDidChange = true
+        return newState
+    }
+
+    static private func saveSettingsPressed(state: AppState) -> AppState {
+        var newState = state
+        newState.settings.isLoading = true
+        return newState
+    }
+
+    static private func saveSettingsSuccess(state: AppState) -> AppState {
+        var newState = state
+        newState.settings.isLoading = false
+        newState.settings.settingsDidChange = false
+        newState.settings.saveSettingsSuccess = true
+        return newState
+    }
+
+    static private func saveSettingsError(state: AppState, error: Error) -> AppState {
+        AppLogging.error("Failure Action: \(error)")
+        var newState = state
+        newState.settings.saveSettingsError = error
+        newState.settings.isLoading = false
         return newState
     }
 
@@ -182,6 +210,7 @@ struct SettingsReducer {
         newState.settings.accountRestoreSuccess = false
         newState.settings.linkGoogleAccountSuccess = false
         newState.settings.unlinkGoogleAccountSuccess = false
+        newState.settings.saveSettingsSuccess = false
         return newState
     }
 
@@ -190,6 +219,7 @@ struct SettingsReducer {
         newState.settings.googleSignInError = nil
         newState.settings.linkGoogleAccountError = nil
         newState.settings.unlinkGoogleAccountError = nil
+        newState.settings.saveSettingsError = nil
         return newState
     }
 

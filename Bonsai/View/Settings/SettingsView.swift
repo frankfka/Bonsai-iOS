@@ -9,6 +9,7 @@ struct SettingsView: View {
     struct ViewModel {
         let showLoading: Bool
         let errorMessage: String
+        private let settingsDidChange: Bool
         var showError: Bool {
             !errorMessage.isEmpty
         }
@@ -19,6 +20,17 @@ struct SettingsView: View {
         var interactionDisabled: Bool {
             showLoading || showError || showSuccess
         }
+        var saveButtonDisabled: Bool {
+            !settingsDidChange || interactionDisabled
+        }
+
+        init(showLoading: Bool, errorMessage: String, settingsDidChange: Bool, successMessage: String) {
+            self.showLoading = showLoading
+            self.errorMessage = errorMessage
+            self.settingsDidChange = settingsDidChange
+            self.successMessage = successMessage
+        }
+
     }
     private var viewModel: ViewModel { getViewModel() }
     
@@ -32,7 +44,9 @@ struct SettingsView: View {
                 TitledSection(sectionTitle: "Analytics") {
                     AnalyticsSettingsSection(viewModel: self.getAnalyticsSectionViewModel())
                 }
-                // TODO: Save button
+                // Save Button
+                RoundedBorderButtonView(viewModel: self.getSaveButtonViewModel())
+                    .disabled(self.viewModel.saveButtonDisabled)
             }
         }
         // TODO: Declaring background breaks scrollview collapse navigation title behavior
@@ -60,6 +74,10 @@ struct SettingsView: View {
         store.send(.settings(action: .settingsDidChange(newSettings: newSettings)))
     }
 
+    private func onSaveTapped() {
+        store.send(.settings(action: .saveSettingsPressed))
+    }
+
     // MARK: View Model
     private func getViewModel() -> ViewModel {
         let showLoading = store.state.settings.isLoading
@@ -71,6 +89,8 @@ struct SettingsView: View {
             successMessage = "Account Linked"
         } else if store.state.settings.unlinkGoogleAccountSuccess {
             successMessage = "Account Unlinked"
+        } else if store.state.settings.saveSettingsSuccess {
+            successMessage = "Settings Saved"
         }
         // Create error message
         var errorMessage = ""
@@ -80,10 +100,13 @@ struct SettingsView: View {
             errorMessage = "Could Not Sign In"
         } else if store.state.settings.unlinkGoogleAccountError != nil {
             errorMessage = "Could Not Unlink"
+        } else if store.state.settings.saveSettingsError != nil {
+            errorMessage = "Error Saving Settings"
         }
         return ViewModel(
             showLoading: showLoading,
             errorMessage: errorMessage,
+            settingsDidChange: store.state.settings.settingsDidChange,
             successMessage: successMessage
         )
     }
@@ -103,6 +126,14 @@ struct SettingsView: View {
         return AnalyticsSettingsSection.ViewModel(
             settings: store.state.settings.settings,
             onSettingsChanged: self.onSettingsChanged
+        )
+    }
+
+    private func getSaveButtonViewModel() -> RoundedBorderButtonView.ViewModel {
+        return RoundedBorderButtonView.ViewModel(
+                text: "Save",
+                textColor: self.viewModel.saveButtonDisabled ? Color.Theme.text : Color.Theme.primary,
+                onTap: self.onSaveTapped
         )
     }
 

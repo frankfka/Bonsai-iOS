@@ -11,6 +11,7 @@ struct SettingsMiddleware {
     static func middleware(services: Services) -> [Middleware<AppState>] {
         return [
             mapUserInitToSettingsInitMiddleware(),
+            saveSettingsMiddleware(userService: services.userService),
             linkGoogleAccountPressedMiddleware(userService: services.userService),
             linkGoogleAccountSuccessMiddleware(userService: services.userService),
             searchForExistingUsersSuccessMiddleware(),
@@ -26,11 +27,41 @@ struct SettingsMiddleware {
             switch action {
             case .global(action: let .initSuccess(user)):
                 // Dispatch action to initialize settings state
-                    send(.settings(action: .initSavedSettings(settings: user.settings)))
+                send(.settings(action: .initSavedSettings(settings: user.settings)))
             default:
                 break
             }
         }
+    }
+
+    private static func saveSettingsMiddleware(userService: UserService) -> Middleware<AppState> {
+        return { state, action, cancellables, send in
+            switch action {
+            case .settings(action: .saveSettingsPressed):
+                // Check user exists
+                guard var user = state.global.user else {
+                    fatalError("No user initialized when saving settings")
+                }
+                // Assign new settings to the user
+                user.settings = state.settings.settings
+                saveSettingsMiddleware(userService: userService, user: user)
+                        .sink(receiveValue: { newAction in
+                            send(newAction)
+                        })
+                        .store(in: &cancellables)
+            default:
+                break
+            }
+        }
+    }
+
+    private static func saveSettingsMiddleware(userService: UserService, user: User) -> AnyPublisher<AppAction, Never> {
+        return userService.save(user: user)
+                .map { _ in
+                    AppAction.settings(action: .saveSettingsSuccess)
+                }.catch { (err) -> Just<AppAction> in
+                    Just(AppAction.settings(action: .saveSettingsError(error: err)))
+                }.eraseToAnyPublisher()
     }
 
     // MARK: Link Google Account

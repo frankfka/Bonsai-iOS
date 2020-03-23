@@ -11,7 +11,8 @@ extension User {
         return [
             SerializationConstants.User.IdField: self.id,
             SerializationConstants.User.DateCreatedField: self.dateCreated,
-            SerializationConstants.User.LinkedGoogleAccountField: self.linkedFirebaseGoogleAccount?.encode() as Any
+            SerializationConstants.User.LinkedGoogleAccountField: self.linkedFirebaseGoogleAccount?.encode() as Any,
+            SerializationConstants.User.SettingsField: self.settings.encode() as Any
         ]
     }
 
