@@ -1,5 +1,6 @@
 import SwiftUI
 
+// TODO: Switch to generic picker
 struct CreateLogCategoryPicker: View {
     
     struct ViewModel {
