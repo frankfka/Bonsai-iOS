@@ -146,8 +146,18 @@ struct AccountSettingsSection: View {
 
 }
 
-//struct AccountSettingsView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AccountSettingsView()
-//    }
-//}
+struct AccountSettingsSection_Previews: PreviewProvider {
+
+    private static let viewModel = AccountSettingsSection.ViewModel(
+            linkedGoogleAccountEmail: "test@gmail.com",
+            isSignedIn: true,
+            showRestoreDialog: false,
+            interactionDisabled: false
+    )
+
+    static var previews: some View {
+        AccountSettingsSection(viewModel: viewModel)
+            .background(Color.Theme.backgroundPrimary)
+            .environmentObject(PreviewRedux.initialStore)
+    }
+}

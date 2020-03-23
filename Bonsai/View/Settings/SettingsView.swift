@@ -1,6 +1,8 @@
 import SwiftUI
 import GoogleSignIn
 
+typealias SettingsChangedCallback = (User.Settings) -> Void
+
 struct SettingsView: View {
     @EnvironmentObject var store: AppStore
     
@@ -22,11 +24,15 @@ struct SettingsView: View {
     
     var body: some View {
         ScrollView {
-            VStack {
+            VStack(spacing: CGFloat.Theme.Layout.normal) {
                 TitledSection(sectionTitle: "Account") {
                     AccountSettingsSection(viewModel: self.getAccountSectionViewModel())
                 }
                 .padding(.top, CGFloat.Theme.Layout.normal)
+                TitledSection(sectionTitle: "Analytics") {
+                    AnalyticsSettingsSection(viewModel: self.getAnalyticsSectionViewModel())
+                }
+                // TODO: Save button
             }
         }
         // TODO: Declaring background breaks scrollview collapse navigation title behavior
@@ -48,6 +54,10 @@ struct SettingsView: View {
 
     private func errorPopupShown() {
         store.send(.settings(action: .errorPopupShown))
+    }
+
+    private func onSettingsChanged(newSettings: User.Settings) {
+        store.send(.settings(action: .settingsDidChange(newSettings: newSettings)))
     }
 
     // MARK: View Model
@@ -88,6 +98,14 @@ struct SettingsView: View {
             interactionDisabled: viewModel.interactionDisabled
         )
     }
+
+    private func getAnalyticsSectionViewModel() -> AnalyticsSettingsSection.ViewModel {
+        return AnalyticsSettingsSection.ViewModel(
+            settings: store.state.settings.settings,
+            onSettingsChanged: self.onSettingsChanged
+        )
+    }
+
 }
 
 struct SettingsView_Previews: PreviewProvider {

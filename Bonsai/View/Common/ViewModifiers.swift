@@ -20,9 +20,9 @@ struct RoundedBorderSectionModifier: ViewModifier {
 struct FormRowModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
-                .contentShape(Rectangle())
-                .padding(CGFloat.Theme.Layout.normal)
-                .background(Color.Theme.backgroundSecondary)
+            .contentShape(Rectangle())
+            .padding(CGFloat.Theme.Layout.normal)
+            .background(Color.Theme.backgroundSecondary)
     }
 }
 

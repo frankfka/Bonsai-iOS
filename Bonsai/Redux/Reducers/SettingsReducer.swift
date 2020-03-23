@@ -11,6 +11,8 @@ struct SettingsReducer {
         // MARK: User Settings
         case .initSavedSettings(let settings):
             return initSavedSettings(state: state, savedSettings: settings)
+        case .settingsDidChange(let newSettings):
+            return settingsDidChange(state: state, newSettings: newSettings)
         // MARK: Link Google Account
         case .linkGoogleAccountPressed:
             return linkGoogleAccountPressed(state: state)
@@ -54,8 +56,15 @@ struct SettingsReducer {
 
     static private func initSavedSettings(state: AppState, savedSettings: User.Settings) -> AppState {
         var newState = state
-        newState.settings.savedSettings = savedSettings
+        newState.settings.settings = savedSettings
         newState.settings.settingsDidChange = false
+        return newState
+    }
+
+    static private func settingsDidChange(state: AppState, newSettings: User.Settings) -> AppState {
+        var newState = state
+        newState.settings.settings = newSettings
+        newState.settings.settingsDidChange = true
         return newState
     }
 
