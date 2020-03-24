@@ -38,7 +38,6 @@ struct CreateLogView: View {
             self.loadMessage = loadMessage
         }
     }
-    @State(initialValue: false) private var showCategoryPicker
     @State(initialValue: false) private var showDatePicker
     @State(initialValue: false) private var showTimePicker
     private var viewModel: ViewModel
@@ -50,7 +49,7 @@ struct CreateLogView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: CGFloat.Theme.Layout.normal) {
-                CreateLogCategoryPicker(viewModel: getCategoryPickerViewModel())
+                RowPickerView(viewModel: getCategoryPickerViewModel())
                     .padding(.top, CGFloat.Theme.Layout.normal)
                 DateTimeFormPickerView(viewModel: getCreateLogDateTimePickerViewModel())
                 getCategorySpecificView()
@@ -136,15 +135,25 @@ struct CreateLogView: View {
             return MedicationLogView().eraseToAnyView()
         }
     }
-    
-    private func getCategoryPickerViewModel() -> CreateLogCategoryPicker.ViewModel {
-        return CreateLogCategoryPicker.ViewModel(
-            categories: store.state.createLog.allCategories.map {
-                $0.displayValue()
-            },
-            selectedCategory: store.state.createLog.selectedCategoryIndex,
-            selectedCategoryDidChange: onSelectedCategoryChange,
-            showPicker: $showCategoryPicker
+
+    struct CategoryPickerValue: RowPickerValue {
+        let pickerDisplay: String
+    }
+
+    private func getCategoryPickerViewModel() -> RowPickerView.ViewModel {
+        let allValues = store.state.createLog.allCategories.map { CategoryPickerValue(pickerDisplay: $0.displayValue()) }
+        let selectedIndex = store.state.createLog.selectedCategoryIndex
+        let rowValue = allValues[selectedIndex].pickerDisplay
+        let selectionBinding = Binding<Int>(get: {
+            return selectedIndex
+        }, set: { newVal in
+            self.onSelectedCategoryChange(newVal: newVal)
+        })
+        return RowPickerView.ViewModel(
+            rowTitle: "Category",
+            rowValue: rowValue,
+            values: allValues,
+            selectionIndex: selectionBinding
         )
     }
 
