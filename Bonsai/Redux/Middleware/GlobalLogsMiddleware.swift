@@ -11,7 +11,7 @@ struct GlobalLogsMiddleware {
     static func middleware(services: Services) -> [Middleware<AppState>] {
         return [
             mapActionsToGlobalLogActionMiddleware(),
-            mapLogActionsToUpdateAnalyticsMiddleware(),
+            mapActionsToUpdateAnalyticsMiddleware(),
             updateAnalyticsMiddleware(analyticsService: services.analyticsService)
         ]
     }
@@ -40,7 +40,7 @@ struct GlobalLogsMiddleware {
     }
 
     // MARK: Analytics
-    private static func mapLogActionsToUpdateAnalyticsMiddleware() -> Middleware<AppState> {
+    private static func mapActionsToUpdateAnalyticsMiddleware() -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
             case .globalLog(action: .insert):
@@ -48,6 +48,8 @@ struct GlobalLogsMiddleware {
             case .globalLog(action: .insertMany):
                 send(.globalLog(action: .updateAnalytics))
             case .globalLog(action: .delete):
+                send(.globalLog(action: .updateAnalytics))
+            case .settings(action: .saveSettingsSuccess):
                 send(.globalLog(action: .updateAnalytics))
             default:
                 break

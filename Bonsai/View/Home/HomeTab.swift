@@ -128,9 +128,9 @@ struct HomeTab: View {
     }
 
     private func getMoodAnalyticsSectionViewModel() -> MoodAnalyticsSection.ViewModel {
-        let pastWeekChartViewModel: PastWeekMoodChartView.ViewModel?
-        if let moodRankAnalytics = store.state.globalLogs.analytics?.pastWeekMoodRank {
-            pastWeekChartViewModel = PastWeekMoodChartView.ViewModel(analytics: moodRankAnalytics)
+        let pastWeekChartViewModel: HistoricalMoodChartView.ViewModel?
+        if let moodRankAnalytics = store.state.globalLogs.analytics?.historicalMoodRank {
+            pastWeekChartViewModel = HistoricalMoodChartView.ViewModel(analytics: moodRankAnalytics)
         } else {
             pastWeekChartViewModel = nil
         }

@@ -21,35 +21,36 @@ class AnalyticsServiceImpl: AnalyticsService {
     func getAllAnalytics(for user: User) -> ServicePublisher<LogAnalytics> {
         // Get Logs
         let now = Date()
-        let beginDate = now.addingTimeInterval(-TimeInterval.week)
+        // TODO: Determine a maximum for log retrieval
+        let beginDate = now.addingTimeInterval(-3 * TimeInterval.week)
         // Map the retrieved logs into analytics
         return self.db.getLogs(
             for: user, in: nil, since: beginDate,
             toAndIncluding: now, limit: nil, startingAfterLog: nil, offline: true
         ).map { fetchedLogs in
-            return self.getAllAnalytics(from: fetchedLogs)
+            return self.getAllAnalytics(from: fetchedLogs, for: user)
         }.mapError { err in
             AppLogging.error("Error retrieving local logs for analytics: \(err)")
             return err
         }.eraseToAnyPublisher()
     }
 
-    private func getAllAnalytics(from logs: [Loggable]) -> LogAnalytics {
+    private func getAllAnalytics(from logs: [Loggable], for user: User) -> LogAnalytics {
         // Categorize the logs
         let logsByType = AppUtils.splitLoggablesByType(logs: logs)
 
         // Get Analytics
-        let pastWeekMoodRank = getPastWeekMoodRankAnalytics(from: logsByType.moodLogs)
-        let analytics = LogAnalytics(pastWeekMoodRank: pastWeekMoodRank)
+        let historicalMoodRank = getHistoricalMoodRank(from: logsByType.moodLogs, numDays: user.settings.analyticsMoodRankDays)
+        let analytics = LogAnalytics(historicalMoodRank: historicalMoodRank)
 
         return analytics
     }
 
-    private func getPastWeekMoodRankAnalytics(from logs: [MoodLog]) -> MoodRankAnalytics {
+    private func getHistoricalMoodRank(from logs: [MoodLog], numDays: Int) -> MoodRankAnalytics {
         var moodRankDays: [MoodRankDaySummary] = []
         let now = Date()
         // Calculate for the past 7 days, in reverse order
-        for daysInThePast in (0 ..< 7).reversed() {
+        for daysInThePast in (0 ..< numDays).reversed() {
             let date = now.addingTimeInterval(Double(-daysInThePast) * TimeInterval.day)
             // Get the date
             let moodLogsInDate = logs.filter {

@@ -13,7 +13,7 @@ struct AnalyticsSettingsSection: View {
     @EnvironmentObject var store: AppStore
 
     struct MoodRankDayPickerValue: RowPickerValue {
-        static let values = (5...15).map { MoodRankDayPickerValue(dayValue: $0) }
+        static let values = (5...12).map { MoodRankDayPickerValue(dayValue: $0) }
         let dayValue: Int
         var pickerDisplay: String {
             "\(dayValue) Days"

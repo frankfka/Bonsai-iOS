@@ -13,9 +13,9 @@ struct MoodAnalyticsSection: View {
     struct ViewModel {
         let isLoading: Bool
         let loadError: Bool
-        let chartViewModel: PastWeekMoodChartView.ViewModel?
+        let chartViewModel: HistoricalMoodChartView.ViewModel?
         
-        init(chartViewModel: PastWeekMoodChartView.ViewModel?, isLoading: Bool, loadError: Bool) {
+        init(chartViewModel: HistoricalMoodChartView.ViewModel?, isLoading: Bool, loadError: Bool) {
             self.chartViewModel = chartViewModel
             self.isLoading = isLoading
             self.loadError = loadError
@@ -36,7 +36,7 @@ struct MoodAnalyticsSection: View {
                 ErrorView()
             } else {
                 self.viewModel.chartViewModel.map {
-                    PastWeekMoodChartView(viewModel: $0)
+                    HistoricalMoodChartView(viewModel: $0)
                             .padding(CGFloat.Theme.Layout.small)
                 }
             }
@@ -47,7 +47,7 @@ struct MoodAnalyticsSection: View {
 struct MoodAnalyticsSection_Previews: PreviewProvider {
 
     private static var dataVm = MoodAnalyticsSection.ViewModel(
-            chartViewModel: PastWeekMoodChartView.ViewModel(analytics: AnalyticsPreviews.PastWeekWithData),
+            chartViewModel: HistoricalMoodChartView.ViewModel(analytics: AnalyticsPreviews.PastWeekWithData),
             isLoading: false,
             loadError: false
     )

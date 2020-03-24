@@ -20,8 +20,8 @@ extension DateFormatter {
     }
 }
 
-struct PastWeekMoodChartView: View {
-    
+struct HistoricalMoodChartView: View {
+
     struct ViewModel {
         static let minChartHeight: CGFloat = 200 // TODO: Somehow make this not a constant
         static let barChartStyle = BarChartStyle(
@@ -70,7 +70,11 @@ struct PastWeekMoodChartView: View {
             LineChartDataPoint(xRel: 1, yRel: getRelativeValue(CGFloat(MoodRank.negative.rawValue)))
         ])
         
-        let axisLabels: [String]
+        let axisLabels: [(fullDisplay: String, shortDisplay: String)]
+        var useFullAxisLabels: Bool {
+            // TODO: Use width to determine this
+            dailyMoodBarChartData.count < 10
+        }
         let dailyMoodBarChartData: [BarChartDataPoint]
         let avgMoodLineChartData: LineChartData
         let showNoDataText: Bool
@@ -78,10 +82,12 @@ struct PastWeekMoodChartView: View {
         init(analytics: MoodRankAnalytics) {
             var showNoDataText = true
             // Bar Chart
-            var axisLabels: [String] = []
+            var axisLabels: [(fullDisplay: String, shortDisplay: String)] = []
             var barChartDataPoints: [BarChartDataPoint] = []
             for day in analytics.moodRankDays {
-                axisLabels.append(DateFormatter.stringForMoodAnalyticsAxis(from: day.date))
+                let dateString = DateFormatter.stringForMoodAnalyticsAxis(from: day.date)
+                // Short display is used for lengthier datasets
+                axisLabels.append((fullDisplay: dateString, shortDisplay: String(dateString.prefix(1))))
                 let relativeValue: CGFloat
                 if let averageValue = day.averageMoodRankValue {
                     relativeValue = ViewModel.getRelativeValue(CGFloat(averageValue))
@@ -159,8 +165,8 @@ struct PastWeekMoodChartView: View {
             }
             // Bottom Axis
             HStack {
-                ForEach(viewModel.axisLabels, id: \.self) { label in
-                    Text(label)
+                ForEach(viewModel.axisLabels, id: \.fullDisplay) { label in
+                    Text(self.viewModel.useFullAxisLabels ? label.fullDisplay : label.shortDisplay)
                         .font(Font.Theme.subtext)
                         .foregroundColor(Color.Theme.text)
                         .frame(maxWidth: .infinity)
@@ -175,12 +181,12 @@ struct PastWeekMoodChartView_Previews: PreviewProvider {
     
     static var previews: some View {
         Group {
-            PastWeekMoodChartView(viewModel: PastWeekMoodChartView.ViewModel(analytics: AnalyticsPreviews.PastWeekWithData))
+            HistoricalMoodChartView(viewModel: HistoricalMoodChartView.ViewModel(analytics: AnalyticsPreviews.PastWeekWithData))
             
-            PastWeekMoodChartView(viewModel: PastWeekMoodChartView.ViewModel(analytics: AnalyticsPreviews.PastWeekWithData))
+            HistoricalMoodChartView(viewModel: HistoricalMoodChartView.ViewModel(analytics: AnalyticsPreviews.PastWeekWithData))
                 .environment(\.colorScheme, .dark)
             
-            PastWeekMoodChartView(viewModel: PastWeekMoodChartView.ViewModel(analytics: AnalyticsPreviews.PastWeekWithNoData))
+            HistoricalMoodChartView(viewModel: HistoricalMoodChartView.ViewModel(analytics: AnalyticsPreviews.PastWeekWithNoData))
         }
         .frame(width: 500, height: 300)
         .background(Color.Theme.backgroundSecondary)

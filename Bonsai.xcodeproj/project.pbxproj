@@ -57,7 +57,7 @@
 		11FF402D23FB8C4C0058583C /* BarChartComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FF402C23FB8C4C0058583C /* BarChartComponent.swift */; };
 		11FF402F23FC5C9B0058583C /* LineChartComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FF402E23FC5C9B0058583C /* LineChartComponent.swift */; };
 		11FF403223FEFB490058583C /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FF403123FEFB490058583C /* ChartView.swift */; };
-		11FF403423FF277B0058583C /* PastWeekMoodChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FF403323FF277B0058583C /* PastWeekMoodChartView.swift */; };
+		11FF403423FF277B0058583C /* HistoricalMoodChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FF403323FF277B0058583C /* HistoricalMoodChartView.swift */; };
 		9E04B0429AF78781ABC30DCB /* GlobalLogRemindersMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B7D200ED57FC399C8F5F /* GlobalLogRemindersMiddleware.swift */; };
 		9E04B066551BCEEF58E9DB5B /* HomeScreenMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B329C5305296C0C18D78 /* HomeScreenMiddleware.swift */; };
 		9E04B0E9C35B4A8C7F35725C /* LogRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B355F83BFA8404BC1206 /* LogRow.swift */; };
@@ -220,7 +220,7 @@
 		11FF402C23FB8C4C0058583C /* BarChartComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartComponent.swift; sourceTree = "<group>"; };
 		11FF402E23FC5C9B0058583C /* LineChartComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartComponent.swift; sourceTree = "<group>"; };
 		11FF403123FEFB490058583C /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
-		11FF403323FF277B0058583C /* PastWeekMoodChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastWeekMoodChartView.swift; sourceTree = "<group>"; };
+		11FF403323FF277B0058583C /* HistoricalMoodChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricalMoodChartView.swift; sourceTree = "<group>"; };
 		5224D148B81081E7444187A6 /* Pods-HealthTrack.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthTrack.release.xcconfig"; path = "Target Support Files/Pods-HealthTrack/Pods-HealthTrack.release.xcconfig"; sourceTree = "<group>"; };
 		75E56A12C7431D234EDF9416 /* Pods-Bonsai.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bonsai.debug.xcconfig"; path = "Target Support Files/Pods-Bonsai/Pods-Bonsai.debug.xcconfig"; sourceTree = "<group>"; };
 		76CC4C0B881B5BDB7CBB1305 /* Pods_Bonsai.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bonsai.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -665,7 +665,7 @@
 		9E04B281F9FE1970BB809117 /* Analytics */ = {
 			isa = PBXGroup;
 			children = (
-				11FF403323FF277B0058583C /* PastWeekMoodChartView.swift */,
+				11FF403323FF277B0058583C /* HistoricalMoodChartView.swift */,
 			);
 			path = Analytics;
 			sourceTree = "<group>";
@@ -1073,7 +1073,7 @@
 				9E04B986D42B107ED18ED0E5 /* AuthViewControllerRepresentable.swift in Sources */,
 				9E04B19E91A48EB332B64267 /* KeyboardPadding.swift in Sources */,
 				11FF402F23FC5C9B0058583C /* LineChartComponent.swift in Sources */,
-				11FF403423FF277B0058583C /* PastWeekMoodChartView.swift in Sources */,
+				11FF403423FF277B0058583C /* HistoricalMoodChartView.swift in Sources */,
 				11B246C92428002800AAC632 /* RowPickerView.swift in Sources */,
 				9E04B44B6BD1BCCE962BF217 /* LineChartHelpers.swift in Sources */,
 				9E04B33DA4A87FE7E2ED790E /* LineChartModels.swift in Sources */,

@@ -82,6 +82,7 @@ struct SettingsReducer {
 
     static private func saveSettingsSuccess(state: AppState) -> AppState {
         var newState = state
+        newState.global.user?.settings = state.settings.settings // Assign the saved settings to the global user
         newState.settings.isLoading = false
         newState.settings.settingsDidChange = false
         newState.settings.saveSettingsSuccess = true

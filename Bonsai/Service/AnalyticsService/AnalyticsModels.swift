@@ -7,10 +7,10 @@ import Foundation
 
 // MARK: Master object for analytics
 struct LogAnalytics {
-    let pastWeekMoodRank: MoodRankAnalytics?
+    let historicalMoodRank: MoodRankAnalytics?
 
-    init(pastWeekMoodRank: MoodRankAnalytics? = nil) {
-        self.pastWeekMoodRank = pastWeekMoodRank
+    init(historicalMoodRank: MoodRankAnalytics? = nil) {
+        self.historicalMoodRank = historicalMoodRank
     }
 }
 
