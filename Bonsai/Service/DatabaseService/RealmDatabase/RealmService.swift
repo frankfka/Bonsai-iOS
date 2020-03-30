@@ -11,7 +11,7 @@ class RealmService {
     private let db: Realm
 
     // Limits as Realm returns everything, we wouldn't want to map all the objects
-    private let logQueryLimit = 50 // Maximum logs to return at a given time
+    private let logQueryLimit = 400 // Maximum logs to return at a given time
     private let logReminderLimit = 50 // Maximum reminders to return at a given time
 
     init() throws {
