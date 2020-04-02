@@ -14,6 +14,12 @@ struct LogDetailsReducer {
             return fetchLogDataSuccess(state: state, loggable: loggable)
         case let .fetchLogDataError(error):
             return fetchLogDataError(state: state, error: error)
+        case .initSymptomLogAnalytics:
+            return initSymptomLogAnalytics(state: state)
+        case .initSymptomLogAnalyticsSuccess(let result):
+            return initSymptomLogAnalyticsSuccess(state: state, analyticsResult: result)
+        case .initSymptomLogAnalyticsFailure(let error):
+            return initSymptomLogAnalyticsFailure(state: state, error: error)
         case .deleteCurrentLog:
             return deleteLog(state: state)
         case let .deleteSuccess(deletedLog):
@@ -49,6 +55,27 @@ struct LogDetailsReducer {
         var newState = state
         newState.logDetails.isLoading = false
         newState.logDetails.loadError = error
+        return newState
+    }
+
+    static private func initSymptomLogAnalytics(state: AppState) -> AppState {
+        var newState = state
+        newState.logDetails.isLoadingAnalytics = true
+        return newState
+    }
+
+    static private func initSymptomLogAnalyticsSuccess(state: AppState, analyticsResult: SymptomSeverityAnalytics) -> AppState {
+        var newState = state
+        newState.logDetails.isLoadingAnalytics = false
+        newState.logDetails.symptomSeverityAnalytics = analyticsResult
+        return newState
+    }
+
+    static private func initSymptomLogAnalyticsFailure(state: AppState, error: Error) -> AppState {
+        AppLogging.error("Failure Action: \(error)")
+        var newState = state
+        newState.logDetails.isLoadingAnalytics = false
+        newState.logDetails.loadAnalyticsError = error
         return newState
     }
 

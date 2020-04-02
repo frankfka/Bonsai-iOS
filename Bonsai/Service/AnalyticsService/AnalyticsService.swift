@@ -8,16 +8,18 @@ import Combine
 
 protocol AnalyticsService {
     func getAllAnalytics(for user: User) -> ServicePublisher<LogAnalytics>
+    func getHistoricalSymptomSeverity(for user: User, with symptomLog: SymptomLog) -> ServicePublisher<SymptomSeverityAnalytics>
 }
 
 class AnalyticsServiceImpl: AnalyticsService {
-
+    
     private let db: DatabaseService
-
+    
     init(db: DatabaseService) {
         self.db = db
     }
-
+    
+    // MARK: Get All Analytics
     func getAllAnalytics(for user: User) -> ServicePublisher<LogAnalytics> {
         // Get Logs
         let now = Date()
@@ -34,18 +36,18 @@ class AnalyticsServiceImpl: AnalyticsService {
             return err
         }.eraseToAnyPublisher()
     }
-
+    
     private func getAllAnalytics(from logs: [Loggable], for user: User) -> LogAnalytics {
         // Categorize the logs
         let logsByType = AppUtils.splitLoggablesByType(logs: logs)
-
+        
         // Get Analytics
         let historicalMoodRank = getHistoricalMoodRank(from: logsByType.moodLogs, numDays: user.settings.analyticsMoodRankDays)
         let analytics = LogAnalytics(historicalMoodRank: historicalMoodRank)
-
+        
         return analytics
     }
-
+    
     private func getHistoricalMoodRank(from logs: [MoodLog], numDays: Int) -> MoodRankAnalytics {
         var moodRankDays: [MoodRankDaySummary] = []
         let now = Date()
@@ -60,13 +62,29 @@ class AnalyticsServiceImpl: AnalyticsService {
             let numMoodLogsInDate = moodLogsInDate.count
             if numMoodLogsInDate > 0 {
                 averageMoodRank = moodLogsInDate
-                        .map { Double($0.moodRank.rawValue) }
-                        .reduce(0.0, +) / Double(numMoodLogsInDate)
+                    .map { Double($0.moodRank.rawValue) }
+                    .reduce(0.0, +) / Double(numMoodLogsInDate)
             }
             moodRankDays.append(MoodRankDaySummary(date: date, averageMoodRankValue: averageMoodRank))
         }
         return MoodRankAnalytics(moodRankDays: moodRankDays)
     }
-
-
+    
+    // MARK: Symptom Severity Analytics
+    func getHistoricalSymptomSeverity(for user: User, with symptomLog: SymptomLog) -> ServicePublisher<SymptomSeverityAnalytics> {
+        // Get logs up to the date of the log provided, we can customize this at a later time
+        return self.db.getLogs(
+            for: user, in: nil, since: nil,
+            toAndIncluding: symptomLog.dateCreated, limit: nil, startingAfterLog: symptomLog, offline: true
+        ).map { fetchedLogs in
+            for log in fetchedLogs {
+                print(log)
+            }
+            return SymptomSeverityAnalytics(severityDaySummaries: [])
+        }.mapError { err in
+            AppLogging.error("Error retrieving local logs for analytics: \(err)")
+            return err
+        }.eraseToAnyPublisher()
+    }
+    
 }
