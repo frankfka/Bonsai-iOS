@@ -74,17 +74,26 @@ class AnalyticsServiceImpl: AnalyticsService {
     func getHistoricalSymptomSeverity(for user: User, with symptomLog: SymptomLog) -> ServicePublisher<SymptomSeverityAnalytics> {
         // Get logs up to the date of the log provided, we can customize this at a later time
         return self.db.getLogs(
-            for: user, in: nil, since: nil,
+            for: user, in: .symptom, since: nil,
             toAndIncluding: symptomLog.dateCreated, limit: nil, startingAfterLog: symptomLog, offline: true
         ).map { fetchedLogs in
-            for log in fetchedLogs {
-                print(log)
-            }
-            return SymptomSeverityAnalytics(severityDaySummaries: [])
+            return self.getHistoricalSymptomSeverity(initialLog: symptomLog, fetchedLogs: fetchedLogs)
         }.mapError { err in
             AppLogging.error("Error retrieving local logs for analytics: \(err)")
             return err
         }.eraseToAnyPublisher()
+    }
+    
+    private func getHistoricalSymptomSeverity(initialLog: SymptomLog, fetchedLogs: [Loggable]) -> SymptomSeverityAnalytics {
+        // Add the loggable back in at the beginning (as startingAfter doesn't include it)
+        var matchingSymptomLogs: [SymptomLog] = [initialLog]
+        for log in fetchedLogs {
+            if log.category == .symptom, let log = log as? SymptomLog, log.symptomId == initialLog.symptomId {
+                matchingSymptomLogs.append(log)
+            }
+        }
+        print(matchingSymptomLogs.count)
+        return SymptomSeverityAnalytics(severityDaySummaries: [])
     }
     
 }

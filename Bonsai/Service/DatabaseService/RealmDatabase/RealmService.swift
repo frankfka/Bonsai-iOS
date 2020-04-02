@@ -47,7 +47,9 @@ class RealmService {
         if let endDate = endDate {
             realmLogs = realmLogs.filter("\(RealmLoggable.dateCreatedKey) <= %@", endDate.addingTimeInterval(1))
         }
-        // TODO: Log category
+        if let category = category {
+            realmLogs = realmLogs.filter("\(RealmLoggable.categoryKey) == %@", category.serializedLogCategoryName())
+        }
         // Sort by reverse chronological order
         realmLogs = realmLogs.sorted(byKeyPath: RealmLoggable.dateCreatedKey, ascending: false)
         // Enforce limit - Realm lazy-reads items
