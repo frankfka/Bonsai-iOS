@@ -181,12 +181,12 @@ struct PastWeekMoodChartView_Previews: PreviewProvider {
     
     static var previews: some View {
         Group {
-            HistoricalMoodChartView(viewModel: HistoricalMoodChartView.ViewModel(analytics: AnalyticsPreviews.PastWeekWithData))
+            HistoricalMoodChartView(viewModel: HistoricalMoodChartView.ViewModel(analytics: AnalyticsPreviews.HistoricalMoodPastWeekWithData))
             
-            HistoricalMoodChartView(viewModel: HistoricalMoodChartView.ViewModel(analytics: AnalyticsPreviews.PastWeekWithData))
+            HistoricalMoodChartView(viewModel: HistoricalMoodChartView.ViewModel(analytics: AnalyticsPreviews.HistoricalMoodPastWeekWithData))
                 .environment(\.colorScheme, .dark)
             
-            HistoricalMoodChartView(viewModel: HistoricalMoodChartView.ViewModel(analytics: AnalyticsPreviews.PastWeekWithNoData))
+            HistoricalMoodChartView(viewModel: HistoricalMoodChartView.ViewModel(analytics: AnalyticsPreviews.HistoricalMoodPastWeekWithNoData))
         }
         .frame(width: 500, height: 300)
         .background(Color.Theme.backgroundSecondary)

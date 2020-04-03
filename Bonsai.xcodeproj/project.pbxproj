@@ -23,6 +23,7 @@
 		114B743D23A20D120095D44B /* AppAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114B743C23A20D120095D44B /* AppAction.swift */; };
 		114B743F23A28A800095D44B /* AppRedux.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114B743E23A28A800095D44B /* AppRedux.swift */; };
 		1162466D23C1390500788BA5 /* SymptomSeveritySliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1162466C23C1390400788BA5 /* SymptomSeveritySliderView.swift */; };
+		116AC8002437A01900C21B6E /* HistoricalSymptomSeverityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116AC7FF2437A01800C21B6E /* HistoricalSymptomSeverityView.swift */; };
 		117F128D23E137990036C055 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 117F128C23E137980036C055 /* GoogleService-Info.plist */; };
 		1191FCB1241D41870056D5C8 /* LogReminderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1191FCB0241D41870056D5C8 /* LogReminderDetailView.swift */; };
 		11929D1123CC358400B06B99 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11929D1023CC358400B06B99 /* ErrorView.swift */; };
@@ -184,6 +185,7 @@
 		114B743C23A20D120095D44B /* AppAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAction.swift; sourceTree = "<group>"; };
 		114B743E23A28A800095D44B /* AppRedux.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRedux.swift; sourceTree = "<group>"; };
 		1162466C23C1390400788BA5 /* SymptomSeveritySliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomSeveritySliderView.swift; sourceTree = "<group>"; };
+		116AC7FF2437A01800C21B6E /* HistoricalSymptomSeverityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricalSymptomSeverityView.swift; sourceTree = "<group>"; };
 		117F128C23E137980036C055 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1191FCB0241D41870056D5C8 /* LogReminderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogReminderDetailView.swift; sourceTree = "<group>"; };
 		11929D1023CC358400B06B99 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
@@ -666,6 +668,7 @@
 			isa = PBXGroup;
 			children = (
 				11FF403323FF277B0058583C /* HistoricalMoodChartView.swift */,
+				116AC7FF2437A01800C21B6E /* HistoricalSymptomSeverityView.swift */,
 			);
 			path = Analytics;
 			sourceTree = "<group>";
@@ -1103,6 +1106,7 @@
 				9E04B6BF3C7D7FB63498CBC7 /* LogReminderService.swift in Sources */,
 				9E04BDF0DAEF6ACE6A72C6B0 /* GlobalAction.swift in Sources */,
 				9E04BF1993CF8C610E940B48 /* GlobalLogAction.swift in Sources */,
+				116AC8002437A01900C21B6E /* HistoricalSymptomSeverityView.swift in Sources */,
 				9E04B45D12F47C245C45A70E /* HomeScreenAction.swift in Sources */,
 				9E04BA2EC7B2BFCAC370DB44 /* ViewLogsAction.swift in Sources */,
 				9E04B79908F30010E6B5C073 /* LogDetailsAction.swift in Sources */,

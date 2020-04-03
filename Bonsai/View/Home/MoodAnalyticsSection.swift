@@ -47,7 +47,7 @@ struct MoodAnalyticsSection: View {
 struct MoodAnalyticsSection_Previews: PreviewProvider {
 
     private static var dataVm = MoodAnalyticsSection.ViewModel(
-            chartViewModel: HistoricalMoodChartView.ViewModel(analytics: AnalyticsPreviews.PastWeekWithData),
+            chartViewModel: HistoricalMoodChartView.ViewModel(analytics: AnalyticsPreviews.HistoricalMoodPastWeekWithData),
             isLoading: false,
             loadError: false
     )

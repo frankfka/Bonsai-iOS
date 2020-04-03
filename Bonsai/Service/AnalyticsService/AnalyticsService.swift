@@ -73,18 +73,27 @@ class AnalyticsServiceImpl: AnalyticsService {
     // MARK: Symptom Severity Analytics
     func getHistoricalSymptomSeverity(for user: User, with symptomLog: SymptomLog) -> ServicePublisher<SymptomSeverityAnalytics> {
         // Get logs up to the date of the log provided, we can customize this at a later time
+        // TODO: Get past logs date based on user settings
+        let daysToAnalyze: Int = 7
+        let toDate = symptomLog.dateCreated
+        let fromDate = toDate.addingTimeInterval(-Double(daysToAnalyze) * TimeInterval.day).beginningOfDate
         return self.db.getLogs(
-            for: user, in: .symptom, since: nil,
-            toAndIncluding: symptomLog.dateCreated, limit: nil, startingAfterLog: symptomLog, offline: true
+            for: user, in: .symptom, since: fromDate,
+            toAndIncluding: toDate, limit: nil, startingAfterLog: symptomLog, offline: true
         ).map { fetchedLogs in
-            return self.getHistoricalSymptomSeverity(initialLog: symptomLog, fetchedLogs: fetchedLogs)
+            return self.getHistoricalSymptomSeverity(
+                    initialLog: symptomLog,
+                    fetchedLogs: fetchedLogs,
+                    daysToAnalyze: daysToAnalyze
+            )
         }.mapError { err in
             AppLogging.error("Error retrieving local logs for analytics: \(err)")
             return err
         }.eraseToAnyPublisher()
     }
     
-    private func getHistoricalSymptomSeverity(initialLog: SymptomLog, fetchedLogs: [Loggable]) -> SymptomSeverityAnalytics {
+    private func getHistoricalSymptomSeverity(initialLog: SymptomLog, fetchedLogs: [Loggable],
+                                              daysToAnalyze: Int) -> SymptomSeverityAnalytics {
         // Add the loggable back in at the beginning (as startingAfter doesn't include it)
         var matchingSymptomLogs: [SymptomLog] = [initialLog]
         for log in fetchedLogs {
@@ -92,8 +101,31 @@ class AnalyticsServiceImpl: AnalyticsService {
                 matchingSymptomLogs.append(log)
             }
         }
-        print(matchingSymptomLogs.count)
-        return SymptomSeverityAnalytics(severityDaySummaries: [])
+        // Make sure logs are properly sorted (latest first)
+        matchingSymptomLogs.sort { first, second in first.dateCreated > second.dateCreated }
+        guard let firstSymptomLog = matchingSymptomLogs.first else {
+            AppLogging.warn("Somehow no symptom logs in getting analytics, but the minimum size is 1")
+            return SymptomSeverityAnalytics(severityDaySummaries: [])
+        }
+        let latestDate = firstSymptomLog.dateCreated
+        var daySummaries: [SymptomSeverityAnalytics.DaySummary] = []
+        for daysInThePast in (0 ..< daysToAnalyze) {
+            let date = latestDate.addingTimeInterval(Double(-daysInThePast) * TimeInterval.day)
+            // Get the date
+            let symptomLogsInDate = matchingSymptomLogs.filter {
+                $0.dateCreated.isInDay(date)
+            }
+            var averageSeverity: Double? = nil
+            let numInDate = symptomLogsInDate.count
+            if numInDate > 0 {
+                averageSeverity = symptomLogsInDate
+                        .map { Double($0.severity.rawValue) }
+                        .reduce(0.0, +) / Double(numInDate)
+            }
+            daySummaries.append(SymptomSeverityAnalytics.DaySummary(date: date, averageSeverityValue: averageSeverity))
+        }
+        // Return with earliest data point first
+        return SymptomSeverityAnalytics(severityDaySummaries: daySummaries.reversed())
     }
     
 }
