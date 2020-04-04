@@ -12,4 +12,8 @@ struct LogDetailState {
     var isDeleting: Bool = false
     var deleteSuccess: Bool = false
     var deleteError: Error? = nil
+    // Analytics
+    var symptomSeverityAnalytics: SymptomSeverityAnalytics? = nil
+    var isLoadingAnalytics: Bool = false
+    var loadAnalyticsError: Error? = nil
 }

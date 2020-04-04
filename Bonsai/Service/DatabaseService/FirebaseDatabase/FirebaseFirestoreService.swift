@@ -217,6 +217,7 @@ class FirebaseFirestoreService {
                 .document(user.id)
                 .collection(SerializationConstants.Logs.Collection)
                 .order(by: SerializationConstants.Logs.DateCreatedField, descending: true)
+        // TODO: Query by category
         // Query starting at a snapshot if specified
         if let startingAfterDoc = startingAfterDoc {
             q = q.start(afterDocument: startingAfterDoc)

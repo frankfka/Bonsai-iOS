@@ -11,7 +11,10 @@ struct LogDetailMiddleware {
     static func middleware(services: Services) -> [Middleware<AppState>] {
         return [
             initLogData(logService: services.logService),
-            deleteLog(logService: services.logService)
+            deleteLog(logService: services.logService),
+            // Analytics
+            mapInitActionToInitAnalytics(),
+            initSymptomLogAnalytics(analyticsService: services.analyticsService)
         ]
     }
 
@@ -20,10 +23,10 @@ struct LogDetailMiddleware {
             switch action {
             case .logDetails(action: .initState(let initialLoggable)):
                 initLogData(for: initialLoggable, logService: logService)
-                    .sink(receiveValue: { newAction in
-                        send(newAction)
-                    })
-                    .store(in: &cancellables)
+                        .sink(receiveValue: { newAction in
+                            send(newAction)
+                        })
+                        .store(in: &cancellables)
             default:
                 break
             }
@@ -38,6 +41,49 @@ struct LogDetailMiddleware {
         }.eraseToAnyPublisher()
     }
 
+    private static func mapInitActionToInitAnalytics() -> Middleware<AppState> {
+        return { state, action, cancellables, send in
+            switch action {
+            case .logDetails(action: .initState(let initialLoggable)):
+                if initialLoggable.category == .symptom, let loggable = initialLoggable as? SymptomLog {
+                    send(.logDetails(action: .initSymptomLogAnalytics(symptomLog: loggable)))
+                }
+            default:
+                break
+            }
+        }
+    }
+
+    private static func initSymptomLogAnalytics(analyticsService: AnalyticsService) -> Middleware<AppState> {
+        return { state, action, cancellables, send in
+            switch action {
+            case .logDetails(action: .initSymptomLogAnalytics(let symptomLog)):
+                // Check user exists
+                guard let user = state.global.user else {
+                    fatalError("No user initialized when initializing analytics")
+                }
+                initSymptomLogAnalytics(for: user, with: symptomLog, analyticsService: analyticsService)
+                        .sink(receiveValue: { newAction in
+                            send(newAction)
+                        })
+                        .store(in: &cancellables)
+            default:
+                break
+            }
+        }
+    }
+
+    private static func initSymptomLogAnalytics(for user: User, with symptomLog: SymptomLog,
+                                                analyticsService: AnalyticsService) -> AnyPublisher<AppAction, Never> {
+        return analyticsService.getHistoricalSymptomSeverity(for: user, with: symptomLog)
+                .map {
+                    return AppAction.logDetails(action: .initSymptomLogAnalyticsSuccess(result: $0))
+                }.catch({ (err) -> Just<AppAction> in
+                    AppLogging.info("Failed to retrieve symptom severity analytics: \(err)")
+                    return Just(AppAction.logDetails(action: .initSymptomLogAnalyticsFailure(error: err)))
+                }).eraseToAnyPublisher()
+    }
+
     private static func deleteLog(logService: LogService) -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
@@ -50,7 +96,7 @@ struct LogDetailMiddleware {
                     send(.logDetails(action: .deleteError(error: ServiceError(message: "No loggable initialized in log details state, so cannot delete the log"))))
                     return
                 }
-                deleteLog(_ : log, for: user, logService: logService)
+                deleteLog(_: log, for: user, logService: logService)
                         .sink(receiveValue: { newAction in
                             send(newAction)
                         })

@@ -40,11 +40,15 @@ class RealmService {
         var realmLogs = self.db.objects(RealmLoggable.self)
         // Filter out templates used in log reminders
         realmLogs = realmLogs.filter("\(RealmLoggable.isTemplateKey) == FALSE")
+        // Give an additional buffer as less/greater or equal to doesn't seem to work
         if let beginDate = beginDate {
-            realmLogs = realmLogs.filter("\(RealmLoggable.dateCreatedKey) >= %@", beginDate)
+            realmLogs = realmLogs.filter("\(RealmLoggable.dateCreatedKey) >= %@", beginDate.addingTimeInterval(-1))
         }
         if let endDate = endDate {
-            realmLogs = realmLogs.filter("\(RealmLoggable.dateCreatedKey) <= %@", endDate)
+            realmLogs = realmLogs.filter("\(RealmLoggable.dateCreatedKey) <= %@", endDate.addingTimeInterval(1))
+        }
+        if let category = category {
+            realmLogs = realmLogs.filter("\(RealmLoggable.categoryKey) == %@", category.serializedLogCategoryName())
         }
         // Sort by reverse chronological order
         realmLogs = realmLogs.sorted(byKeyPath: RealmLoggable.dateCreatedKey, ascending: false)
@@ -66,7 +70,7 @@ class RealmService {
                     AppLogging.warn("Could not get Loggable from Realm object \(realmLog.id) created on \(realmLog.dateCreated)")
                 }
             } else if let startingAfterLog = startingAfterLog, realmLog.id == startingAfterLog.id {
-                // Found the beginning loggable, start adding on next interation
+                // Found the beginning loggable, start adding on next iteration
                 beginAddingLogs = true
             }
         }

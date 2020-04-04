@@ -43,6 +43,7 @@ class RealmLoggable: Object {
 
     static let dateCreatedKey: String = "dateCreated"
     static let isTemplateKey: String = "isTemplate"
+    static let categoryKey: String = "categoryRawValue"
 
     override static func primaryKey() -> String? {
         return "id"

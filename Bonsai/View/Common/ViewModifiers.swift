@@ -9,11 +9,11 @@ import SwiftUI
 struct RoundedBorderSectionModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
-                .padding(.all, CGFloat.Theme.Layout.small)
-                .background(
-                        RoundedRectangle(cornerRadius: CGFloat.Theme.Layout.cornerRadius)
-                                .foregroundColor(Color.Theme.backgroundSecondary)
-                )
+            .padding(.all, CGFloat.Theme.Layout.small)
+            .background(
+                RoundedRectangle(cornerRadius: CGFloat.Theme.Layout.cornerRadius)
+                    .foregroundColor(Color.Theme.backgroundSecondary)
+            )
     }
 }
 
