@@ -148,8 +148,10 @@ struct HomeTab: View {
 struct HomeTab_Previews: PreviewProvider {
     static var previews: some View {
         HomeTab(viewModel: HomeTab.ViewModel(
-                showReminders: true,
-                showCreateLogModal: .constant(false)
-        )).environmentObject(PreviewRedux.initialStore)
+            showReminders: true,
+            showCreateLogModal: .constant(false)
+        ))
+        .background(Color.Theme.backgroundPrimary)
+        .environmentObject(PreviewRedux.initialStore)
     }
 }

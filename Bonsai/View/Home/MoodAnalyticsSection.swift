@@ -37,7 +37,7 @@ struct MoodAnalyticsSection: View {
             } else {
                 self.viewModel.chartViewModel.map {
                     HistoricalMoodChartView(viewModel: $0)
-                            .padding(CGFloat.Theme.Layout.small)
+                        .padding(CGFloat.Theme.Layout.small)
                 }
             }
         }

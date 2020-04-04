@@ -271,7 +271,12 @@ struct LogDetailView: View {
             return nil
         }
         let symptomName = symptomLog.selectedSymptom?.name ?? "Unknown"
-        return LogDetailSymptomView.ViewModel(name: symptomName, severity: symptomLog.severity.displayValue())
+        let severityAnalytics = store.state.logDetails.symptomSeverityAnalytics
+        return LogDetailSymptomView.ViewModel(
+            name: symptomName,
+            severity: symptomLog.severity.displayValue(),
+            severityAnalytics: severityAnalytics
+        )
     }
 
     func getActivityDetailViewModel() -> LogDetailActivityView.ViewModel? {
