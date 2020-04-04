@@ -61,6 +61,7 @@ struct LogDetailsReducer {
     static private func initSymptomLogAnalytics(state: AppState) -> AppState {
         var newState = state
         newState.logDetails.isLoadingAnalytics = true
+        newState.logDetails.symptomSeverityAnalytics = nil
         return newState
     }
 
@@ -76,6 +77,7 @@ struct LogDetailsReducer {
         var newState = state
         newState.logDetails.isLoadingAnalytics = false
         newState.logDetails.loadAnalyticsError = error
+        newState.logDetails.symptomSeverityAnalytics = nil
         return newState
     }
 

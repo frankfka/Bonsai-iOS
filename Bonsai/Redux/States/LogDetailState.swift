@@ -13,7 +13,7 @@ struct LogDetailState {
     var deleteSuccess: Bool = false
     var deleteError: Error? = nil
     // Analytics
-    var symptomSeverityAnalytics: SymptomSeverityAnalytics?
+    var symptomSeverityAnalytics: SymptomSeverityAnalytics? = nil
     var isLoadingAnalytics: Bool = false
     var loadAnalyticsError: Error? = nil
 }
