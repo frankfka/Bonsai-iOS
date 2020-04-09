@@ -8,10 +8,6 @@ import Foundation
 struct ViewLogsReducer {
     static func reduce(state: AppState, action: ViewLogsAction) -> AppState {
         switch action {
-        case .fetchData:
-            return fetchData(state: state)
-        case let .dataLoadSuccessForDate(logs, _):
-            return dataLoadSuccess(state: state, logs: logs)
         case let .dataLoadError(error):
             return dataLoadError(state: state, error: error)
         case let .viewTypeChanged(isViewByDate):
@@ -19,6 +15,15 @@ struct ViewLogsReducer {
         // View by date
         case let .selectedDateChanged(date):
             return dateForLogsChanged(state: state, newDate: date)
+        case .fetchDataByDate:
+            return fetchData(state: state)
+        case .dataLoadSuccessForDate:
+            return dataLoadSuccess(state: state)
+        // View all
+        case .fetchAllLogData:
+            return fetchData(state: state)
+        case .dataLoadSuccessForAllLogs:
+            return dataLoadSuccess(state: state)
         }
     }
 
@@ -28,7 +33,7 @@ struct ViewLogsReducer {
         return newState
     }
 
-    static private func dataLoadSuccess(state: AppState, logs: [Loggable]) -> AppState {
+    static private func dataLoadSuccess(state: AppState) -> AppState {
         var newState = state
         newState.viewLogs.isLoading = false
         newState.viewLogs.loadError = nil
@@ -54,5 +59,4 @@ struct ViewLogsReducer {
         newState.viewLogs.dateForLogs = newDate
         return newState
     }
-
 }

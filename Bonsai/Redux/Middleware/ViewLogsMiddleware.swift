@@ -25,9 +25,29 @@ struct ViewLogsMiddleware {
 
     static func middleware(services: Services) -> [Middleware<AppState>] {
         return [
+            mapViewTypeChangeToFetchDataActionMiddleware(),
             mapDateChangeToFetchDataActionMiddleware(),
+            fetchAllLogDataMiddleware(logService: services.logService),
             fetchLogDataForDateMiddleware(logService: services.logService)
         ]
+    }
+
+    // Maps a view type change to the relevant fetch action
+    private static func mapViewTypeChangeToFetchDataActionMiddleware() -> Middleware<AppState> {
+        return { state, action, cancellables, send in
+            switch action {
+            case .viewLog(action: .viewTypeChanged(let isViewByDate)):
+                if isViewByDate {
+                    // Change to view by date
+                    send(.viewLog(action: .fetchDataByDate(date: state.viewLogs.dateForLogs)))
+                } else {
+                    // Change to view all
+                    send(.viewLog(action: .fetchAllLogData(limit: state.viewLogs.viewAllNumToShow)))
+                }
+            default:
+                break
+            }
+        }
     }
 
     // Maps a date change to a fetch data action
@@ -35,9 +55,50 @@ struct ViewLogsMiddleware {
         return { state, action, cancellables, send in
             switch action {
             case .viewLog(action: .selectedDateChanged(let date)):
-                send(.viewLog(action: .fetchData(date: date)))
+                send(.viewLog(action: .fetchDataByDate(date: date)))
             default:
                 break
+            }
+        }
+    }
+
+    // Called when we want to fetch all logs
+    private static func fetchAllLogDataMiddleware(logService: LogService) -> Middleware<AppState> {
+        return { state, action, cancellables, send in
+            switch action {
+            case .viewLog(action: .fetchAllLogData(let limit)):
+                // Check user exists
+                guard let user = state.global.user else {
+                    fatalError("No user initialized when fetching logs")
+                }
+                // Check whether we need to initialize new data
+                let fetchedLogs = state.globalLogs.sortedLogs
+                let numToShow = state.viewLogs.viewAllNumToShow
+                var needsInit = false
+                if fetchedLogs.count < numToShow {
+                    // Fetch if we don't have enough
+                    needsInit = true
+                } else {
+                    // TODO: can have home screen init action make all of the dates its fetched marked on global log?
+                    // Check that all dates to the earliest log have been initialized
+                    let earliestLogDate = fetchedLogs[numToShow - 1].dateCreated
+                    var checkDate = Date()
+                    while checkDate > earliestLogDate {
+                        if !state.globalLogs.hasBeenRetrieved(checkDate) {
+                            needsInit = true
+                            break
+                        }
+                        checkDate = checkDate.addingTimeInterval(-TimeInterval.day)
+                    }
+                }
+                // Return immediately if we don't need to init
+                if !needsInit {
+                    AppLogging.info("Enough logs already retrieved for all logs view, not retrieving")
+                    send(AppAction.viewLog(action: .dataLoadSuccessForAllLogs(logs: Array(fetchedLogs.prefix(numToShow)))))
+                    return
+                }
+                // TODO: Fetch more
+            default: break
             }
         }
     }
@@ -46,7 +107,7 @@ struct ViewLogsMiddleware {
     private static func fetchLogDataForDateMiddleware(logService: LogService) -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
-            case .viewLog(action: .fetchData(let date)):
+            case .viewLog(action: .fetchDataByDate(let date)):
                 // Check user exists
                 guard let user = state.global.user else {
                     fatalError("No user initialized when fetching logs")
