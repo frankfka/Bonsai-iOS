@@ -12,16 +12,33 @@ struct ViewLogsTabContainer: View {
     @EnvironmentObject var store: AppStore
 
     struct ViewModel {
+        static let viewAllNumToShowIncrement = 10
+
         let isLoading: Bool
         let loadError: Bool
-        let dateForLogs: Date
         let logViewModels: [LogRow.ViewModel]
 
-        init(isLoading: Bool, loadError: Bool, dateForLogs: Date, logViewModels: [LogRow.ViewModel]) {
-            self.isLoading = isLoading
-            self.loadError = loadError
-            self.dateForLogs = dateForLogs
-            self.logViewModels = logViewModels
+        // View by date
+        let showDatePicker: Bool
+        let dateForLogs: Date
+
+        init(state: AppState) {
+            self.isLoading = state.viewLogs.isLoading
+            self.loadError = state.viewLogs.loadError != nil
+            self.dateForLogs = state.viewLogs.dateForLogs
+            let showLogsByDate = state.viewLogs.showLogsByDate
+            let logsToShow: [Loggable] // Show different logs depending on view type selection
+            if showLogsByDate {
+                // Show by date
+                logsToShow = state.globalLogs.getLogs(for: dateForLogs)
+            } else {
+                // Show all
+                logsToShow = Array(state.globalLogs.sortedLogs.prefix(state.viewLogs.viewAllNumToShow))
+            }
+            self.logViewModels = logsToShow.map { LogRow.ViewModel(loggable: $0) }
+            self.showDatePicker = showLogsByDate
+            // TODO: Enable/disable show more button
+            // TODO: Create show more button
         }
 
         func showDivider(after vm: LogRow.ViewModel) -> Bool {
@@ -35,15 +52,15 @@ struct ViewLogsTabContainer: View {
         }
     }
 
-    private var viewModel: ViewModel {
-        getViewModel()
-    }
+    private var viewModel: ViewModel { ViewModel(state: store.state) }
     @State(initialValue: false) private var navigateToLogDetails: Bool? // Allows conditional pushing of navigation views
 
     var body: some View {
         VStack(spacing: 0) {
             ViewLogsViewTypePickerView(viewModel: getViewTypePickerViewModel())
-            ViewLogsDateHeaderView(viewModel: getHeaderDatePickerViewModel())
+            if self.viewModel.showDatePicker {
+                ViewLogsDateHeaderView(viewModel: getHeaderDatePickerViewModel())
+            }
             if viewModel.isLoading {
                 FullScreenLoadingSpinner(isOverlay: false)
             } else if viewModel.loadError {
@@ -85,19 +102,6 @@ struct ViewLogsTabContainer: View {
         .padding(.top) // Temporary - bug where scrollview goes under the status bar
     }
 
-    private func getViewModel() -> ViewModel {
-        let dateForLogs = store.state.viewLogs.dateForLogs
-        let logsForDate = store.state.globalLogs.getLogs(for: dateForLogs)
-        return ViewLogsTabContainer.ViewModel(
-                isLoading: store.state.viewLogs.isLoading,
-                loadError: store.state.viewLogs.loadError != nil,
-                dateForLogs: dateForLogs,
-                logViewModels: logsForDate.map {
-                    LogRow.ViewModel(loggable: $0)
-                }
-        )
-    }
-
     private func onAppear() {
         self.navigateToLogDetails = nil // Resets navigation state
         self.store.send(.viewLog(action: .fetchData(date: self.store.state.viewLogs.dateForLogs)))
@@ -115,7 +119,6 @@ struct ViewLogsTabContainer: View {
                 initialDate: store.state.viewLogs.dateForLogs
         ) { newDate in
             self.store.send(.viewLog(action: .selectedDateChanged(date: newDate)))
-            self.store.send(.viewLog(action: .fetchData(date: newDate)))
         }
     }
 

@@ -7,11 +7,13 @@ import Foundation
 
 enum ViewLogsAction: LoggableAction {
     case fetchData(date: Date)
-    case dataLoadSuccess(logs: [Loggable], date: Date)
+    case dataLoadSuccessForDate(logs: [Loggable], date: Date)
     case dataLoadError(error: Error)
 
     case viewTypeChanged(isViewByDate: Bool)
 
     // View by date
     case selectedDateChanged(date: Date) // Only support 1 day for now
+    // View all
+
 }

@@ -27,7 +27,7 @@ struct GlobalLogsMiddleware {
             case .createLog(action: let .onSaveSuccess(newLog, _)):
                 send(.globalLog(action: .insert(log: newLog)))
             // View Logs
-            case .viewLog(action: let .dataLoadSuccess(logs, date)):
+            case .viewLog(action: let .dataLoadSuccessForDate(logs, date)):
                 send(.globalLog(action: .replace(logs: logs, date: date)))
                 send(.globalLog(action: .markAsRetrieved(date: date)))
             // View Log Detail

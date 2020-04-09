@@ -11,4 +11,6 @@ struct ViewLogsState {
     var dateForLogs: Date = Date()
     // View type
     var showLogsByDate: Bool = true
+    // View all
+    var viewAllNumToShow: Int = 10
 }

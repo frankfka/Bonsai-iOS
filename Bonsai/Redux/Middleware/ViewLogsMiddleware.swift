@@ -25,11 +25,25 @@ struct ViewLogsMiddleware {
 
     static func middleware(services: Services) -> [Middleware<AppState>] {
         return [
-            fetchLogDataMiddleware(logService: services.logService)
+            mapDateChangeToFetchDataActionMiddleware(),
+            fetchLogDataForDateMiddleware(logService: services.logService)
         ]
     }
 
-    private static func fetchLogDataMiddleware(logService: LogService) -> Middleware<AppState> {
+    // Maps a date change to a fetch data action
+    private static func mapDateChangeToFetchDataActionMiddleware() -> Middleware<AppState> {
+        return { state, action, cancellables, send in
+            switch action {
+            case .viewLog(action: .selectedDateChanged(let date)):
+                send(.viewLog(action: .fetchData(date: date)))
+            default:
+                break
+            }
+        }
+    }
+
+    // Called when we want to fetch data for a specific date (By Date view)
+    private static func fetchLogDataForDateMiddleware(logService: LogService) -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
             case .viewLog(action: .fetchData(let date)):
@@ -43,7 +57,7 @@ struct ViewLogsMiddleware {
                 if isInitialized {
                     // TODO: Consider a separate action - this will trigger global logs middleware
                     AppLogging.info("Logs already exist for this date, not retrieving from service")
-                    send(AppAction.viewLog(action: .dataLoadSuccess(logs: logsForDate, date: date)))
+                    send(AppAction.viewLog(action: .dataLoadSuccessForDate(logs: logsForDate, date: date)))
                     return
                 }
                 fetchLogData(for: date, with: user, logService: logService)
@@ -62,7 +76,7 @@ struct ViewLogsMiddleware {
         logService.getLogs(for: user, in: nil, since: date.beginningOfDate, toAndIncluding: date.endOfDate,
                         limitedTo: nil, startingAfterLog: nil, offline: false)
                 .map { logData in
-                    return AppAction.viewLog(action: .dataLoadSuccess(logs: logData, date: date))
+                    return AppAction.viewLog(action: .dataLoadSuccessForDate(logs: logData, date: date))
                 }.catch { (err) -> Just<AppAction> in
                     return Just(AppAction.viewLog(action: .dataLoadError(error: err)))
                 }

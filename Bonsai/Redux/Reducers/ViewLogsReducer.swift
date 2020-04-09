@@ -10,7 +10,7 @@ struct ViewLogsReducer {
         switch action {
         case .fetchData:
             return fetchData(state: state)
-        case let .dataLoadSuccess(logs, _):
+        case let .dataLoadSuccessForDate(logs, _):
             return dataLoadSuccess(state: state, logs: logs)
         case let .dataLoadError(error):
             return dataLoadError(state: state, error: error)
@@ -20,7 +20,6 @@ struct ViewLogsReducer {
         case let .selectedDateChanged(date):
             return dateForLogsChanged(state: state, newDate: date)
         }
-        return state
     }
 
     static private func fetchData(state: AppState) -> AppState {

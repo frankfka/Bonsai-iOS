@@ -14,13 +14,13 @@ struct GlobalLogState {
     var logsByDate: [Date: [Loggable]] = [:]
     var sortedLogs: [Loggable] {
         logsByDate
-                // Sort by reverse chronological keys
-                .sorted(by: { first, second in first.key > second.key })
-                // Flat map to sorted loggables
-                .flatMap { date, loggables in
-                    // Sort individual loggables by date
-                    loggables.sorted(by: { first, second in first.dateCreated > second.dateCreated })
-                }
+            // Sort by reverse chronological keys
+            .sorted(by: { first, second in first.key > second.key })
+            // Flat map to sorted loggables
+            .flatMap { date, loggables in
+                // Sort individual loggables by date
+                loggables.sorted(by: { first, second in first.dateCreated > second.dateCreated })
+            }
     }
     // Specifies whether we have retrieved all the logs for a specific date
     private var retrieved: Set<Date> = []
