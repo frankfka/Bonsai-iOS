@@ -10,38 +10,45 @@ import SwiftUI
 
 struct ViewLogsTabContainer: View {
     @EnvironmentObject var store: AppStore
-    
+
     struct ViewModel {
         let isLoading: Bool
         let loadError: Bool
-        let viewLogsTabDidAppear: VoidCallback?
         let dateForLogs: Date
-        let logs: [LogRow.ViewModel]
-        
+        let logViewModels: [LogRow.ViewModel]
+
+        init(isLoading: Bool, loadError: Bool, dateForLogs: Date, logViewModels: [LogRow.ViewModel]) {
+            self.isLoading = isLoading
+            self.loadError = loadError
+            self.dateForLogs = dateForLogs
+            self.logViewModels = logViewModels
+        }
+
         func showDivider(after vm: LogRow.ViewModel) -> Bool {
-            let index = logs.firstIndex { item in vm.id == item.id }
-            if let index = index, index < logs.count - 1 {
+            let index = logViewModels.firstIndex { item in
+                vm.id == item.id
+            }
+            if let index = index, index < logViewModels.count - 1 {
                 return true
             }
             return false
         }
     }
-    
-    private let viewModel: ViewModel
-    @State(initialValue: false) private var navigateToLogDetails: Bool? // Allows conditional pushing of navigation views
-    
-    init(viewModel: ViewModel) {
-        self.viewModel = viewModel
+
+    private var viewModel: ViewModel {
+        getViewModel()
     }
-    
+    @State(initialValue: false) private var navigateToLogDetails: Bool? // Allows conditional pushing of navigation views
+
     var body: some View {
         VStack(spacing: 0) {
+            ViewLogsViewTypePickerView(viewModel: getViewTypePickerViewModel())
             ViewLogsDateHeaderView(viewModel: getHeaderDatePickerViewModel())
             if viewModel.isLoading {
                 FullScreenLoadingSpinner(isOverlay: false)
             } else if viewModel.loadError {
                 ErrorView()
-            } else if viewModel.logs.isEmpty {
+            } else if viewModel.logViewModels.isEmpty {
                 ViewLogsTabNoResultsView()
             } else {
                 ScrollView {
@@ -50,7 +57,7 @@ struct ViewLogsTabContainer: View {
                         NavigationLink(destination: LogDetailView(), tag: true, selection: $navigateToLogDetails) {
                             EmptyView()
                         }
-                        ForEach(viewModel.logs) { logVm in
+                        ForEach(viewModel.logViewModels) { logVm in
                             Group {
                                 LogRow(viewModel: logVm)
                                         .onTapGesture {
@@ -78,14 +85,34 @@ struct ViewLogsTabContainer: View {
         .padding(.top) // Temporary - bug where scrollview goes under the status bar
     }
 
+    private func getViewModel() -> ViewModel {
+        let dateForLogs = store.state.viewLogs.dateForLogs
+        let logsForDate = store.state.globalLogs.getLogs(for: dateForLogs)
+        return ViewLogsTabContainer.ViewModel(
+                isLoading: store.state.viewLogs.isLoading,
+                loadError: store.state.viewLogs.loadError != nil,
+                dateForLogs: dateForLogs,
+                logViewModels: logsForDate.map {
+                    LogRow.ViewModel(loggable: $0)
+                }
+        )
+    }
+
     private func onAppear() {
         self.navigateToLogDetails = nil // Resets navigation state
-        self.viewModel.viewLogsTabDidAppear?()
+        self.store.send(.viewLog(action: .fetchData(date: self.store.state.viewLogs.dateForLogs)))
+    }
+
+    private func getViewTypePickerViewModel() -> ViewLogsViewTypePickerView.ViewModel {
+        return ViewLogsViewTypePickerView.ViewModel(isViewByDate: self.store.state.viewLogs.showLogsByDate) {
+            newIsViewByDate in
+            self.store.send(.viewLog(action: .viewTypeChanged(isViewByDate: newIsViewByDate)))
+        }
     }
 
     private func getHeaderDatePickerViewModel() -> ViewLogsDateHeaderView.ViewModel {
         return ViewLogsDateHeaderView.ViewModel(
-            initialDate: store.state.viewLogs.dateForLogs
+                initialDate: store.state.viewLogs.dateForLogs
         ) { newDate in
             self.store.send(.viewLog(action: .selectedDateChanged(date: newDate)))
             self.store.send(.viewLog(action: .fetchData(date: newDate)))
@@ -99,20 +126,55 @@ struct ViewLogsTabContainer: View {
 
 }
 
+// Segmented picker at the top to select between "By Date" and "All" view types
+struct ViewLogsViewTypePickerView: View {
+
+    struct ViewModel {
+        static let displayValues: [String] = ["By Date", "All"]
+        @Binding var pickerSelection: Int
+
+        init(isViewByDate: Bool, onNewViewByDateChangedValue: BoolCallback? = nil) {
+            self._pickerSelection = Binding<Int>(get: {
+                isViewByDate ? 0 : 1
+            }, set: { newVal in
+                onNewViewByDateChangedValue?(newVal == 0)
+            })
+        }
+    }
+
+    private let viewModel: ViewModel
+
+    init(viewModel: ViewModel) {
+        self.viewModel = viewModel
+    }
+
+    var body: some View {
+        VStack {
+            // TODO: Unfortunately we get weird flickering behavior on re-rendering, leaving for now
+            Picker("", selection: self.viewModel.$pickerSelection) {
+                ForEach(0..<ViewModel.displayValues.count) { index in
+                    Text(ViewModel.displayValues[index]).tag(index)
+                }
+            }
+            .pickerStyle(SegmentedPickerStyle())
+        }
+        .padding(.vertical, CGFloat.Theme.Layout.small)
+        .padding(.horizontal, CGFloat.Theme.Layout.normal)
+        .background(Color.Theme.backgroundSecondary)
+    }
+}
+
+// Text to show no results
 struct ViewLogsTabNoResultsView: View {
-    
+
     var body: some View {
         VStack(alignment: .center) {
             Spacer()
             Text("No Logs Found")
-                .font(Font.Theme.heading)
-                .foregroundColor(Color.Theme.textDark)
-            // TODO: "Or show most recent"
-            Text("Try searching for other dates.")
-                .font(Font.Theme.normalText)
-                .foregroundColor(Color.Theme.text)
+                    .font(Font.Theme.heading)
+                    .foregroundColor(Color.Theme.textDark)
             Spacer()
-        }
+        }.frame(minWidth: 0, maxWidth: .infinity)
     }
-    
+
 }

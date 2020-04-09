@@ -10,6 +10,7 @@ import Foundation
 import SwiftUI
 
 typealias VoidCallback = () -> ()
+typealias BoolCallback = (Bool) -> ()
 typealias IntCallback = (Int) -> ()
 typealias DoubleCallback = (Double) -> ()
 typealias StringCallback = (String) -> ()

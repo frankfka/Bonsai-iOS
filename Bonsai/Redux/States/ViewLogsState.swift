@@ -9,4 +9,6 @@ struct ViewLogsState {
     var isLoading: Bool = false
     var loadError: Error? = nil
     var dateForLogs: Date = Date()
+    // View type
+    var showLogsByDate: Bool = true
 }
