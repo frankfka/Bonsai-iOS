@@ -6,6 +6,7 @@
 import Foundation
 
 enum ViewLogsAction: LoggableAction {
+    case screenDidShow
     case dataLoadError(error: Error)
 
     case viewTypeChanged(isViewByDate: Bool)

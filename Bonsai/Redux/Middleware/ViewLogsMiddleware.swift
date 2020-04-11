@@ -25,6 +25,7 @@ struct ViewLogsMiddleware {
 
     static func middleware(services: Services) -> [Middleware<AppState>] {
         return [
+            mapOnAppearToFetchDataActionMiddleware(),
             mapViewTypeChangeToFetchDataActionMiddleware(),
             mapDateChangeToFetchDataActionMiddleware(),
             fetchAllLogDataMiddleware(logService: services.logService),
@@ -32,21 +33,35 @@ struct ViewLogsMiddleware {
         ]
     }
 
+    // Maps onAppear to the correct retrieval action
+    private static func mapOnAppearToFetchDataActionMiddleware() -> Middleware<AppState> {
+        return { state, action, cancellables, send in
+            switch action {
+            case .viewLog(action: .screenDidShow):
+                send(getFetchDataAction(isViewByDate: state.viewLogs.showLogsByDate, state: state))
+            default:
+                break
+            }
+        }
+    }
+
     // Maps a view type change to the relevant fetch action
     private static func mapViewTypeChangeToFetchDataActionMiddleware() -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
             case .viewLog(action: .viewTypeChanged(let isViewByDate)):
-                if isViewByDate {
-                    // Change to view by date
-                    send(.viewLog(action: .fetchDataByDate(date: state.viewLogs.dateForLogs)))
-                } else {
-                    // Change to view all
-                    send(.viewLog(action: .fetchAllLogData(limit: state.viewLogs.viewAllNumToShow)))
-                }
+                send(getFetchDataAction(isViewByDate: isViewByDate, state: state))
             default:
                 break
             }
+        }
+    }
+
+    private static func getFetchDataAction(isViewByDate: Bool, state: AppState) -> AppAction {
+        if isViewByDate {
+            return .viewLog(action: .fetchDataByDate(date: state.viewLogs.dateForLogs))
+        } else {
+            return .viewLog(action: .fetchAllLogData(limit: state.viewLogs.viewAllNumToShow))
         }
     }
 
@@ -79,16 +94,10 @@ struct ViewLogsMiddleware {
                     // Fetch if we don't have enough
                     needsInit = true
                 } else {
-                    // TODO: can have home screen init action make all of the dates its fetched marked on global log?
                     // Check that all dates to the earliest log have been initialized
                     let earliestLogDate = fetchedLogs[numToShow - 1].dateCreated
-                    var checkDate = Date()
-                    while checkDate > earliestLogDate {
-                        if !state.globalLogs.hasBeenRetrieved(checkDate) {
-                            needsInit = true
-                            break
-                        }
-                        checkDate = checkDate.addingTimeInterval(-TimeInterval.day)
+                    if !state.globalLogs.hasBeenRetrieved(from: earliestLogDate, toAndIncluding: Date()) {
+                        needsInit = true
                     }
                 }
                 // Return immediately if we don't need to init
@@ -97,7 +106,11 @@ struct ViewLogsMiddleware {
                     send(AppAction.viewLog(action: .dataLoadSuccessForAllLogs(logs: Array(fetchedLogs.prefix(numToShow)))))
                     return
                 }
-                // TODO: Fetch more
+                fetchLogData(fetchLimit: numToShow, with: user, logService: logService)
+                    .sink(receiveValue: { newAction in
+                        send(newAction)
+                    })
+                    .store(in: &cancellables)
             default: break
             }
         }
@@ -132,7 +145,19 @@ struct ViewLogsMiddleware {
         }
     }
 
-    // This just supports 1 day now
+    // Used for all logs view
+    private static func fetchLogData(fetchLimit: Int, with user: User, logService: LogService)  -> AnyPublisher<AppAction, Never> {
+        logService.getLogs(for: user, in: nil, since: nil, toAndIncluding: nil,
+                        limitedTo: fetchLimit, startingAfterLog: nil, offline: false)
+                .map { logData in
+                    return AppAction.viewLog(action: .dataLoadSuccessForAllLogs(logs: logData))
+                }.catch { (err) -> Just<AppAction> in
+                    return Just(AppAction.viewLog(action: .dataLoadError(error: err)))
+                }
+                .eraseToAnyPublisher()
+    }
+
+    // Used for date view
     private static func fetchLogData(for date: Date, with user: User, logService: LogService) -> AnyPublisher<AppAction, Never> {
         logService.getLogs(for: user, in: nil, since: date.beginningOfDate, toAndIncluding: date.endOfDate,
                         limitedTo: nil, startingAfterLog: nil, offline: false)

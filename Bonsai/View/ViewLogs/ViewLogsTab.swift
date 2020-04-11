@@ -104,7 +104,7 @@ struct ViewLogsTabContainer: View {
 
     private func onAppear() {
         self.navigateToLogDetails = nil // Resets navigation state
-        self.store.send(.viewLog(action: .fetchDataByDate(date: self.store.state.viewLogs.dateForLogs)))
+        self.store.send(.viewLog(action: .screenDidShow))
     }
 
     private func getViewTypePickerViewModel() -> ViewLogsViewTypePickerView.ViewModel {

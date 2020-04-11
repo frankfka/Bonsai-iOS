@@ -39,6 +39,18 @@ struct GlobalLogState {
         return retrieved.contains(date.beginningOfDate)
     }
 
+    // Determine whether in a date range has been retrieved
+    func hasBeenRetrieved(from startDate: Date, toAndIncluding: Date) -> Bool {
+        var checkDate: Date = startDate
+        while checkDate < toAndIncluding {
+            if !self.hasBeenRetrieved(checkDate) {
+                return false
+            }
+            checkDate = checkDate.addingTimeInterval(.day)
+        }
+        return true
+    }
+
     // Mark a specific date as having been retrieved
     mutating func markAsRetrieved(for date: Date) {
         retrieved.insert(date.beginningOfDate)

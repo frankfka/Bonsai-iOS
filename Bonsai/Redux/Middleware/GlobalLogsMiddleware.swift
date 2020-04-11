@@ -19,6 +19,8 @@ struct GlobalLogsMiddleware {
     // MARK: Middleware to map individual screen actions to global log actions
     private static func mapActionsToGlobalLogActionMiddleware() -> Middleware<AppState> {
         return { state, action, cancellables, send in
+            // TODO: can have home screen init action make all of the dates its fetched marked on global log?
+            // TODO: Mark as retrieved for all logs retrieval
             switch action {
             // Home Screen
             case .homeScreen(action: let .dataLoadSuccess(recentLogs, _)):

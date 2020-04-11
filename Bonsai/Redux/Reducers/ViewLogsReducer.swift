@@ -8,6 +8,9 @@ import Foundation
 struct ViewLogsReducer {
     static func reduce(state: AppState, action: ViewLogsAction) -> AppState {
         switch action {
+        case .screenDidShow:
+            // Handled by middleware
+            return state
         case let .dataLoadError(error):
             return dataLoadError(state: state, error: error)
         case let .viewTypeChanged(isViewByDate):
