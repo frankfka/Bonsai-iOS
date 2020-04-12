@@ -12,7 +12,7 @@ struct ViewLogsTabContainer: View {
     @EnvironmentObject var store: AppStore
 
     struct ViewModel {
-        static let viewAllNumToShowIncrement = 10
+        static let viewAllNumToShowIncrement = 2
 
         let isLoading: Bool
         let loadError: Bool
@@ -21,6 +21,11 @@ struct ViewLogsTabContainer: View {
         // View by date
         let showDatePicker: Bool
         let dateForLogs: Date
+
+        // View all
+        let showViewAllBottomActions: Bool
+        let showLoadingMoreIndicator: Bool
+        let showLoadMoreButton: Bool
 
         init(state: AppState) {
             self.isLoading = state.viewLogs.isLoading
@@ -37,8 +42,11 @@ struct ViewLogsTabContainer: View {
             }
             self.logViewModels = logsToShow.map { LogRow.ViewModel(loggable: $0) }
             self.showDatePicker = showLogsByDate
-            // TODO: Enable/disable show more button
-            // TODO: Create show more button
+            let canLoadMore = state.viewLogs.canLoadMore
+            let isLoadingMore = state.viewLogs.isLoadingMore
+            self.showViewAllBottomActions = !showLogsByDate
+            self.showLoadMoreButton = canLoadMore && !isLoadingMore
+            self.showLoadingMoreIndicator = isLoadingMore
         }
 
         func showDivider(after vm: LogRow.ViewModel) -> Bool {
@@ -77,13 +85,33 @@ struct ViewLogsTabContainer: View {
                         ForEach(viewModel.logViewModels) { logVm in
                             Group {
                                 LogRow(viewModel: logVm)
-                                        .onTapGesture {
-                                            self.onLogRowTapped(loggable: logVm.loggable)
-                                        }
+                                    .onTapGesture {
+                                        self.onLogRowTapped(loggable: logVm.loggable)
+                                    }
                                 if self.viewModel.showDivider(after: logVm) {
                                     Divider()
                                 }
                             }
+                        }
+                        if viewModel.showViewAllBottomActions {
+                            VStack(alignment: .center) {
+                                if viewModel.showLoadingMoreIndicator {
+                                    FullWidthLoadingSpinner(size: .small)
+                                }
+                                if viewModel.showLoadMoreButton {
+                                    // Load more button
+                                    Button(action: {
+                                        self.onViewAllShowMoreTapped()
+                                    }, label: {
+                                        Text("Show More")
+                                            .font(Font.Theme.normalText)
+                                            .foregroundColor(Color.Theme.primary)
+                                    })
+                                }
+                            }
+                            .padding(.vertical, CGFloat.Theme.Layout.extraSmall)
+                            .padding(.horizontal, CGFloat.Theme.Layout.normal)
+                            .frame(minWidth: 0, maxWidth: .infinity)
                         }
                     }
                     .modifier(RoundedBorderSectionModifier())
@@ -107,6 +135,7 @@ struct ViewLogsTabContainer: View {
         self.store.send(.viewLog(action: .screenDidShow))
     }
 
+    // MARK: View Models
     private func getViewTypePickerViewModel() -> ViewLogsViewTypePickerView.ViewModel {
         return ViewLogsViewTypePickerView.ViewModel(isViewByDate: self.store.state.viewLogs.showLogsByDate) {
             newIsViewByDate in
@@ -122,6 +151,13 @@ struct ViewLogsTabContainer: View {
         }
     }
 
+    // MARK: Actions
+    private func onViewAllShowMoreTapped() {
+        // Compute new number to show
+        let newNumToShow = self.store.state.viewLogs.viewAllNumToShow + ViewModel.viewAllNumToShowIncrement
+        self.store.send(.viewLog(action: .numToShowChanged(newNumToShow: newNumToShow)))
+    }
+
     private func onLogRowTapped(loggable: Loggable) {
         store.send(.logDetails(action: .initState(loggable: loggable)))
         navigateToLogDetails = true
@@ -129,55 +165,3 @@ struct ViewLogsTabContainer: View {
 
 }
 
-// Segmented picker at the top to select between "By Date" and "All" view types
-struct ViewLogsViewTypePickerView: View {
-
-    struct ViewModel {
-        static let displayValues: [String] = ["By Date", "All"]
-        @Binding var pickerSelection: Int
-
-        init(isViewByDate: Bool, onNewViewByDateChangedValue: BoolCallback? = nil) {
-            self._pickerSelection = Binding<Int>(get: {
-                isViewByDate ? 0 : 1
-            }, set: { newVal in
-                onNewViewByDateChangedValue?(newVal == 0)
-            })
-        }
-    }
-
-    private let viewModel: ViewModel
-
-    init(viewModel: ViewModel) {
-        self.viewModel = viewModel
-    }
-
-    var body: some View {
-        VStack {
-            // TODO: Unfortunately we get weird flickering behavior on re-rendering, leaving for now
-            Picker("", selection: self.viewModel.$pickerSelection) {
-                ForEach(0..<ViewModel.displayValues.count) { index in
-                    Text(ViewModel.displayValues[index]).tag(index)
-                }
-            }
-            .pickerStyle(SegmentedPickerStyle())
-        }
-        .padding(.vertical, CGFloat.Theme.Layout.small)
-        .padding(.horizontal, CGFloat.Theme.Layout.normal)
-        .background(Color.Theme.backgroundSecondary)
-    }
-}
-
-// Text to show no results
-struct ViewLogsTabNoResultsView: View {
-
-    var body: some View {
-        VStack(alignment: .center) {
-            Spacer()
-            Text("No Logs Found")
-                    .font(Font.Theme.heading)
-                    .foregroundColor(Color.Theme.textDark)
-            Spacer()
-        }.frame(minWidth: 0, maxWidth: .infinity)
-    }
-
-}

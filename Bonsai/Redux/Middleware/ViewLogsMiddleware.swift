@@ -28,6 +28,8 @@ struct ViewLogsMiddleware {
             mapOnAppearToFetchDataActionMiddleware(),
             mapViewTypeChangeToFetchDataActionMiddleware(),
             mapDateChangeToFetchDataActionMiddleware(),
+            mapViewAllNumToShowChangeToLoadDataActionMiddleware(),
+            fetchAdditionalLogsMiddleware(logService: services.logService),
             fetchAllLogDataMiddleware(logService: services.logService),
             fetchLogDataForDateMiddleware(logService: services.logService)
         ]
@@ -59,9 +61,9 @@ struct ViewLogsMiddleware {
 
     private static func getFetchDataAction(isViewByDate: Bool, state: AppState) -> AppAction {
         if isViewByDate {
-            return .viewLog(action: .fetchDataByDate(date: state.viewLogs.dateForLogs))
+            return .viewLog(action: .initDataByDate(date: state.viewLogs.dateForLogs))
         } else {
-            return .viewLog(action: .fetchAllLogData(limit: state.viewLogs.viewAllNumToShow))
+            return .viewLog(action: .initAllLogData)
         }
     }
 
@@ -70,7 +72,19 @@ struct ViewLogsMiddleware {
         return { state, action, cancellables, send in
             switch action {
             case .viewLog(action: .selectedDateChanged(let date)):
-                send(.viewLog(action: .fetchDataByDate(date: date)))
+                send(.viewLog(action: .initDataByDate(date: date)))
+            default:
+                break
+            }
+        }
+    }
+
+    // Maps a request to load more logs to a fetch data action
+    private static func mapViewAllNumToShowChangeToLoadDataActionMiddleware() -> Middleware<AppState> {
+        return { state, action, cancellables, send in
+            switch action {
+            case .viewLog(action: .numToShowChanged):
+                send(.viewLog(action: .loadAdditionalLogs))
             default:
                 break
             }
@@ -78,35 +92,52 @@ struct ViewLogsMiddleware {
     }
 
     // Called when we want to fetch all logs
-    private static func fetchAllLogDataMiddleware(logService: LogService) -> Middleware<AppState> {
+    // TODO: need to consolidate these two
+    // TODO: fetch only logs after our last log?
+    // TODO: this will always cause loading if we're past the total # of logs for the user
+    private static func fetchAdditionalLogsMiddleware(logService: LogService) -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
-            case .viewLog(action: .fetchAllLogData(let limit)):
+            case .viewLog(action: .loadAdditionalLogs):
                 // Check user exists
                 guard let user = state.global.user else {
                     fatalError("No user initialized when fetching logs")
                 }
-                // Check whether we need to initialize new data
                 let fetchedLogs = state.globalLogs.sortedLogs
                 let numToShow = state.viewLogs.viewAllNumToShow
-                var needsInit = false
-                if fetchedLogs.count < numToShow {
-                    // Fetch if we don't have enough
-                    needsInit = true
-                } else {
-                    // Check that all dates to the earliest log have been initialized
-                    let earliestLogDate = fetchedLogs[numToShow - 1].dateCreated
-                    if !state.globalLogs.hasBeenRetrieved(from: earliestLogDate, toAndIncluding: Date()) {
-                        needsInit = true
-                    }
-                }
                 // Return immediately if we don't need to init
-                if !needsInit {
+                if !needToFetchLogs(state: state) {
                     AppLogging.info("Enough logs already retrieved for all logs view, not retrieving")
                     send(AppAction.viewLog(action: .dataLoadSuccessForAllLogs(logs: Array(fetchedLogs.prefix(numToShow)))))
                     return
                 }
-                fetchLogData(fetchLimit: numToShow, with: user, logService: logService)
+                fetchLogData(fetchLimit: state.viewLogs.viewAllNumToShow, with: user, logService: logService)
+                    .sink(receiveValue: { newAction in
+                        send(newAction)
+                    })
+                    .store(in: &cancellables)
+            default:
+                break
+            }
+        }
+    }
+    private static func fetchAllLogDataMiddleware(logService: LogService) -> Middleware<AppState> {
+        return { state, action, cancellables, send in
+            switch action {
+            case .viewLog(action: .initAllLogData):
+                // Check user exists
+                guard let user = state.global.user else {
+                    fatalError("No user initialized when fetching logs")
+                }
+                let fetchedLogs = state.globalLogs.sortedLogs
+                let numToShow = state.viewLogs.viewAllNumToShow
+                // Return immediately if we don't need to init
+                if !needToFetchLogs(state: state) {
+                    AppLogging.info("Enough logs already retrieved for all logs view, not retrieving")
+                    send(AppAction.viewLog(action: .dataLoadSuccessForAllLogs(logs: Array(fetchedLogs.prefix(numToShow)))))
+                    return
+                }
+                fetchLogData(fetchLimit: state.viewLogs.viewAllNumToShow, with: user, logService: logService)
                     .sink(receiveValue: { newAction in
                         send(newAction)
                     })
@@ -116,11 +147,29 @@ struct ViewLogsMiddleware {
         }
     }
 
+    // Check whether we need to initialize new data
+    private static func needToFetchLogs(state: AppState) -> Bool {
+        let fetchedLogs = state.globalLogs.sortedLogs
+        let numToShow = state.viewLogs.viewAllNumToShow
+        var needsInit = false
+        if fetchedLogs.count < numToShow {
+            // Fetch if we don't have enough
+            needsInit = true
+        } else {
+            // Check that all dates to the earliest log have been initialized
+            let earliestLogDate = fetchedLogs[numToShow - 1].dateCreated
+            if !state.globalLogs.hasBeenRetrieved(from: earliestLogDate, toAndIncluding: Date()) {
+                needsInit = true
+            }
+        }
+        return needsInit
+    }
+
     // Called when we want to fetch data for a specific date (By Date view)
     private static func fetchLogDataForDateMiddleware(logService: LogService) -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
-            case .viewLog(action: .fetchDataByDate(let date)):
+            case .viewLog(action: .initDataByDate(let date)):
                 // Check user exists
                 guard let user = state.global.user else {
                     fatalError("No user initialized when fetching logs")
@@ -131,7 +180,7 @@ struct ViewLogsMiddleware {
                 if isInitialized {
                     // TODO: Consider a separate action - this will trigger global logs middleware
                     AppLogging.info("Logs already exist for this date, not retrieving from service")
-                    send(AppAction.viewLog(action: .dataLoadSuccessForDate(logs: logsForDate, date: date)))
+                    send(AppAction.viewLog(action: .dataInitSuccessForDate(logs: logsForDate, date: date)))
                     return
                 }
                 fetchLogData(for: date, with: user, logService: logService)
@@ -162,7 +211,7 @@ struct ViewLogsMiddleware {
         logService.getLogs(for: user, in: nil, since: date.beginningOfDate, toAndIncluding: date.endOfDate,
                         limitedTo: nil, startingAfterLog: nil, offline: false)
                 .map { logData in
-                    return AppAction.viewLog(action: .dataLoadSuccessForDate(logs: logData, date: date))
+                    return AppAction.viewLog(action: .dataInitSuccessForDate(logs: logData, date: date))
                 }.catch { (err) -> Just<AppAction> in
                     return Just(AppAction.viewLog(action: .dataLoadError(error: err)))
                 }

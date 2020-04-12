@@ -18,28 +18,25 @@ struct ViewLogsReducer {
         // View by date
         case let .selectedDateChanged(date):
             return dateForLogsChanged(state: state, newDate: date)
-        case .fetchDataByDate:
-            return fetchData(state: state)
-        case .dataLoadSuccessForDate:
-            return dataLoadSuccess(state: state)
+        case .initDataByDate:
+            return initAllLogData(state: state)
+        case .dataInitSuccessForDate:
+            return viewLogsByDateDataLoadSuccess(state: state)
         // View all
-        case .fetchAllLogData:
-            return fetchData(state: state)
-        case .dataLoadSuccessForAllLogs:
-            return dataLoadSuccess(state: state)
+        case .initAllLogData:
+            return initAllLogData(state: state)
+        case let .dataLoadSuccessForAllLogs(allLogs):
+            return viewAllLogsDataLoadSuccess(state: state, allLogs: allLogs)
+        case let .numToShowChanged(newNumToShow):
+            return numToShowChanged(state: state, newNumToShow: newNumToShow)
+        case .loadAdditionalLogs:
+            return loadAdditionalLogs(state: state)
         }
     }
 
-    static private func fetchData(state: AppState) -> AppState {
+    static private func initAllLogData(state: AppState) -> AppState {
         var newState = state
         newState.viewLogs.isLoading = true
-        return newState
-    }
-
-    static private func dataLoadSuccess(state: AppState) -> AppState {
-        var newState = state
-        newState.viewLogs.isLoading = false
-        newState.viewLogs.loadError = nil
         return newState
     }
 
@@ -62,4 +59,35 @@ struct ViewLogsReducer {
         newState.viewLogs.dateForLogs = newDate
         return newState
     }
+
+    private static func viewLogsByDateDataLoadSuccess(state: AppState) -> AppState {
+        var newState = state
+        newState.viewLogs.isLoading = false
+        newState.viewLogs.loadError = nil
+        return newState
+    }
+
+    // MARK: View all
+    static private func viewAllLogsDataLoadSuccess(state: AppState, allLogs: [Loggable]) -> AppState {
+        var newState = state
+        newState.viewLogs.isLoading = false
+        newState.viewLogs.isLoadingMore = false
+        newState.viewLogs.loadError = nil
+        // If we load fewer than the number we're supposed to show, it means we've retrieved all the logs
+        newState.viewLogs.canLoadMore = allLogs.count >= newState.viewLogs.viewAllNumToShow
+        return newState
+    }
+
+    static private func numToShowChanged(state: AppState, newNumToShow: Int) -> AppState {
+        var newState = state
+        newState.viewLogs.viewAllNumToShow = newNumToShow
+        return newState
+    }
+    
+    static private func loadAdditionalLogs(state: AppState) -> AppState {
+        var newState = state
+        newState.viewLogs.isLoadingMore = true
+        return newState
+    }
+
 }
