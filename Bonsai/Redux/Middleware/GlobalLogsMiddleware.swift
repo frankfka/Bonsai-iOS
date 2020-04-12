@@ -19,19 +19,21 @@ struct GlobalLogsMiddleware {
     // MARK: Middleware to map individual screen actions to global log actions
     private static func mapActionsToGlobalLogActionMiddleware() -> Middleware<AppState> {
         return { state, action, cancellables, send in
-            // TODO: can have home screen init action make all of the dates its fetched marked on global log?
-            // TODO: Mark as retrieved for all logs retrieval
             switch action {
             // Home Screen
             case .homeScreen(action: let .dataLoadSuccess(recentLogs, _)):
-                send(.globalLog(action: .insertMany(logs: recentLogs)))
+                send(.globalLog(action: .insert(logs: recentLogs)))
+                send(.globalLog(action: .markAsRetrieved(dates: getMarkAsRetrievedDates(for: recentLogs))))
             // Create Log
             case .createLog(action: let .onSaveSuccess(newLog, _)):
-                send(.globalLog(action: .insert(log: newLog)))
+                send(.globalLog(action: .insert(logs: [newLog])))
             // View Logs
             case .viewLog(action: let .dataLoadSuccessForDate(logs, date)):
                 send(.globalLog(action: .replace(logs: logs, date: date)))
-                send(.globalLog(action: .markAsRetrieved(date: date)))
+                send(.globalLog(action: .markAsRetrieved(dates: [date])))
+            case .viewLog(action: let .dataLoadSuccessForAllLogs(logs)):
+                send(.globalLog(action: .insert(logs: logs)))
+                send(.globalLog(action: .markAsRetrieved(dates: getMarkAsRetrievedDates(for: logs))))
             // View Log Detail
             case .logDetails(action: let .deleteSuccess(deletedLog)):
                 send(.globalLog(action: .delete(log: deletedLog)))
@@ -41,13 +43,31 @@ struct GlobalLogsMiddleware {
         }
     }
 
+    private static func getMarkAsRetrievedDates(for retrievedLogs: [Loggable]) -> [Date] {
+        // TODO: This will not cover up to the latest date, only the latest log date
+        if retrievedLogs.count == 0 {
+            return []
+        }
+        // Reverse chronological
+        let allLogs = retrievedLogs.sorted { first, second in first.dateCreated > second.dateCreated }
+        let mostRecentDate = allLogs[0].dateCreated
+        let earliestDate = allLogs[allLogs.count - 1].dateCreated
+        // We can't be certain that all logs for the earliest date were retrieved, so need to add a day
+        var markAsRetrievedDate = earliestDate.addingTimeInterval(.day).beginningOfDate
+        var dates: [Date] = []
+        while markAsRetrievedDate < mostRecentDate {
+            // Mark all the dates from the earliest to the most recent as retrieved
+            dates.append(markAsRetrievedDate)
+            markAsRetrievedDate = markAsRetrievedDate.addingTimeInterval(.day)
+        }
+        return dates
+    }
+
     // MARK: Analytics
     private static func mapActionsToUpdateAnalyticsMiddleware() -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
             case .globalLog(action: .insert):
-                send(.globalLog(action: .updateAnalytics))
-            case .globalLog(action: .insertMany):
                 send(.globalLog(action: .updateAnalytics))
             case .globalLog(action: .delete):
                 send(.globalLog(action: .updateAnalytics))

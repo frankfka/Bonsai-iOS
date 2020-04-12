@@ -52,8 +52,10 @@ struct GlobalLogState {
     }
 
     // Mark a specific date as having been retrieved
-    mutating func markAsRetrieved(for date: Date) {
-        retrieved.insert(date.beginningOfDate)
+    mutating func markAsRetrieved(for dates: [Date]) {
+        for date in dates {
+            retrieved.insert(date.beginningOfDate)
+        }
     }
 
     // Insert a log
@@ -63,8 +65,19 @@ struct GlobalLogState {
         var logsForDate: [Loggable] = logsByDate[logDate] ?? []
         logsForDate.append(log)
         logsForDate.sort { first, second in first.dateCreated > second.dateCreated } // Descending (latest first)
+        logsForDate = deduplicateLogs(logsForDate) // Deduplicate logs
         // Put back into dict
         logsByDate[logDate] = logsForDate
+    }
+
+    private func deduplicateLogs(_ logs: [Loggable]) -> [Loggable] {
+        var deduplicatedLogs: [Loggable] = []
+        for log in logs {
+            if deduplicatedLogs.firstIndex(where: {$0.id == log.id}) == nil {
+                deduplicatedLogs.append(log)
+            }
+        }
+        return deduplicatedLogs
     }
 
     // Replace an entire dict entry
