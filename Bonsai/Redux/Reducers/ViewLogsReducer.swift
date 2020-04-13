@@ -25,7 +25,7 @@ struct ViewLogsReducer {
         // View all
         case .initAllLogData:
             return initAllLogData(state: state)
-        case let .dataLoadSuccessForAllLogs(allLogs):
+        case let .dataLoadSuccessForAllLogs(allLogs, _):
             return viewAllLogsDataLoadSuccess(state: state, allLogs: allLogs)
         case let .numToShowChanged(newNumToShow):
             return numToShowChanged(state: state, newNumToShow: newNumToShow)

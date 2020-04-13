@@ -11,6 +11,7 @@ enum GlobalLogAction: LoggableAction {
     case replace(logs: [Loggable], date: Date)
     case delete(log: Loggable)
     case markAsRetrieved(dates: [Date])
+    case markAllAsRetrieved // Indicate that we've retrieved all realm logs from Firebase
     case updateAnalytics
     case analyticsLoadSuccess(analytics: LogAnalytics)
     case analyticsLoadError(error: Error)

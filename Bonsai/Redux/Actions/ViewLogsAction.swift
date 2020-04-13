@@ -17,6 +17,6 @@ enum ViewLogsAction: LoggableAction {
     // View all
     case initAllLogData
     case loadAdditionalLogs
-    case dataLoadSuccessForAllLogs(logs: [Loggable])
+    case dataLoadSuccessForAllLogs(logs: [Loggable], initialFetchLimit: Int)
     case numToShowChanged(newNumToShow: Int) // When user presses load more
 }

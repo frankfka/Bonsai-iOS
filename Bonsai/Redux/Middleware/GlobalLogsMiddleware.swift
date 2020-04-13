@@ -20,7 +20,6 @@ struct GlobalLogsMiddleware {
     private static func mapActionsToGlobalLogActionMiddleware() -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
-            // TODO: introduce a state that determines whether all items have been loaded??
             // Home Screen
             case .homeScreen(action: let .dataLoadSuccess(recentLogs, _)):
                 send(.globalLog(action: .insert(logs: recentLogs)))
@@ -32,9 +31,12 @@ struct GlobalLogsMiddleware {
             case .viewLog(action: let .dataInitSuccessForDate(logs, date)):
                 send(.globalLog(action: .replace(logs: logs, date: date)))
                 send(.globalLog(action: .markAsRetrieved(dates: [date])))
-            case .viewLog(action: let .dataLoadSuccessForAllLogs(logs)):
+            case .viewLog(action: let .dataLoadSuccessForAllLogs(logs, initialFetchLimit)):
                 send(.globalLog(action: .insert(logs: logs)))
                 send(.globalLog(action: .markAsRetrieved(dates: getMarkAsRetrievedDates(for: logs))))
+                if logs.count < initialFetchLimit {
+                    send(.globalLog(action: .markAllAsRetrieved))
+                }
             // View Log Detail
             case .logDetails(action: let .deleteSuccess(deletedLog)):
                 send(.globalLog(action: .delete(log: deletedLog)))

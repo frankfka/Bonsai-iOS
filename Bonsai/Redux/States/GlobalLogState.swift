@@ -24,6 +24,8 @@ struct GlobalLogState {
     }
     // Specifies whether we have retrieved all the logs for a specific date
     private var retrieved: Set<Date> = []
+    // Specifies whether all logs are retrieved from Firebase, be careful with this
+    var retrievedAll: Bool = false
 
     func getLogs(for date: Date) -> [Loggable] {
         if let logs = logsByDate[date.beginningOfDate] {
@@ -36,7 +38,7 @@ struct GlobalLogState {
 
     // Determine whether logs for a certain date has been retrieved
     func hasBeenRetrieved(_ date: Date) -> Bool {
-        return retrieved.contains(date.beginningOfDate)
+        return retrieved.contains(date.beginningOfDate) || retrievedAll
     }
 
     // Determine whether in a date range has been retrieved

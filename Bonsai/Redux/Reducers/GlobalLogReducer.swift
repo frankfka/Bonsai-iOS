@@ -17,6 +17,8 @@ struct GlobalLogReducer {
             return delete(state: state, log: log)
         case .markAsRetrieved(let dates):
             return markAsRetrieved(state: state, dates: dates)
+        case .markAllAsRetrieved:
+            return markAllAsRetrieved(state: state)
         // Analytics
         case .updateAnalytics:
             return updateAnalytics(state: state)
@@ -51,6 +53,12 @@ struct GlobalLogReducer {
     static private func markAsRetrieved(state: AppState, dates: [Date]) -> AppState {
         var newState = state
         newState.globalLogs.markAsRetrieved(for: dates)
+        return newState
+    }
+
+    static private func markAllAsRetrieved(state: AppState) -> AppState {
+        var newState = state
+        newState.globalLogs.retrievedAll = true
         return newState
     }
     
