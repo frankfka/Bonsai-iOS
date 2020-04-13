@@ -105,6 +105,7 @@
 		9E04B79908F30010E6B5C073 /* LogDetailsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BE9767AC25E6DB2946D9 /* LogDetailsAction.swift */; };
 		9E04B7C8274F27A34D900D11 /* SearchAddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BA16DE33AF23CFDC1835 /* SearchAddItemView.swift */; };
 		9E04B7D8552FA405AEC1E868 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B315B5D54A72FC7B7D71 /* Common.swift */; };
+		9E04B7FE60AABD823F3E2C2C /* ViewLogsLoadMoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BA9C95C417290B892907 /* ViewLogsLoadMoreView.swift */; };
 		9E04B821E25A6B57FABBFC74 /* SearchListResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B80416B6B7E5CB269041 /* SearchListResultsView.swift */; };
 		9E04B82235F9357663F3503D /* GlobalLogReminderAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B8529DCEEB464FAAB365 /* GlobalLogReminderAction.swift */; };
 		9E04B83524FD1C31EBE1A9AE /* SearchListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BA6AAC00E25E507C5764 /* SearchListView.swift */; };
@@ -295,6 +296,7 @@
 		9E04BA56CFBC889B457A7755 /* SettingsAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsAction.swift; sourceTree = "<group>"; };
 		9E04BA6AAC00E25E507C5764 /* SearchListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchListView.swift; sourceTree = "<group>"; };
 		9E04BA6E51A6CDACF7C60F88 /* SearchListItemRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchListItemRow.swift; sourceTree = "<group>"; };
+		9E04BA9C95C417290B892907 /* ViewLogsLoadMoreView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewLogsLoadMoreView.swift; sourceTree = "<group>"; };
 		9E04BAB20AC9FE3AA62269E3 /* FirebaseFirestoreService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseFirestoreService.swift; sourceTree = "<group>"; };
 		9E04BAB921A890EC2BB62579 /* CreateLogAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogAction.swift; sourceTree = "<group>"; };
 		9E04BAC2E285A783EA206AED /* BarChartModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarChartModels.swift; sourceTree = "<group>"; };
@@ -517,6 +519,7 @@
 				9E04B345F9A5313B154DC745 /* ViewLogsTab.swift */,
 				9E04BC76878783EE7F216EC6 /* ViewLogsTabNoResultsView.swift */,
 				9E04B1780D9898A7E915BE33 /* ViewLogsViewTypePickerView.swift */,
+				9E04BA9C95C417290B892907 /* ViewLogsLoadMoreView.swift */,
 			);
 			path = ViewLogs;
 			sourceTree = "<group>";
@@ -1135,6 +1138,7 @@
 				9E04B3446D16D652E4CB91A1 /* FirebaseLogSearchableConverters.swift in Sources */,
 				9E04BD5766B2733F48DB184E /* ViewLogsTabNoResultsView.swift in Sources */,
 				9E04B49307D270FDE091B1F6 /* ViewLogsViewTypePickerView.swift in Sources */,
+				9E04B7FE60AABD823F3E2C2C /* ViewLogsLoadMoreView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

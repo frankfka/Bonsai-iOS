@@ -12,7 +12,7 @@ struct ViewLogsTabContainer: View {
     @EnvironmentObject var store: AppStore
 
     struct ViewModel {
-        static let viewAllNumToShowIncrement = 2
+        static let viewAllNumToShowIncrement = 10
 
         let isLoading: Bool
         let loadError: Bool
@@ -24,8 +24,6 @@ struct ViewLogsTabContainer: View {
 
         // View all
         let showViewAllBottomActions: Bool
-        let showLoadingMoreIndicator: Bool
-        let showLoadMoreButton: Bool
 
         init(state: AppState) {
             self.isLoading = state.viewLogs.isLoading
@@ -42,11 +40,7 @@ struct ViewLogsTabContainer: View {
             }
             self.logViewModels = logsToShow.map { LogRow.ViewModel(loggable: $0) }
             self.showDatePicker = showLogsByDate
-            let canLoadMore = state.viewLogs.canLoadMore
-            let isLoadingMore = state.viewLogs.isLoadingMore
             self.showViewAllBottomActions = !showLogsByDate
-            self.showLoadMoreButton = canLoadMore && !isLoadingMore
-            self.showLoadingMoreIndicator = isLoadingMore
         }
 
         func showDivider(after vm: LogRow.ViewModel) -> Bool {
@@ -94,24 +88,7 @@ struct ViewLogsTabContainer: View {
                             }
                         }
                         if viewModel.showViewAllBottomActions {
-                            VStack(alignment: .center) {
-                                if viewModel.showLoadingMoreIndicator {
-                                    FullWidthLoadingSpinner(size: .small)
-                                }
-                                if viewModel.showLoadMoreButton {
-                                    // Load more button
-                                    Button(action: {
-                                        self.onViewAllShowMoreTapped()
-                                    }, label: {
-                                        Text("Show More")
-                                            .font(Font.Theme.normalText)
-                                            .foregroundColor(Color.Theme.primary)
-                                    })
-                                }
-                            }
-                            .padding(.vertical, CGFloat.Theme.Layout.extraSmall)
-                            .padding(.horizontal, CGFloat.Theme.Layout.normal)
-                            .frame(minWidth: 0, maxWidth: .infinity)
+                            ViewLogsLoadMoreView(viewModel: getViewAllLoadMoreViewModel())
                         }
                     }
                     .modifier(RoundedBorderSectionModifier())
@@ -151,13 +128,21 @@ struct ViewLogsTabContainer: View {
         }
     }
 
-    // MARK: Actions
-    private func onViewAllShowMoreTapped() {
-        // Compute new number to show
-        let newNumToShow = self.store.state.viewLogs.viewAllNumToShow + ViewModel.viewAllNumToShowIncrement
-        self.store.send(.viewLog(action: .numToShowChanged(newNumToShow: newNumToShow)))
+    private func getViewAllLoadMoreViewModel() -> ViewLogsLoadMoreView.ViewModel {
+        let canLoadMore = store.state.viewLogs.canLoadMore
+        let isLoadingMore = store.state.viewLogs.isLoadingMore
+        let showLoadMoreButton = canLoadMore && !isLoadingMore
+        let showLoadingMoreIndicator = isLoadingMore
+        return ViewLogsLoadMoreView.ViewModel(
+                showLoadingMoreIndicator: showLoadingMoreIndicator,
+                showLoadMoreButton: showLoadMoreButton) {
+            // Compute new number to show
+            let newNumToShow = self.store.state.viewLogs.viewAllNumToShow + ViewModel.viewAllNumToShowIncrement
+            self.store.send(.viewLog(action: .numToShowChanged(newNumToShow: newNumToShow)))
+        }
     }
 
+    // MARK: Actions
     private func onLogRowTapped(loggable: Loggable) {
         store.send(.logDetails(action: .initState(loggable: loggable)))
         navigateToLogDetails = true

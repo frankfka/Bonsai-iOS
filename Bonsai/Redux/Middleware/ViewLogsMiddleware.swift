@@ -91,7 +91,6 @@ struct ViewLogsMiddleware {
     }
 
     // Called when we want to fetch all logs
-    // TODO: this still tries to retrieve the last logs, figure out why
     private static func fetchAllLogDataMiddleware(logService: LogService) -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
@@ -102,7 +101,7 @@ struct ViewLogsMiddleware {
                 }
                 let fetchedLogs = state.globalLogs.sortedLogs
                 let numToShow = state.viewLogs.viewAllNumToShow
-                let (needToFetch, fetchAfterLogs) = needToFetchLogs(state: state)
+                let (needToFetch, fetchAfterLogs) = getViewAllLogsFetchInfo(state: state)
                 // Return immediately if we don't need to init
                 if !needToFetch {
                     AppLogging.info("Enough logs already retrieved for all logs view, not retrieving")
@@ -122,7 +121,7 @@ struct ViewLogsMiddleware {
     // Check whether we need to initialize new data
     // Returns true/false of whether we need to fetch additional logs
     // Returns a list of logs in reverse chronological order, indicating the logs to start retrieving after
-    private static func needToFetchLogs(state: AppState) -> (Bool, [Loggable]) {
+    private static func getViewAllLogsFetchInfo(state: AppState) -> (Bool, [Loggable]) {
         let fetchedLogsInRevChronOrder = state.globalLogs.sortedLogs
         let numToShow = state.viewLogs.viewAllNumToShow
         var fetchAfterLogs: [Loggable] = []
@@ -199,7 +198,6 @@ struct ViewLogsMiddleware {
     private static func fetchLogData(totalLogsToShow: Int, fetchAfterLogsInRevChronOrder: [Loggable],
                                      with user: User, logService: LogService)  -> AnyPublisher<AppAction, Never> {
         let fetchLimit = totalLogsToShow - fetchAfterLogsInRevChronOrder.count
-        print(fetchLimit)
         let startAfterLog = fetchAfterLogsInRevChronOrder.last
         return logService.getLogs(for: user, in: nil, since: nil, toAndIncluding: nil,
                         limitedTo: fetchLimit, startingAfterLog: startAfterLog, offline: false)
