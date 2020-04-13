@@ -32,7 +32,7 @@ struct ActivityLogDurationRowView: View {
         ) {
             self.selectedDuration = selectedDuration
             self.didTapRow = {
-                ViewHelpers.toggleWithAnimation(binding: showPicker)
+                ViewHelpers.toggleWithEaseAnimation(binding: showPicker)
             }
             self.onDurationChange = onDurationChange
             self._showPicker = showPicker
@@ -62,7 +62,7 @@ struct ActivityLogDurationRowView: View {
     }
     
     private func onRowTapped() {
-        ViewHelpers.toggleWithAnimation(binding: viewModel.$showPicker)
+        ViewHelpers.toggleWithEaseAnimation(binding: viewModel.$showPicker)
     }
 
     private func getDurationPickerViewModel() -> ActivityLogDurationPickerView.ViewModel {

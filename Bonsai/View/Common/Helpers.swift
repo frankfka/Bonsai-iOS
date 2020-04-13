@@ -19,9 +19,15 @@ typealias TimeIntervalCallback = (TimeInterval) -> ()
 
 struct ViewHelpers {
     
-    static func toggleWithAnimation(binding: Binding<Bool>) {
+    static func toggleWithEaseAnimation(binding: Binding<Bool>) {
         withAnimation(Animation.easeInOut(duration: 0.25)) {
             binding.wrappedValue.toggle()
+        }
+    }
+
+    static func setWithLinearAnimation(binding: Binding<Bool>, newVal: Bool) {
+        withAnimation(Animation.linear(duration: 0.25)) {
+            binding.wrappedValue = newVal
         }
     }
 

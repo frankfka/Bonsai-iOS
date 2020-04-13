@@ -154,7 +154,7 @@ struct LogReminderIntervalPickerView: View {
     }
     
     private func rowTapped() {
-        ViewHelpers.toggleWithAnimation(binding: self.viewModel.$showPicker)
+        ViewHelpers.toggleWithEaseAnimation(binding: self.viewModel.$showPicker)
     }
     
 }

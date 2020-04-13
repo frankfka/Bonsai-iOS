@@ -184,7 +184,7 @@ struct ViewLogsDateHeaderView: View {
     }
     
     private func toggleDatePickerVisibility() {
-        ViewHelpers.toggleWithAnimation(binding: $showDatePicker)
+        ViewHelpers.toggleWithEaseAnimation(binding: $showDatePicker)
     }
     
     private func onViewAppear() {

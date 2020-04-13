@@ -14,6 +14,8 @@ struct GlobalLogState {
     var logsByDate: [Date: [Loggable]] = [:]
     var sortedLogs: [Loggable] {
         logsByDate
+            // Sort by reverse chronological keys
+            .sorted(by: { first, second in first.key > second.key })
             // Flat map to sorted loggables
             .flatMap { date, loggables in
                 // Sort individual loggables by date

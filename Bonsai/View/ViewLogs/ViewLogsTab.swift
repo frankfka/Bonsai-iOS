@@ -60,6 +60,9 @@ struct ViewLogsTabContainer: View {
     var body: some View {
         VStack(spacing: 0) {
             ViewLogsViewTypePickerView(viewModel: getViewTypePickerViewModel())
+                .padding(.vertical, CGFloat.Theme.Layout.small)
+                .padding(.horizontal, CGFloat.Theme.Layout.normal)
+                .background(Color.Theme.backgroundSecondary)
             if self.viewModel.showDatePicker {
                 ViewLogsDateHeaderView(viewModel: getHeaderDatePickerViewModel())
             }

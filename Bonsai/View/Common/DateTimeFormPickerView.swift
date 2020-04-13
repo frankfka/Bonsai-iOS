@@ -123,11 +123,11 @@ struct DateTimeFormPickerView: View {
     
     // Actions
     private func datePickerRowTapped() {
-        ViewHelpers.toggleWithAnimation(binding: viewModel.$showDatePicker)
+        ViewHelpers.toggleWithEaseAnimation(binding: viewModel.$showDatePicker)
     }
     
     private func timePickerRowTapped() {
-        ViewHelpers.toggleWithAnimation(binding: viewModel.$showTimePicker)
+        ViewHelpers.toggleWithEaseAnimation(binding: viewModel.$showTimePicker)
     }
     
     // View models
