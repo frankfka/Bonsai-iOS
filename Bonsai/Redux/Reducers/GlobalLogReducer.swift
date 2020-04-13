@@ -9,16 +9,16 @@ struct GlobalLogReducer {
     static func reduce(state: AppState, action: GlobalLogAction) -> AppState {
         switch action {
         // Log Actions
-        case .insert(let log):
-            return insert(state: state, log: log)
-        case .insertMany(let logs):
-            return insertMany(state: state, logs: logs)
+        case .insert(let logs):
+            return insert(state: state, logs: logs)
         case .replace(let logs, let date):
             return replace(state: state, logs: logs, date: date)
         case .delete(let log):
             return delete(state: state, log: log)
-        case .markAsRetrieved(let date):
-            return markAsRetrieved(state: state, date: date)
+        case .markAsRetrieved(let dates):
+            return markAsRetrieved(state: state, dates: dates)
+        case .markAllAsRetrieved:
+            return markAllAsRetrieved(state: state)
         // Analytics
         case .updateAnalytics:
             return updateAnalytics(state: state)
@@ -29,15 +29,10 @@ struct GlobalLogReducer {
         }
     }
 
-    static private func insert(state: AppState, log: Loggable) -> AppState {
-        var newState = state
-        newState.globalLogs.insert(log)
-        return newState
-    }
-
-    static private func insertMany(state: AppState, logs: [Loggable]) -> AppState {
+    static private func insert(state: AppState, logs: [Loggable]) -> AppState {
         var newState = state
         for log in logs {
+            // This is not very performant, but leaving for now
             newState.globalLogs.insert(log)
         }
         return newState
@@ -55,9 +50,15 @@ struct GlobalLogReducer {
         return newState
     }
 
-    static private func markAsRetrieved(state: AppState, date: Date) -> AppState {
+    static private func markAsRetrieved(state: AppState, dates: [Date]) -> AppState {
         var newState = state
-        newState.globalLogs.markAsRetrieved(for: date)
+        newState.globalLogs.markAsRetrieved(for: dates)
+        return newState
+    }
+
+    static private func markAllAsRetrieved(state: AppState) -> AppState {
+        var newState = state
+        newState.globalLogs.retrievedAll = true
         return newState
     }
     

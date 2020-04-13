@@ -22,14 +22,22 @@ struct GlobalLogsMiddleware {
             switch action {
             // Home Screen
             case .homeScreen(action: let .dataLoadSuccess(recentLogs, _)):
-                send(.globalLog(action: .insertMany(logs: recentLogs)))
+                send(.globalLog(action: .insert(logs: recentLogs)))
+                send(.globalLog(action: .markAsRetrieved(dates: getMarkAsRetrievedDates(for: recentLogs, upToToday: true))))
             // Create Log
             case .createLog(action: let .onSaveSuccess(newLog, _)):
-                send(.globalLog(action: .insert(log: newLog)))
+                send(.globalLog(action: .insert(logs: [newLog])))
             // View Logs
-            case .viewLog(action: let .dataLoadSuccess(logs, date)):
+            case .viewLog(action: let .dataInitSuccessForDate(logs, date)):
                 send(.globalLog(action: .replace(logs: logs, date: date)))
-                send(.globalLog(action: .markAsRetrieved(date: date)))
+                send(.globalLog(action: .markAsRetrieved(dates: [date])))
+            case .viewLog(action: let .dataLoadSuccessForAllLogs(logs, initialFetchLimit)):
+                send(.globalLog(action: .insert(logs: logs)))
+                send(.globalLog(action: .markAsRetrieved(dates: getMarkAsRetrievedDates(for: logs))))
+                // If we fetched all, but got less than the limit back, it means we've fetched all available
+                if logs.count < initialFetchLimit {
+                    send(.globalLog(action: .markAllAsRetrieved))
+                }
             // View Log Detail
             case .logDetails(action: let .deleteSuccess(deletedLog)):
                 send(.globalLog(action: .delete(log: deletedLog)))
@@ -39,13 +47,31 @@ struct GlobalLogsMiddleware {
         }
     }
 
+    // UpToToday indicates that we've tried fetching for all logs up to the current date
+    private static func getMarkAsRetrievedDates(for retrievedLogs: [Loggable], upToToday: Bool = false) -> [Date] {
+        if retrievedLogs.count == 0 {
+            return []
+        }
+        // Reverse chronological
+        let allLogs = retrievedLogs.sorted { first, second in first.dateCreated > second.dateCreated }
+        let mostRecentDate = upToToday ? Date() : allLogs[0].dateCreated
+        let earliestDate = allLogs[allLogs.count - 1].dateCreated
+        // We can't be certain that all logs for the earliest date were retrieved, so need to add a day
+        var markAsRetrievedDate = earliestDate.addingTimeInterval(.day).beginningOfDate
+        var dates: [Date] = []
+        while markAsRetrievedDate < mostRecentDate {
+            // Mark all the dates from the earliest to the most recent as retrieved
+            dates.append(markAsRetrievedDate)
+            markAsRetrievedDate = markAsRetrievedDate.addingTimeInterval(.day)
+        }
+        return dates
+    }
+
     // MARK: Analytics
     private static func mapActionsToUpdateAnalyticsMiddleware() -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
             case .globalLog(action: .insert):
-                send(.globalLog(action: .updateAnalytics))
-            case .globalLog(action: .insertMany):
                 send(.globalLog(action: .updateAnalytics))
             case .globalLog(action: .delete):
                 send(.globalLog(action: .updateAnalytics))

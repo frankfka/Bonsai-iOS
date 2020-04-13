@@ -7,8 +7,16 @@ import Foundation
 
 enum ViewLogsAction: LoggableAction {
     case screenDidShow
-    case fetchData(date: Date)
-    case selectedDateChanged(date: Date) // Only support 1 day for now
-    case dataLoadSuccess(logs: [Loggable], date: Date)
     case dataLoadError(error: Error)
+
+    case viewTypeChanged(isViewByDate: Bool)
+    // View by date
+    case initDataByDate(date: Date)
+    case selectedDateChanged(date: Date) // Only support 1 day for now
+    case dataInitSuccessForDate(logs: [Loggable], date: Date)
+    // View all
+    case initAllLogData
+    case loadAdditionalLogs
+    case dataLoadSuccessForAllLogs(logs: [Loggable], initialFetchLimit: Int)
+    case numToShowChanged(newNumToShow: Int) // When user presses load more
 }

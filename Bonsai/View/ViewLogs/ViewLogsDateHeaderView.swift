@@ -143,7 +143,7 @@ struct ViewLogsDateHeaderView: View {
         .onAppear(perform: {
             self.onViewAppear()
         })
-            .background(Color.Theme.backgroundSecondary)
+        .background(Color.Theme.backgroundSecondary)
     }
     
     private func getDatePickerViewModel() -> DatePickerView.ViewModel {
@@ -184,7 +184,7 @@ struct ViewLogsDateHeaderView: View {
     }
     
     private func toggleDatePickerVisibility() {
-        ViewHelpers.toggleWithAnimation(binding: $showDatePicker)
+        ViewHelpers.toggleWithEaseAnimation(binding: $showDatePicker)
     }
     
     private func onViewAppear() {

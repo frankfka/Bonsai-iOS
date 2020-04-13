@@ -60,7 +60,7 @@ struct RowPickerView: View {
     }
     
     private func onRowTapped() {
-        ViewHelpers.toggleWithAnimation(binding: self.$showPicker)
+        ViewHelpers.toggleWithEaseAnimation(binding: self.$showPicker)
     }
 }
 

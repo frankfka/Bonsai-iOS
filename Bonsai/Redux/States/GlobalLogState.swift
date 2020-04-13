@@ -14,16 +14,18 @@ struct GlobalLogState {
     var logsByDate: [Date: [Loggable]] = [:]
     var sortedLogs: [Loggable] {
         logsByDate
-                // Sort by reverse chronological keys
-                .sorted(by: { first, second in first.key > second.key })
-                // Flat map to sorted loggables
-                .flatMap { date, loggables in
-                    // Sort individual loggables by date
-                    loggables.sorted(by: { first, second in first.dateCreated > second.dateCreated })
-                }
+            // Sort by reverse chronological keys
+            .sorted(by: { first, second in first.key > second.key })
+            // Flat map to sorted loggables
+            .flatMap { date, loggables in
+                // Sort individual loggables by date
+                loggables.sorted(by: { first, second in first.dateCreated > second.dateCreated })
+            }
     }
     // Specifies whether we have retrieved all the logs for a specific date
     private var retrieved: Set<Date> = []
+    // Specifies whether all logs are retrieved from Firebase, be careful with this
+    var retrievedAll: Bool = false
 
     func getLogs(for date: Date) -> [Loggable] {
         if let logs = logsByDate[date.beginningOfDate] {
@@ -36,12 +38,26 @@ struct GlobalLogState {
 
     // Determine whether logs for a certain date has been retrieved
     func hasBeenRetrieved(_ date: Date) -> Bool {
-        return retrieved.contains(date.beginningOfDate)
+        return retrieved.contains(date.beginningOfDate) || retrievedAll
+    }
+
+    // Determine whether in a date range has been retrieved
+    func hasBeenRetrieved(from startDate: Date, toAndIncluding: Date) -> Bool {
+        var checkDate: Date = startDate
+        while checkDate < toAndIncluding {
+            if !self.hasBeenRetrieved(checkDate) {
+                return false
+            }
+            checkDate = checkDate.addingTimeInterval(.day)
+        }
+        return true
     }
 
     // Mark a specific date as having been retrieved
-    mutating func markAsRetrieved(for date: Date) {
-        retrieved.insert(date.beginningOfDate)
+    mutating func markAsRetrieved(for dates: [Date]) {
+        for date in dates {
+            retrieved.insert(date.beginningOfDate)
+        }
     }
 
     // Insert a log
@@ -51,8 +67,19 @@ struct GlobalLogState {
         var logsForDate: [Loggable] = logsByDate[logDate] ?? []
         logsForDate.append(log)
         logsForDate.sort { first, second in first.dateCreated > second.dateCreated } // Descending (latest first)
+        logsForDate = deduplicateLogs(logsForDate) // Deduplicate logs
         // Put back into dict
         logsByDate[logDate] = logsForDate
+    }
+
+    private func deduplicateLogs(_ logs: [Loggable]) -> [Loggable] {
+        var deduplicatedLogs: [Loggable] = []
+        for log in logs {
+            if deduplicatedLogs.firstIndex(where: {$0.id == log.id}) == nil {
+                deduplicatedLogs.append(log)
+            }
+        }
+        return deduplicatedLogs
     }
 
     // Replace an entire dict entry

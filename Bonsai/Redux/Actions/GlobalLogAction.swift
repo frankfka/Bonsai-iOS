@@ -7,11 +7,11 @@ import Foundation
 
 enum GlobalLogAction: LoggableAction {
     // Dispatched to change global store of logs
-    case insert(log: Loggable)
-    case insertMany(logs: [Loggable])
+    case insert(logs: [Loggable])
     case replace(logs: [Loggable], date: Date)
     case delete(log: Loggable)
-    case markAsRetrieved(date: Date)
+    case markAsRetrieved(dates: [Date])
+    case markAllAsRetrieved // Indicate that we've retrieved all realm logs from Firebase
     case updateAnalytics
     case analyticsLoadSuccess(analytics: LogAnalytics)
     case analyticsLoadError(error: Error)

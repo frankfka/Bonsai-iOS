@@ -66,9 +66,10 @@ struct ContentView: View {
         
         VStack(spacing: 0) {
             if viewModel.tabIndex == 0 {
+                // TODO: Make viewmodel init inside the container itself
                 HomeTabContainer(viewModel: getHomeTabViewModel())
             } else {
-                ViewLogsTabContainer(viewModel: getLogsTabViewModel())
+                ViewLogsTabContainer()
             }
             TabBarView(viewModel: viewModel.tabBarViewModel)
         }
@@ -97,21 +98,6 @@ struct ContentView: View {
                 loadError: loadError,
                 showCreateLogModal: viewModel.$showCreateLogModal,
                 homeTabDidAppear: onShowHomeTab
-        )
-    }
-
-    private func getLogsTabViewModel() -> ViewLogsTabContainer.ViewModel {
-        let dateForLogs = store.state.viewLogs.dateForLogs
-        let logsForDate = store.state.globalLogs.getLogs(for: dateForLogs)
-        return ViewLogsTabContainer.ViewModel(
-                isLoading: store.state.viewLogs.isLoading,
-                loadError: store.state.viewLogs.loadError != nil,
-                viewLogsTabDidAppear: {
-                    self.store.send(.viewLog(action: .screenDidShow))
-                    self.store.send(.viewLog(action: .fetchData(date: self.store.state.viewLogs.dateForLogs)))
-                },
-                dateForLogs: dateForLogs,
-                logs: logsForDate.map { LogRow.ViewModel(loggable: $0) }
         )
     }
 
