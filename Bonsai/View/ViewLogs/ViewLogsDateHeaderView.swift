@@ -29,11 +29,13 @@ extension DateFormatter {
 struct ViewLogsDateHeaderView: View {
     
     struct ViewModel {
-        let initialDate: Date
+        let confirmedDate: Date
+        let dateSelectionBinding: Binding<Date> // This changes when user changes the date picker, but hasn't yet confirmed the date
         let onNewDateConfirmed: DateCallback?
         
-        init(initialDate: Date, onNewDateConfirmed: DateCallback? = nil) {
-            self.initialDate = initialDate
+        init(confirmedDate: Date, dateSelectionBinding: Binding<Date>, onNewDateConfirmed: DateCallback? = nil) {
+            self.dateSelectionBinding = dateSelectionBinding
+            self.confirmedDate = confirmedDate
             self.onNewDateConfirmed = onNewDateConfirmed
         }
         
@@ -44,9 +46,8 @@ struct ViewLogsDateHeaderView: View {
         }
     }
     @State var showDatePicker: Bool = false
-    @State var selectedDate: Date = Date()
     private var isDateIncrementDisabled: Bool {
-        viewModel.isDateIncrementDisabled(selectedDate: selectedDate)
+        viewModel.isDateIncrementDisabled(selectedDate: self.viewModel.dateSelectionBinding.wrappedValue)
     }
     private let viewModel: ViewModel
     
@@ -54,8 +55,6 @@ struct ViewLogsDateHeaderView: View {
         self.viewModel = viewModel
     }
     
-    // TODO: Alignment guides to center
-    // TODO: Today text, make it slide down instead of fade
     var body: some View {
         VStack(spacing: 0) {
             Divider()
@@ -89,7 +88,7 @@ struct ViewLogsDateHeaderView: View {
                 Spacer()
                 // Center date display
                 HStack(spacing: 0) {
-                    Text(DateFormatter.stringForLogDatePicker(from: selectedDate))
+                    Text(DateFormatter.stringForLogDatePicker(from: self.viewModel.dateSelectionBinding.wrappedValue))
                         .font(Font.Theme.normalBoldText)
                         .foregroundColor(Color.Theme.textDark)
                         .padding(.trailing, CGFloat.Theme.Layout.small)
@@ -147,39 +146,39 @@ struct ViewLogsDateHeaderView: View {
     }
     
     private func getDatePickerViewModel() -> DatePickerView.ViewModel {
-        return DatePickerView.ViewModel(selectedDate: $selectedDate)
+        return DatePickerView.ViewModel(selectedDate: self.viewModel.dateSelectionBinding)
     }
     
     private func onDecrementDateTapped() {
-        let decrementedDate = selectedDate.addingTimeInterval(-TimeInterval.day)
-        // @State var doesn't update, so manually update it
-        selectedDate = decrementedDate
+        let decrementedDate = self.viewModel.dateSelectionBinding.wrappedValue.addingTimeInterval(-TimeInterval.day)
+        // Binding is a @State var so it doesn't update, so manually update it
+        self.viewModel.dateSelectionBinding.wrappedValue = decrementedDate
         viewModel.onNewDateConfirmed?(decrementedDate)
     }
     
     private func onIncrementDateTapped() {
-        let incrementedDate = selectedDate.addingTimeInterval(TimeInterval.day)
+        let incrementedDate = self.viewModel.dateSelectionBinding.wrappedValue.addingTimeInterval(TimeInterval.day)
         if incrementedDate <= Date() {
-            // @State var doesn't update, so manually update it
-            selectedDate = incrementedDate
+            // Binding is a @State var so it doesn't update, so manually update it
+            self.viewModel.dateSelectionBinding.wrappedValue = incrementedDate
             viewModel.onNewDateConfirmed?(incrementedDate)
         }
     }
     
     private func onDateViewTapped() {
         // Cancel current selection
-        setToInitialDate()
+        resetDateSelection()
         toggleDatePickerVisibility()
     }
     
     private func onDateSelectionConfirmed() {
-        viewModel.onNewDateConfirmed?(selectedDate)
+        viewModel.onNewDateConfirmed?(self.viewModel.dateSelectionBinding.wrappedValue)
         toggleDatePickerVisibility()
     }
     
     private func onDateSelectionCancel() {
         // Cancel current selection
-        setToInitialDate()
+        resetDateSelection()
         toggleDatePickerVisibility()
     }
     
@@ -189,11 +188,11 @@ struct ViewLogsDateHeaderView: View {
     
     private func onViewAppear() {
         // Update selected date to current date
-        setToInitialDate()
+        resetDateSelection()
     }
-    
-    private func setToInitialDate() {
-        selectedDate = viewModel.initialDate
+
+    func resetDateSelection() {
+        self.viewModel.dateSelectionBinding.wrappedValue = self.viewModel.confirmedDate
     }
     
 }
@@ -201,8 +200,11 @@ struct ViewLogsDateHeaderView: View {
 struct ViewLogsDateHeaderView_Previews: PreviewProvider {
     static var previews: some View {
         ViewLogsDateHeaderView(
-            viewModel: ViewLogsDateHeaderView.ViewModel(initialDate: Date())
+            viewModel: ViewLogsDateHeaderView.ViewModel(
+                confirmedDate: Date(),
+                dateSelectionBinding: .constant(Date())
+            )
         )
-            .previewLayout(.sizeThatFits)
+        .previewLayout(.sizeThatFits)
     }
 }

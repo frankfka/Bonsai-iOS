@@ -20,6 +20,7 @@ struct ViewLogsTabContainer: View {
 
         // View by date
         let showDatePicker: Bool
+        let allowSwipeGesture: Bool
         let dateForLogs: Date
 
         // View all
@@ -40,6 +41,7 @@ struct ViewLogsTabContainer: View {
             }
             self.logViewModels = logsToShow.map { LogRow.ViewModel(loggable: $0) }
             self.showDatePicker = showLogsByDate
+            self.allowSwipeGesture = showLogsByDate
             self.showViewAllBottomActions = !showLogsByDate
         }
 
@@ -56,6 +58,11 @@ struct ViewLogsTabContainer: View {
 
     private var viewModel: ViewModel { ViewModel(state: store.state) }
     @State(initialValue: false) private var navigateToLogDetails: Bool? // Allows conditional pushing of navigation views
+    @State(initialValue: Date()) private var datePickerSelection: Date
+
+    private var headerView: ViewLogsDateHeaderView {
+        ViewLogsDateHeaderView(viewModel: getHeaderDatePickerViewModel())
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -64,7 +71,7 @@ struct ViewLogsTabContainer: View {
                 .padding(.horizontal, CGFloat.Theme.Layout.normal)
                 .background(Color.Theme.backgroundSecondary)
             if self.viewModel.showDatePicker {
-                ViewLogsDateHeaderView(viewModel: getHeaderDatePickerViewModel())
+                self.headerView
             }
             if viewModel.isLoading {
                 FullScreenLoadingSpinner(isOverlay: false)
@@ -97,6 +104,7 @@ struct ViewLogsTabContainer: View {
                     .modifier(RoundedBorderSectionModifier())
                     .padding(.all, CGFloat.Theme.Layout.normal)
                 }
+                .modifier(ViewLogsTabSwipeGestureRecognizer(onSwipe: self.onLogSectionSwipe))
             }
         }
         // Use flex frame so it always fills width
@@ -125,10 +133,10 @@ struct ViewLogsTabContainer: View {
 
     private func getHeaderDatePickerViewModel() -> ViewLogsDateHeaderView.ViewModel {
         return ViewLogsDateHeaderView.ViewModel(
-                initialDate: store.state.viewLogs.dateForLogs
-        ) { newDate in
-            self.store.send(.viewLog(action: .selectedDateChanged(date: newDate)))
-        }
+            confirmedDate: store.state.viewLogs.dateForLogs,
+            dateSelectionBinding: self.$datePickerSelection,
+            onNewDateConfirmed: self.onNewDateConfirmed
+        )
     }
 
     private func getViewAllLoadMoreViewModel() -> ViewLogsLoadMoreView.ViewModel {
@@ -149,6 +157,25 @@ struct ViewLogsTabContainer: View {
     private func onLogRowTapped(loggable: Loggable) {
         store.send(.logDetails(action: .initState(loggable: loggable)))
         navigateToLogDetails = true
+    }
+
+    private func onNewDateConfirmed(_ date: Date) {
+        self.datePickerSelection = date
+        self.store.send(.viewLog(action: .selectedDateChanged(date: date)))
+    }
+
+    private func onLogSectionSwipe(direction: ViewLogsTabSwipeGestureRecognizer.Direction) {
+        guard self.viewModel.allowSwipeGesture else {
+            // Not choosing logs by date, so ignore swipes
+            return
+        }
+        // Left swipe is to increase date
+        let newDate = self.viewModel.dateForLogs.addingTimeInterval(direction == .left ? TimeInterval.day : -TimeInterval.day)
+        guard newDate <= Date() else {
+            // Trying to go past today, ignore
+            return
+        }
+        self.onNewDateConfirmed(newDate)
     }
 
 }
