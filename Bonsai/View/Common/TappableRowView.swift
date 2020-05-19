@@ -31,7 +31,7 @@ struct TappableRowView: View {
         HStack {
             Text(viewModel.primaryText)
                 .lineLimit(1)
-                .font(Font.Theme.boldNormalText)
+                .font(Font.Theme.normalBoldText)
                 .foregroundColor(Color.Theme.textDark)
             Spacer(minLength: CGFloat.Theme.Layout.rowSeparator)
             Text(viewModel.secondaryText)

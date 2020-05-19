@@ -13,11 +13,11 @@ extension View {
         return self.withPopup(show: show) {
             VStack {
                 LoadingSpinner(size: .small)
-                        .padding(.bottom, CGFloat.Theme.Layout.small)
+                    .padding(.bottom, CGFloat.Theme.Layout.small)
                 if text != nil {
                     Text(text!)
-                            .font(Font.Theme.normalText)
-                            .foregroundColor(Color.Theme.text)
+                        .font(Font.Theme.normalText)
+                        .foregroundColor(Color.Theme.text)
                 }
             }.eraseToAnyView()
         }

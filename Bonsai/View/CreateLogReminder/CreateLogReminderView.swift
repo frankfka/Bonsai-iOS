@@ -80,7 +80,7 @@ struct CreateLogReminderView: View {
                         self.onSave()
                     }, label: {
                         Text("Save")
-                            .font(Font.Theme.boldNormalText)
+                            .font(Font.Theme.normalBoldText)
                             .foregroundColor(self.viewModel.isSaveButtonDisabled ? Color.Theme.grayscalePrimary : Color.Theme.primary)
                     })
                     .disabled(self.viewModel.isSaveButtonDisabled)

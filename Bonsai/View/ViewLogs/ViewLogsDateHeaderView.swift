@@ -90,7 +90,7 @@ struct ViewLogsDateHeaderView: View {
                 // Center date display
                 HStack(spacing: 0) {
                     Text(DateFormatter.stringForLogDatePicker(from: selectedDate))
-                        .font(Font.Theme.boldNormalText)
+                        .font(Font.Theme.normalBoldText)
                         .foregroundColor(Color.Theme.textDark)
                         .padding(.trailing, CGFloat.Theme.Layout.small)
                     Image(systemName: showDatePicker ? "chevron.down" : "chevron.right")
@@ -108,7 +108,7 @@ struct ViewLogsDateHeaderView: View {
                             self.onDateSelectionConfirmed()
                         }) {
                             Text("Done")
-                                .font(Font.Theme.boldNormalText)
+                                .font(Font.Theme.normalBoldText)
                                 .foregroundColor(Color.Theme.primary)
                         }
                     } else {

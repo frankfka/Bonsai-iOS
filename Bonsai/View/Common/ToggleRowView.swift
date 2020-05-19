@@ -21,7 +21,7 @@ struct ToggleRowView: View {
         Toggle(isOn: viewModel.$value) {
             Text(viewModel.title)
                     .lineLimit(1)
-                    .font(Font.Theme.boldNormalText)
+                    .font(Font.Theme.normalBoldText)
                     .foregroundColor(Color.Theme.textDark)
         }
         .foregroundColor(Color.Theme.primary)

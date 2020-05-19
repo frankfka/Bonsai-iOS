@@ -14,7 +14,7 @@ struct MoodLogView: View {
         VStack(spacing: CGFloat.Theme.Layout.normal) {
             VStack(alignment: .center) {
                 Text("How are you feeling?")
-                    .font(Font.Theme.boldNormalText)
+                    .font(Font.Theme.normalBoldText)
                 MoodRankPickerView(
                     viewModel: self.getMoodRankPickerViewModel()
                 )

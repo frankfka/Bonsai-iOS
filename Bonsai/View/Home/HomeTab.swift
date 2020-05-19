@@ -48,10 +48,10 @@ struct HomeTabContainer: View {
         .navigationBarItems(
                 trailing: NavigationLink(destination: SettingsView()) {
                     Image(systemName: "person.crop.circle")
-                            .resizable()
-                            .aspectRatio(1, contentMode: .fit)
-                            .frame(height: CGFloat.Theme.Layout.navBarItemHeight)
-                            .foregroundColor(Color.Theme.primary)
+                        .resizable()
+                        .aspectRatio(1, contentMode: .fit)
+                        .frame(height: CGFloat.Theme.Layout.navBarItemHeight)
+                        .foregroundColor(Color.Theme.primary)
                 }
         )
         .embedInNavigationView()
@@ -60,7 +60,7 @@ struct HomeTabContainer: View {
     
     func getHomeTabViewModel() -> HomeTab.ViewModel {
         // TODO: Show empty text instead?
-        // TODO: Limit to only today?
+        // TODO: Limit to only today? - or a setting to determine how much to show
         let showReminders = !store.state.globalLogReminders.sortedLogReminders.isEmpty
         return HomeTab.ViewModel(
             showReminders: showReminders,

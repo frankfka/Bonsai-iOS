@@ -73,7 +73,7 @@ struct CreateLogView: View {
                 self.onSave()
             }, label: {
                 Text("Save")
-                    .font(Font.Theme.boldNormalText)
+                    .font(Font.Theme.normalBoldText)
                     .foregroundColor(viewModel.isSaveButtonDisabled ? Color.Theme.grayscalePrimary : Color.Theme.primary)
             })
                 .disabled(viewModel.isSaveButtonDisabled)

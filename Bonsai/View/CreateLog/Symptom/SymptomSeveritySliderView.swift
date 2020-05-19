@@ -36,7 +36,7 @@ struct SymptomSeveritySliderView: View {
         VStack(alignment: .leading) {
             HStack(spacing: CGFloat.Theme.Layout.small) {
                 Text("Severity:")
-                    .font(Font.Theme.boldNormalText)
+                    .font(Font.Theme.normalBoldText)
                     .foregroundColor(Color.Theme.textDark)
                 Text(viewModel.severityString)
                     .font(Font.Theme.normalText)

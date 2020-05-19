@@ -56,6 +56,8 @@ struct LogReminderRow: View {
             Image.Icons.todoEmpty
                 .font(Font.Theme.normalIcon)
                 .foregroundColor(Color.Theme.primary)
+                // Add additional padding to make tappable space bigger
+                .padding(.vertical, CGFloat.Theme.Layout.small)
                 .padding(.trailing, CGFloat.Theme.Layout.small)
                 .onTapGesture {
                     self.viewModel.onTodoTapped?()
