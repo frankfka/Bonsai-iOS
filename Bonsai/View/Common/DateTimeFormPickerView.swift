@@ -12,8 +12,7 @@ import SwiftUI
 extension DateFormatter {
     private static var datePickerDateOnlyFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
-        dateFormatter.timeStyle = .none
-        dateFormatter.dateStyle = .medium
+        dateFormatter.dateFormat = "EEEE, MMM d, yyy"
         return dateFormatter
     }
     private static var datePickerTimeOnlyFormatter: DateFormatter {

@@ -9,14 +9,24 @@
 import SwiftUI
 
 extension DateFormatter {
-    // Full Date & Time
+    // Full Date with day of week
     private static var logReminderDetailDateFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "h:mm a, MMM d, yyyy"
+        dateFormatter.dateFormat = "EEEE, MMM d, yyy"
+        return dateFormatter
+    }
+    // Time in 12hr (ex. 9:00AM)
+    private static var logReminderDetailTimeFormatter: DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = .short
+        dateFormatter.dateStyle = .none
         return dateFormatter
     }
     static func stringForLogReminderDetailDate(from date: Date) -> String {
         return logReminderDetailDateFormatter.string(from: date)
+    }
+    static func stringForLogReminderDetailTime(from date: Date) -> String {
+        return logReminderDetailTimeFormatter.string(from: date)
     }
 }
 
@@ -62,6 +72,7 @@ struct LogReminderDetailView: View {
         // Log reminder
         let logReminder: LogReminder
         let reminderDate: String
+        let reminderTime: String
         let reminderInterval: String
         let showReminderInterval: Bool
         let logTitle: String
@@ -76,6 +87,7 @@ struct LogReminderDetailView: View {
             let logReminder = state.logReminder ?? ViewModel.EmptyLogReminder
             self.logReminder = logReminder
             self.reminderDate = DateFormatter.stringForLogReminderDetailDate(from: logReminder.reminderDate)
+            self.reminderTime = DateFormatter.stringForLogReminderDetailTime(from: logReminder.reminderDate)
             self.logTitle = logReminder.templateLoggable.title
             self.logCategory = logReminder.templateLoggable.category.displayValue()
             if let interval = logReminder.reminderInterval {
@@ -100,6 +112,14 @@ struct LogReminderDetailView: View {
                             viewModel: TappableRowView.ViewModel(
                                 primaryText: .constant("Reminder Date"),
                                 secondaryText: .constant(self.viewModel.reminderDate),
+                                hasDisclosureIndicator: false
+                            )
+                        )
+                        Divider()
+                        TappableRowView(
+                            viewModel: TappableRowView.ViewModel(
+                                primaryText: .constant("Reminder Time"),
+                                secondaryText: .constant(self.viewModel.reminderTime),
                                 hasDisclosureIndicator: false
                             )
                         )
