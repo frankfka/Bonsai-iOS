@@ -9,6 +9,7 @@ struct CreateLogReminderState {
     var templateLog: Loggable? = nil
     var reminderDate: Date = Date().addingTimeInterval(.day)
     var isRecurring: Bool = false
+    var isPushNotificationEnabled: Bool = false
     var reminderInterval: TimeInterval = .day
     var isValidated: Bool {
         templateLog != nil
