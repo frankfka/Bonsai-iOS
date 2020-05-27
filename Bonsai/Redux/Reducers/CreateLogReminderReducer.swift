@@ -8,6 +8,8 @@ import Foundation
 struct CreateLogReminderReducer {
     static func reduce(state: AppState, action: CreateLogReminderAction) -> AppState {
         switch action {
+        case .screenDidShow:
+            return state
         case .initCreateLogReminder(let template):
             return initCreateLogReminder(state: state, template: template)
         case .isRecurringDidChange(let isRecurring):

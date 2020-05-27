@@ -20,19 +20,9 @@ extension TimeInterval {
     ]
     static func reminderIntervalToSelection(_ interval: TimeInterval) -> (valueIdx: Int, typeIdx: Int) {
         // This will always return the biggest time interval (something saved as 7 days -> 1 week after reload)
-        let valueIdx: Int?
-        let typeIdx: Int?
-        if interval.truncatingRemainder(dividingBy: TimeInterval.week) == 0 {
-            valueIdx = reminderIntervalValueSelections.firstIndex { _, val in val == Int(interval / TimeInterval.week) }
-            typeIdx = reminderIntervalTypeSelections.firstIndex { _, _, timeInterval in timeInterval == TimeInterval.week }
-        } else if interval.truncatingRemainder(dividingBy: TimeInterval.day) == 0 {
-            valueIdx = reminderIntervalValueSelections.firstIndex { _, val in val == Int(interval / TimeInterval.day) }
-            typeIdx = reminderIntervalTypeSelections.firstIndex { _, _, timeInterval in timeInterval == TimeInterval.day }
-        } else {
-            valueIdx = reminderIntervalValueSelections.firstIndex { _, val in val == Int(interval / TimeInterval.hour) }
-            typeIdx = reminderIntervalTypeSelections.firstIndex { _, _, timeInterval in timeInterval == TimeInterval.hour }
-        }
-        if let valueIdx = valueIdx, let typeIdx = typeIdx {
+        if let (num, interval) = interval.reduceToSingleComponent(),
+           let valueIdx = reminderIntervalValueSelections.firstIndex(where: { _, val in val == num }),
+           let typeIdx = reminderIntervalTypeSelections.firstIndex(where: { _, _, timeInterval in timeInterval == interval }) {
             return (valueIdx, typeIdx)
         }
         // Default to first selection

@@ -14,6 +14,11 @@ struct GlobalReducer {
             return initSuccess(state: state, user: user)
         case let .initFailure(error):
             return initFailure(state: state, error: error)
+        // Permissions
+        case let .notificationPermissionsDidChange(isEnabled):
+            return notificationPermissionsDidChange(state: state, isEnabled: isEnabled)
+        case let .errorRequestingNotificationPermissions(error):
+            return errorRequestingNotificationPermissions(state: state, error: error)
         }
     }
 
@@ -36,6 +41,19 @@ struct GlobalReducer {
         var newState = state
         newState.global.isInitializing = false
         newState.global.initError = error
+        return newState
+    }
+
+    static private func notificationPermissionsDidChange(state: AppState, isEnabled: Bool) -> AppState {
+        var newState = state
+        newState.global.hasNotificationPermissions = isEnabled
+        return newState
+    }
+
+    static private func errorRequestingNotificationPermissions(state: AppState, error: Error) -> AppState {
+        var newState = state
+        AppLogging.error("Failure Action: \(error)")
+        newState.global.hasNotificationPermissions = false // Assume no notification permissions
         return newState
     }
 

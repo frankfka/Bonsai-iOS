@@ -9,17 +9,8 @@
 import Foundation
 import Combine
 
-struct AppError: Error {
-    let message: String
-    let wrappedError: Error?
-
-    init(message: String, wrappedError: Error? = nil) {
-        self.message = message
-        self.wrappedError = wrappedError
-    }
-}
-
 class Services {
+    let notificationService: NotificationService
     let userService: UserService
     let logService: LogService
     let logReminderService: LogReminderService
@@ -30,6 +21,7 @@ class Services {
         let db = try DatabaseServiceImpl()
         let cache = CacheServiceImpl()
         let firebaseAuthService = FirebaseAuthService()
+        notificationService = NotificationService()
         userService = UserServiceImpl(db: db, auth: firebaseAuthService)
         logService = LogServiceImpl(db: db, cache: cache)
         logReminderService = LogReminderServiceImpl(db: db)
@@ -88,9 +80,9 @@ struct AppState {
 let globalServices = try! Services()  // TODO: Figure out a place to gracefully handle this error
 // Global store
 let globalStore = AppStore(
-        initialState: AppState(),
-        reducer: AppReducer.reduce,
-        middleware: AppMiddleware.middleware(services: globalServices)
+    initialState: AppState(),
+    reducer: AppReducer.reduce,
+    middleware: AppMiddleware.middleware(services: globalServices)
 )
 // Somewhat hacky way to send actions in our naive redux implementation
 func doInMiddleware(_ action: @escaping VoidCallback) {

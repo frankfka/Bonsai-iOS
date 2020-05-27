@@ -37,6 +37,7 @@ class LogReminderServiceImpl: LogReminderService {
         }
     }
 
+    // TODO: Need to check for permissions if reminders are set, then create the notification reminder as well
     func saveLogReminder(logReminder: LogReminder) -> ServicePublisher<LogReminder> {
         return self.db.saveOrUpdateLogReminder(logReminder)
     }

@@ -7,6 +7,7 @@ import Foundation
 
 enum CreateLogReminderAction: LoggableAction {
     case initCreateLogReminder(template: Loggable)
+    case screenDidShow
     // User Edit Actions
     case isRecurringDidChange(isRecurring: Bool)
     case isPushNotificationEnabledDidChange(isEnabled: Bool)

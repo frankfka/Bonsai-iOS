@@ -8,6 +8,7 @@ struct CreateLogReminderView: View {
         // View States
         @Binding var showModal: Bool
         private let isFormValid: Bool
+        private let hasNotificationPermissions: Bool
         let isLoading: Bool
         let showSuccessDialog: Bool
         let showErrorDialog: Bool
@@ -17,22 +18,31 @@ struct CreateLogReminderView: View {
         var isFormDisabled: Bool {
             isLoading || showSuccessDialog || showErrorDialog
         }
+        var disableNotificationToggle: Bool {
+            !hasNotificationPermissions
+        }
+        var showNoNotificationPermissionsText: Bool {
+            !hasNotificationPermissions
+        }
         // User states
-        let isRecurringReminder: Bool // Unused - @State var is used instead
+        let isRecurringReminder: Bool
+        let isPushNotificationEnabled: Bool
         let recurringTimeInterval: TimeInterval
         let reminderDate: Date
 
-        init(showModal: Binding<Bool>, state: CreateLogReminderState) {
+        init(showModal: Binding<Bool>, state: AppState) {
             // View States
             self._showModal = showModal
-            self.isFormValid = state.isValidated
-            self.showSuccessDialog = state.saveSuccess
-            self.showErrorDialog = state.saveError != nil
-            self.isLoading = state.isSaving
+            self.isFormValid = state.createLogReminder.isValidated
+            self.showSuccessDialog = state.createLogReminder.saveSuccess
+            self.showErrorDialog = state.createLogReminder.saveError != nil
+            self.isLoading = state.createLogReminder.isSaving
             // User States
-            self.isRecurringReminder = state.isRecurring
-            self.recurringTimeInterval = state.reminderInterval
-            self.reminderDate = state.reminderDate
+            self.isRecurringReminder = state.createLogReminder.isRecurring
+            self.isPushNotificationEnabled = state.createLogReminder.isPushNotificationEnabled
+            self.recurringTimeInterval = state.createLogReminder.reminderInterval
+            self.reminderDate = state.createLogReminder.reminderDate
+            self.hasNotificationPermissions = state.global.hasNotificationPermissions
         }
     }
     @State(initialValue: false) private var showIntervalPicker
@@ -60,19 +70,22 @@ struct CreateLogReminderView: View {
                         if self.viewModel.isRecurringReminder {
                             Divider()
                             LogReminderIntervalPickerView(
-                                    viewModel: self.getLogReminderIntervalPickerViewModel(),
-                                    geometry: geometry
+                                viewModel: self.getLogReminderIntervalPickerViewModel(),
+                                geometry: geometry
                             )
                         }
                     }
                     // Pick whether to enable push notifications
                     ToggleRowView(viewModel: self.getIsPushNotificationsEnabledViewModel())
-                    // TODO: Some warning text to indicate that notification settings are turned off
+                        .disabled(self.viewModel.disableNotificationToggle)
                     Spacer()
                 }
             }
             .disableInteraction(isDisabled: .constant(self.viewModel.isFormDisabled))
             .background(Color.Theme.backgroundPrimary)
+            .onAppear {
+                self.store.send(.createLogReminder(action: .screenDidShow))
+            }
             .navigationBarTitle("Create Reminder")
             .navigationBarItems(
                 leading: Button(action: {
@@ -166,11 +179,16 @@ struct CreateLogReminderView: View {
     }
 
     private func getIsPushNotificationsEnabledViewModel() -> ToggleRowView.ViewModel {
-        return ToggleRowView.ViewModel(title: .constant("Enable Notifications"), value: Binding<Bool>(get: {
-            return self.isPushNotificationEnabled
-        }, set: { isEnabled in
-            self.isPushNotificationEnabledDidChange(isEnabled: isEnabled)
-        }))
+        return ToggleRowView.ViewModel(
+            title: .constant("Enable Notifications"),
+            description: self.viewModel.showNoNotificationPermissionsText ?
+                .constant("Notifications permissions are currently disabled. Permissions must be enabled manually in iPhone settings.") : .constant(nil),
+            value: Binding<Bool>(get: {
+                return self.isPushNotificationEnabled
+            }, set: { isEnabled in
+                self.isPushNotificationEnabledDidChange(isEnabled: isEnabled)
+            })
+        )
     }
 
 }
@@ -179,7 +197,7 @@ struct CreateLogReminderView_Previews: PreviewProvider {
 
     static let viewModel = CreateLogReminderView.ViewModel(
         showModal: .constant(true),
-        state: PreviewRedux.initialStore.state.createLogReminder
+        state: PreviewRedux.initialStore.state
     )
 
     static var previews: some View {

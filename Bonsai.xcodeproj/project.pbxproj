@@ -143,6 +143,7 @@
 		9E04BBC2B2FF6C3F91B2FC86 /* ViewLogsReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B4F958CBB6E0E7260A21 /* ViewLogsReducer.swift */; };
 		9E04BBC70F549E1E51568666 /* DisableInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BD4984DDBAEC66B08A34 /* DisableInteraction.swift */; };
 		9E04BBD7053D815FC161C5F2 /* CreateLogReminderAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B41C35F8E9303DE177BA /* CreateLogReminderAction.swift */; };
+		9E04BC2763A09FF026853F71 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B736FC8750FB3CB69472 /* NotificationService.swift */; };
 		9E04BC27B32E25F3B672BEBE /* FirebaseFirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BAB20AC9FE3AA62269E3 /* FirebaseFirestoreService.swift */; };
 		9E04BC69C070ACB3E9681D10 /* LoggableRealmConverters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B2B35634D7EB1023FCB1 /* LoggableRealmConverters.swift */; };
 		9E04BC8DB125285AF036E6F4 /* PreviewLoggables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B6B20E717222C1408967 /* PreviewLoggables.swift */; };
@@ -281,6 +282,7 @@
 		9E04B6B20E717222C1408967 /* PreviewLoggables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewLoggables.swift; sourceTree = "<group>"; };
 		9E04B6C42CD67CF8BEF300C2 /* LogService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogService.swift; sourceTree = "<group>"; };
 		9E04B6C450860BE65AF311A7 /* UserConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserConstants.swift; sourceTree = "<group>"; };
+		9E04B736FC8750FB3CB69472 /* NotificationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		9E04B755AF0815DAF19D6FE2 /* AuthViewControllerRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthViewControllerRepresentable.swift; sourceTree = "<group>"; };
 		9E04B763E5A55C21C9EF3E57 /* SearchTextObservable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTextObservable.swift; sourceTree = "<group>"; };
 		9E04B76872034B69E6F59084 /* LogReminderRealmConverters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogReminderRealmConverters.swift; sourceTree = "<group>"; };
@@ -838,6 +840,7 @@
 				9E04B06A3829C4D6FD042168 /* DatabaseService */,
 				9E04B55A8BE0A69208646B1E /* AnalyticsService */,
 				9E04BCB108A60AC967332E25 /* LogReminderService.swift */,
+				9E04B736FC8750FB3CB69472 /* NotificationService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -1143,6 +1146,7 @@
 				9E04B49307D270FDE091B1F6 /* ViewLogsViewTypePickerView.swift in Sources */,
 				9E04B7FE60AABD823F3E2C2C /* ViewLogsLoadMoreView.swift in Sources */,
 				9E04B7D56311416227B63BB3 /* ViewLogsTabSwipeGestureRecognizer.swift in Sources */,
+				9E04BC2763A09FF026853F71 /* NotificationService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

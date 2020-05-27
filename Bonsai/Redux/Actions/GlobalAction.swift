@@ -10,4 +10,8 @@ enum GlobalAction: LoggableAction {
     case appDidLaunch
     case initSuccess(user: User)
     case initFailure(error: Error)
+
+    // Permissions
+    case notificationPermissionsDidChange(isEnabled: Bool)
+    case errorRequestingNotificationPermissions(error: Error)
 }

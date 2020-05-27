@@ -11,46 +11,27 @@ struct CreateLogReminderMiddleware {
 
     static func middleware(services: Services) -> [Middleware<AppState>] {
         return [
-            changePushNotificationSettingMiddleware(),
+            changePushNotificationSettingMiddleware(notificationService: services.notificationService),
             createLogReminderFromLogReminderStateMiddleware(logReminderService: services.logReminderService)
         ]
     }
 
     // MARK: Check permissions
-    private static func changePushNotificationSettingMiddleware() -> Middleware<AppState> {
-
-
-        func requestPermission(onComplete: @escaping BoolCallback) -> Void {
-            print("Requesting")
-            UNUserNotificationCenter
-                .current()
-                .requestAuthorization(options: [.alert]) { granted, error in
-                    guard error == nil else {
-                        AppLogging.warn("Error requesting notification authorization: \(String(describing: error))")
-                        onComplete(false)
-                        return
-                    }
-                    if granted && error == nil {
-                        print("granted")
-                        onComplete(true)
-                    } else {
-                        print("Denied")
-                        onComplete(false)
-                    }
-                }
-        }
-
+    private static func changePushNotificationSettingMiddleware(notificationService: NotificationService) -> Middleware<AppState> {
+        // TODO: Let's rethink this - we want to prompt when appropriate..
         return { state, action, cancellables, send in
             switch action {
-            case .createLogReminder(action: .isPushNotificationEnabledDidChange(let isEnabled)):
-                guard isEnabled else {
-                    // Don't need to check permissions if we're disabling
-                    return
-                }
-                // TODO: if no permission, dispatch action to display warning
-                requestPermission { didGetPermission in
-
-                }
+            case .createLogReminder(action: .screenDidShow):
+                notificationService.checkAndPromptForNotificationPermission()
+                    .map { isEnabled in
+                        return AppAction.global(action: .notificationPermissionsDidChange(isEnabled: isEnabled))
+                    }.catch { (err) -> Just<AppAction> in
+                        return Just(AppAction.global(action: .errorRequestingNotificationPermissions(error: err)))
+                    }
+                    .sink(receiveValue: { newAction in
+                        send(newAction)
+                    })
+                    .store(in: &cancellables)
             default:
                 break
             }
