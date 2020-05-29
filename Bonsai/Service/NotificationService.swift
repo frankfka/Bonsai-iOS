@@ -7,7 +7,16 @@ import Foundation
 import UserNotifications
 import Combine
 
-class NotificationService {
+protocol NotificationService {
+    func checkForNotificationPermission() -> ServicePublisher<Bool>
+    func checkAndPromptForNotificationPermission() -> ServicePublisher<Bool>
+    func scheduleNotificationsIfNeeded(for logReminders: [LogReminder]) -> ServicePublisher<[String]>
+    func scheduleNotification(for logReminder: LogReminder) -> ServicePublisher<String?>
+    func removeDeliveredNotifications(for logReminders: [LogReminder])
+    func removeAllDeliveredNotifications()
+}
+
+class NotificationServiceImpl: NotificationService {
 
     // MARK: Check for / optionally prompt for permissions
     func checkForNotificationPermission() -> ServicePublisher<Bool> {
@@ -78,7 +87,8 @@ class NotificationService {
         }.eraseToAnyPublisher()
     }
 
-    private func scheduleNotification(for logReminder: LogReminder) -> ServicePublisher<String?> {
+    // Schedule a notification for the log reminder, does not do any precondition checking
+    func scheduleNotification(for logReminder: LogReminder) -> ServicePublisher<String?> {
         ServiceFuture<String?> { promise in
             self.scheduleNotification(for: logReminder) { result in
                 promise(result)
@@ -116,7 +126,7 @@ class NotificationService {
     }
 
     // MARK: Retrieve scheduled notifications
-    func getScheduledNotifications() -> ServicePublisher<[String]> {
+    private func getScheduledNotifications() -> ServicePublisher<[String]> {
         ServiceFuture<[String]> { promise in
             self.getScheduledNotifications { result in
                 promise(result)
@@ -143,7 +153,7 @@ private extension LogReminder {
     func toNotificationContent() -> UNNotificationContent {
         let content = UNMutableNotificationContent()
         content.title = "Log Reminder"
-        content.body = "It's time to create a new \(self.templateLoggable.category.displayValue()) log for: \(self.templateLoggable.title)"
+        content.body = "It's time to create a new \(self.templateLoggable.category.displayValue().lowercased()) log for: \(self.templateLoggable.title)"
         return content
     }
 

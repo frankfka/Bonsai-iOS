@@ -18,11 +18,8 @@ struct CreateLogReminderView: View {
         var isFormDisabled: Bool {
             isLoading || showSuccessDialog || showErrorDialog
         }
-        var disableNotificationToggle: Bool {
-            !hasNotificationPermissions
-        }
         var showNoNotificationPermissionsText: Bool {
-            !hasNotificationPermissions
+            !hasNotificationPermissions && isPushNotificationEnabled
         }
         // User states
         let isRecurringReminder: Bool
@@ -77,7 +74,6 @@ struct CreateLogReminderView: View {
                     }
                     // Pick whether to enable push notifications
                     ToggleRowView(viewModel: self.getIsPushNotificationsEnabledViewModel())
-                        .disabled(self.viewModel.disableNotificationToggle)
                     Spacer()
                 }
             }

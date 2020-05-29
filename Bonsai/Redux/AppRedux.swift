@@ -21,7 +21,7 @@ class Services {
         let db = try DatabaseServiceImpl()
         let cache = CacheServiceImpl()
         let firebaseAuthService = FirebaseAuthService()
-        notificationService = NotificationService()
+        notificationService = NotificationServiceImpl()
         userService = UserServiceImpl(db: db, auth: firebaseAuthService)
         logService = LogServiceImpl(db: db, cache: cache)
         logReminderService = LogReminderServiceImpl(db: db)
