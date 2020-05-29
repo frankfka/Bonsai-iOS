@@ -50,26 +50,47 @@ class NotificationService {
 
 
     // MARK: Schedule notifications for log reminders if required - should be called on app init
-    func scheduleNotificationsIfNeeded(for logReminders: [LogReminder]) -> ServicePublisher<[Bool]> {
-        // TODO: check for permissions, then filter for no notifications enabled
-        Publishers.MergeMany(logReminders.map {
-                    scheduleNotification(for: $0)
-                })
-                .collect().eraseToAnyPublisher()
+    func scheduleNotificationsIfNeeded(for logReminders: [LogReminder]) -> ServicePublisher<[String]> {
+        // Check for permissions and currently scheduled notifications
+        Publishers.Zip(checkForNotificationPermission(), getScheduledNotifications())
+        // Convert these publishers into a schedule permission publisher
+        .flatMap { zippedResult -> ServicePublisher<[String]> in
+            let hasPermission = zippedResult.0
+            let scheduledNotificationIds = Set(zippedResult.1)
+            // If no permission, just return empty array
+            if !hasPermission {
+                return Just<[String]>([]).setFailureType(to: ServiceError.self).eraseToAnyPublisher()
+            }
+            // If we have permission - schedule notifications
+            return Publishers.MergeMany(logReminders.filter {
+                // Don't schedule notifications that are already scheduled
+                !scheduledNotificationIds.contains($0.notificationId)
+            }.map {
+                // Map to the schedule notification publisher
+                self.scheduleNotification(for: $0)
+            })
+            .compactMap {
+                // Get rid of nil values (when notifications are disabled, or not recurring)
+                $0
+            }
+            .collect() // Wait for all the values
+            .eraseToAnyPublisher()
+        }.eraseToAnyPublisher()
     }
 
-    private func scheduleNotification(for logReminder: LogReminder) -> ServicePublisher<Bool> {
-        ServiceFuture<Bool> { promise in
+    private func scheduleNotification(for logReminder: LogReminder) -> ServicePublisher<String?> {
+        ServiceFuture<String?> { promise in
             self.scheduleNotification(for: logReminder) { result in
                 promise(result)
             }
         }.eraseToAnyPublisher()
     }
 
-    private func scheduleNotification(for logReminder: LogReminder, onComplete: @escaping ServiceCallback<Bool>) {
+    // Schedules notifications, calls onComplete with the scheduled ID
+    private func scheduleNotification(for logReminder: LogReminder, onComplete: @escaping ServiceCallback<String?>) {
         guard let trigger = logReminder.toNotificationTrigger() else {
             // No need to schedule notifications for this log reminder
-            onComplete(.success(false))
+            onComplete(.success(nil))
             return
         }
         let content = logReminder.toNotificationContent()
@@ -78,7 +99,7 @@ class NotificationService {
             if let err = err {
                 onComplete(.failure(ServiceError(message: "Could not create notification for log reminder", wrappedError: err)))
             } else {
-                onComplete(.success(true))
+                onComplete(.success(logReminder.notificationId))
             }
         }
     }
@@ -92,6 +113,24 @@ class NotificationService {
 
     func removeAllDeliveredNotifications() {
         UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+    }
+
+    // MARK: Retrieve scheduled notifications
+    func getScheduledNotifications() -> ServicePublisher<[String]> {
+        ServiceFuture<[String]> { promise in
+            self.getScheduledNotifications { result in
+                promise(result)
+            }
+        }.eraseToAnyPublisher()
+    }
+
+    // Gets all notification identifiers
+    private func getScheduledNotifications(onComplete: @escaping ServiceCallback<[String]>) {
+        UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
+            onComplete(.success(requests.map {
+                $0.identifier
+            }))
+        }
     }
 
 }
