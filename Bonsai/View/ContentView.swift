@@ -33,11 +33,11 @@ struct ContentViewContainer: View {
     
     func getTabBarViewModel() -> TabBarView.ViewModel {
         return TabBarView.ViewModel(
-                tabIndex: $viewModel.tabIndex,
-                onCreateLogPressed: {
-                    self.store.send(.createLog(action: .resetCreateLogState))
-                    self.viewModel.showCreateLogModal.toggle()
-                }
+            tabIndex: $viewModel.tabIndex,
+            onCreateLogPressed: {
+                self.store.send(.createLog(action: .resetCreateLogState))
+                self.viewModel.showCreateLogModal.toggle()
+            }
         )
     }
 }
@@ -80,6 +80,10 @@ struct ContentView: View {
             CreateLogView(
                 viewModel: self.getCreateLogViewModel()
             ).environmentObject(self.store)
+        }
+        .onReceive(self.store.showCreateLogModalPublisher) {
+            print("Sent value \($0)")
+            self.viewModel.showCreateLogModal = $0
         }
     }
     

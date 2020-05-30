@@ -11,14 +11,22 @@ import SwiftUI
 import Firebase
 import GoogleSignIn
 
+
+// TODO: Consider having an extension on Store to conform to GIDSignInDelegate
+// TODO: Can we create globalstore and stuff here?? - make them vars that are non nil?
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Configure Firebase
+
+        // Configure Firebase - must be done first
+        // TODO: This breaks if we use globalstore beforehand, this is because globalstore relies on Firebaseapp.configure()
         FirebaseApp.configure()
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
+
+        // Configure notifications
+        UNUserNotificationCenter.current().delegate = globalStore
         
         globalStore.send(.global(action: .appDidLaunch))
 

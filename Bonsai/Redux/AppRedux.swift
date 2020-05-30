@@ -79,6 +79,7 @@ struct AppState {
 // Global services wrapper
 let globalServices = try! Services()  // TODO: Figure out a place to gracefully handle this error
 // Global store
+// TODO: Pass services into the store, so it can be private?
 let globalStore = AppStore(
     initialState: AppState(),
     reducer: AppReducer.reduce,

@@ -114,6 +114,13 @@ class RealmService {
     }
 
     // MARK: Log Reminders
+    func getLogReminder(with id: String) -> LogReminder? {
+        if let realmObj = self.db.object(ofType: RealmLogReminder.self, forPrimaryKey: id) {
+            return getLogReminder(from: realmObj)
+        }
+        return nil
+    }
+
     func getLogReminders() -> [LogReminder] {
         var realmLogReminders = self.db.objects(RealmLogReminder.self)
         // Sort by chronological order (earliest reminders first)

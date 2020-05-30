@@ -25,6 +25,7 @@ protocol DatabaseService {
     func deleteLog(for user: User, with id: String) -> ServicePublisher<Void>
 
     // Log Reminder functions
+    func getLogReminder(with id: String) -> ServicePublisher<LogReminder?>
     func getLogReminders() -> ServicePublisher<[LogReminder]>
     func saveOrUpdateLogReminder(_ logReminder: LogReminder) -> ServicePublisher<LogReminder>
     func deleteLogReminder(_ logReminder: LogReminder) -> ServicePublisher<LogReminder>
@@ -247,6 +248,14 @@ class DatabaseServiceImpl: DatabaseService {
     }
 
     // MARK: Log Reminder Functions
+    func getLogReminder(with id: String) -> ServicePublisher<LogReminder?> {
+        let future = ServiceFuture<LogReminder?> { promise in
+            let logReminder = self.realmService.getLogReminder(with: id)
+            promise(.success(logReminder))
+        }
+        return AnyPublisher(future)
+    }
+
     func getLogReminders() -> ServicePublisher<[LogReminder]> {
         let future = ServiceFuture<[LogReminder]> { promise in
             let retrievedLogReminders = self.realmService.getLogReminders()

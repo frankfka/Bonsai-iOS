@@ -6,6 +6,7 @@
 import Foundation
 
 protocol LogReminderService {
+    func getLogReminder(with id: String) -> ServicePublisher<LogReminder?>
     func getLogReminders() -> ServicePublisher<[LogReminder]>
     // Called when user completes a log reminder
     func completeLogReminder(logReminder: LogReminder) -> (publisher: ServicePublisher<LogReminder>, didDelete: Bool)
@@ -19,6 +20,10 @@ class LogReminderServiceImpl: LogReminderService {
 
     init(db: DatabaseService) {
         self.db = db
+    }
+
+    func getLogReminder(with id: String) -> ServicePublisher<LogReminder?> {
+        return self.db.getLogReminder(with: id)
     }
 
     func getLogReminders() -> ServicePublisher<[LogReminder]> {

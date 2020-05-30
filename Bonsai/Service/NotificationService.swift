@@ -145,11 +145,15 @@ class NotificationServiceImpl: NotificationService {
 
 }
 
-private extension LogReminder {
+extension LogReminder {
     var notificationId: String {
         self.id
     }
-
+    static func idFromNotificationId(_ notificationId: String) -> String {
+        return notificationId
+    }
+}
+private extension LogReminder {
     func toNotificationContent() -> UNNotificationContent {
         let content = UNMutableNotificationContent()
         content.title = "Log Reminder"
@@ -163,26 +167,10 @@ private extension LogReminder {
             return nil
         }
         // Find next notification date
-        var notificationDate: Date? = nil
         if self.reminderDate > Date() {
-            // Schedule for first reminder
-            notificationDate = self.reminderDate
-        } else if let interval = self.reminderInterval {
-            // Schedule for recurring
-            let intervalAddition = ceil(Date().timeIntervalSince(self.reminderDate) / interval) * interval
-            notificationDate = self.reminderDate.addingTimeInterval(TimeInterval(intervalAddition))
-        }
-        // Create trigger
-        if let notificationDate = notificationDate {
-            if notificationDate < Date() {
-                // TODO: Remove after testing
-                AppLogging.warn("Trying to set notification date to \(notificationDate)")
-                fatalError("Trying to set notification date to \(notificationDate)")
-            }
-            let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: notificationDate)
+            let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: self.reminderDate)
             return UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
-        } else {
-            return nil
         }
+        return nil
     }
 }
