@@ -5,7 +5,6 @@
 
 import Combine
 import Foundation
-import UserNotifications
 
 struct CreateLogReminderMiddleware {
 
@@ -39,7 +38,7 @@ struct CreateLogReminderMiddleware {
         }
     }
 
-    // MARK: Prompt notifications on enabling notifications
+    // MARK: Prompt notifications on enabling notifications - will not prompt after first prompt
     private static func promptForPermissionsOnEnablingReminderNotifications(notificationService: NotificationService) -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
@@ -125,8 +124,8 @@ struct CreateLogReminderMiddleware {
                             AppLogging.error("Error scheduling notification for new reminder: \(err)")
                         }
                     }, receiveValue: { possibleNotificationId in
-                        if let possibleNotificationId = possibleNotificationId {
-                            AppLogging.info("Scheduled notification for log reminder with notification ID \(possibleNotificationId)")
+                        if let notificationId = possibleNotificationId {
+                            AppLogging.info("Scheduled notification for log reminder with notification ID \(notificationId)")
                         } else {
                             AppLogging.error("Nil notification ID for log reminder with ID \(logReminder.id) - a notification should have been scheduled")
                         }

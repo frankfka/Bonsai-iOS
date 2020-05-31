@@ -176,7 +176,7 @@ struct CreateLogReminderView: View {
 
     private func getIsPushNotificationsEnabledViewModel() -> ToggleRowView.ViewModel {
         return ToggleRowView.ViewModel(
-            title: .constant("Enable Notifications"),
+            title: .constant("Push Notification"),
             description: self.viewModel.showNoNotificationPermissionsText ?
                 .constant("Notifications permissions are currently disabled. Permissions must be enabled manually in iPhone settings.") : .constant(nil),
             value: Binding<Bool>(get: {

@@ -7,7 +7,6 @@ struct AppColors {
     let textDark: Color = Color.init(.label)
     let text: Color = Color.init(.secondaryLabel)
     let textLight: Color = Color.init(.tertiaryLabel)
-    let warningText: Color = .red
 
     // Primary theme colors
     let primaryUIColor: UIColor = .systemGreen

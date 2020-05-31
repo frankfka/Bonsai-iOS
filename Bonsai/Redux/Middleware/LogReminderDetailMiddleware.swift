@@ -10,11 +10,12 @@ struct LogReminderDetailMiddleware {
 
     static func middleware(services: Services) -> [Middleware<AppState>] {
         return [
-            deleteLogReminderMiddleware(logReminderService: services.logReminderService)
+            deleteLogReminderMiddleware(logReminderService: services.logReminderService, notificationService: services.notificationService)
         ]
     }
 
-    private static func deleteLogReminderMiddleware(logReminderService: LogReminderService) -> Middleware<AppState> {
+    private static func deleteLogReminderMiddleware(logReminderService: LogReminderService,
+                                                    notificationService: NotificationService) -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
             case .logReminderDetails(action: .deleteCurrentReminder):
@@ -24,7 +25,7 @@ struct LogReminderDetailMiddleware {
                     return
                 }
                 // Perform delete
-                delete(logReminderService: logReminderService, logReminder: logReminder)
+                delete(logReminderService: logReminderService, notificationService: notificationService, logReminder: logReminder)
                         .sink(receiveValue: { newAction in
                             send(newAction)
                         })
@@ -35,10 +36,14 @@ struct LogReminderDetailMiddleware {
         }
     }
 
-    private static func delete(logReminderService: LogReminderService, logReminder: LogReminder)
+    private static func delete(logReminderService: LogReminderService,
+                               notificationService: NotificationService,
+                               logReminder: LogReminder)
                     -> AnyPublisher<AppAction, Never> {
         return logReminderService.deleteLogReminder(logReminder: logReminder)
                 .map { deletedReminder in
+                    // Success - Remove notifications
+                    notificationService.removeNotifications(for: [deletedReminder])
                     return AppAction.logReminderDetails(action: .deleteSuccess(deletedReminder: deletedReminder))
                 }.catch { (err) -> Just<AppAction> in
                     return Just(AppAction.logReminderDetails(action: .deleteError(error: err)))

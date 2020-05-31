@@ -19,7 +19,6 @@ struct LogReminder {
     var templateLoggable: Loggable
     var isPushNotificationEnabled: Bool
 
-    // TODO: Remove the default arg here
     init(id: String, reminderDate: Date, reminderInterval: TimeInterval?,
          templateLoggable: Loggable, isPushNotificationEnabled: Bool = false) {
         self.id = id

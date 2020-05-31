@@ -18,7 +18,7 @@ class AppStore: NSObject, ObservableObject {
     @Published private(set) var state: AppState
     private let reducer: Reducer<AppState, AppAction>
     private let middleware: [Middleware<AppState>]
-    var cancellables: Set<AnyCancellable> = []
+    private var cancellables: Set<AnyCancellable> = []
 
     init(initialState: AppState, reducer: @escaping Reducer<AppState, AppAction>, middleware: [Middleware<AppState>] = []) {
         self.state = initialState
@@ -41,8 +41,7 @@ class AppStore: NSObject, ObservableObject {
     }
 
     // MARK: Publishers to communicate programmatic navigation
-    let showCreateLogModalPublisher = PassthroughSubject<Bool, Never>()
-
+    @Published var showCreateLogModal: Bool = false
 }
 
 // MARK: Extension for notifications
@@ -56,23 +55,33 @@ extension AppStore: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         switch response.actionIdentifier {
         case UNNotificationDefaultActionIdentifier:
-            // App was opened
-            let logReminderId = LogReminder.idFromNotificationId(response.notification.request.identifier)
-            globalServices.logReminderService.getLogReminder(with: logReminderId)
-                    .sink(receiveCompletion: { completion in
-                        if case let .failure(err) = completion {
-                            AppLogging.error("Error retrieving log reminder for notification: \(err)")
-                        }
-                    }, receiveValue: { reminder in
-                        if let reminder = reminder {
-                            // TODO: This doesn't work if app is shut off, because content view is not yet initialized
-                            self.send(.createLog(action: .beginInitFromLogReminder(logReminder: reminder)))
-                            self.showCreateLogModalPublisher.send(true)
-                        } else {
-                            AppLogging.error("No log reminder found for notification ID \(response.notification.request.identifier)")
-                        }
-                    })
-                    .store(in: &self.cancellables)
+            // App was opened - We need to show the CreateLogScreen, but if app was not previously open, state is not yet initialized
+            // So, we wait until we have initialized using a timer
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+                if !self.state.global.isInitializing {
+                    // Done waiting, cancel the timer
+                    timer.invalidate()
+                    guard self.state.global.initError == nil && self.state.global.user != nil else {
+                        // Load error, so skip
+                        return
+                    }
+                    let logReminderId = LogReminder.idFromNotificationId(response.notification.request.identifier)
+                    globalServices.logReminderService.getLogReminder(with: logReminderId)
+                        .sink(receiveCompletion: { completion in
+                            if case let .failure(err) = completion {
+                                AppLogging.error("Error retrieving log reminder for notification: \(err)")
+                            }
+                        }, receiveValue: { reminder in
+                            if let reminder = reminder {
+                                self.send(.createLog(action: .beginInitFromLogReminder(logReminder: reminder)))
+                                self.showCreateLogModal = true
+                            } else {
+                                AppLogging.error("No log reminder found for notification ID \(response.notification.request.identifier)")
+                            }
+                        })
+                        .store(in: &self.cancellables)
+                }
+            }
         default:
             break
         }

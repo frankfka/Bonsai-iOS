@@ -75,16 +75,23 @@ struct LogReminderDetailView: View {
         let reminderTime: String
         let reminderInterval: String
         let showReminderInterval: Bool
+        private let hasNotificationPermissions: Bool
+        var showNoNotificationPermissionsText: Bool {
+            !hasNotificationPermissions && isPushNotificationEnabled
+        }
+        var isPushNotificationEnabled: Bool {
+            logReminder.isPushNotificationEnabled
+        }
         let logTitle: String
         let logCategory: String
 
 
-        init(state: LogReminderDetailState) {
-            self.isLoading = state.isDeleting
-            self.showDeleteSuccess = state.deleteSuccess
-            self.showDeleteError = state.deleteError != nil
-            self.showErrorView = state.logReminder == nil
-            let logReminder = state.logReminder ?? ViewModel.EmptyLogReminder
+        init(state: AppState) {
+            self.isLoading = state.logReminderDetails.isDeleting
+            self.showDeleteSuccess = state.logReminderDetails.deleteSuccess
+            self.showDeleteError = state.logReminderDetails.deleteError != nil
+            self.showErrorView = state.logReminderDetails.logReminder == nil
+            let logReminder = state.logReminderDetails.logReminder ?? ViewModel.EmptyLogReminder
             self.logReminder = logReminder
             self.reminderDate = DateFormatter.stringForLogReminderDetailDate(from: logReminder.reminderDate)
             self.reminderTime = DateFormatter.stringForLogReminderDetailTime(from: logReminder.reminderDate)
@@ -97,9 +104,10 @@ struct LogReminderDetailView: View {
                 self.showReminderInterval = false
                 self.reminderInterval = ""
             }
+            self.hasNotificationPermissions = state.global.hasNotificationPermissions
         }
     }
-    private var viewModel: ViewModel { ViewModel(state: store.state.logReminderDetails) }
+    private var viewModel: ViewModel { ViewModel(state: store.state) }
 
     // Main View
     var mainBody: some View {
@@ -133,6 +141,15 @@ struct LogReminderDetailView: View {
                                 )
                             )
                         }
+                        Divider()
+                        ToggleRowView(
+                            viewModel: ToggleRowView.ViewModel(
+                                title: .constant("Push Notification"),
+                                description: self.viewModel.showNoNotificationPermissionsText ?
+                                    .constant("Notifications permissions are currently disabled. Permissions must be enabled manually in iPhone settings.") : .constant(nil),
+                                value: .constant(self.viewModel.isPushNotificationEnabled)
+                            )
+                        ).disabled(true)
                     }
                 }
                 // Loggable info
