@@ -15,7 +15,6 @@ struct AppInitMiddleware {
             // Notifications
             cancelDeliveredNotificationsMiddleware(notificationService: services.notificationService),
             getNotificationPermissionsOnAppLaunchMiddleware(notificationService: services.notificationService),
-            scheduleNextNotificationForLogReminders(notificationService: services.notificationService, logReminderService: services.logReminderService)
         ]
     }
 
@@ -91,34 +90,6 @@ struct AppInitMiddleware {
                     }
                     .sink(receiveValue: { newAction in
                         send(newAction)
-                    })
-                    .store(in: &cancellables)
-            default:
-                break
-            }
-        }
-    }
-
-    // MARK: Schedule notifications for log reminders
-    private static func scheduleNextNotificationForLogReminders(notificationService: NotificationService,
-                                                                logReminderService: LogReminderService) -> Middleware<AppState> {
-        return { state, action, cancellables, send in
-            switch action {
-            case .global(action: .notificationPermissionsInit(let isEnabled)):
-                guard isEnabled else {
-                    AppLogging.info("No notification permissions, skipping scheduling notifications")
-                    return
-                }
-                logReminderService.getLogReminders()
-                    .flatMap { reminders -> ServicePublisher<[String]> in
-                        notificationService.scheduleNotificationsIfNeeded(for: reminders)
-                    }
-                    .sink(receiveCompletion: { completion in
-                        if case let .failure(err) = completion {
-                            AppLogging.error("Error scheduling notifications: \(err)")
-                        }
-                    }, receiveValue: { scheduledNotificationIds in
-                        AppLogging.info("Scheduled \(scheduledNotificationIds.count) notifications")
                     })
                     .store(in: &cancellables)
             default:

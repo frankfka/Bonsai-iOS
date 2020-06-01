@@ -35,6 +35,7 @@ struct LogReminderDetailView: View {
     @EnvironmentObject var store: AppStore
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State(initialValue: false) private var showDeleteReminderConfirmation: Bool
+    @State(initialValue: false) private var isPushNotificationEnabled: Bool
     
     struct ViewModel {
         // Default Log Reminder so we don't have nullables
@@ -79,9 +80,7 @@ struct LogReminderDetailView: View {
         var showNoNotificationPermissionsText: Bool {
             !hasNotificationPermissions && isPushNotificationEnabled
         }
-        var isPushNotificationEnabled: Bool {
-            logReminder.isPushNotificationEnabled
-        }
+        let isPushNotificationEnabled: Bool
         let logTitle: String
         let logCategory: String
 
@@ -104,10 +103,27 @@ struct LogReminderDetailView: View {
                 self.showReminderInterval = false
                 self.reminderInterval = ""
             }
+            self.isPushNotificationEnabled = state.logReminderDetails.isPushNotificationEnabled
             self.hasNotificationPermissions = state.global.hasNotificationPermissions
         }
     }
+    // MARK: View models
     private var viewModel: ViewModel { ViewModel(state: store.state) }
+    private var isPushNotificationEnabledRowVm: ToggleRowView.ViewModel {
+        ToggleRowView.ViewModel(
+            title: .constant("Push Notification"),
+            description: self.viewModel.showNoNotificationPermissionsText ?
+                .constant("Notifications permissions are currently disabled. Permissions must be enabled manually in iPhone settings.") :
+                .constant(nil),
+            value: Binding<Bool>(get: {
+                self.isPushNotificationEnabled
+            }, set: { newVal in
+                self.isPushNotificationEnabledDidChange(isEnabled: newVal)
+            })
+        )
+    }
+
+    // MARK: Views
 
     // Main View
     var mainBody: some View {
@@ -142,14 +158,7 @@ struct LogReminderDetailView: View {
                             )
                         }
                         Divider()
-                        ToggleRowView(
-                            viewModel: ToggleRowView.ViewModel(
-                                title: .constant("Push Notification"),
-                                description: self.viewModel.showNoNotificationPermissionsText ?
-                                    .constant("Notifications permissions are currently disabled. Permissions must be enabled manually in iPhone settings.") : .constant(nil),
-                                value: .constant(self.viewModel.isPushNotificationEnabled)
-                            )
-                        ).disabled(true)
+                        ToggleRowView(viewModel: self.isPushNotificationEnabledRowVm)
                     }
                 }
                 // Loggable info
@@ -176,6 +185,10 @@ struct LogReminderDetailView: View {
             .padding(.vertical, CGFloat.Theme.Layout.normal)
         }
         .background(Color.Theme.backgroundPrimary)
+        .onReceive(self.store.$state, perform: { _ in 
+            // Update state vars to match that of store
+            self.updateState()
+        })
     }
 
     // View with Error View
@@ -228,6 +241,12 @@ struct LogReminderDetailView: View {
         }
     }
 
+    // MARK: Actions
+    private func isPushNotificationEnabledDidChange(isEnabled: Bool) {
+        self.isPushNotificationEnabled = isEnabled
+        store.send(.logReminderDetails(action: .isPushNotificationEnabledDidChange(isEnabled: isEnabled)))
+    }
+
     private func onDeleteReminderTapped() {
         showDeleteReminderConfirmation.toggle()
     }
@@ -248,6 +267,12 @@ struct LogReminderDetailView: View {
     private func dismissView() {
         self.presentationMode.wrappedValue.dismiss()
         store.send(.logReminderDetails(action: .screenDidDismiss))
+    }
+
+    // Updates state variables to reflect our centralized store
+    private func updateState() {
+        // TODO: Use this solution in other relevant places
+        self.isPushNotificationEnabled = self.viewModel.isPushNotificationEnabled
     }
 }
 

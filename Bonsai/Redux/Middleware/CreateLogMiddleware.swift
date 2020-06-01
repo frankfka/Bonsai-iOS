@@ -14,7 +14,7 @@ struct CreateLogMiddleware {
             createLogSearchMiddleware(logService: services.logService),
             createLogAddNewItemMiddleware(logService: services.logService),
             createLogOnSaveMiddleware(logService: services.logService),
-            completeLogReminderMiddleware(logReminderService: services.logReminderService, notificationService: services.notificationService)
+            completeLogReminderMiddleware(logReminderService: services.logReminderService)
         ]
     }
 
@@ -179,21 +179,19 @@ struct CreateLogMiddleware {
     }
 
     // Middleware to complete log reminder if needed
-    private static func completeLogReminderMiddleware(logReminderService: LogReminderService,
-                                                      notificationService: NotificationService) -> Middleware<AppState> {
+    private static func completeLogReminderMiddleware(logReminderService: LogReminderService) -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
             case .createLog(action: let .onSaveSuccess(_, associatedLogReminder)):
                 if let reminder = associatedLogReminder {
                     completeLogReminder(
                         logReminderService: logReminderService,
-                        notificationService: notificationService,
                         logReminder: reminder
                     )
-                            .sink(receiveValue: { newAction in
-                                send(newAction)
-                            })
-                            .store(in: &cancellables)
+                    .sink(receiveValue: { newAction in
+                        send(newAction)
+                    })
+                    .store(in: &cancellables)
                 }
             default:
                 break
@@ -202,15 +200,12 @@ struct CreateLogMiddleware {
     }
 
     private static func completeLogReminder(logReminderService: LogReminderService,
-                                            notificationService: NotificationService,
                                             logReminder: LogReminder) -> AnyPublisher<AppAction, Never> {
         let completeResult = logReminderService.completeLogReminder(logReminder: logReminder)
         return completeResult
                 .publisher
                 .map { updatedReminder in
-                    // Success - Remove associated notifications
-                    notificationService.removeNotifications(for: [updatedReminder])
-                    return AppAction.createLog(
+                    AppAction.createLog(
                         action: .onLogReminderComplete(logReminder: updatedReminder, didDelete: completeResult.didDelete)
                     )
                 }.catch { (err) -> Empty<AppAction, Never> in

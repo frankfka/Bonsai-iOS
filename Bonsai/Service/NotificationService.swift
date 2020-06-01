@@ -11,7 +11,6 @@ protocol NotificationService {
     func checkForNotificationPermission() -> ServicePublisher<Bool>
     func checkAndPromptForNotificationPermission() -> ServicePublisher<Bool>
     func scheduleNotificationsIfNeeded(for logReminders: [LogReminder]) -> ServicePublisher<[String]>
-    func scheduleNotification(for logReminder: LogReminder) -> ServicePublisher<String?>
     func removeNotifications(for logReminders: [LogReminder])
     func removeAllDeliveredNotifications()
 }
@@ -88,7 +87,7 @@ class NotificationServiceImpl: NotificationService {
     }
 
     // Schedule a notification for the log reminder, does not do any precondition checking
-    func scheduleNotification(for logReminder: LogReminder) -> ServicePublisher<String?> {
+    private func scheduleNotification(for logReminder: LogReminder) -> ServicePublisher<String?> {
         ServiceFuture<String?> { promise in
             self.scheduleNotification(for: logReminder) { result in
                 promise(result)
@@ -116,9 +115,11 @@ class NotificationServiceImpl: NotificationService {
 
     // MARK: Removal of delivered notifications, good practice to remove any notifications delivered when app launches
     func removeNotifications(for logReminders: [LogReminder]) {
-        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: logReminders.map {
+        let logReminderNotificationIds = logReminders.map {
             $0.notificationId
-        })
+        }
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: logReminderNotificationIds)
+        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: logReminderNotificationIds)
     }
 
     func removeAllDeliveredNotifications() {

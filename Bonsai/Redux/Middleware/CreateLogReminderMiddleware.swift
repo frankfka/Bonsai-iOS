@@ -12,8 +12,7 @@ struct CreateLogReminderMiddleware {
         return [
             checkPushNotificationPermissionsOnScreenShowMiddleware(notificationService: services.notificationService),
             promptForPermissionsOnEnablingReminderNotifications(notificationService: services.notificationService),
-            createLogReminderFromLogReminderStateMiddleware(logReminderService: services.logReminderService),
-            scheduleNewNotificationIfNeeded(notificationService: services.notificationService)
+            createLogReminderFromLogReminderStateMiddleware(logReminderService: services.logReminderService)
         ]
     }
 
@@ -75,8 +74,8 @@ struct CreateLogReminderMiddleware {
                     )
                     return
                 }
-                // Perform save
-                logReminderService.saveLogReminder(logReminder: logReminder)
+                // Perform save - this will schedule all the required notifications as well
+                logReminderService.saveOrUpdateLogReminder(logReminder: logReminder)
                     .map { savedLogReminder in
                         return AppAction.createLogReminder(action: .onSaveSuccess(logReminder: savedLogReminder))
                     }.catch { (err) -> Just<AppAction> in
@@ -103,38 +102,6 @@ struct CreateLogReminderMiddleware {
             templateLoggable: templateLog,
             isPushNotificationEnabled: state.isPushNotificationEnabled
         )
-    }
-
-    // MARK: Schedule notification if needed
-    private static func scheduleNewNotificationIfNeeded(notificationService: NotificationService) -> Middleware<AppState> {
-        return { state, action, cancellables, send in
-            switch action {
-            case .createLogReminder(action: .onSaveSuccess(let logReminder)):
-                // Permissions should have been initialized
-                guard logReminder.isPushNotificationEnabled else {
-                    return // No action needed
-                }
-                guard state.global.hasNotificationPermissions else {
-                    return // No permissions
-                }
-                // Schedule a notification
-                notificationService.scheduleNotification(for: logReminder)
-                    .sink(receiveCompletion: { completion in
-                        if case let .failure(err) = completion {
-                            AppLogging.error("Error scheduling notification for new reminder: \(err)")
-                        }
-                    }, receiveValue: { possibleNotificationId in
-                        if let notificationId = possibleNotificationId {
-                            AppLogging.info("Scheduled notification for log reminder with notification ID \(notificationId)")
-                        } else {
-                            AppLogging.error("Nil notification ID for log reminder with ID \(logReminder.id) - a notification should have been scheduled")
-                        }
-                    })
-                    .store(in: &cancellables)
-            default:
-                break
-            }
-        }
     }
 
 }

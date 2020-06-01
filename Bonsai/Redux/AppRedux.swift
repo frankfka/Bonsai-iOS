@@ -24,7 +24,7 @@ class Services {
         notificationService = NotificationServiceImpl()
         userService = UserServiceImpl(db: db, auth: firebaseAuthService)
         logService = LogServiceImpl(db: db, cache: cache)
-        logReminderService = LogReminderServiceImpl(db: db)
+        logReminderService = LogReminderServiceImpl(db: db, notificationService: notificationService)
         analyticsService = AnalyticsServiceImpl(db: db)
     }
 }
