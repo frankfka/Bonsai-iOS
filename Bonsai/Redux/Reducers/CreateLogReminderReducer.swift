@@ -8,10 +8,14 @@ import Foundation
 struct CreateLogReminderReducer {
     static func reduce(state: AppState, action: CreateLogReminderAction) -> AppState {
         switch action {
+        case .screenDidShow:
+            return state
         case .initCreateLogReminder(let template):
             return initCreateLogReminder(state: state, template: template)
         case .isRecurringDidChange(let isRecurring):
             return isRecurringDidChange(state: state, isRecurring: isRecurring)
+        case .isPushNotificationEnabledDidChange(let isEnabled):
+            return isPushNotificationEnabledDidChange(state: state, isEnabled: isEnabled)
         case .reminderDateDidChange(let newReminderDate):
             return reminderDateDidChange(state: state, newReminderDate: newReminderDate)
         case .reminderIntervalDidChange(let newInterval):
@@ -40,6 +44,12 @@ struct CreateLogReminderReducer {
     static private func isRecurringDidChange(state: AppState, isRecurring: Bool) -> AppState {
         var newState = state
         newState.createLogReminder.isRecurring = isRecurring
+        return newState
+    }
+
+    static private func isPushNotificationEnabledDidChange(state: AppState, isEnabled: Bool) -> AppState {
+        var newState = state
+        newState.createLogReminder.isPushNotificationEnabled = isEnabled
         return newState
     }
 

@@ -111,7 +111,8 @@ struct NoRecentLogsView: View {
                     .foregroundColor(Color.Theme.text)
             Spacer()
         }
-        .padding(CGFloat.Theme.Layout.normal)
+        .padding(.horizontal, CGFloat.Theme.Layout.normal)
+        .padding(.vertical, CGFloat.Theme.Layout.large)
         .frame(minWidth: 0, maxWidth: .infinity)
     }
 }

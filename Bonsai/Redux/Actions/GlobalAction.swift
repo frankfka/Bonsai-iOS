@@ -10,4 +10,9 @@ enum GlobalAction: LoggableAction {
     case appDidLaunch
     case initSuccess(user: User)
     case initFailure(error: Error)
+
+    // Permissions
+    case notificationPermissionsInit(isEnabled: Bool) // Dispatched when we first check on app launch - this triggers scheduling of notifications, but otherwise has same effect
+    case notificationPermissionsDidChange(isEnabled: Bool)
+    case errorProcessingNotificationPermissions(error: Error) // Dispatched when we have error retrieving notifications/asking for them
 }

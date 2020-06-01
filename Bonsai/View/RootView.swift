@@ -17,8 +17,8 @@ struct RootView: View {
     }
     private var viewModel: ViewModel {
         ViewModel(
-                isLoading: store.state.global.isInitializing,
-                loadError: store.state.global.initError != nil
+            isLoading: store.state.global.isInitializing,
+            loadError: store.state.global.initError != nil
         )
     }
     

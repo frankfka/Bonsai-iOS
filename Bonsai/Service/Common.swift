@@ -11,7 +11,6 @@ typealias ServicePublisher<SuccessType> = AnyPublisher<SuccessType, ServiceError
 typealias ServiceFuture<SuccessType> = Future<SuccessType, ServiceError>
 
 struct ServiceError: Error {
-
     static let DoesNotExistInDatabaseError = "DOES_NOT_EXIST_IN_DB"
 
     let message: String

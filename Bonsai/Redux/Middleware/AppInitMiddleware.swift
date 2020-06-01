@@ -10,19 +10,24 @@ struct AppInitMiddleware {
 
     static func middleware(services: Services) -> [Middleware<AppState>] {
         return [
-            appInitUserMiddleware(userService: services.userService)
+            appInitUserMiddleware(userService: services.userService),
+
+            // Notifications
+            cancelDeliveredNotificationsMiddleware(notificationService: services.notificationService),
+            getNotificationPermissionsOnAppLaunchMiddleware(notificationService: services.notificationService),
         ]
     }
 
+    // MARK: Retrieve user details
     private static func appInitUserMiddleware(userService: UserService) -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
             case .global(action: .appDidLaunch):
                 initUser(userService: userService)
-                        .sink(receiveValue: { newAction in
-                            send(newAction)
-                        })
-                        .store(in: &cancellables)
+                    .sink(receiveValue: { newAction in
+                        send(newAction)
+                    })
+                    .store(in: &cancellables)
             default:
                 break
             }
@@ -58,4 +63,39 @@ struct AppInitMiddleware {
                     }).eraseToAnyPublisher()
         }
     }
+
+    // MARK: Cancel delivered notifications
+    private static func cancelDeliveredNotificationsMiddleware(notificationService: NotificationService) -> Middleware<AppState> {
+        return { state, action, cancellables, send in
+            switch action {
+            case .global(action: .appDidLaunch):
+                notificationService.removeAllDeliveredNotifications()
+            default:
+                break
+            }
+        }
+    }
+
+    // MARK: Get notification permissions
+    private static func getNotificationPermissionsOnAppLaunchMiddleware(notificationService: NotificationService) -> Middleware<AppState> {
+        return { state, action, cancellables, send in
+            switch action {
+            case .global(action: .initSuccess):
+                notificationService.checkForNotificationPermission()
+                    .map { hasPermission in
+                        AppAction.global(action: .notificationPermissionsInit(isEnabled: hasPermission))
+                    }
+                    .catch { err in
+                        Just(AppAction.global(action: .errorProcessingNotificationPermissions(error: err)))
+                    }
+                    .sink(receiveValue: { newAction in
+                        send(newAction)
+                    })
+                    .store(in: &cancellables)
+            default:
+                break
+            }
+        }
+    }
+
 }

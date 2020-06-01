@@ -152,7 +152,7 @@ class LogServiceImpl: LogService {
     func getLogSearchable(with id: String, in category: LogCategory) -> ServicePublisher<LogSearchable> {
         if let cached = self.cache.getLogSearchable(with: id, in: category) {
             AppLogging.debug("Returning cached log searchable \(id)")
-            return AnyPublisher(Just(cached).setFailureType(to: ServiceError.self))
+            return Just(cached).setFailureType(to: ServiceError.self).eraseToAnyPublisher()
         }
         return self.db.getLogSearchable(with: id, in: category).map { result -> LogSearchable in
             self.cache.saveLogSearchable(result)

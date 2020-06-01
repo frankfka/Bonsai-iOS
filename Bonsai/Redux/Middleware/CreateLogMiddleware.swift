@@ -94,11 +94,11 @@ struct CreateLogMiddleware {
                 }
                 // Check new item is not empty
                 guard !name.isEmptyWithoutWhitespace() else {
-                    send(AppAction.createLog(action: .onAddSearchItemFailure(error: AppError(message: "New item name is empty"))))
+                    send(AppAction.createLog(action: .onAddSearchItemFailure(error: ServiceError(message: "New item name is empty"))))
                     return
                 }
                 guard let newSearchItem = createSearchItemFromState(state: state.createLog, newItemName: name, user: user) else {
-                    send(.createLog(action: .onAddSearchItemFailure(error: AppError(message: "Could not make new search item"))))
+                    send(.createLog(action: .onAddSearchItemFailure(error: ServiceError(message: "Could not make new search item"))))
                     return
                 }
                 // Perform save
@@ -153,7 +153,7 @@ struct CreateLogMiddleware {
                 }
                 // Check that the log state is valid
                 guard let newLog = createLogFromState(state: state.createLog) else {
-                    send(.createLog(action: .onSaveFailure(error: AppError(message: "Could not parse log state"))))
+                    send(.createLog(action: .onSaveFailure(error: ServiceError(message: "Could not parse log state"))))
                     return
                 }
                 save(logService: logService, log: newLog, for: user, with: state.createLog.associatedReminder)
@@ -184,11 +184,14 @@ struct CreateLogMiddleware {
             switch action {
             case .createLog(action: let .onSaveSuccess(_, associatedLogReminder)):
                 if let reminder = associatedLogReminder {
-                    completeLogReminder(logReminderService: logReminderService, logReminder: reminder)
-                            .sink(receiveValue: { newAction in
-                                send(newAction)
-                            })
-                            .store(in: &cancellables)
+                    completeLogReminder(
+                        logReminderService: logReminderService,
+                        logReminder: reminder
+                    )
+                    .sink(receiveValue: { newAction in
+                        send(newAction)
+                    })
+                    .store(in: &cancellables)
                 }
             default:
                 break

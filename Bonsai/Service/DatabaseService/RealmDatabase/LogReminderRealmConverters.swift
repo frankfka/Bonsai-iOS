@@ -17,6 +17,7 @@ extension RealmService {
         realmLogReminder.reminderDate = logReminder.reminderDate
         realmLogReminder.reminderIntervalValue = logReminder.reminderInterval?.magnitude ?? 0
         realmLogReminder.templateLoggable = templateRealmLog
+        realmLogReminder.isPushNotificationEnabled = logReminder.isPushNotificationEnabled
         return realmLogReminder
     }
 }
@@ -34,10 +35,11 @@ extension RealmService {
             reminderInterval = TimeInterval(realmLogReminder.reminderIntervalValue)
         }
         return LogReminder(
-                id: realmLogReminder.id,
-                reminderDate: realmLogReminder.reminderDate,
-                reminderInterval: reminderInterval,
-                templateLoggable: templateLoggable
+            id: realmLogReminder.id,
+            reminderDate: realmLogReminder.reminderDate,
+            reminderInterval: reminderInterval,
+            templateLoggable: templateLoggable,
+            isPushNotificationEnabled: realmLogReminder.isPushNotificationEnabled
         )
     }
 }

@@ -17,6 +17,16 @@ struct LogReminder {
         reminderDate < Date()
     }
     var templateLoggable: Loggable
+    var isPushNotificationEnabled: Bool
+
+    init(id: String, reminderDate: Date, reminderInterval: TimeInterval?,
+         templateLoggable: Loggable, isPushNotificationEnabled: Bool = false) {
+        self.id = id
+        self.reminderDate = reminderDate
+        self.reminderInterval = reminderInterval
+        self.templateLoggable = templateLoggable
+        self.isPushNotificationEnabled = isPushNotificationEnabled
+    }
 }
 extension LogReminder: Hashable, Equatable, Identifiable {
     func hash(into hasher: inout Hasher) {
@@ -27,13 +37,16 @@ extension LogReminder: Hashable, Equatable, Identifiable {
     }
 }
 
+// This is the object that Realm stores
 class RealmLogReminder: Object {
+    static let ReminderDateKey: String = "reminderDate"
+    static let IsPushNotificationsEnabledKey: String = "isPushNotificationEnabled"
+
     @objc dynamic var id: String = UUID().uuidString
     @objc dynamic var reminderDate: Date = Date()
     @objc dynamic var reminderIntervalValue: Double = 0
     @objc dynamic var templateLoggable: RealmLoggable?
-
-    static let reminderDateKey: String = "reminderDate"
+    @objc dynamic var isPushNotificationEnabled: Bool = false
 
     override static func primaryKey() -> String? {
         return "id"

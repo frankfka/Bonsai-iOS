@@ -19,6 +19,17 @@ extension TimeInterval {
     static let hour: TimeInterval = TimeInterval(3600)
     static let day: TimeInterval = 24 * hour
     static let week: TimeInterval = 7 * day
+    func reduceToSingleComponent() -> (Int, TimeInterval)? {
+        // Converts a time interval to a whole number of time intervals. This is used for log reminders, which only support hour, day, and week
+        if self.truncatingRemainder(dividingBy: TimeInterval.week) == 0 {
+            return (Int(self / TimeInterval.week), TimeInterval.week)
+        } else if self.truncatingRemainder(dividingBy: TimeInterval.day) == 0 {
+            return (Int(self / TimeInterval.day), TimeInterval.day)
+        } else if self.truncatingRemainder(dividingBy: TimeInterval.hour) == 0 {
+            return (Int(self / TimeInterval.hour), TimeInterval.hour)
+        }
+        return nil
+    }
 }
 
 struct AppUtils {

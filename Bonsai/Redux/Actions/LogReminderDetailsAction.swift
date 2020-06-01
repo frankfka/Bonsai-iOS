@@ -12,4 +12,6 @@ enum LogReminderDetailsAction: LoggableAction {
     case deleteError(error: Error)
     case errorPopupShown
     case screenDidDismiss
+    case isPushNotificationEnabledDidChange(isEnabled: Bool)
+    case updateLogReminder(logReminder: LogReminder)
 }

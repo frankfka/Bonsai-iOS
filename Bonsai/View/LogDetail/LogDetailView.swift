@@ -229,7 +229,7 @@ struct LogDetailView: View {
     }
 
     private func getCreateLogReminderModalViewModel() -> CreateLogReminderView.ViewModel {
-        return CreateLogReminderView.ViewModel(showModal: $showCreateLogReminderModal, state: store.state.createLogReminder)
+        return CreateLogReminderView.ViewModel(showModal: $showCreateLogReminderModal, state: store.state)
     }
 
     // MARK: Category-specific views

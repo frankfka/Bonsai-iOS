@@ -9,4 +9,7 @@ struct GlobalState {
     var user: User? = nil
     var isInitializing: Bool = false
     var initError: Error? = nil
+
+    // Permissions
+    var hasNotificationPermissions: Bool = false
 }
