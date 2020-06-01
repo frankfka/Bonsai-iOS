@@ -10,12 +10,12 @@ struct LogReminderDetailMiddleware {
 
     static func middleware(services: Services) -> [Middleware<AppState>] {
         return [
-            changePushNotificationMiddleware(logReminderService: services.logReminderService),
+            changePushNotificationPreferencesMiddleware(logReminderService: services.logReminderService),
             deleteLogReminderMiddleware(logReminderService: services.logReminderService)
         ]
     }
 
-    private static func changePushNotificationMiddleware(logReminderService: LogReminderService) -> Middleware<AppState> {
+    private static func changePushNotificationPreferencesMiddleware(logReminderService: LogReminderService) -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
             case .logReminderDetails(action: .isPushNotificationEnabledDidChange(let isEnabled)):

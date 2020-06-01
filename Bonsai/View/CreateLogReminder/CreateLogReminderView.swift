@@ -45,7 +45,8 @@ struct CreateLogReminderView: View {
     @State(initialValue: false) private var showIntervalPicker
     @State(initialValue: false) private var showDatePicker
     @State(initialValue: false) private var showTimePicker
-    // Workaround for toggle to animate nicely, state should reflect this value - caveat is that we need to make sure the initial values are the same
+
+    // Use state vars for toggle to animate nicely. These are updated in `updateState` on AppState change
     @State(initialValue: false) private var isRecurring
     @State(initialValue: false) private var isPushNotificationEnabled
     private var viewModel: ViewModel
@@ -79,9 +80,6 @@ struct CreateLogReminderView: View {
             }
             .disableInteraction(isDisabled: .constant(self.viewModel.isFormDisabled))
             .background(Color.Theme.backgroundPrimary)
-            .onAppear {
-                self.store.send(.createLogReminder(action: .screenDidShow))
-            }
             .navigationBarTitle("Create Reminder")
             .navigationBarItems(
                 leading: Button(action: {
@@ -107,6 +105,12 @@ struct CreateLogReminderView: View {
             }
             .withStandardPopup(show: .constant(self.viewModel.showErrorDialog), type: .failure, text: "Something Went Wrong") {
                 self.onSaveErrorPopupDismiss()
+            }
+            .onAppear {
+                self.store.send(.createLogReminder(action: .screenDidShow))
+            }
+            .onReceive(self.store.$state) { _ in
+                self.updateState()
             }
         }
     }
@@ -147,7 +151,12 @@ struct CreateLogReminderView: View {
         viewModel.showModal.toggle()
     }
 
-    // View Models
+    private func updateState() {
+        self.isPushNotificationEnabled = self.viewModel.isPushNotificationEnabled
+        self.isRecurring = self.viewModel.isRecurringReminder
+    }
+
+    // View Models TODO: make them computed vars
     private func getDateTimeFormPickerViewModel() -> DateTimeFormPickerView.ViewModel {
         return DateTimeFormPickerView.ViewModel(
             selectedDate: viewModel.reminderDate, showDatePicker: $showDatePicker, showTimePicker: $showTimePicker,

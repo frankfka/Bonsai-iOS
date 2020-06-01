@@ -271,7 +271,6 @@ struct LogReminderDetailView: View {
 
     // Updates state variables to reflect our centralized store
     private func updateState() {
-        // TODO: Use this solution in other relevant places
         self.isPushNotificationEnabled = self.viewModel.isPushNotificationEnabled
     }
 }
