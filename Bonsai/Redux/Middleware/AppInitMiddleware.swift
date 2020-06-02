@@ -15,6 +15,7 @@ struct AppInitMiddleware {
             // Notifications
             cancelDeliveredNotificationsMiddleware(notificationService: services.notificationService),
             getNotificationPermissionsOnAppLaunchMiddleware(notificationService: services.notificationService),
+            scheduleMissingNotificationsForLogRemindersMiddleware(logReminderService: services.logReminderService, notificationService: services.notificationService)
         ]
     }
 
@@ -38,29 +39,29 @@ struct AppInitMiddleware {
         if let userId = UserDefaults.standard.string(forKey: UserConstants.UserDefaultsUserIdKey) {
             AppLogging.info("Retrieved user ID \(userId) from local")
             return userService.get(userId: userId)
-                    .map { user in
-                        AppLogging.info("Success getting user \(user.id)")
-                        return AppAction.global(action: GlobalAction.initSuccess(user: user))
-                    }.catch({ (err) -> Just<AppAction> in
-                        AppLogging.info("Failed to get user \(userId): \(err)")
-                        if let reason = err.reason, reason == ServiceError.DoesNotExistInDatabaseError {
-                            UserDefaults.standard.removeObject(forKey: UserConstants.UserDefaultsUserIdKey)
-                            AppLogging.info("Removing ID \(userId) from user defaults")
-                        }
-                        return Just(AppAction.global(action: GlobalAction.initFailure(error: err)))
-                    }).eraseToAnyPublisher()
+                .map { user in
+                    AppLogging.info("Success getting user \(user.id)")
+                    return AppAction.global(action: GlobalAction.initSuccess(user: user))
+                }.catch({ (err) -> Just<AppAction> in
+                    AppLogging.info("Failed to get user \(userId): \(err)")
+                    if let reason = err.reason, reason == ServiceError.DoesNotExistInDatabaseError {
+                        UserDefaults.standard.removeObject(forKey: UserConstants.UserDefaultsUserIdKey)
+                        AppLogging.info("Removing ID \(userId) from user defaults")
+                    }
+                    return Just(AppAction.global(action: GlobalAction.initFailure(error: err)))
+                }).eraseToAnyPublisher()
         } else {
             AppLogging.info("No user ID saved locally, creating a new user")
             let newUser = userService.createUser()
             return userService.save(user: newUser)
-                    .map {
-                        AppLogging.info("Created user \(newUser.id). Adding to user defaults")
-                        UserDefaults.standard.set(newUser.id, forKey: UserConstants.UserDefaultsUserIdKey)
-                        return AppAction.global(action: GlobalAction.initSuccess(user: newUser))
-                    }.catch({ (err) -> Just<AppAction> in
-                        AppLogging.info("Failed to create user: \(err)")
-                        return Just(AppAction.global(action: GlobalAction.initFailure(error: err)))
-                    }).eraseToAnyPublisher()
+                .map {
+                    AppLogging.info("Created user \(newUser.id). Adding to user defaults")
+                    UserDefaults.standard.set(newUser.id, forKey: UserConstants.UserDefaultsUserIdKey)
+                    return AppAction.global(action: GlobalAction.initSuccess(user: newUser))
+                }.catch({ (err) -> Just<AppAction> in
+                    AppLogging.info("Failed to create user: \(err)")
+                    return Just(AppAction.global(action: GlobalAction.initFailure(error: err)))
+                }).eraseToAnyPublisher()
         }
     }
 
@@ -90,6 +91,33 @@ struct AppInitMiddleware {
                     }
                     .sink(receiveValue: { newAction in
                         send(newAction)
+                    })
+                    .store(in: &cancellables)
+            default:
+                break
+            }
+        }
+    }
+
+
+    // MARK: Schedule any notifications
+    private static func scheduleMissingNotificationsForLogRemindersMiddleware(logReminderService: LogReminderService,
+                                                                              notificationService: NotificationService) -> Middleware<AppState> {
+        return { state, action, cancellables, send in
+            switch action {
+            case .global(action: .initSuccess):
+                logReminderService.getLogReminders() // TODO: Might need to deal with the case where we exceed limit
+                    .flatMap { logReminders -> ServicePublisher<[String]> in
+                        notificationService.scheduleNotificationsIfNeeded(for: logReminders)
+                    }
+                    .sink(receiveCompletion: { completion in
+                        if case let .failure(err) = completion {
+                            AppLogging.error("Error scheduling notifications on app launch: \(err)")
+                        }
+                    }, receiveValue: { scheduledNotificationIds in
+                        if scheduledNotificationIds.count > 0 {
+                            AppLogging.info("Scheduled \(scheduledNotificationIds.count) notifications on app launch")
+                        }
                     })
                     .store(in: &cancellables)
             default:

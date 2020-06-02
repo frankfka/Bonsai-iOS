@@ -10,12 +10,13 @@ struct LogReminderDetailMiddleware {
 
     static func middleware(services: Services) -> [Middleware<AppState>] {
         return [
-            changePushNotificationPreferencesMiddleware(logReminderService: services.logReminderService),
+            changePushNotificationPreferencesMiddleware(logReminderService: services.logReminderService, notificationService: services.notificationService),
             deleteLogReminderMiddleware(logReminderService: services.logReminderService)
         ]
     }
 
-    private static func changePushNotificationPreferencesMiddleware(logReminderService: LogReminderService) -> Middleware<AppState> {
+    private static func changePushNotificationPreferencesMiddleware(logReminderService: LogReminderService,
+                                                                    notificationService: NotificationService) -> Middleware<AppState> {
         return { state, action, cancellables, send in
             switch action {
             case .logReminderDetails(action: .isPushNotificationEnabledDidChange(let isEnabled)):
@@ -24,14 +25,22 @@ struct LogReminderDetailMiddleware {
                     AppLogging.error("Toggling push notification change but no log reminder is in the state")
                     return
                 }
-                // Construct a new log reminder
-                var newLogReminder = logReminder
-                newLogReminder.isPushNotificationEnabled = isEnabled
-                logReminderService.saveOrUpdateLogReminder(logReminder: newLogReminder)
-                    .map { savedReminder in
-                        // Reinit state with the new reminder
-                        AppAction.logReminderDetails(action: .updateLogReminder(logReminder: savedReminder))
-                    }.catch { err in
+                // In case we haven't prompted for notifications, do this first before saving
+                notificationService.checkAndPromptForNotificationPermission()
+                    .receive(on: DispatchQueue.main) // Updating realm object, so must use main thread
+                    .flatMap { _ -> ServicePublisher<AppAction> in
+                        // Whether we actually have permission doesn't matter, we can still save the log reminder
+                        // Construct a new log reminder
+                        var newLogReminder = logReminder
+                        newLogReminder.isPushNotificationEnabled = isEnabled
+                        return logReminderService.saveOrUpdateLogReminder(logReminder: newLogReminder)
+                            .map { savedReminder in
+                                // Reinit state with the new reminder
+                                AppAction.logReminderDetails(action: .updateLogReminder(logReminder: savedReminder))
+                            }
+                            .eraseToAnyPublisher()
+                    }
+                    .catch { err in
                         // Failed to save - update state back to original reminder
                         Just(AppAction.logReminderDetails(action: .updateLogReminder(logReminder: logReminder)))
                     }
