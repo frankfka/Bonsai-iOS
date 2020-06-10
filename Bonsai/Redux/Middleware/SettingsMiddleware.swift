@@ -8,7 +8,7 @@ import Combine
 
 struct SettingsMiddleware {
 
-    static func middleware(services: Services) -> [Middleware<AppState>] {
+    static func middleware(services: AppServices) -> [Middleware<AppState>] {
         return [
             mapUserInitToSettingsInitMiddleware(),
             saveSettingsMiddleware(userService: services.userService),

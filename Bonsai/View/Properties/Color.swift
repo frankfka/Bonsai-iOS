@@ -20,6 +20,7 @@ struct AppColors {
     let Negative: Color = Color(.systemRed)
     
     // Background colors
+    let NavBarBackground: UIColor = .systemBackground
     let BackgroundPrimary: Color = Color(.systemGroupedBackground)
     let BackgroundSecondary: Color = Color(.secondarySystemGroupedBackground)
     let BackgroundPopup: Color = Color(.secondarySystemGroupedBackground)

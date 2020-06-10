@@ -8,7 +8,7 @@ import Combine
 
 struct LogReminderDetailMiddleware {
 
-    static func middleware(services: Services) -> [Middleware<AppState>] {
+    static func middleware(services: AppServices) -> [Middleware<AppState>] {
         return [
             changePushNotificationPreferencesMiddleware(logReminderService: services.logReminderService, notificationService: services.notificationService),
             deleteLogReminderMiddleware(logReminderService: services.logReminderService)

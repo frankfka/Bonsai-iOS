@@ -8,7 +8,7 @@ import Foundation
 
 struct CreateLogReminderMiddleware {
 
-    static func middleware(services: Services) -> [Middleware<AppState>] {
+    static func middleware(services: AppServices) -> [Middleware<AppState>] {
         return [
             checkPushNotificationPermissionsOnScreenShowMiddleware(notificationService: services.notificationService),
             promptForPermissionsOnEnablingReminderNotifications(notificationService: services.notificationService),
