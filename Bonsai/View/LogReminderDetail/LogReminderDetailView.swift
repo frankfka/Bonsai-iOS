@@ -185,9 +185,9 @@ struct LogReminderDetailView: View {
             .padding(.vertical, CGFloat.Theme.Layout.Normal)
         }
         .background(Color.Theme.BackgroundPrimary)
-        .onReceive(self.store.$state, perform: { _ in 
+        .onReceive(self.store.$state, perform: { newState in
             // Update state vars to match that of store
-            self.updateState()
+            self.updateState(with: newState)
         })
     }
 
@@ -243,7 +243,6 @@ struct LogReminderDetailView: View {
 
     // MARK: Actions
     private func isPushNotificationEnabledDidChange(isEnabled: Bool) {
-        self.isPushNotificationEnabled = isEnabled
         store.send(.logReminderDetails(action: .isPushNotificationEnabledDidChange(isEnabled: isEnabled)))
     }
 
@@ -269,9 +268,10 @@ struct LogReminderDetailView: View {
         store.send(.logReminderDetails(action: .screenDidDismiss))
     }
 
-    // Updates state variables to reflect our centralized store
-    private func updateState() {
-        self.isPushNotificationEnabled = self.viewModel.isPushNotificationEnabled
+    // Update toggle state vars with state, this ensures that we have smooth toggling
+    // Unfortunately we can't grab these values from viewmodel, as that updates after
+    private func updateState(with appState: AppState) {
+        self.isPushNotificationEnabled = appState.logReminderDetails.isPushNotificationEnabled
     }
 }
 

@@ -109,8 +109,8 @@ struct CreateLogReminderView: View {
             .onAppear {
                 self.store.send(.createLogReminder(action: .screenDidShow))
             }
-            .onReceive(self.store.$state) { _ in
-                self.updateState()
+            .onReceive(self.store.$state) { newState in
+                self.updateState(with: newState)
             }
         }
     }
@@ -125,17 +125,15 @@ struct CreateLogReminderView: View {
     }
 
     private func isRecurringDidChange(isRecurring: Bool) {
-        self.isRecurring = isRecurring
         self.store.send(.createLogReminder(action: .isRecurringDidChange(isRecurring: isRecurring)))
     }
 
     private func isPushNotificationEnabledDidChange(isEnabled: Bool) {
-        self.isPushNotificationEnabled = isEnabled
-        store.send(.createLogReminder(action: .isPushNotificationEnabledDidChange(isEnabled: isEnabled)))
+        self.store.send(.createLogReminder(action: .isPushNotificationEnabledDidChange(isEnabled: isEnabled)))
     }
 
     private func onSave() {
-        store.send(.createLogReminder(action: .onSavePressed))
+        self.store.send(.createLogReminder(action: .onSavePressed))
     }
 
     private func onSaveSuccessPopupDismiss() {
@@ -151,9 +149,11 @@ struct CreateLogReminderView: View {
         viewModel.showModal.toggle()
     }
 
-    private func updateState() {
-        self.isPushNotificationEnabled = self.viewModel.isPushNotificationEnabled
-        self.isRecurring = self.viewModel.isRecurringReminder
+    // Update toggle state vars with state, this ensures that we have smooth toggling
+    // Unfortunately we can't grab these values from viewmodel, as that updates after
+    private func updateState(with appState: AppState) {
+        self.isPushNotificationEnabled = appState.createLogReminder.isPushNotificationEnabled
+        self.isRecurring = appState.createLogReminder.isRecurring
     }
 
     // View Models TODO: make them computed vars
