@@ -25,26 +25,25 @@ struct HistoricalMoodChartView: View {
     struct ViewModel {
         static let minChartHeight: CGFloat = 200 // TODO: Somehow make this not a constant
         static let barChartStyle = BarChartStyle(
-            barColor: Color.Theme.positive.opacity(0.8),
-            barSpacing: CGFloat.Theme.Charts.barSpacing,
-            barRadius: CGFloat.Theme.Charts.barCornerRadius
+            barColor: Color.Theme.Positive.opacity(0.8),
+            barSpacing: CGFloat.Theme.Charts.BarSpacing,
+            barRadius: CGFloat.Theme.Charts.BarCornerRadius
         )
         static let barChartBackgroundStyle = BarChartStyle(
             barColor: Color.white,
-            barSpacing: CGFloat.Theme.Charts.barSpacing,
-            barRadius: CGFloat.Theme.Charts.barCornerRadius
+            barSpacing: CGFloat.Theme.Charts.BarSpacing,
+            barRadius: CGFloat.Theme.Charts.BarCornerRadius
         )
         static let barChartPadding: CGFloat = 8
-        // TODO: different color for different averages?
         static let averageMoodLineChartStyle = LineChartStyle(
-            lineColor: Color.Theme.accent.opacity(0.8),
-            lineStrokeStyle: StrokeStyle(lineWidth: CGFloat.Theme.Charts.normalLineWidth),
+            lineColor: Color.Theme.Accent.opacity(0.8),
+            lineStrokeStyle: StrokeStyle(lineWidth: CGFloat.Theme.Charts.NormalLineWidth),
             smoothed: false
         )
         // Used for background axis lines
         static let axisLineChartStyle = LineChartStyle(
-                lineColor: Color.Theme.grayscalePrimary.opacity(0.2),
-                lineStrokeStyle: StrokeStyle(lineWidth: CGFloat.Theme.Charts.thinLineWidth),
+                lineColor: Color.Theme.GrayscalePrimary.opacity(0.2),
+                lineStrokeStyle: StrokeStyle(lineWidth: CGFloat.Theme.Charts.ThinLineWidth),
                 smoothed: false
         )
 
@@ -72,7 +71,6 @@ struct HistoricalMoodChartView: View {
         
         let axisLabels: [(fullDisplay: String, shortDisplay: String)]
         var useFullAxisLabels: Bool {
-            // TODO: Use width to determine this
             dailyMoodBarChartData.count < 10
         }
         let dailyMoodBarChartData: [BarChartDataPoint]
@@ -125,8 +123,8 @@ struct HistoricalMoodChartView: View {
             if viewModel.showNoDataText {
                 // Show prompt if no data exists for past week
                 Text("No Mood Data")
-                    .font(Font.Theme.normalText)
-                    .foregroundColor(Color.Theme.text)
+                    .font(Font.Theme.NormalText)
+                    .foregroundColor(Color.Theme.SecondaryText)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 // Otherwise, show charts
@@ -167,8 +165,8 @@ struct HistoricalMoodChartView: View {
             HStack {
                 ForEach(viewModel.axisLabels, id: \.fullDisplay) { label in
                     Text(self.viewModel.useFullAxisLabels ? label.fullDisplay : label.shortDisplay)
-                        .font(Font.Theme.subtext)
-                        .foregroundColor(Color.Theme.text)
+                        .font(Font.Theme.SmallText)
+                        .foregroundColor(Color.Theme.SecondaryText)
                         .frame(maxWidth: .infinity)
                 }
             }
@@ -189,7 +187,7 @@ struct PastWeekMoodChartView_Previews: PreviewProvider {
             HistoricalMoodChartView(viewModel: HistoricalMoodChartView.ViewModel(analytics: AnalyticsPreviews.HistoricalMoodPastWeekWithNoData))
         }
         .frame(width: 500, height: 300)
-        .background(Color.Theme.backgroundSecondary)
+        .background(Color.Theme.BackgroundSecondary)
         .previewLayout(.sizeThatFits)
     }
 }

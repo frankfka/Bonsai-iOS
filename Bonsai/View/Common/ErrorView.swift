@@ -12,22 +12,22 @@ import SwiftUI
 struct ErrorView: View {
     var body: some View {
         GeometryReader { geometry in
-            VStack(alignment: .center, spacing: CGFloat.Theme.Layout.normal) {
+            VStack(alignment: .center, spacing: CGFloat.Theme.Layout.Normal) {
                 Spacer()
                 Image(systemName: "xmark.circle")
                     .resizable()
                     .aspectRatio(1.0, contentMode: .fit)
                     .frame(maxWidth: geometry.size.width / 4, alignment: .center)
-                    .foregroundColor(Color.Theme.primary)
+                    .foregroundColor(Color.Theme.Primary)
                 Text("Something isn't Right")
-                    .font(Font.Theme.heading)
-                    .foregroundColor(Color.Theme.textDark)
+                    .font(Font.Theme.Heading)
+                    .foregroundColor(Color.Theme.Text)
                 Text("Check your internet connection and try again.")
                     .multilineTextAlignment(.center)
-                    .font(Font.Theme.normalText)
-                    .foregroundColor(Color.Theme.text)
+                    .font(Font.Theme.NormalText)
+                    .foregroundColor(Color.Theme.SecondaryText)
                 Spacer()
-            }.padding(CGFloat.Theme.Layout.normal * 3)
+            }.padding(CGFloat.Theme.Layout.Normal * 3)
         }
     }
 }

@@ -31,18 +31,18 @@ struct TappableRowView: View {
         HStack {
             Text(viewModel.primaryText)
                 .lineLimit(1)
-                .font(Font.Theme.normalBoldText)
-                .foregroundColor(Color.Theme.textDark)
-            Spacer(minLength: CGFloat.Theme.Layout.rowSeparator)
+                .font(Font.Theme.NormalBoldText)
+                .foregroundColor(Color.Theme.Text)
+            Spacer(minLength: CGFloat.Theme.Layout.RowSeparator)
             Text(viewModel.secondaryText)
                 .lineLimit(1)
                 .truncationMode(.tail)
-                .font(Font.Theme.normalText)
-                .foregroundColor(Color.Theme.text)
+                .font(Font.Theme.NormalText)
+                .foregroundColor(Color.Theme.SecondaryText)
             if viewModel.hasDisclosureIndicator {
                 Image(systemName: "chevron.right")
-                    .foregroundColor(Color.Theme.textLight)
-                    .padding(.leading, CGFloat.Theme.Layout.small)
+                    .foregroundColor(Color.Theme.TertiaryText)
+                    .padding(.leading, CGFloat.Theme.Layout.Small)
             }
         }
         .modifier(FormRowModifier())

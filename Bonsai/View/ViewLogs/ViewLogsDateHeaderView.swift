@@ -68,8 +68,8 @@ struct ViewLogsDateHeaderView: View {
                             self.onDateSelectionCancel()
                         }) {
                             Text("Cancel")
-                                .font(Font.Theme.normalText)
-                                .foregroundColor(Color.Theme.primary)
+                                .font(Font.Theme.NormalText)
+                                .foregroundColor(Color.Theme.Primary)
                         }
                     } else {
                         // Left chevron - to decrement date
@@ -79,24 +79,24 @@ struct ViewLogsDateHeaderView: View {
                             Image(systemName: "chevron.left")
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .frame(width: CGFloat.Theme.Font.normalIcon, height: CGFloat.Theme.Font.normalIcon)
-                                .foregroundColor(Color.Theme.primary)
+                                .frame(width: CGFloat.Theme.Font.NormalIcon, height: CGFloat.Theme.Font.NormalIcon)
+                                .foregroundColor(Color.Theme.Primary)
                         }
                     }
                 }
-                .padding(CGFloat.Theme.Layout.small)
+                .padding(CGFloat.Theme.Layout.Small)
                 Spacer()
                 // Center date display
                 HStack(spacing: 0) {
                     Text(DateFormatter.stringForLogDatePicker(from: self.viewModel.dateSelectionBinding.wrappedValue))
-                        .font(Font.Theme.normalBoldText)
-                        .foregroundColor(Color.Theme.textDark)
-                        .padding(.trailing, CGFloat.Theme.Layout.small)
+                        .font(Font.Theme.NormalBoldText)
+                        .foregroundColor(Color.Theme.Text)
+                        .padding(.trailing, CGFloat.Theme.Layout.Small)
                     Image(systemName: showDatePicker ? "chevron.down" : "chevron.right")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: CGFloat.Theme.Font.smallIcon, height: CGFloat.Theme.Font.smallIcon)
-                        .foregroundColor(Color.Theme.textDark)
+                        .frame(width: CGFloat.Theme.Font.SmallIcon, height: CGFloat.Theme.Font.SmallIcon)
+                        .foregroundColor(Color.Theme.Text)
                 }
                 Spacer()
                 // Right bar item
@@ -107,8 +107,8 @@ struct ViewLogsDateHeaderView: View {
                             self.onDateSelectionConfirmed()
                         }) {
                             Text("Done")
-                                .font(Font.Theme.normalBoldText)
-                                .foregroundColor(Color.Theme.primary)
+                                .font(Font.Theme.NormalBoldText)
+                                .foregroundColor(Color.Theme.Primary)
                         }
                     } else {
                         // Right chevron - to increment date
@@ -118,23 +118,22 @@ struct ViewLogsDateHeaderView: View {
                             Image(systemName: "chevron.right")
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .frame(width: CGFloat.Theme.Font.normalIcon, height: CGFloat.Theme.Font.normalIcon)
-                                .foregroundColor(isDateIncrementDisabled ? Color.Theme.grayscalePrimary : Color.Theme.primary)
+                                .frame(width: CGFloat.Theme.Font.NormalIcon, height: CGFloat.Theme.Font.NormalIcon)
+                                .foregroundColor(isDateIncrementDisabled ? Color.Theme.GrayscalePrimary : Color.Theme.Primary)
                         }
                         .disabled(isDateIncrementDisabled)
                     }
                 }
-                .padding(CGFloat.Theme.Layout.small)
+                .padding(CGFloat.Theme.Layout.Small)
             }
-            .padding(.vertical, CGFloat.Theme.Layout.small)
-            .padding(.horizontal, CGFloat.Theme.Layout.normal)
+            .padding(.vertical, CGFloat.Theme.Layout.Small)
+            .padding(.horizontal, CGFloat.Theme.Layout.Normal)
             .contentShape(Rectangle())
             .onTapGesture {
                 self.onDateViewTapped()
             }
             // Calendar Picker View
             if showDatePicker {
-                // TODO: Top to bottom transition?
                 DatePickerView(viewModel: getDatePickerViewModel())
             }
             Divider()
@@ -142,7 +141,7 @@ struct ViewLogsDateHeaderView: View {
         .onAppear(perform: {
             self.onViewAppear()
         })
-        .background(Color.Theme.backgroundSecondary)
+        .background(Color.Theme.BackgroundSecondary)
     }
     
     private func getDatePickerViewModel() -> DatePickerView.ViewModel {

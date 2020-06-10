@@ -35,13 +35,13 @@ struct ViewLogsLoadMoreView: View {
                     self.viewModel.onShowMoreTapped?()
                 }, label: {
                     Text("Show More")
-                        .font(Font.Theme.normalText)
-                        .foregroundColor(Color.Theme.primary)
+                        .font(Font.Theme.NormalText)
+                        .foregroundColor(Color.Theme.Primary)
                 })
             }
         }
-        .padding(.vertical, CGFloat.Theme.Layout.extraSmall)
-        .padding(.horizontal, CGFloat.Theme.Layout.normal)
+        .padding(.vertical, CGFloat.Theme.Layout.ExtraSmall)
+        .padding(.horizontal, CGFloat.Theme.Layout.Normal)
         .frame(minWidth: 0, maxWidth: .infinity)
     }
 

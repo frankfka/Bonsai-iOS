@@ -9,6 +9,7 @@
 import SwiftUI
 import Combine
 
+// TODO: Can probably remove this
 struct ContentViewContainer: View {
 
     @EnvironmentObject var store: AppStore
@@ -68,8 +69,7 @@ struct ContentView: View {
     var body: some View {
         VStack(spacing: 0) {
             if viewModel.tabIndex == 0 {
-                // TODO: Make viewmodel init inside the container itself
-                HomeTabContainer(viewModel: getHomeTabViewModel())
+                HomeTabContainer(showCreateLogModalBinding: self.viewModel.$showCreateLogModal)
             } else {
                 ViewLogsTabContainer()
             }
@@ -93,21 +93,6 @@ struct ContentView: View {
             showModal: viewModel.$showCreateLogModal,
             state: store.state.createLog
         )
-    }
-
-    private func getHomeTabViewModel() -> HomeTabContainer.ViewModel {
-        let isLoading = store.state.homeScreen.isLoading
-        let loadError = store.state.homeScreen.initFailure != nil
-        return HomeTabContainer.ViewModel(
-            isLoading: isLoading,
-            loadError: loadError,
-            showCreateLogModal: viewModel.$showCreateLogModal,
-            homeTabDidAppear: onShowHomeTab
-        )
-    }
-
-    private func onShowHomeTab() {
-        self.store.send(.homeScreen(action: .screenDidShow))
     }
 
 }

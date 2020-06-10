@@ -82,10 +82,10 @@ struct RecentLogSection: View {
                         self.bottomButtonViewModel.onTap?()
                     }, label: {
                         Text(self.bottomButtonViewModel.text)
-                            .font(Font.Theme.normalText)
-                            .foregroundColor(Color.Theme.primary)
-                            .padding(.vertical, CGFloat.Theme.Layout.extraSmall)
-                            .padding(.horizontal, CGFloat.Theme.Layout.normal)
+                            .font(Font.Theme.NormalText)
+                            .foregroundColor(Color.Theme.Primary)
+                            .padding(.vertical, CGFloat.Theme.Layout.ExtraSmall)
+                            .padding(.horizontal, CGFloat.Theme.Layout.Normal)
                     })
                 }
             }
@@ -103,16 +103,16 @@ struct NoRecentLogsView: View {
         VStack(alignment: .center) {
             Spacer()
             Text("No recent logs found")
-                    .font(Font.Theme.heading)
-                    .foregroundColor(Color.Theme.textDark)
+                    .font(Font.Theme.Heading)
+                    .foregroundColor(Color.Theme.Text)
             Text("Begin by adding a log using the \"+\" icon below")
-                    .font(Font.Theme.normalText)
+                    .font(Font.Theme.NormalText)
                     .multilineTextAlignment(.center)
-                    .foregroundColor(Color.Theme.text)
+                    .foregroundColor(Color.Theme.SecondaryText)
             Spacer()
         }
-        .padding(.horizontal, CGFloat.Theme.Layout.normal)
-        .padding(.vertical, CGFloat.Theme.Layout.large)
+        .padding(.horizontal, CGFloat.Theme.Layout.Normal)
+        .padding(.vertical, CGFloat.Theme.Layout.Large)
         .frame(minWidth: 0, maxWidth: .infinity)
     }
 }

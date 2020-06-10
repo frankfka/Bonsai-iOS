@@ -11,17 +11,17 @@ struct MoodLogView: View {
     }
 
     var body: some View {
-        VStack(spacing: CGFloat.Theme.Layout.normal) {
+        VStack(spacing: CGFloat.Theme.Layout.Normal) {
             VStack(alignment: .center) {
                 Text("How are you feeling?")
-                    .font(Font.Theme.normalBoldText)
+                    .font(Font.Theme.NormalBoldText)
                 MoodRankPickerView(
                     viewModel: self.getMoodRankPickerViewModel()
                 )
             }
-            .padding(.top, CGFloat.Theme.Layout.normal)
-            .padding(.vertical, CGFloat.Theme.Layout.normal)
-            .background(Color.Theme.backgroundSecondary)
+            .padding(.top, CGFloat.Theme.Layout.Normal)
+            .padding(.vertical, CGFloat.Theme.Layout.Normal)
+            .background(Color.Theme.BackgroundSecondary)
         }
     }
 

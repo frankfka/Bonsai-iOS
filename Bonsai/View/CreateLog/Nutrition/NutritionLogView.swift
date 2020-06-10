@@ -10,6 +10,7 @@ struct NutritionLogView: View {
             self._selectNutritionRowTitle = selectNutritionRowTitle
         }
     }
+
     private var viewModel: ViewModel {
         getViewModel()
     }
@@ -17,22 +18,22 @@ struct NutritionLogView: View {
     var body: some View {
         VStack(spacing: 0) {
             NavigationLink(
-                    destination: SearchListViewContainer(
-                            onUpdateQueryDebounced: onUpdateQueryDebounced
-                    )
+                destination: SearchListViewContainer(
+                    onUpdateQueryDebounced: onUpdateQueryDebounced
+                )
             ) {
                 TappableRowView(
-                        viewModel: TappableRowView.ViewModel(
-                                primaryText: viewModel.$selectNutritionRowTitle,
-                                secondaryText: .constant(""),
-                                hasDisclosureIndicator: true
-                        )
+                    viewModel: TappableRowView.ViewModel(
+                        primaryText: viewModel.$selectNutritionRowTitle,
+                        secondaryText: .constant(""),
+                        hasDisclosureIndicator: true
+                    )
                 )
             }
             Divider()
             CreateLogTextField(viewModel: getNutritionItemAmountViewModel())
         }
-        .background(Color.Theme.backgroundSecondary)
+            .background(Color.Theme.BackgroundSecondary)
     }
 
     func onUpdateQueryDebounced(query: String) {

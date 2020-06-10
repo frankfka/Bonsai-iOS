@@ -34,7 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         // TODO: Using unmonitored UIColor here
         navigationBarAppearace.backgroundColor = .systemBackground
         navigationBarAppearace.barTintColor = .systemBackground
-        navigationBarAppearace.tintColor = Color.Theme.primaryUIColor
+        navigationBarAppearace.tintColor = Color.Theme.PrimaryUIColor
         return true
     }
 

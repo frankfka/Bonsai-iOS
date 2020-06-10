@@ -8,26 +8,35 @@
 
 import SwiftUI
 
+// TODO: Get rid of this container as wel
 struct HomeTabContainer: View {
     @EnvironmentObject var store: AppStore
     
     struct ViewModel {
         let isLoading: Bool
         let loadError: Bool
-        let homeTabDidAppear: VoidCallback?
         @Binding var showCreateLogModal: Bool
 
-        init(isLoading: Bool, loadError: Bool, showCreateLogModal: Binding<Bool>, homeTabDidAppear: VoidCallback? = nil) {
+        init(isLoading: Bool, loadError: Bool, showCreateLogModal: Binding<Bool>) {
             self.isLoading = isLoading
             self.loadError = loadError
             self._showCreateLogModal = showCreateLogModal
-            self.homeTabDidAppear = homeTabDidAppear
         }
     }
-    private let viewModel: ViewModel
-    
-    init(viewModel: ViewModel) {
-        self.viewModel = viewModel
+
+    private var showCreateLogModalBinding: Binding<Bool>
+    private var viewModel: ViewModel {
+        let isLoading = store.state.homeScreen.isLoading
+        let loadError = store.state.homeScreen.initFailure != nil
+        return HomeTabContainer.ViewModel(
+            isLoading: isLoading,
+            loadError: loadError,
+            showCreateLogModal: self.showCreateLogModalBinding
+        )
+    }
+
+    init(showCreateLogModalBinding: Binding<Bool>) {
+        self.showCreateLogModalBinding = showCreateLogModalBinding
     }
     
     var body: some View {
@@ -41,17 +50,17 @@ struct HomeTabContainer: View {
             }
         }
         .onAppear {
-            self.viewModel.homeTabDidAppear?()
+            self.homeTabDidAppear()
         }
-        .background(Color.Theme.backgroundPrimary)
+        .background(Color.Theme.BackgroundPrimary)
         .navigationBarTitle("Home")
         .navigationBarItems(
                 trailing: NavigationLink(destination: SettingsView()) {
                     Image(systemName: "person.crop.circle")
                         .resizable()
                         .aspectRatio(1, contentMode: .fit)
-                        .frame(height: CGFloat.Theme.Layout.navBarItemHeight)
-                        .foregroundColor(Color.Theme.primary)
+                        .frame(height: CGFloat.Theme.Layout.NavBarItemHeight)
+                        .foregroundColor(Color.Theme.Primary)
                 }
         )
         .embedInNavigationView()
@@ -67,6 +76,11 @@ struct HomeTabContainer: View {
             showCreateLogModal: viewModel.$showCreateLogModal
         )
     }
+
+    func homeTabDidAppear() {
+        self.store.send(.homeScreen(action: .screenDidShow))
+    }
+
 }
 
 struct HomeTab: View {
@@ -95,7 +109,7 @@ struct HomeTab: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: CGFloat.Theme.Layout.large) {
+            VStack(alignment: .leading, spacing: CGFloat.Theme.Layout.Large) {
                 if viewModel.showReminders {
                     RoundedBorderTitledSection(sectionTitle: "Reminders") {
                         LogReminderSection(viewModel: self.getLogReminderSectionViewModel())
@@ -108,7 +122,7 @@ struct HomeTab: View {
                     MoodAnalyticsSection(viewModel: self.getMoodAnalyticsSectionViewModel())
                 }
             }
-            .padding(.all, CGFloat.Theme.Layout.normal)
+            .padding(.all, CGFloat.Theme.Layout.Normal)
         }
     }
 
@@ -151,7 +165,7 @@ struct HomeTab_Previews: PreviewProvider {
             showReminders: true,
             showCreateLogModal: .constant(false)
         ))
-        .background(Color.Theme.backgroundPrimary)
+        .background(Color.Theme.BackgroundPrimary)
         .environmentObject(PreviewRedux.initialStore)
     }
 }

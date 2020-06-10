@@ -15,7 +15,7 @@ struct RoundedBorderButtonView: View {
         let textColor: Color
         let onTap: VoidCallback?
         
-        init(text: String, textColor: Color = Color.Theme.grayscalePrimary, onTap: VoidCallback? = nil) {
+        init(text: String, textColor: Color = Color.Theme.GrayscalePrimary, onTap: VoidCallback? = nil) {
             self.text = text
             self.textColor = textColor
             self.onTap = onTap
@@ -33,10 +33,10 @@ struct RoundedBorderButtonView: View {
             self.viewModel.onTap?()
         }) {
             Text(viewModel.text)
-                .font(Font.Theme.normalText)
+                .font(Font.Theme.NormalText)
                 .foregroundColor(viewModel.textColor)
-                .padding(.horizontal, CGFloat.Theme.Layout.normal)
-                .padding(.vertical, CGFloat.Theme.Layout.small)
+                .padding(.horizontal, CGFloat.Theme.Layout.Normal)
+                .padding(.vertical, CGFloat.Theme.Layout.Small)
         }
         .modifier(RoundedBorderSectionModifier())
     }
@@ -44,11 +44,11 @@ struct RoundedBorderButtonView: View {
 
 struct RoundedBorderButtonView_Previews: PreviewProvider {
     
-    static private var viewModel = RoundedBorderButtonView.ViewModel(text: "Log This Again", textColor: Color.Theme.primary)
+    static private var viewModel = RoundedBorderButtonView.ViewModel(text: "Log This Again", textColor: Color.Theme.Primary)
     
     static var previews: some View {
         RoundedBorderButtonView(viewModel: viewModel)
-            .background(Color.Theme.grayscalePrimary)
+            .background(Color.Theme.GrayscalePrimary)
             .previewLayout(.sizeThatFits)
     }
 }

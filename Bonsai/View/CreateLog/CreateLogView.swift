@@ -48,9 +48,9 @@ struct CreateLogView: View {
     
     var body: some View {
         ScrollView {
-            VStack(spacing: CGFloat.Theme.Layout.normal) {
+            VStack(spacing: CGFloat.Theme.Layout.Normal) {
                 RowPickerView(viewModel: getCategoryPickerViewModel())
-                    .padding(.top, CGFloat.Theme.Layout.normal)
+                    .padding(.top, CGFloat.Theme.Layout.Normal)
                 DateTimeFormPickerView(viewModel: getCreateLogDateTimePickerViewModel())
                 getCategorySpecificView()
                 CreateLogTextField(viewModel: getNotesViewModel())
@@ -58,23 +58,23 @@ struct CreateLogView: View {
             }
             .keyboardAwarePadding()
         }
-        .disableInteraction(isDisabled: .constant(self.viewModel.isFormDisabled))
-        .background(Color.Theme.backgroundPrimary)
+        .disabled(self.viewModel.isFormDisabled)
+        .background(Color.Theme.BackgroundPrimary)
         .navigationBarTitle("Add Log")
         .navigationBarItems(
             leading: Button(action: {
                 self.onCancel()
             }, label: {
                 Text("Cancel")
-                    .font(Font.Theme.normalText)
-                    .foregroundColor(Color.Theme.primary)
+                    .font(Font.Theme.NormalText)
+                    .foregroundColor(Color.Theme.Primary)
             }),
             trailing: Button(action: {
                 self.onSave()
             }, label: {
                 Text("Save")
-                    .font(Font.Theme.normalBoldText)
-                    .foregroundColor(viewModel.isSaveButtonDisabled ? Color.Theme.grayscalePrimary : Color.Theme.primary)
+                    .font(Font.Theme.NormalBoldText)
+                    .foregroundColor(viewModel.isSaveButtonDisabled ? Color.Theme.GrayscalePrimary : Color.Theme.Primary)
             })
                 .disabled(viewModel.isSaveButtonDisabled)
         )

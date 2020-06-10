@@ -33,7 +33,7 @@ struct SymptomLogView: View {
             Divider()
             SymptomSeveritySliderView(viewModel: getSymptomSeveritySliderViewModel())
         }
-        .background(Color.Theme.backgroundSecondary)
+        .background(Color.Theme.BackgroundSecondary)
     }
 
     func onUpdateQueryDebounced(query: String) {

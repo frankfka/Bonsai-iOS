@@ -38,8 +38,8 @@ struct SearchBar : UIViewRepresentable {
         searchBar.delegate = context.coordinator
         searchBar.returnKeyType = .search
         searchBar.placeholder = "Search"
-        searchBar.tintColor = Color.Theme.primaryUIColor
-        searchBar.searchTextField.font = Font.Theme.normalTextUIFont
+        searchBar.tintColor = Color.Theme.PrimaryUIColor
+        searchBar.searchTextField.font = Font.Theme.NormalTextUIFont
         return searchBar
     }
     

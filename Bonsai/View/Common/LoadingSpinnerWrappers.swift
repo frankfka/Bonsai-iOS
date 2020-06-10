@@ -13,11 +13,11 @@ extension View {
         return self.withPopup(show: show) {
             VStack {
                 LoadingSpinner(size: .small)
-                    .padding(.bottom, CGFloat.Theme.Layout.small)
+                    .padding(.bottom, CGFloat.Theme.Layout.Small)
                 if text != nil {
                     Text(text!)
-                        .font(Font.Theme.normalText)
-                        .foregroundColor(Color.Theme.text)
+                        .font(Font.Theme.NormalText)
+                        .foregroundColor(Color.Theme.SecondaryText)
                 }
             }.eraseToAnyView()
         }
@@ -41,7 +41,7 @@ struct FullScreenLoadingSpinner: View {
                 Spacer()
             }
             .frame(width: UIScreen.main.bounds.width, alignment: .center)
-            .background(self.isOverlay ? Color.Theme.overlay : Color.Theme.backgroundPrimary)
+            .background(self.isOverlay ? Color.Theme.Overlay : Color.Theme.BackgroundPrimary)
             .edgesIgnoringSafeArea(.all)
         }
     }

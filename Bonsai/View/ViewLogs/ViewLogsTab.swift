@@ -67,9 +67,9 @@ struct ViewLogsTabContainer: View {
     var body: some View {
         VStack(spacing: 0) {
             ViewLogsViewTypePickerView(viewModel: getViewTypePickerViewModel())
-                .padding(.vertical, CGFloat.Theme.Layout.small)
-                .padding(.horizontal, CGFloat.Theme.Layout.normal)
-                .background(Color.Theme.backgroundSecondary)
+                .padding(.vertical, CGFloat.Theme.Layout.Small)
+                .padding(.horizontal, CGFloat.Theme.Layout.Normal)
+                .background(Color.Theme.BackgroundSecondary)
             if self.viewModel.showDatePicker {
                 self.headerView
             }
@@ -102,7 +102,7 @@ struct ViewLogsTabContainer: View {
                         }
                     }
                     .modifier(RoundedBorderSectionModifier())
-                    .padding(.all, CGFloat.Theme.Layout.normal)
+                    .padding(.all, CGFloat.Theme.Layout.Normal)
                 }
                 .modifier(ViewLogsTabSwipeGestureRecognizer(onSwipe: self.onLogSectionSwipe))
             }
@@ -112,7 +112,7 @@ struct ViewLogsTabContainer: View {
         .onAppear {
             self.onAppear()
         }
-        .background(Color.Theme.backgroundPrimary)
+        .background(Color.Theme.BackgroundPrimary)
         .navigationBarTitle("Logs")
         .embedInNavigationView()
         .padding(.top) // Temporary - bug where scrollview goes under the status bar

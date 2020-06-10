@@ -53,7 +53,7 @@ struct AccountSettingsSection: View {
                     RoundedBorderButtonView(viewModel: self.getUnlinkButtonViewModel())
                 }
             }
-            .padding(.top, CGFloat.Theme.Layout.normal)
+            .padding(.top, CGFloat.Theme.Layout.Normal)
             .disabled(self.viewModel.interactionDisabled)
         }
         // Restore User Dialog
@@ -128,7 +128,7 @@ struct AccountSettingsSection: View {
     private func getLogInWithGoogleButtonViewModel() -> RoundedBorderButtonView.ViewModel {
         RoundedBorderButtonView.ViewModel(
             text: "Log In With Google",
-            textColor: self.viewModel.interactionDisabled ? Color.Theme.text : Color.Theme.primary
+            textColor: self.viewModel.interactionDisabled ? Color.Theme.SecondaryText : Color.Theme.Primary
         ) {
             // Create the VC. On appear, dispatch an action to dismiss the placeholder view controller
             self.navigateToGoogleSignIn = true
@@ -138,7 +138,7 @@ struct AccountSettingsSection: View {
     private func getUnlinkButtonViewModel() -> RoundedBorderButtonView.ViewModel {
         RoundedBorderButtonView.ViewModel(
             text: "Unlink Account",
-            textColor: self.viewModel.interactionDisabled ? Color.Theme.text : Color.Theme.negative
+            textColor: self.viewModel.interactionDisabled ? Color.Theme.SecondaryText : Color.Theme.Negative
         ) {
             self.showUnlinkConfirmationDialog.toggle()
         }
@@ -157,7 +157,7 @@ struct AccountSettingsSection_Previews: PreviewProvider {
 
     static var previews: some View {
         AccountSettingsSection(viewModel: viewModel)
-            .background(Color.Theme.backgroundPrimary)
+            .background(Color.Theme.BackgroundPrimary)
             .environmentObject(PreviewRedux.initialStore)
     }
 }

@@ -24,14 +24,14 @@ struct LogDetailNotesView: View {
         TitledSection(sectionTitle: "Notes") {
             HStack {
                 Text(self.viewModel.showNoNotesPlaceholder ?  "No Notes" : self.viewModel.notes)
-                        .font(Font.Theme.normalText)
-                        .foregroundColor(Color.Theme.text)
+                        .font(Font.Theme.NormalText)
+                        .foregroundColor(Color.Theme.SecondaryText)
                         .multilineTextAlignment(.leading)
                 // Push text to leading
                 Spacer(minLength: 0)
             }
-            .padding(.all, CGFloat.Theme.Layout.normal)
-            .background(Color.Theme.backgroundSecondary)
+            .padding(.all, CGFloat.Theme.Layout.Normal)
+            .background(Color.Theme.BackgroundSecondary)
         }
     }
 }
@@ -49,7 +49,7 @@ struct LogDetailNotesView_Previews: PreviewProvider {
                 viewModel: LogDetailNotesView.ViewModel(notes: "")
             )
         }
-        .background(Color.Theme.backgroundPrimary)
+        .background(Color.Theme.BackgroundPrimary)
         .previewLayout(.sizeThatFits)
     }
 }

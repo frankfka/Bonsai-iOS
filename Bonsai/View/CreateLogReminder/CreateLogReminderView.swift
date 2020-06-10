@@ -58,10 +58,10 @@ struct CreateLogReminderView: View {
     var body: some View {
         GeometryReader { geometry in
             ScrollView {
-                VStack(spacing: CGFloat.Theme.Layout.normal) {
+                VStack(spacing: CGFloat.Theme.Layout.Normal) {
                     // Pick date and time for reminder
                     DateTimeFormPickerView(viewModel: self.getDateTimeFormPickerViewModel())
-                            .padding(.top, CGFloat.Theme.Layout.normal)
+                            .padding(.top, CGFloat.Theme.Layout.Normal)
                     // Pick whether the reminder is recurring
                     VStack(spacing: 0) {
                         ToggleRowView(viewModel: self.getIsRecurringToggleViewModel())
@@ -78,23 +78,23 @@ struct CreateLogReminderView: View {
                     Spacer()
                 }
             }
-            .disableInteraction(isDisabled: .constant(self.viewModel.isFormDisabled))
-            .background(Color.Theme.backgroundPrimary)
+            .disabled(self.viewModel.isFormDisabled)
+            .background(Color.Theme.BackgroundPrimary)
             .navigationBarTitle("Create Reminder")
             .navigationBarItems(
                 leading: Button(action: {
                     self.onCancel()
                 }, label: {
                     Text("Cancel")
-                        .font(Font.Theme.normalText)
-                        .foregroundColor(Color.Theme.primary)
+                        .font(Font.Theme.NormalText)
+                        .foregroundColor(Color.Theme.Primary)
                 }),
                 trailing: Button(action: {
                     self.onSave()
                 }, label: {
                     Text("Save")
-                        .font(Font.Theme.normalBoldText)
-                        .foregroundColor(self.viewModel.isSaveButtonDisabled ? Color.Theme.grayscalePrimary : Color.Theme.primary)
+                        .font(Font.Theme.NormalBoldText)
+                        .foregroundColor(self.viewModel.isSaveButtonDisabled ? Color.Theme.GrayscalePrimary : Color.Theme.Primary)
                 })
                 .disabled(self.viewModel.isSaveButtonDisabled)
             )

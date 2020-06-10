@@ -24,7 +24,7 @@ struct MoodRankPickerView: View {
     let viewModel: ViewModel
     
     var body: some View {
-        HStack(spacing: CGFloat.Theme.Layout.normal) {
+        HStack(spacing: CGFloat.Theme.Layout.Normal) {
             Spacer()
             ForEach(0..<self.viewModel.moodRanks.count) { index in
                 Image(
@@ -35,11 +35,11 @@ struct MoodRankPickerView: View {
                 )
                     .resizable()
                     .foregroundColor(self.getIconColor(for: index))
-                    .frame(width: CGFloat.Theme.Font.largeIcon, height: CGFloat.Theme.Font.largeIcon)
+                    .frame(width: CGFloat.Theme.Font.LargeIcon, height: CGFloat.Theme.Font.LargeIcon)
                     .onTapGesture {
                         self.viewModel.onMoodRankTap?(index)
                     }
-                    .padding(CGFloat.Theme.Layout.normal)
+                    .padding(CGFloat.Theme.Layout.Normal)
             }
             Spacer()
         }
@@ -58,17 +58,17 @@ struct MoodRankPickerView: View {
 
     private func getIconColor(for index: Int) -> Color {
         return viewModel.selectedMoodRankIndex == index ?
-                getSelectedIconColor(for: viewModel.moodRanks[index]) : Color.Theme.grayscalePrimary
+                getSelectedIconColor(for: viewModel.moodRanks[index]) : Color.Theme.GrayscalePrimary
     }
     
     private func getSelectedIconColor(for moodRank: MoodRank) -> Color {
         switch moodRank {
         case .negative:
-            return Color.Theme.negative
+            return Color.Theme.Negative
         case .neutral:
-            return Color.Theme.neutral
+            return Color.Theme.Neutral
         case .positive:
-            return Color.Theme.positive
+            return Color.Theme.Positive
         }
     }
     

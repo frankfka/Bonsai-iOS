@@ -14,7 +14,7 @@ struct LogDetailSymptomView: View {
     }
     
     var body: some View {
-        VStack(spacing: CGFloat.Theme.Layout.normal) {
+        VStack(spacing: CGFloat.Theme.Layout.Normal) {
             // Symptom Details
             TitledSection(sectionTitle: "Symptom") {
                 VStack(spacing: 0) {
@@ -40,9 +40,9 @@ struct LogDetailSymptomView: View {
                     HistoricalSymptomSeverityView(
                         viewModel: HistoricalSymptomSeverityView.ViewModel(analytics: analytics)
                     )
-                    .padding(CGFloat.Theme.Layout.small)
+                    .padding(CGFloat.Theme.Layout.Small)
                 }
-                .padding(CGFloat.Theme.Layout.small)
+                .padding(CGFloat.Theme.Layout.Small)
             }
         }
     }
@@ -53,7 +53,7 @@ struct LogDetailSymptomView_Previews: PreviewProvider {
         LogDetailSymptomView(
             viewModel: LogDetailSymptomView.ViewModel(name: "Fatigue", severity: "Extreme", severityAnalytics: AnalyticsPreviews.HistoricalSeverityPastWeek)
         )
-        .background(Color.Theme.backgroundPrimary)
+        .background(Color.Theme.BackgroundPrimary)
         .previewLayout(.sizeThatFits)
     }
 }

@@ -1,30 +1,29 @@
 import Foundation
 import SwiftUI
 
-// TODO: refactor this?
 struct AppColors {
     // Text colors
-    let textDark: Color = Color.init(.label)
-    let text: Color = Color.init(.secondaryLabel)
-    let textLight: Color = Color.init(.tertiaryLabel)
+    let Text: Color = Color(.label)
+    let SecondaryText: Color = Color(.secondaryLabel)
+    let TertiaryText: Color = Color(.tertiaryLabel)
 
     // Primary theme colors
-    let primaryUIColor: UIColor = .systemGreen
-    let primary: Color = Color.init(.systemGreen)
-    let accent: Color = .orange
-    let grayscalePrimary: Color = Color.init(.systemGray)
-    let grayscaleSecondary: Color = Color.init(.systemGray3)
+    let PrimaryUIColor: UIColor = .systemGreen
+    let Primary: Color = Color(.systemGreen)
+    let Accent: Color = .orange
+    let GrayscalePrimary: Color = Color(.systemGray)
+    let GrayscaleSecondary: Color = Color(.systemGray3)
     
     // Generic conditional colors
-    let positive: Color = Color.init(.systemGreen)
-    let neutral: Color = Color.init(.systemOrange)
-    let negative: Color = Color.init(.systemRed)
+    let Positive: Color = Color(.systemGreen)
+    let Neutral: Color = Color(.systemOrange)
+    let Negative: Color = Color(.systemRed)
     
     // Background colors
-    let backgroundPrimary: Color = Color.init(.systemGroupedBackground)
-    let backgroundSecondary: Color = Color.init(.secondarySystemGroupedBackground)
-    let overlay: Color = Color.init(.systemGray3).opacity(0.5)
-    let popupBackground: Color = Color.init(.secondarySystemGroupedBackground)
+    let BackgroundPrimary: Color = Color(.systemGroupedBackground)
+    let BackgroundSecondary: Color = Color(.secondarySystemGroupedBackground)
+    let BackgroundPopup: Color = Color(.secondarySystemGroupedBackground)
+    let Overlay: Color = Color(.systemGray3).opacity(0.5)
 }
 
 extension Color {
@@ -32,12 +31,12 @@ extension Color {
 }
 
 struct CategoryColors {
-    static let Mood = Color.init(.systemRed)
-    static let Note = Color.init(.systemPurple)
-    static let Medication = Color.init(.systemBlue)
-    static let Nutrition = Color.init(.systemGreen)
-    static let Activity = Color.init(.systemYellow)
-    static let Symptom = Color.init(.systemOrange)
+    static let Mood = Color(.systemRed)
+    static let Note = Color(.systemPurple)
+    static let Medication = Color(.systemBlue)
+    static let Nutrition = Color(.systemGreen)
+    static let Activity = Color(.systemYellow)
+    static let Symptom = Color(.systemOrange)
 }
 
 extension LogCategory {

@@ -141,7 +141,6 @@
 		9E04BB66ECCD13C94DFBC8B1 /* Popup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BFB9FC87753455D68DDA /* Popup.swift */; };
 		9E04BB6ECC15FF7A01CF2DB5 /* ChartModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BD32195B26669D42A6AD /* ChartModels.swift */; };
 		9E04BBC2B2FF6C3F91B2FC86 /* ViewLogsReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B4F958CBB6E0E7260A21 /* ViewLogsReducer.swift */; };
-		9E04BBC70F549E1E51568666 /* DisableInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BD4984DDBAEC66B08A34 /* DisableInteraction.swift */; };
 		9E04BBD7053D815FC161C5F2 /* CreateLogReminderAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B41C35F8E9303DE177BA /* CreateLogReminderAction.swift */; };
 		9E04BC2763A09FF026853F71 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04B736FC8750FB3CB69472 /* NotificationService.swift */; };
 		9E04BC27B32E25F3B672BEBE /* FirebaseFirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E04BAB20AC9FE3AA62269E3 /* FirebaseFirestoreService.swift */; };
@@ -324,7 +323,6 @@
 		9E04BD32195B26669D42A6AD /* ChartModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartModels.swift; sourceTree = "<group>"; };
 		9E04BD3BB3217EB7C0EB444B /* CreateLogReminderReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateLogReminderReducer.swift; sourceTree = "<group>"; };
 		9E04BD42E217456E1AA1DA03 /* CacheService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheService.swift; sourceTree = "<group>"; };
-		9E04BD4984DDBAEC66B08A34 /* DisableInteraction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisableInteraction.swift; sourceTree = "<group>"; };
 		9E04BD4AB903F6E3E687B8B6 /* SettingsMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsMiddleware.swift; sourceTree = "<group>"; };
 		9E04BDE701392FDFBCF183E3 /* LogReminderDetailMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogReminderDetailMiddleware.swift; sourceTree = "<group>"; };
 		9E04BDF41F15A3CC3EB991BA /* Previews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Previews.swift; sourceTree = "<group>"; };
@@ -460,7 +458,6 @@
 				9E04B763E5A55C21C9EF3E57 /* SearchTextObservable.swift */,
 				9E04BFB9FC87753455D68DDA /* Popup.swift */,
 				9E04BE18499AF88003242B88 /* StandardPopups.swift */,
-				9E04BD4984DDBAEC66B08A34 /* DisableInteraction.swift */,
 				11929D1023CC358400B06B99 /* ErrorView.swift */,
 				9E04B9D9B417E31F7195DE54 /* SectionViews.swift */,
 				9E04BE968E2C57ED5F12F9BB /* TappableRowView.swift */,
@@ -1045,7 +1042,6 @@
 				11EDE0EE23C6EE2E00A54673 /* DatePickerView.swift in Sources */,
 				9E04BB66ECCD13C94DFBC8B1 /* Popup.swift in Sources */,
 				9E04BF009A3FCEC39D6F0D59 /* StandardPopups.swift in Sources */,
-				9E04BBC70F549E1E51568666 /* DisableInteraction.swift in Sources */,
 				9E04BE1242E1E56CB9BD4DF4 /* LoggingMiddleware.swift in Sources */,
 				11B7651523CEDAA100BC08CB /* LogDetailSymptomView.swift in Sources */,
 				9E04B5451F43ADCBD5CC72FA /* HomeScreenReducer.swift in Sources */,

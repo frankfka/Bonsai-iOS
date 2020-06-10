@@ -31,15 +31,15 @@ extension View {
                 Image(systemName: imageName)
                 .resizable()
                 .frame(
-                    width: CGFloat.Theme.Font.popupIcon,
-                    height: CGFloat.Theme.Font.popupIcon
+                    width: CGFloat.Theme.Font.PopupIcon,
+                    height: CGFloat.Theme.Font.PopupIcon
                 )
-                .foregroundColor(Color.Theme.primary)
-                .padding(.bottom, CGFloat.Theme.Layout.small)
+                .foregroundColor(Color.Theme.Primary)
+                .padding(.bottom, CGFloat.Theme.Layout.Small)
                 if text != nil {
                     Text(text!)
-                        .font(Font.Theme.normalText)
-                        .foregroundColor(Color.Theme.text)
+                        .font(Font.Theme.NormalText)
+                        .foregroundColor(Color.Theme.SecondaryText)
                 }
             }
             .onAppear() {

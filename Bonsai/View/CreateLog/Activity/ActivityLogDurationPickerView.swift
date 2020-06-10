@@ -72,7 +72,7 @@ struct ActivityLogDurationPickerView: View {
             DurationPickerWithLabelView(viewModel: self.getHourPickerViewModel())
             DurationPickerWithLabelView(viewModel: self.getMinutePickerViewModel())
         }
-        .padding(CGFloat.Theme.Layout.small)
+        .padding(CGFloat.Theme.Layout.Small)
     }
 
     private func getHourPickerViewModel() -> DurationPickerWithLabelView.ViewModel {
@@ -127,8 +127,8 @@ struct DurationPickerWithLabelView: View {
                 ForEach(0 ..< self.viewModel.values.count) {
                     Text(self.viewModel.values[$0])
                         .tag($0)
-                        .font(Font.Theme.normalText)
-                        .foregroundColor(Color.Theme.textDark)
+                        .font(Font.Theme.NormalText)
+                        .foregroundColor(Color.Theme.Text)
                 }
             }
             .pickerStyle(WheelPickerStyle())
@@ -136,7 +136,7 @@ struct DurationPickerWithLabelView: View {
             .labelsHidden()
             .clipped()
             Text(self.viewModel.label)
-                .padding(.horizontal, CGFloat.Theme.Layout.small)
+                .padding(.horizontal, CGFloat.Theme.Layout.Small)
         }
     }
     

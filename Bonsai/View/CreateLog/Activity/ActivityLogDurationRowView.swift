@@ -58,7 +58,7 @@ struct ActivityLogDurationRowView: View {
                 ActivityLogDurationPickerView(viewModel: getDurationPickerViewModel())
             }
         }
-        .background(Color.Theme.backgroundSecondary)
+        .background(Color.Theme.BackgroundSecondary)
     }
     
     private func onRowTapped() {

@@ -29,10 +29,10 @@ struct TabBarView: View {
             HStack {
                 Image(systemName: viewModel.tabIndex == 0 ? "house.fill" : "house")
                     .resizable()
-                    .foregroundColor(viewModel.tabIndex == 0 ? Color.Theme.primary : Color.Theme.grayscalePrimary)
+                    .foregroundColor(viewModel.tabIndex == 0 ? Color.Theme.Primary : Color.Theme.GrayscalePrimary)
                     .aspectRatio(contentMode: .fit)
-                    .padding(CGFloat.Theme.Layout.normal)
-                    .frame(height: CGFloat.Theme.Layout.tabItemHeight)
+                    .padding(CGFloat.Theme.Layout.Normal)
+                    .frame(height: CGFloat.Theme.Layout.TabItemHeight)
                     .frame(minWidth: 0, maxWidth: .infinity)
                     .contentShape(Rectangle())
                     .onTapGesture {
@@ -41,28 +41,28 @@ struct TabBarView: View {
                 Image(systemName: "plus.circle.fill")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(height: CGFloat.Theme.Layout.tabItemHeight)
-                    .foregroundColor(Color.Theme.primary)
+                    .frame(height: CGFloat.Theme.Layout.TabItemHeight)
+                    .foregroundColor(Color.Theme.Primary)
                     .onTapGesture {
                         self.viewModel.onCreateLogPressed?()
                     }
                 Image(systemName: viewModel.tabIndex == 1 ? "chart.bar.fill" : "chart.bar")
                     .resizable()
-                    .foregroundColor(viewModel.tabIndex == 1 ? Color.Theme.primary : Color.Theme.grayscalePrimary)
+                    .foregroundColor(viewModel.tabIndex == 1 ? Color.Theme.Primary : Color.Theme.GrayscalePrimary)
                     .aspectRatio(contentMode: .fit)
-                    .padding(CGFloat.Theme.Layout.normal)
-                    .frame(height: CGFloat.Theme.Layout.tabItemHeight)
+                    .padding(CGFloat.Theme.Layout.Normal)
+                    .frame(height: CGFloat.Theme.Layout.TabItemHeight)
                     .frame(minWidth: 0, maxWidth: .infinity)
                     .contentShape(Rectangle())
                     .onTapGesture {
                         self.onTabPressed(index: 1)
                 }
             }
-            .padding(.all, CGFloat.Theme.Layout.small)
+            .padding(.all, CGFloat.Theme.Layout.Small)
         }
-        .padding(.bottom, CGFloat.Theme.Layout.normal)
+        .padding(.bottom, CGFloat.Theme.Layout.Normal)
         .frame(minWidth: 0, maxWidth: .infinity)
-        .background(Color.Theme.backgroundSecondary)
+        .background(Color.Theme.BackgroundSecondary)
     }
 
     private func onTabPressed(index: Int) {

@@ -2,8 +2,6 @@
 import SwiftUI
 import Combine
 
-
-// TODO: Hacky way to allow enough space when keyboard is shown, change when more support is added natively
 // https://swiftwithmajid.com/2019/11/27/combine-and-swiftui-views/
 struct KeyboardAwareModifier: ViewModifier {
     @State private var keyboardHeight: CGFloat = 0

@@ -36,12 +36,12 @@ struct DatePickerView: View {
                 self.onJumpToTodayTapped()
             }) {
                 Text("Jump to Today")
-                    .font(Font.Theme.normalText)
-                    .foregroundColor(Color.Theme.primary)
+                    .font(Font.Theme.NormalText)
+                    .foregroundColor(Color.Theme.Primary)
             }
-            .padding(.all, CGFloat.Theme.Layout.small)
+            .padding(.all, CGFloat.Theme.Layout.Small)
         }
-        .padding(.all, CGFloat.Theme.Layout.small)
+        .padding(.all, CGFloat.Theme.Layout.Small)
         .frame(minWidth: 0, maxWidth: .infinity)
     }
     

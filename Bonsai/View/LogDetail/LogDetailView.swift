@@ -73,12 +73,12 @@ struct LogDetailView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: CGFloat.Theme.Layout.normal) {
+            VStack(spacing: CGFloat.Theme.Layout.Normal) {
                 // Detail Views
                 LogDetailBasicsView(viewModel: getBasicDetailsViewModel())
                 getCategorySpecificView()
                 LogDetailNotesView(viewModel: getNotesViewModel())
-                        .padding(.bottom, CGFloat.Theme.Layout.normal)
+                        .padding(.bottom, CGFloat.Theme.Layout.Normal)
                 Group {
                     // Quick Re-log button
                     RoundedBorderButtonView(viewModel: getLogAgainButtonViewModel())
@@ -88,9 +88,9 @@ struct LogDetailView: View {
                 }
                         .disabled(self.viewModel.disableActions)
             }
-            .padding(.vertical, CGFloat.Theme.Layout.normal)
+            .padding(.vertical, CGFloat.Theme.Layout.Normal)
         }
-        .background(Color.Theme.backgroundPrimary)
+        .background(Color.Theme.BackgroundPrimary)
         .navigationBarItems(
                 trailing: Button(action: {
                     self.onDeleteLogTapped()
@@ -98,10 +98,10 @@ struct LogDetailView: View {
                     Image(systemName: "trash")
                             .resizable()
                             .aspectRatio(1, contentMode: .fit)
-                            .frame(height: CGFloat.Theme.Layout.navBarItemHeight)
+                            .frame(height: CGFloat.Theme.Layout.NavBarItemHeight)
                             .foregroundColor(
                                     self.viewModel.disableDelete ?
-                                            Color.Theme.grayscalePrimary : Color.Theme.primary
+                                            Color.Theme.GrayscalePrimary : Color.Theme.Primary
                             )
                 })
                 .disabled(self.viewModel.disableDelete)
@@ -211,7 +211,7 @@ struct LogDetailView: View {
     private func getLogAgainButtonViewModel() -> RoundedBorderButtonView.ViewModel {
         return RoundedBorderButtonView.ViewModel(
                 text: "Log This Again",
-                textColor: self.viewModel.disableActions ? Color.Theme.text : Color.Theme.primary,
+                textColor: self.viewModel.disableActions ? Color.Theme.SecondaryText : Color.Theme.Primary,
                 onTap: self.onLogAgainTapped
         )
     }
@@ -219,7 +219,7 @@ struct LogDetailView: View {
     private func getCreateLogReminderButtonViewModel() -> RoundedBorderButtonView.ViewModel {
         return RoundedBorderButtonView.ViewModel(
                 text: "Create Reminder",
-                textColor: self.viewModel.disableActions ? Color.Theme.text : Color.Theme.primary,
+                textColor: self.viewModel.disableActions ? Color.Theme.SecondaryText : Color.Theme.Primary,
                 onTap: self.onCreateLogReminderTapped
         )
     }

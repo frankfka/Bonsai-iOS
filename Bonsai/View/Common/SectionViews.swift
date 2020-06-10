@@ -13,7 +13,7 @@ struct RoundedBorderTitledSection<Content>: View where Content: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             SectionTitle(text: sectionTitle)
-                    .padding(.leading, CGFloat.Theme.Layout.small)
+                    .padding(.leading, CGFloat.Theme.Layout.Small)
             sectionView()
                 .frame(minWidth: 0, maxWidth: .infinity)
                 .modifier(RoundedBorderSectionModifier())
@@ -33,7 +33,7 @@ struct TitledSection<Content>: View where Content: View {
     var body: some View {
         VStack(alignment: .leading) {
             SectionTitle(text: sectionTitle)
-                    .padding(.leading, CGFloat.Theme.Layout.normal)
+                    .padding(.leading, CGFloat.Theme.Layout.Normal)
             sectionView()
                     .frame(minWidth: 0, maxWidth: .infinity)
         }
@@ -47,9 +47,9 @@ struct SectionTitle: View {
     }
     var body: some View {
         Text(titleText)
-            .font(Font.Theme.heading)
-            .foregroundColor(Color.Theme.textDark)
-            .padding(.vertical, CGFloat.Theme.Layout.small)
+            .font(Font.Theme.Heading)
+            .foregroundColor(Color.Theme.Text)
+            .padding(.vertical, CGFloat.Theme.Layout.Small)
     }
 }
 
@@ -60,7 +60,7 @@ struct SectionViews_Previews: PreviewProvider {
                 Text("Test")
             }
         }
-        .background(Color.Theme.backgroundPrimary)
+        .background(Color.Theme.BackgroundPrimary)
         .previewLayout(.sizeThatFits)
     }
 }

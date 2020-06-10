@@ -33,7 +33,7 @@ struct ActivityLogView: View {
             Divider()
             ActivityLogDurationRowView(viewModel: getActivityDurationRowViewModel())
         }
-        .background(Color.Theme.backgroundSecondary)
+        .background(Color.Theme.BackgroundSecondary)
     }
 
     private func onUpdateQueryDebounced(query: String) {

@@ -29,14 +29,14 @@ struct AddNewListItemView: View {
         HStack {
             Image(systemName: "plus.circle.fill")
                 .resizable()
-                .frame(width: CGFloat.Theme.Font.normalIcon, height: CGFloat.Theme.Font.normalIcon)
-                .foregroundColor(Color.Theme.primary)
-                .padding(.trailing, CGFloat.Theme.Layout.small)
+                .frame(width: CGFloat.Theme.Font.NormalIcon, height: CGFloat.Theme.Font.NormalIcon)
+                .foregroundColor(Color.Theme.Primary)
+                .padding(.trailing, CGFloat.Theme.Layout.Small)
             Text(viewModel.text)
-                .font(Font.Theme.normalText)
+                .font(Font.Theme.NormalText)
             Spacer()
         }
-        .padding(.all, CGFloat.Theme.Layout.small)
+        .padding(.all, CGFloat.Theme.Layout.Small)
         .contentShape(Rectangle())
         .onTapGesture {
             self.viewModel.onTap?()
