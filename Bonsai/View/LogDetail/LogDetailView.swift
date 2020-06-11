@@ -67,7 +67,6 @@ struct LogDetailView: View {
             return ViewModel(loggable: LogDetailView.ErrorLoggablePlaceholder)
         }
     }
-    @State(initialValue: false) var showCreateLogModal: Bool
     @State(initialValue: false) var showCreateLogReminderModal: Bool
     @State(initialValue: false) var showDeleteLogConfirmation: Bool
 
@@ -122,20 +121,6 @@ struct LogDetailView: View {
                 )
             )
         }
-        // Modals - using backgrounds is a workaround to allow multiple modal presentation blocks
-        .background(
-            EmptyView()
-            // Create Log Modal
-            .sheet(
-                isPresented: $showCreateLogModal,
-                onDismiss: {
-                    self.onCreateLogModalDismiss()
-                }) {
-                    CreateLogView(
-                            viewModel: self.getCreateLogModalViewModel()
-                    ).environmentObject(self.store)
-            }
-        )
         .background(
             EmptyView()
             // Create Log Reminder Modal
@@ -161,10 +146,7 @@ struct LogDetailView: View {
     private func onLogAgainTapped() {
         // Dispatch an action for logging that will initialize the state
         store.send(.createLog(action: .initFromPreviousLog(loggable: self.viewModel.loggable)))
-        showCreateLogModal.toggle()
-    }
-    private func onCreateLogModalDismiss() {
-        store.send(.createLog(action: .resetCreateLogState))
+        store.send(.global(action: .changeCreateLogModalDisplay(shouldDisplay: true)))
     }
 
     // Create Reminder
@@ -222,10 +204,6 @@ struct LogDetailView: View {
                 textColor: self.viewModel.disableActions ? Color.Theme.SecondaryText : Color.Theme.Primary,
                 onTap: self.onCreateLogReminderTapped
         )
-    }
-
-    private func getCreateLogModalViewModel() -> CreateLogView.ViewModel {
-        return CreateLogView.ViewModel(showModal: $showCreateLogModal, state: store.state.createLog)
     }
 
     private func getCreateLogReminderModalViewModel() -> CreateLogReminderView.ViewModel {

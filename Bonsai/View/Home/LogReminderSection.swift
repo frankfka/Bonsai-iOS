@@ -15,13 +15,10 @@ struct LogReminderSection: View {
         static let numToShow = 5  // Number of reminders to show
         let reminders: [LogReminder]
         @Binding var navigationState: HomeTab.NavigationState?
-        @Binding var showCreateLogModal: Bool
 
-        init(logReminders: [LogReminder], navigationState: Binding<HomeTab.NavigationState?>,
-             showCreateLogModal: Binding<Bool>) {
+        init(logReminders: [LogReminder], navigationState: Binding<HomeTab.NavigationState?>) {
             self.reminders = Array(logReminders.prefix(ViewModel.numToShow))
             self._navigationState = navigationState
-            self._showCreateLogModal = showCreateLogModal
         }
     }
     
@@ -65,7 +62,7 @@ struct LogReminderSection: View {
 
     private func onTodoTapped(_ logReminder: LogReminder) {
         store.send(.createLog(action: .beginInitFromLogReminder(logReminder: logReminder)))
-        viewModel.showCreateLogModal.toggle()
+        store.send(.global(action: .changeCreateLogModalDisplay(shouldDisplay: true)))
     }
 
     private func onLogRowTapped(_ logReminder: LogReminder) {
@@ -81,8 +78,7 @@ struct LogReminderSection_Previews: PreviewProvider {
                 PreviewLogReminders.overdue,
                 PreviewLogReminders.notOverdue,
             ],
-            navigationState: .constant(nil),
-            showCreateLogModal: .constant(false)
+            navigationState: .constant(nil)
     )
 
     static var previews: some View {

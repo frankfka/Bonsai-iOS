@@ -32,7 +32,7 @@ struct RootView: View {
                 ErrorView()
             } else {
                 // The content view for all of the app
-                ContentViewContainer()
+                ContentView()
             }
         }
     }

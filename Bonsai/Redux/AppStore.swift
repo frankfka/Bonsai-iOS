@@ -24,13 +24,17 @@ let globalStore: AppStore = {
     )
 }()
 class AppStore: NSObject, ObservableObject {
-    @Published private(set) var state: AppState
+    @Published var state: AppState
     private let reducer: Reducer<AppState, AppAction>
     private let middleware: [Middleware<AppState>]
     let services: AppServices
     var cancellables: Set<AnyCancellable> = []
 
-    init(initialState: AppState, reducer: @escaping Reducer<AppState, AppAction>, services: AppServices, middleware: [Middleware<AppState>] = []) {
+    init(initialState: AppState,
+         reducer: @escaping Reducer<AppState, AppAction>,
+         services: AppServices,
+         middleware: [Middleware<AppState>] = []
+    ) {
         self.state = initialState
         self.reducer = reducer
         self.middleware = middleware

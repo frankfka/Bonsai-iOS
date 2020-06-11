@@ -10,6 +10,9 @@ struct GlobalState {
     var isInitializing: Bool = false
     var initError: Error? = nil
 
+    // Global Navigation
+    var showCreateLogModal = false
+
     // Permissions
     var hasNotificationPermissions: Bool = false
 }

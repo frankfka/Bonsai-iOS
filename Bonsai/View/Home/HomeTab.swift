@@ -15,28 +15,20 @@ struct HomeTabContainer: View {
     struct ViewModel {
         let isLoading: Bool
         let loadError: Bool
-        @Binding var showCreateLogModal: Bool
 
-        init(isLoading: Bool, loadError: Bool, showCreateLogModal: Binding<Bool>) {
+        init(isLoading: Bool, loadError: Bool) {
             self.isLoading = isLoading
             self.loadError = loadError
-            self._showCreateLogModal = showCreateLogModal
         }
     }
 
-    private var showCreateLogModalBinding: Binding<Bool>
     private var viewModel: ViewModel {
         let isLoading = store.state.homeScreen.isLoading
         let loadError = store.state.homeScreen.initFailure != nil
         return HomeTabContainer.ViewModel(
             isLoading: isLoading,
-            loadError: loadError,
-            showCreateLogModal: self.showCreateLogModalBinding
+            loadError: loadError
         )
-    }
-
-    init(showCreateLogModalBinding: Binding<Bool>) {
-        self.showCreateLogModalBinding = showCreateLogModalBinding
     }
     
     var body: some View {
@@ -72,8 +64,7 @@ struct HomeTabContainer: View {
         // TODO: Limit to only today? - or a setting to determine how much to show
         let showReminders = !store.state.globalLogReminders.sortedLogReminders.isEmpty
         return HomeTab.ViewModel(
-            showReminders: showReminders,
-            showCreateLogModal: viewModel.$showCreateLogModal
+            showReminders: showReminders
         )
     }
 
@@ -88,11 +79,9 @@ struct HomeTab: View {
     
     struct ViewModel {
        let showReminders: Bool
-        @Binding var showCreateLogModal: Bool
 
-        init(showReminders: Bool, showCreateLogModal: Binding<Bool>) {
+        init(showReminders: Bool) {
             self.showReminders = showReminders
-            self._showCreateLogModal = showCreateLogModal
         }
     }
     private let viewModel: ViewModel
@@ -129,8 +118,7 @@ struct HomeTab: View {
     private func getLogReminderSectionViewModel() -> LogReminderSection.ViewModel {
         return LogReminderSection.ViewModel(
                 logReminders: store.state.globalLogReminders.sortedLogReminders,
-                navigationState: self.$navigationState,
-                showCreateLogModal: viewModel.$showCreateLogModal
+                navigationState: self.$navigationState
         )
     }
     
@@ -162,8 +150,7 @@ struct HomeTab: View {
 struct HomeTab_Previews: PreviewProvider {
     static var previews: some View {
         HomeTab(viewModel: HomeTab.ViewModel(
-            showReminders: true,
-            showCreateLogModal: .constant(false)
+            showReminders: true
         ))
         .background(Color.Theme.BackgroundPrimary)
         .environmentObject(PreviewRedux.initialStore)

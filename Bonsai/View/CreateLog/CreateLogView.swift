@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+// TODO: on dissappear, reset state
 struct CreateLogView: View {
     @EnvironmentObject var store: AppStore
     
@@ -40,10 +41,11 @@ struct CreateLogView: View {
     }
     @State(initialValue: false) private var showDatePicker
     @State(initialValue: false) private var showTimePicker
-    private var viewModel: ViewModel
-    
-    init(viewModel: ViewModel) {
-        self.viewModel = viewModel
+    private var viewModel: ViewModel {
+        ViewModel(
+            showModal: self.$store.state.global.showCreateLogModal,
+            state: self.store.state.createLog
+        )
     }
     
     var body: some View {
@@ -181,17 +183,12 @@ struct CreateLogView: View {
 
 struct CreateLogView_Previews: PreviewProvider {
 
-    static let viewModel = CreateLogView.ViewModel(
-        showModal: .constant(true),
-        state: PreviewRedux.initialStore.state.createLog
-    )
-
     static var previews: some View {
         Group {
-            CreateLogView(viewModel: viewModel)
+            CreateLogView()
                 .environmentObject(PreviewRedux.initialStore)
 
-            CreateLogView(viewModel: viewModel)
+            CreateLogView()
                 .environmentObject(PreviewRedux.initialStore)
                 .environment(\.colorScheme, .dark)
         }

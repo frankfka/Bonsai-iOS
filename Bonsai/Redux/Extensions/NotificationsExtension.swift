@@ -36,7 +36,7 @@ extension AppStore: UNUserNotificationCenterDelegate {
                         }, receiveValue: { reminder in
                             if let reminder = reminder {
                                 self.send(.createLog(action: .beginInitFromLogReminder(logReminder: reminder)))
-                                self.showCreateLogModal = true
+                                self.send(.global(action: .changeCreateLogModalDisplay(shouldDisplay: true)))
                             } else {
                                 AppLogging.error("No log reminder found for notification ID \(response.notification.request.identifier)")
                             }
