@@ -14,9 +14,9 @@ struct LogReminderSection: View {
     struct ViewModel {
         static let numToShow = 5  // Number of reminders to show
         let reminders: [LogReminder]
-        @Binding var navigationState: HomeTab.NavigationState?
+        @Binding var navigationState: HomeTabScrollView.NavigationState?
 
-        init(logReminders: [LogReminder], navigationState: Binding<HomeTab.NavigationState?>) {
+        init(logReminders: [LogReminder], navigationState: Binding<HomeTabScrollView.NavigationState?>) {
             self.reminders = Array(logReminders.prefix(ViewModel.numToShow))
             self._navigationState = navigationState
         }
@@ -33,7 +33,7 @@ struct LogReminderSection: View {
             // Conditional pushing of navigation views, see RecentLogSection
             NavigationLink(
                     destination: LogReminderDetailView(),
-                    tag: HomeTab.NavigationState.logReminderDetail,
+                    tag: HomeTabScrollView.NavigationState.logReminderDetail,
                     selection: viewModel.$navigationState) {
                 EmptyView()
             }
@@ -67,7 +67,7 @@ struct LogReminderSection: View {
 
     private func onLogRowTapped(_ logReminder: LogReminder) {
         store.send(.logReminderDetails(action: .initState(logReminder: logReminder)))
-        viewModel.navigationState = HomeTab.NavigationState.logReminderDetail
+        viewModel.navigationState = HomeTabScrollView.NavigationState.logReminderDetail
     }
 }
 

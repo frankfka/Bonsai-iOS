@@ -26,7 +26,7 @@ struct ContentView: View {
         // Main view with
         VStack(spacing: 0) {
             if self.tabIndex == 0 {
-                HomeTabContainer()
+                HomeTabView()
             } else {
                 ViewLogsTabContainer()
             }

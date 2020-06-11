@@ -25,9 +25,13 @@ fileprivate func initializeApp(with store: AppStore) {
 
     // Configure navigation bar
     let navigationBarAppearance = UINavigationBar.appearance()
-    navigationBarAppearance.backgroundColor = Color.Theme.NavBarBackground
-    navigationBarAppearance.barTintColor = Color.Theme.NavBarBackground
+    let navBarAppearance = UINavigationBarAppearance()
+    navBarAppearance.configureWithOpaqueBackground()
+    navBarAppearance.backgroundColor = Color.Theme.NavBarBackground
     navigationBarAppearance.tintColor = Color.Theme.PrimaryUIColor
+    navigationBarAppearance.isTranslucent = false
+    navigationBarAppearance.standardAppearance = navBarAppearance
+    navigationBarAppearance.scrollEdgeAppearance = navBarAppearance
 }
 
 @UIApplicationMain

@@ -191,6 +191,7 @@ struct ViewLogsDateHeaderView: View {
     }
 
     func resetDateSelection() {
+        // TODO: Modifying state during view update, look into this
         self.viewModel.dateSelectionBinding.wrappedValue = self.viewModel.confirmedDate
     }
     

@@ -8,10 +8,10 @@
 
 import SwiftUI
 
-// TODO: Get rid of this container as wel
-struct HomeTabContainer: View {
+struct HomeTabView: View {
     @EnvironmentObject var store: AppStore
-    
+
+    // MARK: View Model
     struct ViewModel {
         let isLoading: Bool
         let loadError: Bool
@@ -25,28 +25,31 @@ struct HomeTabContainer: View {
     private var viewModel: ViewModel {
         let isLoading = store.state.homeScreen.isLoading
         let loadError = store.state.homeScreen.initFailure != nil
-        return HomeTabContainer.ViewModel(
+        return HomeTabView.ViewModel(
             isLoading: isLoading,
             loadError: loadError
         )
     }
-    
+
+    // MARK: Views
+    @ViewBuilder
+    var viewForState: some View {
+        if self.viewModel.isLoading {
+            FullScreenLoadingSpinner(isOverlay: false)
+        } else if self.viewModel.loadError {
+            ErrorView()
+        } else {
+            HomeTabScrollView()
+        }
+    }
+
+    // Mark: Main View
     var body: some View {
-        VStack {
-            if self.viewModel.isLoading {
-                FullScreenLoadingSpinner(isOverlay: false)
-            } else if self.viewModel.loadError {
-                ErrorView()
-            } else {
-                HomeTab(viewModel: self.getHomeTabViewModel())
-            }
-        }
-        .onAppear {
-            self.homeTabDidAppear()
-        }
-        .background(Color.Theme.BackgroundPrimary)
-        .navigationBarTitle("Home")
-        .navigationBarItems(
+        viewForState
+            .onAppear(perform: self.homeTabDidAppear)
+            .background(Color.Theme.BackgroundPrimary)
+            .navigationBarTitle("Home")
+            .navigationBarItems(
                 trailing: NavigationLink(destination: SettingsView()) {
                     Image(systemName: "person.crop.circle")
                         .resizable()
@@ -54,48 +57,40 @@ struct HomeTabContainer: View {
                         .frame(height: CGFloat.Theme.Layout.NavBarItemHeight)
                         .foregroundColor(Color.Theme.Primary)
                 }
-        )
-        .embedInNavigationView()
-        .padding(.top) // Temporary - bug where scrollview goes under the status bar
-    }
-    
-    func getHomeTabViewModel() -> HomeTab.ViewModel {
-        // TODO: Show empty text instead?
-        // TODO: Limit to only today? - or a setting to determine how much to show
-        let showReminders = !store.state.globalLogReminders.sortedLogReminders.isEmpty
-        return HomeTab.ViewModel(
-            showReminders: showReminders
-        )
+            )
+            .embedInNavigationView()
     }
 
     func homeTabDidAppear() {
         self.store.send(.homeScreen(action: .screenDidShow))
     }
-
 }
 
-struct HomeTab: View {
+struct HomeTabScrollView: View {
     @EnvironmentObject var store: AppStore
-    
+
+    // MARK: View model
     struct ViewModel {
-       let showReminders: Bool
+        let showReminders: Bool
 
         init(showReminders: Bool) {
             self.showReminders = showReminders
         }
     }
-    private let viewModel: ViewModel
+    private var viewModel: ViewModel {
+        // TODO: Limit to only today? - or a setting to determine how much to show
+        ViewModel(
+            showReminders: !store.state.globalLogReminders.sortedLogReminders.isEmpty
+        )
+    }
 
     @State(initialValue: nil) var navigationState: NavigationState? // Allows conditional pushing of navigation views
     enum NavigationState {
         case logDetail
         case logReminderDetail
     }
-    
-    init(viewModel: ViewModel) {
-        self.viewModel = viewModel
-    }
-    
+
+    // MARK: Main View
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: CGFloat.Theme.Layout.Large) {
@@ -117,15 +112,15 @@ struct HomeTab: View {
 
     private func getLogReminderSectionViewModel() -> LogReminderSection.ViewModel {
         return LogReminderSection.ViewModel(
-                logReminders: store.state.globalLogReminders.sortedLogReminders,
-                navigationState: self.$navigationState
+            logReminders: store.state.globalLogReminders.sortedLogReminders,
+            navigationState: self.$navigationState
         )
     }
-    
+
     private func getRecentLogSectionViewModel() -> RecentLogSection.ViewModel {
         return RecentLogSection.ViewModel(
-                recentLogs: store.state.globalLogs.sortedLogs,
-                navigationState: $navigationState
+            recentLogs: store.state.globalLogs.sortedLogs,
+            navigationState: $navigationState
         )
     }
 
@@ -139,9 +134,9 @@ struct HomeTab: View {
         let isLoading = store.state.globalLogs.isLoadingAnalytics
         let loadError = store.state.globalLogs.loadAnalyticsError != nil
         return MoodAnalyticsSection.ViewModel(
-                chartViewModel: pastWeekChartViewModel,
-                isLoading: isLoading,
-                loadError: loadError
+            chartViewModel: pastWeekChartViewModel,
+            isLoading: isLoading,
+            loadError: loadError
         )
     }
 
@@ -149,10 +144,8 @@ struct HomeTab: View {
 
 struct HomeTab_Previews: PreviewProvider {
     static var previews: some View {
-        HomeTab(viewModel: HomeTab.ViewModel(
-            showReminders: true
-        ))
-        .background(Color.Theme.BackgroundPrimary)
-        .environmentObject(PreviewRedux.initialStore)
+        HomeTabScrollView()
+            .background(Color.Theme.BackgroundPrimary)
+            .environmentObject(PreviewRedux.initialStore)
     }
 }
