@@ -13,24 +13,24 @@ struct AnalyticsPreviews {
     private static var positiveMood: Double = Double(MoodRank.positive.rawValue)
     static var HistoricalMoodPastWeekWithData: MoodRankAnalytics = MoodRankAnalytics(
             moodRankDays: [
-                MoodRankDaySummary(date: Date().addingTimeInterval(-7 * TimeInterval.day), averageMoodRankValue: positiveMood),
-                MoodRankDaySummary(date: Date().addingTimeInterval(-6 * TimeInterval.day), averageMoodRankValue: neutralMood),
-                MoodRankDaySummary(date: Date().addingTimeInterval(-5 * TimeInterval.day), averageMoodRankValue: negativeMood),
-                MoodRankDaySummary(date: Date().addingTimeInterval(-4 * TimeInterval.day), averageMoodRankValue: nil),
-                MoodRankDaySummary(date: Date().addingTimeInterval(-3 * TimeInterval.day), averageMoodRankValue: neutralMood),
-                MoodRankDaySummary(date: Date().addingTimeInterval(-2 * TimeInterval.day), averageMoodRankValue: (negativeMood + neutralMood) / 2.0),
-                MoodRankDaySummary(date: Date().addingTimeInterval(-TimeInterval.day), averageMoodRankValue: negativeMood)
+                MoodRankAnalytics.DaySummary(date: Date().addingTimeInterval(-7 * TimeInterval.day), averageMoodRankValue: positiveMood),
+                MoodRankAnalytics.DaySummary(date: Date().addingTimeInterval(-6 * TimeInterval.day), averageMoodRankValue: neutralMood),
+                MoodRankAnalytics.DaySummary(date: Date().addingTimeInterval(-5 * TimeInterval.day), averageMoodRankValue: negativeMood),
+                MoodRankAnalytics.DaySummary(date: Date().addingTimeInterval(-4 * TimeInterval.day), averageMoodRankValue: nil),
+                MoodRankAnalytics.DaySummary(date: Date().addingTimeInterval(-3 * TimeInterval.day), averageMoodRankValue: neutralMood),
+                MoodRankAnalytics.DaySummary(date: Date().addingTimeInterval(-2 * TimeInterval.day), averageMoodRankValue: (negativeMood + neutralMood) / 2.0),
+                MoodRankAnalytics.DaySummary(date: Date().addingTimeInterval(-TimeInterval.day), averageMoodRankValue: negativeMood)
             ]
     )
     static var HistoricalMoodPastWeekWithNoData: MoodRankAnalytics = MoodRankAnalytics(
             moodRankDays: [
-                MoodRankDaySummary(date: Date().addingTimeInterval(-7 * TimeInterval.day), averageMoodRankValue: nil),
-                MoodRankDaySummary(date: Date().addingTimeInterval(-6 * TimeInterval.day), averageMoodRankValue: nil),
-                MoodRankDaySummary(date: Date().addingTimeInterval(-5 * TimeInterval.day), averageMoodRankValue: nil),
-                MoodRankDaySummary(date: Date().addingTimeInterval(-4 * TimeInterval.day), averageMoodRankValue: nil),
-                MoodRankDaySummary(date: Date().addingTimeInterval(-3 * TimeInterval.day), averageMoodRankValue: nil),
-                MoodRankDaySummary(date: Date().addingTimeInterval(-2 * TimeInterval.day), averageMoodRankValue: nil),
-                MoodRankDaySummary(date: Date().addingTimeInterval(-TimeInterval.day), averageMoodRankValue: nil)
+                MoodRankAnalytics.DaySummary(date: Date().addingTimeInterval(-7 * TimeInterval.day), averageMoodRankValue: nil),
+                MoodRankAnalytics.DaySummary(date: Date().addingTimeInterval(-6 * TimeInterval.day), averageMoodRankValue: nil),
+                MoodRankAnalytics.DaySummary(date: Date().addingTimeInterval(-5 * TimeInterval.day), averageMoodRankValue: nil),
+                MoodRankAnalytics.DaySummary(date: Date().addingTimeInterval(-4 * TimeInterval.day), averageMoodRankValue: nil),
+                MoodRankAnalytics.DaySummary(date: Date().addingTimeInterval(-3 * TimeInterval.day), averageMoodRankValue: nil),
+                MoodRankAnalytics.DaySummary(date: Date().addingTimeInterval(-2 * TimeInterval.day), averageMoodRankValue: nil),
+                MoodRankAnalytics.DaySummary(date: Date().addingTimeInterval(-TimeInterval.day), averageMoodRankValue: nil)
             ]
     )
 

@@ -16,22 +16,16 @@ struct LogAnalytics {
 
 // MARK: Mood Rank History
 struct MoodRankAnalytics {
-    let moodRankDays: [MoodRankDaySummary]
-    var averageMoodRankValue: Double? {
-        let values = moodRankDays.compactMap {
-            $0.averageMoodRankValue
-        }
-        let numValues = values.count
-        if numValues == 0 {
-            return nil
-        }
-        return values.reduce(0.0, +) / Double(numValues)
+    struct DaySummary {
+        let date: Date
+        let averageMoodRankValue: Double? // Nil if none exist for that date
     }
-}
-// TODO: Put this inside MoodRankAnalytics
-struct MoodRankDaySummary {
-    let date: Date
-    let averageMoodRankValue: Double? // Nil if none exist for that date
+    let moodRankDays: [DaySummary]
+    var averageMoodRankValue: Double? {
+        moodRankDays.compactMap {
+            $0.averageMoodRankValue
+        }.getAverage()
+    }
 }
 
 // MARK: Symptom Severity
@@ -41,15 +35,20 @@ struct SymptomSeverityAnalytics {
         let averageSeverityValue: Double? // Nil if none exist for that date
     }
     let severityDaySummaries: [DaySummary]
-    // TODO: Extract this into a helper func?
     var averageSeverityValue: Double? {
-        let values = severityDaySummaries.compactMap {
+        severityDaySummaries.compactMap {
             $0.averageSeverityValue
-        }
-        let numValues = values.count
+        }.getAverage()
+    }
+}
+
+// MARK: Helper functions
+fileprivate extension Array where Element == Double {
+    func getAverage() -> Double? {
+        let numValues = self.count
         if numValues == 0 {
             return nil
         }
-        return values.reduce(0.0, +) / Double(numValues)
+        return self.reduce(0.0, +) / Double(numValues)
     }
 }

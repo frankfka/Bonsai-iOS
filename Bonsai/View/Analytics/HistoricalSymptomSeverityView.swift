@@ -24,7 +24,7 @@ extension DateFormatter {
 struct HistoricalSymptomSeverityView: View {
 
     struct ViewModel {
-        static let minChartHeight: CGFloat = 200 // TODO: Somehow make this not a constant
+        static let minChartHeight: CGFloat = 200
         static let barChartStyle = BarChartStyle(
                 barColor: Color.Theme.Positive.opacity(0.8),
                 barSpacing: CGFloat.Theme.Charts.BarSpacing,
@@ -66,7 +66,6 @@ struct HistoricalSymptomSeverityView: View {
 
         let axisLabels: [(fullDisplay: String, shortDisplay: String)]
         var useFullAxisLabels: Bool {
-            // TODO: Use width to determine this
             barChartData.count < 10
         }
         let barChartData: [BarChartDataPoint]

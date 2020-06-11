@@ -8,7 +8,6 @@
 
 import SwiftUI
 
-// TODO: on dissappear, reset state
 struct CreateLogView: View {
     @EnvironmentObject var store: AppStore
     
@@ -59,9 +58,9 @@ struct CreateLogView: View {
                 Spacer()
             }
             .keyboardAwarePadding()
+            .padding(.bottom, CGFloat.Theme.Layout.Normal) // Bottom padding for safe area
         }
         .disabled(self.viewModel.isFormDisabled)
-        .background(Color.Theme.BackgroundPrimary)
         .navigationBarTitle("Add Log")
         .navigationBarItems(
             leading: Button(action: {
@@ -78,9 +77,11 @@ struct CreateLogView: View {
                     .font(Font.Theme.NormalBoldText)
                     .foregroundColor(viewModel.isSaveButtonDisabled ? Color.Theme.GrayscalePrimary : Color.Theme.Primary)
             })
-                .disabled(viewModel.isSaveButtonDisabled)
+            .disabled(viewModel.isSaveButtonDisabled)
         )
+        .background(Color.Theme.BackgroundPrimary)
         .embedInNavigationView()
+        .edgesIgnoringSafeArea(.bottom) // Allow background to cover the bottom safe area
         .withLoadingPopup(show: .constant(self.viewModel.isLoading), text: self.viewModel.loadMessage)
         .withStandardPopup(show: .constant(self.viewModel.showSuccessDialog), type: .success, text: "Saved Successfully") {
             self.onSaveSuccessPopupDismiss()

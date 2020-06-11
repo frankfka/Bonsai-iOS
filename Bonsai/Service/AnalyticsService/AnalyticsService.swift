@@ -49,7 +49,7 @@ class AnalyticsServiceImpl: AnalyticsService {
     }
     
     private func getHistoricalMoodRank(from logs: [MoodLog], numDays: Int) -> MoodRankAnalytics {
-        var moodRankDays: [MoodRankDaySummary] = []
+        var moodRankDays: [MoodRankAnalytics.DaySummary] = []
         let now = Date()
         // Calculate for the past 7 days, in reverse order
         for daysInThePast in (0 ..< numDays).reversed() {
@@ -65,7 +65,7 @@ class AnalyticsServiceImpl: AnalyticsService {
                     .map { Double($0.moodRank.rawValue) }
                     .reduce(0.0, +) / Double(numMoodLogsInDate)
             }
-            moodRankDays.append(MoodRankDaySummary(date: date, averageMoodRankValue: averageMoodRank))
+            moodRankDays.append(MoodRankAnalytics.DaySummary(date: date, averageMoodRankValue: averageMoodRank))
         }
         return MoodRankAnalytics(moodRankDays: moodRankDays)
     }

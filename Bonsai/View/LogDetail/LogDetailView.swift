@@ -121,16 +121,12 @@ struct LogDetailView: View {
                 )
             )
         }
-        .background(
-            EmptyView()
-            // Create Log Reminder Modal
-            .sheet(
-                isPresented: $showCreateLogReminderModal) {
-                    CreateLogReminderView(
-                            viewModel: self.getCreateLogReminderModalViewModel()
-                    ).environmentObject(self.store)
-            }
-        )
+        // Create Log Reminder Modal
+        .sheet(isPresented: $showCreateLogReminderModal) {
+            CreateLogReminderView(
+                viewModel: self.getCreateLogReminderModalViewModel()
+            ).environmentObject(self.store)
+        }
         // Popups
         .withLoadingPopup(show: .constant(self.viewModel.isLoading), text: self.viewModel.loadingMessage)
         .withStandardPopup(show: .constant(self.viewModel.showError), type: .failure, text: self.viewModel.errorMessage) {

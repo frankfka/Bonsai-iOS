@@ -8,7 +8,6 @@
 
 import SwiftUI
 
-// TODO: There's some weird behavior with 24 hours automatically converting to 1 day, but not a big deal
 extension TimeInterval {
     static let reminderIntervalValueSelections: [(strValue: String, val: Int)] = Array(1...24).map {
         ("\($0)", $0)

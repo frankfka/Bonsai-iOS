@@ -13,14 +13,10 @@ struct ContentView: View {
 
     @EnvironmentObject var store: AppStore
 
-    struct ViewModel {
-        var tabIndex: Int = 0
-    }
-
-    @State private var viewModel: ViewModel = ViewModel()
+    @State private var tabIndex: Int = 0
     private var tabBarVm: TabBarView.ViewModel {
         TabBarView.ViewModel(
-            tabIndex: $viewModel.tabIndex,
+            tabIndex: self.$tabIndex,
             onCreateLogPressed: self.onCreateLogPressed
         )
     }
@@ -29,7 +25,7 @@ struct ContentView: View {
     var body: some View {
         // Main view with
         VStack(spacing: 0) {
-            if viewModel.tabIndex == 0 {
+            if self.tabIndex == 0 {
                 HomeTabContainer()
             } else {
                 ViewLogsTabContainer()
