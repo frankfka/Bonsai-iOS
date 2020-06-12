@@ -37,7 +37,7 @@ struct HomeTabView: View {
         if self.viewModel.isLoading {
             FullScreenLoadingSpinner(isOverlay: false)
         } else if self.viewModel.loadError {
-            ErrorView()
+            FullScreenErrorView()
         } else {
             HomeTabScrollView()
         }
@@ -51,7 +51,7 @@ struct HomeTabView: View {
             .navigationBarTitle("Home")
             .navigationBarItems(
                 trailing: NavigationLink(destination: SettingsView()) {
-                    Image(systemName: "person.crop.circle")
+                    Image.Icons.PersonCropCircle
                         .resizable()
                         .aspectRatio(1, contentMode: .fit)
                         .frame(height: CGFloat.Theme.Layout.NavBarItemHeight)

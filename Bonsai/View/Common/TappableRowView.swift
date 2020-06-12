@@ -40,7 +40,7 @@ struct TappableRowView: View {
                 .font(Font.Theme.NormalText)
                 .foregroundColor(Color.Theme.SecondaryText)
             if viewModel.hasDisclosureIndicator {
-                Image(systemName: "chevron.right")
+                Image.Icons.ChevronRight
                     .foregroundColor(Color.Theme.TertiaryText)
                     .padding(.leading, CGFloat.Theme.Layout.Small)
             }

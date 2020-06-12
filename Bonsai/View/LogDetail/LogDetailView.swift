@@ -94,14 +94,14 @@ struct LogDetailView: View {
                 trailing: Button(action: {
                     self.onDeleteLogTapped()
                 }, label: {
-                    Image(systemName: "trash")
-                            .resizable()
-                            .aspectRatio(1, contentMode: .fit)
-                            .frame(height: CGFloat.Theme.Layout.NavBarItemHeight)
-                            .foregroundColor(
-                                    self.viewModel.disableDelete ?
-                                            Color.Theme.GrayscalePrimary : Color.Theme.Primary
-                            )
+                    Image.Icons.Trash
+                        .resizable()
+                        .aspectRatio(1, contentMode: .fit)
+                        .frame(height: CGFloat.Theme.Layout.NavBarItemHeight)
+                        .foregroundColor(
+                            self.viewModel.disableDelete ?
+                                Color.Theme.GrayscalePrimary : Color.Theme.Primary
+                        )
                 })
                 .disabled(self.viewModel.disableDelete)
         )

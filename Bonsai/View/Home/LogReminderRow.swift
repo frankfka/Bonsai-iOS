@@ -53,7 +53,7 @@ struct LogReminderRow: View {
     
     var body: some View {
         HStack {
-            Image.Icons.TodoEmpty
+            Image.Icons.Circle
                 .font(Font.Theme.NormalIcon)
                 .foregroundColor(Color.Theme.Primary)
                 // Add additional padding to make tappable space bigger

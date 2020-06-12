@@ -8,13 +8,42 @@
 
 import SwiftUI
 
-// TODO: Allow for retries
-struct ErrorView: View {
+// Generic full screen error view
+struct FullScreenErrorView: View {
+    private let onRetryTapped: VoidCallback?
+
+    init(onRetryTapped: VoidCallback? = nil) {
+        self.onRetryTapped = onRetryTapped
+    }
+
+    var body: some View {
+        VStack(alignment: .center) {
+            Spacer()
+            GenericErrorView(onRetryTapped: self.onRetryTapped)
+            Spacer()
+        }
+    }
+}
+
+struct GenericErrorView: View {
+    private let onRetryTapped: VoidCallback?
+    private var retryButtonViewModel: RoundedBorderButtonView.ViewModel {
+        RoundedBorderButtonView.ViewModel(
+            text: "Try Again",
+            textColor: Color.white,
+            fillColor: Color.Theme.Primary,
+            onTap: self.onRetryTapped
+        )
+    }
+
+    init(onRetryTapped: VoidCallback? = nil) {
+        self.onRetryTapped = onRetryTapped
+    }
+
     var body: some View {
         GeometryReader { geometry in
             VStack(alignment: .center, spacing: CGFloat.Theme.Layout.Normal) {
-                Spacer()
-                Image(systemName: "xmark.circle")
+                Image.Icons.XMarkCircle
                     .resizable()
                     .aspectRatio(1.0, contentMode: .fit)
                     .frame(maxWidth: geometry.size.width / 4, alignment: .center)
@@ -26,8 +55,10 @@ struct ErrorView: View {
                     .multilineTextAlignment(.center)
                     .font(Font.Theme.NormalText)
                     .foregroundColor(Color.Theme.SecondaryText)
-                Spacer()
-            }.padding(CGFloat.Theme.Layout.Normal * 3)
+                if self.onRetryTapped != nil {
+                    RoundedBorderButtonView(viewModel: self.retryButtonViewModel)
+                }
+            }.padding(CGFloat.Theme.Layout.Normal)
         }
     }
 }
@@ -35,10 +66,16 @@ struct ErrorView: View {
 struct ErrorView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            ErrorView()
+            GenericErrorView()
                 .frame(height: 300)
                 .previewLayout(.sizeThatFits)
-            ErrorView()
+            GenericErrorView(onRetryTapped: {})
+                .frame(height: 300)
+                .previewLayout(.sizeThatFits)
+            FullScreenErrorView()
         }
+        .background(Color.white)
+        .padding()
+        .background(Color.gray)
     }
 }

@@ -195,7 +195,7 @@ struct LogReminderDetailView: View {
     var body: some View {
         VStack {
             if viewModel.showErrorView {
-                ErrorView()
+                FullScreenErrorView()
             } else {
                 mainBody
             }
@@ -204,7 +204,7 @@ struct LogReminderDetailView: View {
             trailing: Button(action: {
                 self.onDeleteReminderTapped()
             }, label: {
-                Image(systemName: "trash")
+                Image.Icons.Trash
                     .resizable()
                     .aspectRatio(1, contentMode: .fit)
                     .frame(height: CGFloat.Theme.Layout.NavBarItemHeight)

@@ -29,9 +29,9 @@ struct FormRowModifier: ViewModifier {
 struct RowModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
-                .padding(.vertical, CGFloat.Theme.Layout.Small)
-                .padding(.horizontal, CGFloat.Theme.Layout.Normal)
-                .contentShape(Rectangle())
-                .background(Color.Theme.BackgroundSecondary)
+            .padding(.vertical, CGFloat.Theme.Layout.Small)
+            .padding(.horizontal, CGFloat.Theme.Layout.Normal)
+            .contentShape(Rectangle())
+            .background(Color.Theme.BackgroundSecondary)
     }
 }

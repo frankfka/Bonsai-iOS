@@ -27,12 +27,7 @@ struct MoodRankPickerView: View {
         HStack(spacing: CGFloat.Theme.Layout.Normal) {
             Spacer()
             ForEach(0..<self.viewModel.moodRanks.count) { index in
-                Image(
-                        systemName: self.getImageNameForMood(
-                                for: self.viewModel.moodRanks[index],
-                                isSelected: self.viewModel.selectedMoodRankIndex == index
-                        )
-                )
+                self.getImageForMood(for: self.viewModel.moodRanks[index], isSelected: self.viewModel.selectedMoodRankIndex == index)
                     .resizable()
                     .foregroundColor(self.getIconColor(for: index))
                     .frame(width: CGFloat.Theme.Font.LargeIcon, height: CGFloat.Theme.Font.LargeIcon)
@@ -45,14 +40,14 @@ struct MoodRankPickerView: View {
         }
     }
     
-    private func getImageNameForMood(for moodRank: MoodRank, isSelected: Bool) -> String {
+    private func getImageForMood(for moodRank: MoodRank, isSelected: Bool) -> Image {
         switch moodRank {
         case .negative:
-            return isSelected ? "1.circle.fill" : "1.circle"
+            return isSelected ? Image.Icons.OneCircleFill : Image.Icons.OneCircle
         case .neutral:
-            return isSelected ? "2.circle.fill" : "2.circle"
+            return isSelected ? Image.Icons.TwoCircleFill : Image.Icons.TwoCircle
         case .positive:
-            return isSelected ? "3.circle.fill" : "3.circle"
+            return isSelected ? Image.Icons.ThreeCircleFill : Image.Icons.ThreeCircle
         }
     }
 

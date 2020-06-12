@@ -27,7 +27,7 @@ struct AddNewListItemView: View {
     
     var body: some View {
         HStack {
-            Image(systemName: "plus.circle.fill")
+            Image.Icons.PlusCircleFill
                 .resizable()
                 .frame(width: CGFloat.Theme.Font.NormalIcon, height: CGFloat.Theme.Font.NormalIcon)
                 .foregroundColor(Color.Theme.Primary)

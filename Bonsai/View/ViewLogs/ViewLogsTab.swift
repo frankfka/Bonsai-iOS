@@ -76,7 +76,7 @@ struct ViewLogsTabContainer: View {
             if viewModel.isLoading {
                 FullScreenLoadingSpinner(isOverlay: false)
             } else if viewModel.loadError {
-                ErrorView()
+                FullScreenErrorView()
             } else if viewModel.logViewModels.isEmpty {
                 ViewLogsTabNoResultsView()
             } else {
