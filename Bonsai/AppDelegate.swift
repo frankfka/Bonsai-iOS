@@ -29,7 +29,6 @@ fileprivate func initializeApp(with store: AppStore) {
     navBarAppearance.configureWithOpaqueBackground()
     navBarAppearance.backgroundColor = Color.Theme.NavBarBackground
     navigationBarAppearance.tintColor = Color.Theme.PrimaryUIColor
-    navigationBarAppearance.isTranslucent = false
     navigationBarAppearance.standardAppearance = navBarAppearance
     navigationBarAppearance.scrollEdgeAppearance = navBarAppearance
 }
