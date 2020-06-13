@@ -57,22 +57,84 @@ struct ViewLogsTabContainer: View {
     }
 
     private var viewModel: ViewModel { ViewModel(state: store.state) }
+    // Child Vm's
+    private var viewTypePickerViewVm: ViewLogsViewTypePickerView.ViewModel {
+        ViewLogsViewTypePickerView.ViewModel(isViewByDate: self.store.state.viewLogs.showLogsByDate) {
+            newIsViewByDate in
+            self.store.send(.viewLog(action: .viewTypeChanged(isViewByDate: newIsViewByDate)))
+        }
+    }
+    private var headerDatePickerViewVm: ViewLogsDateHeaderView.ViewModel {
+        ViewLogsDateHeaderView.ViewModel(
+            confirmedDate: store.state.viewLogs.dateForLogs,
+            dateSelectionBinding: self.$datePickerSelection,
+            onNewDateConfirmed: self.onNewDateConfirmed
+        )
+    }
+    private var viewMoreLogsViewVm: ViewLogsLoadMoreView.ViewModel {
+        let canLoadMore = store.state.viewLogs.canLoadMore
+        let isLoadingMore = store.state.viewLogs.isLoadingMore
+        let showLoadMoreButton = canLoadMore && !isLoadingMore
+        let showLoadingMoreIndicator = isLoadingMore
+        return ViewLogsLoadMoreView.ViewModel(
+            showLoadingMoreIndicator: showLoadingMoreIndicator,
+            showLoadMoreButton: showLoadMoreButton) {
+            // Compute new number to show
+            let newNumToShow = self.store.state.viewLogs.viewAllNumToShow + ViewModel.viewAllNumToShowIncrement
+            self.store.send(.viewLog(action: .numToShowChanged(newNumToShow: newNumToShow)))
+        }
+    }
+
     @State(initialValue: false) private var navigateToLogDetails: Bool? // Allows conditional pushing of navigation views
     @State(initialValue: Date()) private var datePickerSelection: Date
 
-    private var headerView: ViewLogsDateHeaderView {
-        ViewLogsDateHeaderView(viewModel: getHeaderDatePickerViewModel())
+    // MARK: Child Views
+    private var viewTypeView: some View {
+        ViewLogsViewTypePickerView(viewModel: self.viewTypePickerViewVm)
+            .padding(.vertical, CGFloat.Theme.Layout.Small)
+            .padding(.horizontal, CGFloat.Theme.Layout.Normal)
+            .background(Color.Theme.BackgroundSecondary)
+    }
+    private var datePickerHeaderView: some View {
+        ViewLogsDateHeaderView(viewModel: self.headerDatePickerViewVm)
+    }
+    private var mainScrollView: some View {
+        ScrollView {
+            VStack(alignment: .leading) {
+                // Using the tag allows us to conditionally trigger navigation within an onTap method
+                NavigationLink(destination: LogDetailView(), tag: true, selection: $navigateToLogDetails) {
+                    EmptyView()
+                }
+                ForEach(viewModel.logViewModels) { logVm in
+                    Group {
+                        LogRow(viewModel: logVm)
+                            .onTapGesture {
+                                self.onLogRowTapped(loggable: logVm.loggable)
+                            }
+                        if self.viewModel.showDivider(after: logVm) {
+                            Divider()
+                        }
+                    }
+                }
+                if viewModel.showViewAllBottomActions {
+                    ViewLogsLoadMoreView(viewModel: self.viewMoreLogsViewVm)
+                }
+            }
+            .modifier(RoundedBorderSectionModifier())
+            .padding(.all, CGFloat.Theme.Layout.Normal)
+        }
+        .modifier(ViewLogsTabSwipeGestureRecognizer(onSwipe: self.onLogSectionSwipe))
     }
 
+    // MARK: Main View
     var body: some View {
         VStack(spacing: 0) {
-            ViewLogsViewTypePickerView(viewModel: getViewTypePickerViewModel())
-                .padding(.vertical, CGFloat.Theme.Layout.Small)
-                .padding(.horizontal, CGFloat.Theme.Layout.Normal)
-                .background(Color.Theme.BackgroundSecondary)
+            // Header section
+            self.viewTypeView
             if self.viewModel.showDatePicker {
-                self.headerView
+                self.datePickerHeaderView
             }
+            // Main body
             if viewModel.isLoading {
                 FullScreenLoadingSpinner(isOverlay: false)
             } else if viewModel.loadError {
@@ -80,31 +142,7 @@ struct ViewLogsTabContainer: View {
             } else if viewModel.logViewModels.isEmpty {
                 ViewLogsTabNoResultsView()
             } else {
-                ScrollView {
-                    VStack(alignment: .leading) {
-                        // Using the tag allows us to conditionally trigger navigation within an onTap method
-                        NavigationLink(destination: LogDetailView(), tag: true, selection: $navigateToLogDetails) {
-                            EmptyView()
-                        }
-                        ForEach(viewModel.logViewModels) { logVm in
-                            Group {
-                                LogRow(viewModel: logVm)
-                                    .onTapGesture {
-                                        self.onLogRowTapped(loggable: logVm.loggable)
-                                    }
-                                if self.viewModel.showDivider(after: logVm) {
-                                    Divider()
-                                }
-                            }
-                        }
-                        if viewModel.showViewAllBottomActions {
-                            ViewLogsLoadMoreView(viewModel: getViewAllLoadMoreViewModel())
-                        }
-                    }
-                    .modifier(RoundedBorderSectionModifier())
-                    .padding(.all, CGFloat.Theme.Layout.Normal)
-                }
-                .modifier(ViewLogsTabSwipeGestureRecognizer(onSwipe: self.onLogSectionSwipe))
+                self.mainScrollView
             }
         }
         // Use flex frame so it always fills width
@@ -115,45 +153,14 @@ struct ViewLogsTabContainer: View {
         .background(Color.Theme.BackgroundPrimary)
         .navigationBarTitle("Logs")
         .embedInNavigationView()
-        .padding(.top) // Temporary - bug where scrollview goes under the status bar
     }
 
+    // MARK: Actions
     private func onAppear() {
         self.navigateToLogDetails = nil // Resets navigation state
         self.store.send(.viewLog(action: .screenDidShow))
     }
 
-    // MARK: View Models
-    private func getViewTypePickerViewModel() -> ViewLogsViewTypePickerView.ViewModel {
-        return ViewLogsViewTypePickerView.ViewModel(isViewByDate: self.store.state.viewLogs.showLogsByDate) {
-            newIsViewByDate in
-            self.store.send(.viewLog(action: .viewTypeChanged(isViewByDate: newIsViewByDate)))
-        }
-    }
-
-    private func getHeaderDatePickerViewModel() -> ViewLogsDateHeaderView.ViewModel {
-        return ViewLogsDateHeaderView.ViewModel(
-            confirmedDate: store.state.viewLogs.dateForLogs,
-            dateSelectionBinding: self.$datePickerSelection,
-            onNewDateConfirmed: self.onNewDateConfirmed
-        )
-    }
-
-    private func getViewAllLoadMoreViewModel() -> ViewLogsLoadMoreView.ViewModel {
-        let canLoadMore = store.state.viewLogs.canLoadMore
-        let isLoadingMore = store.state.viewLogs.isLoadingMore
-        let showLoadMoreButton = canLoadMore && !isLoadingMore
-        let showLoadingMoreIndicator = isLoadingMore
-        return ViewLogsLoadMoreView.ViewModel(
-                showLoadingMoreIndicator: showLoadingMoreIndicator,
-                showLoadMoreButton: showLoadMoreButton) {
-            // Compute new number to show
-            let newNumToShow = self.store.state.viewLogs.viewAllNumToShow + ViewModel.viewAllNumToShowIncrement
-            self.store.send(.viewLog(action: .numToShowChanged(newNumToShow: newNumToShow)))
-        }
-    }
-
-    // MARK: Actions
     private func onLogRowTapped(loggable: Loggable) {
         store.send(.logDetails(action: .initState(loggable: loggable)))
         navigateToLogDetails = true

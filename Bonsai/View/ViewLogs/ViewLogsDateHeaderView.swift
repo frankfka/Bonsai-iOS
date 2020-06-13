@@ -46,6 +46,9 @@ struct ViewLogsDateHeaderView: View {
     }
     @State var showDatePicker: Bool = false
     private let viewModel: ViewModel
+    private var datePickerViewVm: DatePickerView.ViewModel {
+        DatePickerView.ViewModel(selectedDate: self.viewModel.dateSelectionBinding)
+    }
     
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -158,7 +161,7 @@ struct ViewLogsDateHeaderView: View {
             self.topBarView
             // Calendar Picker View
             if showDatePicker {
-                DatePickerView(viewModel: getDatePickerViewModel())
+                DatePickerView(viewModel: self.datePickerViewVm)
             }
             Divider()
         }
@@ -166,10 +169,6 @@ struct ViewLogsDateHeaderView: View {
             self.onViewAppear()
         })
         .background(Color.Theme.BackgroundSecondary)
-    }
-    
-    private func getDatePickerViewModel() -> DatePickerView.ViewModel {
-        return DatePickerView.ViewModel(selectedDate: self.viewModel.dateSelectionBinding)
     }
     
     private func onDecrementDateTapped() {
@@ -215,7 +214,6 @@ struct ViewLogsDateHeaderView: View {
     }
 
     func resetDateSelection() {
-        // TODO: Modifying state during view update, look into this
         self.viewModel.dateSelectionBinding.wrappedValue = self.viewModel.confirmedDate
     }
     

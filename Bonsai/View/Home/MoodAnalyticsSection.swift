@@ -33,8 +33,7 @@ struct MoodAnalyticsSection: View {
                 FullWidthLoadingSpinner(size: .small)
                     .frame(minHeight: CGFloat.Theme.Layout.MinSectionHeight)
             } else if self.viewModel.loadError {
-                // TODO: This should not use the full screen error view
-                FullScreenErrorView()
+                GenericErrorView()
             } else {
                 self.viewModel.chartViewModel.map {
                     HistoricalMoodChartView(viewModel: $0)
