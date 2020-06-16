@@ -9,7 +9,14 @@
 import Foundation
 import Combine
 
-class Services {
+protocol AppServices {
+    var notificationService: NotificationService { get }
+    var userService: UserService { get }
+    var logService: LogService { get }
+    var logReminderService: LogReminderService { get }
+    var analyticsService: AnalyticsService { get }
+}
+class AppServicesImpl: AppServices {
     let notificationService: NotificationService
     let userService: UserService
     let logService: LogService
@@ -28,7 +35,6 @@ class Services {
         analyticsService = AnalyticsServiceImpl(db: db)
     }
 }
-
 struct AppState {
     // General app related stuff
     var global: GlobalState
@@ -75,24 +81,8 @@ struct AppState {
         self.createLogReminder = createLogReminder
     }
 }
-
-// Global services wrapper
-let globalServices = try! Services()  // TODO: Figure out a place to gracefully handle this error
-// Global store
-// TODO: Pass services into the store, so it can be private?
-let globalStore = AppStore(
-    initialState: AppState(),
-    reducer: AppReducer.reduce,
-    middleware: AppMiddleware.middleware(services: globalServices)
-)
-// Somewhat hacky way to send actions in our naive redux implementation
-func doInMiddleware(_ action: @escaping VoidCallback) {
-    DispatchQueue.main.asyncAfter(deadline: .now()) {
-        action()
-    }
-}
 struct AppMiddleware {
-    static func middleware(services: Services) -> [Middleware<AppState>] {
+    static func getMiddleware(services: AppServices) -> [Middleware<AppState>] {
         var middleware: [Middleware<AppState>] = []
         // Action Logging
         middleware.append(loggingMiddleware())

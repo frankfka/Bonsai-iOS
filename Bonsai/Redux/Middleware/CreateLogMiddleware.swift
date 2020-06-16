@@ -8,7 +8,7 @@ import Foundation
 
 struct CreateLogMiddleware {
 
-    static func middleware(services: Services) -> [Middleware<AppState>] {
+    static func middleware(services: AppServices) -> [Middleware<AppState>] {
         return [
             initFromReminderMiddleware(logService: services.logService),
             createLogSearchMiddleware(logService: services.logService),

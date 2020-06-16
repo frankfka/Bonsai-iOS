@@ -109,27 +109,25 @@ struct SearchListView: View {
                 if viewModel.showAddNew {
                     AddNewListItemView(viewModel: getAddNewListItemViewModel())
                         .modifier(RoundedBorderSectionModifier())
-                        .padding(.horizontal, CGFloat.Theme.Layout.normal)
-                        .padding(.top, CGFloat.Theme.Layout.normal)
+                        .padding(.horizontal, CGFloat.Theme.Layout.Normal)
+                        .padding(.top, CGFloat.Theme.Layout.Normal)
                 }
                 VStack {
                     HStack {
                         Text("Search Results")
-                            .font(Font.Theme.heading)
-                            .foregroundColor(Color.Theme.textDark)
-                            .padding(.bottom, CGFloat.Theme.Layout.small)
+                            .font(Font.Theme.Heading)
+                            .foregroundColor(Color.Theme.Text)
+                            .padding(.bottom, CGFloat.Theme.Layout.Small)
                         Spacer()
                     }
                     getResultView()
                         .modifier(RoundedBorderSectionModifier())
                 }
-                .padding(.all, CGFloat.Theme.Layout.normal)
+                .padding(.all, CGFloat.Theme.Layout.Normal)
             }
         }
-        // TODO: Temporary soln to fix bug in swiftui where scrollview scrolls under bottom bar
-        .padding(.bottom, 1.0)
         // Disable/Enable interaction
-        .disableInteraction(isDisabled: .constant(self.viewModel.viewDisabled))
+        .disabled(self.viewModel.viewDisabled)
         // Loading/Success/Failure States
         .withLoadingPopup(show: .constant(self.viewModel.isCreatingNewLogItem), text: "Saving New Item")
         .withStandardPopup(show: .constant(self.viewModel.createNewLogItemSuccess), type: .success, text: "Saved Successfully") {
@@ -148,13 +146,13 @@ struct SearchListView: View {
                 message: Text("Are you sure you want to add \(self.viewModel.addNewItemName) and select it from the list?"),
                 primaryButton: .default(
                     Text("Confirm")
-                        .foregroundColor(Color.Theme.primary)
+                        .foregroundColor(Color.Theme.Primary)
                 ) {
                     self.viewModel.onAddNewSelect?(self.viewModel.addNewItemName)
                 },
                 secondaryButton: .cancel(
                     Text("Cancel")
-                        .foregroundColor(Color.Theme.primary)
+                        .foregroundColor(Color.Theme.Primary)
                 )
             )
         }
@@ -164,11 +162,11 @@ struct SearchListView: View {
             self.viewModel.onCancel?()
         }, label: {
             Text("Cancel")
-                .font(Font.Theme.normalText)
-                .foregroundColor(Color.Theme.primary)
+                .font(Font.Theme.NormalText)
+                .foregroundColor(Color.Theme.Primary)
         }))
         .navigationBarTitle(Text(viewModel.navigationBarTitle), displayMode: .inline)
-        .background(Color.Theme.backgroundPrimary)
+        .background(Color.Theme.BackgroundPrimary)
     }
     
     private func getResultView() -> AnyView {
@@ -177,7 +175,7 @@ struct SearchListView: View {
             return SearchResultsView(viewModel: getSearchResultsViewModel()).eraseToAnyView()
         case .loading:
             return FullWidthLoadingSpinner(size: .small)
-                .padding(CGFloat.Theme.Layout.normal)
+                .padding(CGFloat.Theme.Layout.Normal)
                 .eraseToAnyView()
         case .info:
             return SearchInfoView(viewModel: getSearchInfoViewModel())

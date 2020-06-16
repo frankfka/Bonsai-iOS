@@ -55,46 +55,84 @@ struct CreateLogReminderView: View {
         self.viewModel = viewModel
     }
 
+    // MARK: Child view models
+    private var dateTimeFormPickerViewVm: DateTimeFormPickerView.ViewModel {
+        DateTimeFormPickerView.ViewModel(
+            selectedDate: viewModel.reminderDate, showDatePicker: $showDatePicker, showTimePicker: $showTimePicker,
+            isForwardLookingRange: true, datePickerLabel: "Reminder Date", timePickerLabel: "Reminder Time",
+            onDateChange: { newDate in
+                self.reminderDateDidChange(newDate: newDate)
+        })
+    }
+    private var logReminderIntervalPickerViewVm: LogReminderIntervalPickerView.ViewModel {
+        LogReminderIntervalPickerView.ViewModel(
+            selectedInterval: viewModel.recurringTimeInterval,
+            showPicker: $showIntervalPicker
+        ) { newIntervalSelection in
+            self.reminderIntervalDidChange(newIntervalSelection: newIntervalSelection)
+        }
+    }
+    private var isRecurringToggleViewVm: ToggleRowView.ViewModel {
+        ToggleRowView.ViewModel(title: .constant("Recurring"), value: Binding<Bool>(get: {
+            self.isRecurring
+        }, set: { isRecurring in
+            self.isRecurringDidChange(isRecurring: isRecurring)
+        }))
+    }
+    private var isPushNotificationsEnabledViewVm: ToggleRowView.ViewModel {
+        ToggleRowView.ViewModel(
+            title: .constant("Push Notification"),
+            description: self.viewModel.showNoNotificationPermissionsText ?
+                .constant("Notifications permissions are currently disabled. Permissions must be enabled manually in iPhone settings.") : .constant(nil),
+            value: Binding<Bool>(get: {
+                self.isPushNotificationEnabled
+            }, set: { isEnabled in
+                self.isPushNotificationEnabledDidChange(isEnabled: isEnabled)
+            })
+        )
+    }
+
+    // MARK: Main view
     var body: some View {
         GeometryReader { geometry in
             ScrollView {
-                VStack(spacing: CGFloat.Theme.Layout.normal) {
+                VStack(spacing: CGFloat.Theme.Layout.Normal) {
                     // Pick date and time for reminder
-                    DateTimeFormPickerView(viewModel: self.getDateTimeFormPickerViewModel())
-                            .padding(.top, CGFloat.Theme.Layout.normal)
+                    DateTimeFormPickerView(viewModel: self.dateTimeFormPickerViewVm)
+                            .padding(.top, CGFloat.Theme.Layout.Normal)
                     // Pick whether the reminder is recurring
                     VStack(spacing: 0) {
-                        ToggleRowView(viewModel: self.getIsRecurringToggleViewModel())
+                        ToggleRowView(viewModel: self.isRecurringToggleViewVm)
                         if self.viewModel.isRecurringReminder {
                             Divider()
                             LogReminderIntervalPickerView(
-                                viewModel: self.getLogReminderIntervalPickerViewModel(),
+                                viewModel: self.logReminderIntervalPickerViewVm,
                                 geometry: geometry
                             )
                         }
                     }
                     // Pick whether to enable push notifications
-                    ToggleRowView(viewModel: self.getIsPushNotificationsEnabledViewModel())
+                    ToggleRowView(viewModel: self.isPushNotificationsEnabledViewVm)
                     Spacer()
                 }
             }
-            .disableInteraction(isDisabled: .constant(self.viewModel.isFormDisabled))
-            .background(Color.Theme.backgroundPrimary)
+            .disabled(self.viewModel.isFormDisabled)
+            .background(Color.Theme.BackgroundPrimary)
             .navigationBarTitle("Create Reminder")
             .navigationBarItems(
                 leading: Button(action: {
                     self.onCancel()
                 }, label: {
                     Text("Cancel")
-                        .font(Font.Theme.normalText)
-                        .foregroundColor(Color.Theme.primary)
+                        .font(Font.Theme.NormalText)
+                        .foregroundColor(Color.Theme.Primary)
                 }),
                 trailing: Button(action: {
                     self.onSave()
                 }, label: {
                     Text("Save")
-                        .font(Font.Theme.normalBoldText)
-                        .foregroundColor(self.viewModel.isSaveButtonDisabled ? Color.Theme.grayscalePrimary : Color.Theme.primary)
+                        .font(Font.Theme.NormalBoldText)
+                        .foregroundColor(self.viewModel.isSaveButtonDisabled ? Color.Theme.GrayscalePrimary : Color.Theme.Primary)
                 })
                 .disabled(self.viewModel.isSaveButtonDisabled)
             )
@@ -109,8 +147,8 @@ struct CreateLogReminderView: View {
             .onAppear {
                 self.store.send(.createLogReminder(action: .screenDidShow))
             }
-            .onReceive(self.store.$state) { _ in
-                self.updateState()
+            .onReceive(self.store.$state) { newState in
+                self.updateState(with: newState)
             }
         }
     }
@@ -125,17 +163,15 @@ struct CreateLogReminderView: View {
     }
 
     private func isRecurringDidChange(isRecurring: Bool) {
-        self.isRecurring = isRecurring
         self.store.send(.createLogReminder(action: .isRecurringDidChange(isRecurring: isRecurring)))
     }
 
     private func isPushNotificationEnabledDidChange(isEnabled: Bool) {
-        self.isPushNotificationEnabled = isEnabled
-        store.send(.createLogReminder(action: .isPushNotificationEnabledDidChange(isEnabled: isEnabled)))
+        self.store.send(.createLogReminder(action: .isPushNotificationEnabledDidChange(isEnabled: isEnabled)))
     }
 
     private func onSave() {
-        store.send(.createLogReminder(action: .onSavePressed))
+        self.store.send(.createLogReminder(action: .onSavePressed))
     }
 
     private func onSaveSuccessPopupDismiss() {
@@ -151,51 +187,12 @@ struct CreateLogReminderView: View {
         viewModel.showModal.toggle()
     }
 
-    private func updateState() {
-        self.isPushNotificationEnabled = self.viewModel.isPushNotificationEnabled
-        self.isRecurring = self.viewModel.isRecurringReminder
+    // Update toggle state vars with state, this ensures that we have smooth toggling
+    // Unfortunately we can't grab these values from viewmodel, as that updates after
+    private func updateState(with appState: AppState) {
+        self.isPushNotificationEnabled = appState.createLogReminder.isPushNotificationEnabled
+        self.isRecurring = appState.createLogReminder.isRecurring
     }
-
-    // View Models TODO: make them computed vars
-    private func getDateTimeFormPickerViewModel() -> DateTimeFormPickerView.ViewModel {
-        return DateTimeFormPickerView.ViewModel(
-            selectedDate: viewModel.reminderDate, showDatePicker: $showDatePicker, showTimePicker: $showTimePicker,
-            isForwardLookingRange: true, datePickerLabel: "Reminder Date", timePickerLabel: "Reminder Time",
-                onDateChange: { newDate in
-            self.reminderDateDidChange(newDate: newDate)
-        })
-    }
-
-    private func getLogReminderIntervalPickerViewModel() -> LogReminderIntervalPickerView.ViewModel {
-        return LogReminderIntervalPickerView.ViewModel(
-                selectedInterval: viewModel.recurringTimeInterval,
-                showPicker: $showIntervalPicker
-        ) { newIntervalSelection in
-            self.reminderIntervalDidChange(newIntervalSelection: newIntervalSelection)
-        }
-    }
-
-    private func getIsRecurringToggleViewModel() -> ToggleRowView.ViewModel {
-        return ToggleRowView.ViewModel(title: .constant("Recurring"), value: Binding<Bool>(get: {
-            return self.isRecurring
-        }, set: { isRecurring in
-            self.isRecurringDidChange(isRecurring: isRecurring)
-        }))
-    }
-
-    private func getIsPushNotificationsEnabledViewModel() -> ToggleRowView.ViewModel {
-        return ToggleRowView.ViewModel(
-            title: .constant("Push Notification"),
-            description: self.viewModel.showNoNotificationPermissionsText ?
-                .constant("Notifications permissions are currently disabled. Permissions must be enabled manually in iPhone settings.") : .constant(nil),
-            value: Binding<Bool>(get: {
-                return self.isPushNotificationEnabled
-            }, set: { isEnabled in
-                self.isPushNotificationEnabledDidChange(isEnabled: isEnabled)
-            })
-        )
-    }
-
 }
 
 struct CreateLogReminderView_Previews: PreviewProvider {

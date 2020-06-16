@@ -40,45 +40,48 @@ struct CreateLogView: View {
     }
     @State(initialValue: false) private var showDatePicker
     @State(initialValue: false) private var showTimePicker
-    private var viewModel: ViewModel
-    
-    init(viewModel: ViewModel) {
-        self.viewModel = viewModel
+    private var viewModel: ViewModel {
+        ViewModel(
+            showModal: self.$store.state.global.showCreateLogModal,
+            state: self.store.state.createLog
+        )
     }
     
     var body: some View {
         ScrollView {
-            VStack(spacing: CGFloat.Theme.Layout.normal) {
+            VStack(spacing: CGFloat.Theme.Layout.Normal) {
                 RowPickerView(viewModel: getCategoryPickerViewModel())
-                    .padding(.top, CGFloat.Theme.Layout.normal)
+                    .padding(.top, CGFloat.Theme.Layout.Normal)
                 DateTimeFormPickerView(viewModel: getCreateLogDateTimePickerViewModel())
                 getCategorySpecificView()
                 CreateLogTextField(viewModel: getNotesViewModel())
                 Spacer()
             }
             .keyboardAwarePadding()
+            .padding(.bottom, CGFloat.Theme.Layout.Normal) // Bottom padding for safe area
         }
-        .disableInteraction(isDisabled: .constant(self.viewModel.isFormDisabled))
-        .background(Color.Theme.backgroundPrimary)
+        .disabled(self.viewModel.isFormDisabled)
         .navigationBarTitle("Add Log")
         .navigationBarItems(
             leading: Button(action: {
                 self.onCancel()
             }, label: {
                 Text("Cancel")
-                    .font(Font.Theme.normalText)
-                    .foregroundColor(Color.Theme.primary)
+                    .font(Font.Theme.NormalText)
+                    .foregroundColor(Color.Theme.Primary)
             }),
             trailing: Button(action: {
                 self.onSave()
             }, label: {
                 Text("Save")
-                    .font(Font.Theme.normalBoldText)
-                    .foregroundColor(viewModel.isSaveButtonDisabled ? Color.Theme.grayscalePrimary : Color.Theme.primary)
+                    .font(Font.Theme.NormalBoldText)
+                    .foregroundColor(viewModel.isSaveButtonDisabled ? Color.Theme.GrayscalePrimary : Color.Theme.Primary)
             })
-                .disabled(viewModel.isSaveButtonDisabled)
+            .disabled(viewModel.isSaveButtonDisabled)
         )
+        .background(Color.Theme.BackgroundPrimary)
         .embedInNavigationView()
+        .edgesIgnoringSafeArea(.bottom) // Allow background to cover the bottom safe area
         .withLoadingPopup(show: .constant(self.viewModel.isLoading), text: self.viewModel.loadMessage)
         .withStandardPopup(show: .constant(self.viewModel.showSuccessDialog), type: .success, text: "Saved Successfully") {
             self.onSaveSuccessPopupDismiss()
@@ -181,17 +184,12 @@ struct CreateLogView: View {
 
 struct CreateLogView_Previews: PreviewProvider {
 
-    static let viewModel = CreateLogView.ViewModel(
-        showModal: .constant(true),
-        state: PreviewRedux.initialStore.state.createLog
-    )
-
     static var previews: some View {
         Group {
-            CreateLogView(viewModel: viewModel)
+            CreateLogView()
                 .environmentObject(PreviewRedux.initialStore)
 
-            CreateLogView(viewModel: viewModel)
+            CreateLogView()
                 .environmentObject(PreviewRedux.initialStore)
                 .environment(\.colorScheme, .dark)
         }

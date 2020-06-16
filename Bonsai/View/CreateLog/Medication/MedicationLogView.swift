@@ -41,7 +41,7 @@ struct MedicationLogView: View {
             Divider()
             CreateLogTextField(viewModel: getDosageViewModel())
         }
-                .background(Color.Theme.backgroundSecondary)
+                .background(Color.Theme.BackgroundSecondary)
     }
 
     func onUpdateQueryDebounced(query: String) {

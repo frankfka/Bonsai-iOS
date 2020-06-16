@@ -8,7 +8,7 @@ import Combine
 
 struct HomeScreenMiddleware {
 
-    static func middleware(services: Services) -> [Middleware<AppState>] {
+    static func middleware(services: AppServices) -> [Middleware<AppState>] {
         return [
             homeScreenDidShowMiddleware(),
             initHomeScreenMiddleware(logService: services.logService, logReminderService: services.logReminderService)

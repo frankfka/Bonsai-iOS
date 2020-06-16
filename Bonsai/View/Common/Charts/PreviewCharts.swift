@@ -16,13 +16,13 @@ struct PreviewCharts {
         BarChartDataPoint(relativeValue: 1)
     ]
     static var AppBarChartStyle: BarChartStyle = BarChartStyle(
-            barGradientColors: [Color.Theme.positive, Color.Theme.positive, Color.Theme.neutral, Color.Theme.negative],
-            barRadius: CGFloat.Theme.Layout.cornerRadius
+            barGradientColors: [Color.Theme.Positive, Color.Theme.Positive, Color.Theme.Neutral, Color.Theme.Negative],
+            barRadius: CGFloat.Theme.Layout.CornerRadius
     )
 
     // Line Charts
     static var LineChartMarker: AnyView = Circle()
-            .foregroundColor(Color.Theme.neutral)
+            .foregroundColor(Color.Theme.Neutral)
             .frame(width: 4, height: 4)
             .eraseToAnyView()
 
@@ -44,7 +44,7 @@ struct PreviewCharts {
     )
 
     static var AppLineChartStyle: LineChartStyle = LineChartStyle(
-            lineColor: Color.Theme.primary,
+            lineColor: Color.Theme.Primary,
             lineStrokeStyle: StrokeStyle(),
             smoothed: true
     )

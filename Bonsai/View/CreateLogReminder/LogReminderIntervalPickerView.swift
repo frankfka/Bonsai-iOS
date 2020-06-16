@@ -8,7 +8,6 @@
 
 import SwiftUI
 
-// TODO: There's some weird behavior with 24 hours automatically converting to 1 day, but not a big deal
 extension TimeInterval {
     static let reminderIntervalValueSelections: [(strValue: String, val: Int)] = Array(1...24).map {
         ("\($0)", $0)
@@ -106,8 +105,8 @@ struct LogReminderIntervalPickerView: View {
                             ForEach(0..<ViewModel.intervalValueSelections.count) { index in
                                 Text(ViewModel.intervalValueSelections[index].0)
                                         .tag(index)
-                                        .font(Font.Theme.normalText)
-                                        .foregroundColor(Color.Theme.textDark)
+                                        .font(Font.Theme.NormalText)
+                                        .foregroundColor(Color.Theme.Text)
                             }
                         }
                         // For type selection
@@ -118,13 +117,13 @@ struct LogReminderIntervalPickerView: View {
                             ForEach(0..<ViewModel.intervalTypeSelections.count) { index in
                                 Text(ViewModel.intervalTypeSelections[index].0)
                                         .tag(index)
-                                        .font(Font.Theme.normalText)
-                                        .foregroundColor(Color.Theme.textDark)
+                                        .font(Font.Theme.NormalText)
+                                        .foregroundColor(Color.Theme.Text)
                             }
                         }
                     }
                     .labelsHidden()
-                    .padding(CGFloat.Theme.Layout.small)
+                    .padding(CGFloat.Theme.Layout.Small)
                     .frame(maxWidth: parentGeometry.size.width / 2)
                     .clipped()
                 }
@@ -132,7 +131,7 @@ struct LogReminderIntervalPickerView: View {
                 .clipped()
             }
         }
-        .background(Color.Theme.backgroundSecondary)
+        .background(Color.Theme.BackgroundSecondary)
     }
     
     private func getRowViewModel() -> TappableRowView.ViewModel {

@@ -17,9 +17,9 @@ struct RecentLogSection: View {
             recentLogs.isEmpty
         }
         let recentLogs: [LogRow.ViewModel]
-        @Binding var navigationState: HomeTab.NavigationState?
+        @Binding var navigationState: HomeTabScrollView.NavigationState?
 
-        init(recentLogs: [Loggable], navigationState: Binding<HomeTab.NavigationState?>) {
+        init(recentLogs: [Loggable], navigationState: Binding<HomeTabScrollView.NavigationState?>) {
             self.recentLogs = recentLogs.map { LogRow.ViewModel(loggable: $0) }
             self._navigationState = navigationState
         }
@@ -63,7 +63,7 @@ struct RecentLogSection: View {
             } else {
                 // Using the tag allows us to conditionally trigger navigation within an onTap method
                 // This is useful because we can dispatch an action to initialize the redux state
-                NavigationLink(destination: LogDetailView(), tag: HomeTab.NavigationState.logDetail, selection: viewModel.$navigationState) {
+                NavigationLink(destination: LogDetailView(), tag: HomeTabScrollView.NavigationState.logDetail, selection: viewModel.$navigationState) {
                     EmptyView()
                 }
                 ForEach(viewModel.recentLogs.prefix(numToShow)) { logVm in
@@ -82,10 +82,10 @@ struct RecentLogSection: View {
                         self.bottomButtonViewModel.onTap?()
                     }, label: {
                         Text(self.bottomButtonViewModel.text)
-                            .font(Font.Theme.normalText)
-                            .foregroundColor(Color.Theme.primary)
-                            .padding(.vertical, CGFloat.Theme.Layout.extraSmall)
-                            .padding(.horizontal, CGFloat.Theme.Layout.normal)
+                            .font(Font.Theme.NormalText)
+                            .foregroundColor(Color.Theme.Primary)
+                            .padding(.vertical, CGFloat.Theme.Layout.ExtraSmall)
+                            .padding(.horizontal, CGFloat.Theme.Layout.Normal)
                     })
                 }
             }
@@ -94,7 +94,7 @@ struct RecentLogSection: View {
 
     private func onLogRowTapped(loggable: Loggable) {
         store.send(.logDetails(action: .initState(loggable: loggable)))
-        viewModel.navigationState = HomeTab.NavigationState.logDetail
+        viewModel.navigationState = HomeTabScrollView.NavigationState.logDetail
     }
 }
 
@@ -103,16 +103,16 @@ struct NoRecentLogsView: View {
         VStack(alignment: .center) {
             Spacer()
             Text("No recent logs found")
-                    .font(Font.Theme.heading)
-                    .foregroundColor(Color.Theme.textDark)
+                    .font(Font.Theme.Heading)
+                    .foregroundColor(Color.Theme.Text)
             Text("Begin by adding a log using the \"+\" icon below")
-                    .font(Font.Theme.normalText)
+                    .font(Font.Theme.NormalText)
                     .multilineTextAlignment(.center)
-                    .foregroundColor(Color.Theme.text)
+                    .foregroundColor(Color.Theme.SecondaryText)
             Spacer()
         }
-        .padding(.horizontal, CGFloat.Theme.Layout.normal)
-        .padding(.vertical, CGFloat.Theme.Layout.large)
+        .padding(.horizontal, CGFloat.Theme.Layout.Normal)
+        .padding(.vertical, CGFloat.Theme.Layout.Large)
         .frame(minWidth: 0, maxWidth: .infinity)
     }
 }

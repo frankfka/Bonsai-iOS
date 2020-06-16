@@ -29,10 +29,10 @@ struct RootView: View {
             if viewModel.isLoading {
                 FullScreenLoadingSpinner(isOverlay: false)
             } else if viewModel.loadError {
-                ErrorView()
+                FullScreenErrorView()
             } else {
                 // The content view for all of the app
-                ContentViewContainer()
+                ContentView()
             }
         }
     }

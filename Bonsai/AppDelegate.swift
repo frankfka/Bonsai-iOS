@@ -12,41 +12,35 @@ import Firebase
 import GoogleSignIn
 
 
-// TODO: Consider having an extension on Store to conform to GIDSignInDelegate
-// TODO: Can we create globalstore and stuff here?? - make them vars that are non nil?
+// Calls all the necessary functions to initialize the app
+fileprivate func initializeApp(with store: AppStore) {
+    GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
+    GIDSignIn.sharedInstance().delegate = globalStore
+
+    // Configure notifications
+    UNUserNotificationCenter.current().delegate = globalStore
+
+    // Notify on app launch
+    globalStore.send(.global(action: .appDidLaunch))
+
+    // Configure navigation bar
+    let navigationBarAppearance = UINavigationBar.appearance()
+    let navBarAppearance = UINavigationBarAppearance()
+    navBarAppearance.configureWithOpaqueBackground()
+    navBarAppearance.backgroundColor = Color.Theme.NavBarBackground
+    navigationBarAppearance.tintColor = Color.Theme.PrimaryUIColor
+    navigationBarAppearance.standardAppearance = navBarAppearance
+    navigationBarAppearance.scrollEdgeAppearance = navBarAppearance
+}
+
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
         // Configure Firebase - must be done first
-        // TODO: This breaks if we use globalstore beforehand, this is because globalstore relies on Firebaseapp.configure()
         FirebaseApp.configure()
-        GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
-        GIDSignIn.sharedInstance().delegate = self
-
-        // Configure notifications
-        UNUserNotificationCenter.current().delegate = globalStore
-        
-        globalStore.send(.global(action: .appDidLaunch))
-
-        let navigationBarAppearace = UINavigationBar.appearance()
-        // TODO: Using unmonitored UIColor here
-        navigationBarAppearace.backgroundColor = .systemBackground
-        navigationBarAppearace.barTintColor = .systemBackground
-        navigationBarAppearace.tintColor = Color.Theme.primaryUIColor
+        initializeApp(with: globalStore)
         return true
-    }
-
-    // MARK: Firebase Auth
-    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        globalServices.userService.googleSignedIn(signIn, didSignInFor: user, withError: error)
-    }
-    // Not supporting below iOS 9
-    @available(iOS 9.0, *)
-    func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any])
-                    -> Bool {
-        return GIDSignIn.sharedInstance().handle(url)
     }
 
 

@@ -5,18 +5,18 @@
 
 import SwiftUI
 
-// Wrapper around search list view for medications
+// TODO: Need to find a cleaner way of doing this
+// Wrapper around search list view
 struct SearchListViewContainer: View {
     @EnvironmentObject var store: AppStore
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @State var searchTextObservable: SearchTextObservable
+    @State var searchTextObservable: SearchTextObservable // This needs to be a @State to make sure the query doesn't reset on VM change
 
-    // TODO: Very hard to not have this in the constructor, so keeping for now
     init(onUpdateQueryDebounced: @escaping StringCallback) {
         self._searchTextObservable = State(
-                initialValue: SearchTextObservable(onUpdateTextDebounced: { q in
-                    onUpdateQueryDebounced(q)
-                })
+            initialValue: SearchTextObservable(onUpdateTextDebounced: { q in
+                onUpdateQueryDebounced(q)
+            })
         )
     }
 
@@ -27,11 +27,7 @@ struct SearchListViewContainer: View {
     func getSearchListViewModel() -> SearchListView.ViewModel {
         return SearchListView.ViewModel(
                 searchDescriptor: store.state.createLog.selectedCategory.displayValue(plural: true),
-                query: Binding<String>(get: {
-                    return self.searchTextObservable.searchText
-                }, set: { newVal in
-                    self.searchTextObservable.searchText = newVal
-                }),
+                query: self.$searchTextObservable.searchText,
                 isSearching: store.state.createLog.isSearching,
                 results: store.state.createLog.searchResults,
                 isCreatingNewLogItem: store.state.createLog.isCreatingLogItem,

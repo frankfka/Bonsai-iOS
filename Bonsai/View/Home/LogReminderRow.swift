@@ -53,12 +53,12 @@ struct LogReminderRow: View {
     
     var body: some View {
         HStack {
-            Image.Icons.todoEmpty
-                .font(Font.Theme.normalIcon)
-                .foregroundColor(Color.Theme.primary)
+            Image.Icons.Circle
+                .font(Font.Theme.NormalIcon)
+                .foregroundColor(Color.Theme.Primary)
                 // Add additional padding to make tappable space bigger
-                .padding(.vertical, CGFloat.Theme.Layout.small)
-                .padding(.trailing, CGFloat.Theme.Layout.small)
+                .padding(.vertical, CGFloat.Theme.Layout.Small)
+                .padding(.trailing, CGFloat.Theme.Layout.Small)
                 .onTapGesture {
                     self.viewModel.onTodoTapped?()
                 }
@@ -67,17 +67,17 @@ struct LogReminderRow: View {
                     Text(self.viewModel.title)
                             .lineLimit(1)
                             .truncationMode(.tail)
-                            .font(Font.Theme.normalText)
-                            .foregroundColor(Color.Theme.textDark)
+                            .font(Font.Theme.NormalText)
+                            .foregroundColor(Color.Theme.Text)
                     Text(self.viewModel.categoryName)
                             .lineLimit(1)
-                            .font(Font.Theme.subtext)
+                            .font(Font.Theme.SmallText)
                             .foregroundColor(self.viewModel.categoryColor)
                 }
-                Spacer(minLength: CGFloat.Theme.Layout.rowSeparator)
+                Spacer(minLength: CGFloat.Theme.Layout.RowSeparator)
                 Text(viewModel.reminderDate)
-                        .font(Font.Theme.subtext)
-                        .foregroundColor(viewModel.isOverdue ? Color.Theme.accent : Color.Theme.primary)
+                        .font(Font.Theme.SmallText)
+                        .foregroundColor(viewModel.isOverdue ? Color.Theme.Accent : Color.Theme.Primary)
             }
             .contentShape(Rectangle())
             .onTapGesture {

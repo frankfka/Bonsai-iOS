@@ -36,11 +36,11 @@ struct SettingsView: View {
     
     var body: some View {
         ScrollView {
-            VStack(spacing: CGFloat.Theme.Layout.normal) {
+            VStack(spacing: CGFloat.Theme.Layout.Normal) {
                 TitledSection(sectionTitle: "Account") {
                     AccountSettingsSection(viewModel: self.getAccountSectionViewModel())
                 }
-                .padding(.top, CGFloat.Theme.Layout.normal)
+                .padding(.top, CGFloat.Theme.Layout.Normal)
                 TitledSection(sectionTitle: "Analytics") {
                     AnalyticsSettingsSection(viewModel: self.getAnalyticsSectionViewModel())
                 }
@@ -50,7 +50,7 @@ struct SettingsView: View {
             }
         }
         // TODO: Declaring background breaks scrollview collapse navigation title behavior
-        .background(Color.Theme.backgroundPrimary)
+        .background(Color.Theme.BackgroundPrimary)
         .withLoadingPopup(show: .constant(viewModel.showLoading), text: "Loading")
         .withStandardPopup(show: .constant(viewModel.showSuccess), type: .success, text: viewModel.successMessage) {
             self.successPopupShown()
@@ -132,7 +132,7 @@ struct SettingsView: View {
     private func getSaveButtonViewModel() -> RoundedBorderButtonView.ViewModel {
         return RoundedBorderButtonView.ViewModel(
                 text: "Save",
-                textColor: self.viewModel.saveButtonDisabled ? Color.Theme.text : Color.Theme.primary,
+                textColor: self.viewModel.saveButtonDisabled ? Color.Theme.SecondaryText : Color.Theme.Primary,
                 onTap: self.onSaveTapped
         )
     }

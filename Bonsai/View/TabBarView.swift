@@ -22,49 +22,63 @@ struct TabBarView: View {
         }
     }
     let viewModel: ViewModel
-    
+
+    // MARK: Child views
+    private var homeTabButton: some View {
+        getTabBarIcon(
+            selectedImage: Image.Icons.HouseFill,
+            defaultImage: Image.Icons.House,
+            isSelected: viewModel.tabIndex == 0,
+            onTap: { self.onTabPressed(index: 0) }
+        )
+    }
+    private var allLogsTabButton: some View {
+        getTabBarIcon(
+            selectedImage: Image.Icons.ChartBarFill,
+            defaultImage: Image.Icons.ChartBar,
+            isSelected: viewModel.tabIndex == 1,
+            onTap: { self.onTabPressed(index: 1) }
+        )
+    }
+    private func getTabBarIcon(selectedImage: Image, defaultImage: Image, isSelected: Bool, onTap: @escaping VoidCallback) -> some View {
+        (isSelected ? selectedImage : defaultImage)
+            .resizable()
+            .foregroundColor(isSelected ? Color.Theme.Primary : Color.Theme.GrayscalePrimary)
+            .aspectRatio(contentMode: .fit)
+            .padding(CGFloat.Theme.Layout.Normal)
+            .frame(height: CGFloat.Theme.Layout.TabItemHeight)
+            .frame(minWidth: 0, maxWidth: .infinity)
+            .contentShape(Rectangle())
+            .onTapGesture(perform: onTap)
+    }
+    private var createLogButton: some View {
+        Image.Icons.PlusCircleFill
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(height: CGFloat.Theme.Layout.TabItemHeight)
+            .foregroundColor(Color.Theme.Primary)
+            .onTapGesture {
+                self.viewModel.onCreateLogPressed?()
+            }
+    }
+
+    // MARK: Main view
     var body: some View {
         VStack {
             Divider()
             HStack {
-                Image(systemName: viewModel.tabIndex == 0 ? "house.fill" : "house")
-                    .resizable()
-                    .foregroundColor(viewModel.tabIndex == 0 ? Color.Theme.primary : Color.Theme.grayscalePrimary)
-                    .aspectRatio(contentMode: .fit)
-                    .padding(CGFloat.Theme.Layout.normal)
-                    .frame(height: CGFloat.Theme.Layout.tabItemHeight)
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        self.onTabPressed(index: 0)
-                }
-                Image(systemName: "plus.circle.fill")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(height: CGFloat.Theme.Layout.tabItemHeight)
-                    .foregroundColor(Color.Theme.primary)
-                    .onTapGesture {
-                        self.viewModel.onCreateLogPressed?()
-                    }
-                Image(systemName: viewModel.tabIndex == 1 ? "chart.bar.fill" : "chart.bar")
-                    .resizable()
-                    .foregroundColor(viewModel.tabIndex == 1 ? Color.Theme.primary : Color.Theme.grayscalePrimary)
-                    .aspectRatio(contentMode: .fit)
-                    .padding(CGFloat.Theme.Layout.normal)
-                    .frame(height: CGFloat.Theme.Layout.tabItemHeight)
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        self.onTabPressed(index: 1)
-                }
+                self.homeTabButton
+                self.createLogButton
+                self.allLogsTabButton
             }
-            .padding(.all, CGFloat.Theme.Layout.small)
+            .padding(.all, CGFloat.Theme.Layout.Small)
         }
-        .padding(.bottom, CGFloat.Theme.Layout.normal)
+        .padding(.bottom, CGFloat.Theme.Layout.Normal)
         .frame(minWidth: 0, maxWidth: .infinity)
-        .background(Color.Theme.backgroundSecondary)
+        .background(Color.Theme.BackgroundSecondary)
     }
 
+    // MARK: Actions
     private func onTabPressed(index: Int) {
         self.viewModel.tabIndex = index
         self.viewModel.onTabPressed?(index)

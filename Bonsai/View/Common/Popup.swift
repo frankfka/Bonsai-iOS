@@ -22,14 +22,14 @@ struct Popup<Content>: View where Content: View {
             self.presentingView()
             if self.showPopup {
                 self.content()
-                    .padding(CGFloat.Theme.Layout.normal)
-                    .frame(minWidth: CGFloat.Theme.Layout.popupFrameSize, minHeight: CGFloat.Theme.Layout.popupFrameSize)
+                    .padding(CGFloat.Theme.Layout.Normal)
+                    .frame(minWidth: CGFloat.Theme.Layout.PopupFrameSize, minHeight: CGFloat.Theme.Layout.PopupFrameSize)
                     .background(
                         ZStack {
-                            RoundedRectangle(cornerRadius: CGFloat.Theme.Layout.cornerRadius)
-                                    .foregroundColor(Color.Theme.popupBackground)
-                            RoundedRectangle(cornerRadius: CGFloat.Theme.Layout.cornerRadius)
-                                    .stroke(Color.Theme.grayscaleSecondary, lineWidth: 0.5)
+                            RoundedRectangle(cornerRadius: CGFloat.Theme.Layout.CornerRadius)
+                                    .foregroundColor(Color.Theme.BackgroundPopup)
+                            RoundedRectangle(cornerRadius: CGFloat.Theme.Layout.CornerRadius)
+                                    .stroke(Color.Theme.GrayscaleSecondary, lineWidth: 0.5)
                         }
                     )
             }

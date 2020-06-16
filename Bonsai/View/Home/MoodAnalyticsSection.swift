@@ -31,13 +31,13 @@ struct MoodAnalyticsSection: View {
         VStack(alignment: .center, spacing: 0) {
             if self.viewModel.isLoading {
                 FullWidthLoadingSpinner(size: .small)
-                    .frame(minHeight: CGFloat.Theme.Layout.minSectionHeight)
+                    .frame(minHeight: CGFloat.Theme.Layout.MinSectionHeight)
             } else if self.viewModel.loadError {
-                ErrorView()
+                GenericErrorView()
             } else {
                 self.viewModel.chartViewModel.map {
                     HistoricalMoodChartView(viewModel: $0)
-                        .padding(CGFloat.Theme.Layout.small)
+                        .padding(CGFloat.Theme.Layout.Small)
                 }
             }
         }

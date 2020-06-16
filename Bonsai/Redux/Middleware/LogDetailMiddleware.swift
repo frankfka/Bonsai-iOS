@@ -8,7 +8,7 @@ import Combine
 
 struct LogDetailMiddleware {
 
-    static func middleware(services: Services) -> [Middleware<AppState>] {
+    static func middleware(services: AppServices) -> [Middleware<AppState>] {
         return [
             initLogData(logService: services.logService),
             deleteLog(logService: services.logService),

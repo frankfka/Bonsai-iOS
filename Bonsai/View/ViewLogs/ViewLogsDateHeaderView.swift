@@ -32,121 +32,143 @@ struct ViewLogsDateHeaderView: View {
         let confirmedDate: Date
         let dateSelectionBinding: Binding<Date> // This changes when user changes the date picker, but hasn't yet confirmed the date
         let onNewDateConfirmed: DateCallback?
+        var isDateIncrementDisabled: Bool {
+            // Date selection is today or later
+            let selectedDate = dateSelectionBinding.wrappedValue
+            return selectedDate > Date().beginningOfDate
+        }
         
         init(confirmedDate: Date, dateSelectionBinding: Binding<Date>, onNewDateConfirmed: DateCallback? = nil) {
             self.dateSelectionBinding = dateSelectionBinding
             self.confirmedDate = confirmedDate
             self.onNewDateConfirmed = onNewDateConfirmed
         }
-        
-        // Slightly hacky way to interface with a @state variable
-        func isDateIncrementDisabled(selectedDate: Date) -> Bool {
-            // Date selection is today or it is later than the current time
-            return Calendar.current.isDateInToday(selectedDate) || selectedDate > Date()
-        }
     }
     @State var showDatePicker: Bool = false
-    private var isDateIncrementDisabled: Bool {
-        viewModel.isDateIncrementDisabled(selectedDate: self.viewModel.dateSelectionBinding.wrappedValue)
-    }
     private let viewModel: ViewModel
+    private var datePickerViewVm: DatePickerView.ViewModel {
+        DatePickerView.ViewModel(selectedDate: self.viewModel.dateSelectionBinding)
+    }
     
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
     }
-    
+
+    // MARK: Child views
+    private var cancelDateSelectionButton: some View {
+        // Left cancel button - show only when date picker is shown
+        Button(action: {
+            self.onDateSelectionCancel()
+        }) {
+            Text("Cancel")
+                .font(Font.Theme.NormalText)
+                .foregroundColor(Color.Theme.Primary)
+        }
+    }
+    private var decrementDateButton: some View {
+        // Left chevron - to decrement date
+        Button(action: {
+            self.onDecrementDateTapped()
+        }) {
+            Image.Icons.ChevronLeft
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: CGFloat.Theme.Font.NormalIcon, height: CGFloat.Theme.Font.NormalIcon)
+                .foregroundColor(Color.Theme.Primary)
+        }
+    }
+    private var leftBarButton: some View {
+        Group {
+            if showDatePicker {
+                self.cancelDateSelectionButton
+            } else {
+                self.decrementDateButton
+            }
+        }
+        .padding(CGFloat.Theme.Layout.Small)
+    }
+
+    private var barCenterDateDisplayView: some View {
+        // Center date display
+        HStack(spacing: 0) {
+            Text(DateFormatter.stringForLogDatePicker(from: self.viewModel.dateSelectionBinding.wrappedValue))
+                .font(Font.Theme.NormalBoldText)
+                .foregroundColor(Color.Theme.Text)
+                .padding(.trailing, CGFloat.Theme.Layout.Small)
+            (showDatePicker ? Image.Icons.ChevronDown : Image.Icons.ChevronRight)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: CGFloat.Theme.Font.SmallIcon, height: CGFloat.Theme.Font.SmallIcon)
+                .foregroundColor(Color.Theme.Text)
+        }
+    }
+
+    private var confirmDateSelectionButton: some View {
+        // Right confirmation button - show only when date picker is shown
+        Button(action: {
+            self.onDateSelectionConfirmed()
+        }) {
+            Text("Done")
+                .font(Font.Theme.NormalBoldText)
+                .foregroundColor(Color.Theme.Primary)
+        }
+    }
+    private var incrementDateButton: some View {
+        // Right chevron - to increment date
+        Button(action: {
+            self.onIncrementDateTapped()
+        }) {
+            Image.Icons.ChevronRight
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: CGFloat.Theme.Font.NormalIcon, height: CGFloat.Theme.Font.NormalIcon)
+                .foregroundColor(viewModel.isDateIncrementDisabled ? Color.Theme.GrayscalePrimary : Color.Theme.Primary)
+        }
+        .disabled(viewModel.isDateIncrementDisabled)
+    }
+    private var rightBarButton: some View {
+        Group {
+            if showDatePicker {
+                self.confirmDateSelectionButton
+            } else {
+                self.incrementDateButton
+            }
+        }
+        .padding(CGFloat.Theme.Layout.Small)
+    }
+
+    private var topBarView: some View {
+        HStack {
+            self.leftBarButton
+            Spacer()
+            self.barCenterDateDisplayView
+            Spacer()
+            self.rightBarButton
+        }
+        .padding(.vertical, CGFloat.Theme.Layout.Small)
+        .padding(.horizontal, CGFloat.Theme.Layout.Normal)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            self.onDateViewTapped()
+        }
+    }
+
+    // MARK: Main body
     var body: some View {
         VStack(spacing: 0) {
             Divider()
             // Top Bar view
-            HStack {
-                // Left bar item
-                Group {
-                    if showDatePicker {
-                        // Left cancel button - show only when date picker is shown
-                        Button(action: {
-                            self.onDateSelectionCancel()
-                        }) {
-                            Text("Cancel")
-                                .font(Font.Theme.normalText)
-                                .foregroundColor(Color.Theme.primary)
-                        }
-                    } else {
-                        // Left chevron - to decrement date
-                        Button(action: {
-                            self.onDecrementDateTapped()
-                        }) {
-                            Image(systemName: "chevron.left")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: CGFloat.Theme.Font.normalIcon, height: CGFloat.Theme.Font.normalIcon)
-                                .foregroundColor(Color.Theme.primary)
-                        }
-                    }
-                }
-                .padding(CGFloat.Theme.Layout.small)
-                Spacer()
-                // Center date display
-                HStack(spacing: 0) {
-                    Text(DateFormatter.stringForLogDatePicker(from: self.viewModel.dateSelectionBinding.wrappedValue))
-                        .font(Font.Theme.normalBoldText)
-                        .foregroundColor(Color.Theme.textDark)
-                        .padding(.trailing, CGFloat.Theme.Layout.small)
-                    Image(systemName: showDatePicker ? "chevron.down" : "chevron.right")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: CGFloat.Theme.Font.smallIcon, height: CGFloat.Theme.Font.smallIcon)
-                        .foregroundColor(Color.Theme.textDark)
-                }
-                Spacer()
-                // Right bar item
-                Group {
-                    if showDatePicker {
-                        // Right confirmation button - show only when date picker is shown
-                        Button(action: {
-                            self.onDateSelectionConfirmed()
-                        }) {
-                            Text("Done")
-                                .font(Font.Theme.normalBoldText)
-                                .foregroundColor(Color.Theme.primary)
-                        }
-                    } else {
-                        // Right chevron - to increment date
-                        Button(action: {
-                            self.onIncrementDateTapped()
-                        }) {
-                            Image(systemName: "chevron.right")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: CGFloat.Theme.Font.normalIcon, height: CGFloat.Theme.Font.normalIcon)
-                                .foregroundColor(isDateIncrementDisabled ? Color.Theme.grayscalePrimary : Color.Theme.primary)
-                        }
-                        .disabled(isDateIncrementDisabled)
-                    }
-                }
-                .padding(CGFloat.Theme.Layout.small)
-            }
-            .padding(.vertical, CGFloat.Theme.Layout.small)
-            .padding(.horizontal, CGFloat.Theme.Layout.normal)
-            .contentShape(Rectangle())
-            .onTapGesture {
-                self.onDateViewTapped()
-            }
+            self.topBarView
             // Calendar Picker View
             if showDatePicker {
-                // TODO: Top to bottom transition?
-                DatePickerView(viewModel: getDatePickerViewModel())
+                DatePickerView(viewModel: self.datePickerViewVm)
             }
             Divider()
         }
         .onAppear(perform: {
             self.onViewAppear()
         })
-        .background(Color.Theme.backgroundSecondary)
-    }
-    
-    private func getDatePickerViewModel() -> DatePickerView.ViewModel {
-        return DatePickerView.ViewModel(selectedDate: self.viewModel.dateSelectionBinding)
+        .background(Color.Theme.BackgroundSecondary)
     }
     
     private func onDecrementDateTapped() {

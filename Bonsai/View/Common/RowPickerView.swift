@@ -48,15 +48,15 @@ struct RowPickerView: View {
                     ForEach(0 ..< self.viewModel.values.count) {
                         Text(self.viewModel.values[$0].pickerDisplay)
                             .tag($0)
-                            .font(Font.Theme.normalText)
-                            .foregroundColor(Color.Theme.textDark)
+                            .font(Font.Theme.NormalText)
+                            .foregroundColor(Color.Theme.Text)
                     }
                 }
                 .labelsHidden()
-                .padding(CGFloat.Theme.Layout.small)
+                .padding(CGFloat.Theme.Layout.Small)
             }
         }
-        .background(Color.Theme.backgroundSecondary)
+        .background(Color.Theme.BackgroundSecondary)
     }
     
     private func onRowTapped() {

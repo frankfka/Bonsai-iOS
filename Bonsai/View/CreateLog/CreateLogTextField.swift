@@ -24,15 +24,15 @@ struct CreateLogTextField: View {
 
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
-        UITextField.appearance().tintColor = Color.Theme.primaryUIColor
+        UITextField.appearance().tintColor = Color.Theme.PrimaryUIColor
     }
 
     var body: some View {
         TextField(viewModel.label, text: viewModel.$input)
                 .textFieldStyle(DefaultTextFieldStyle())
-                .font(Font.Theme.normalText)
-                .padding(CGFloat.Theme.Layout.normal)
-                .background(Color.Theme.backgroundSecondary)
+                .font(Font.Theme.NormalText)
+                .padding(CGFloat.Theme.Layout.Normal)
+                .background(Color.Theme.BackgroundSecondary)
     }
 }
 

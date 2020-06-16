@@ -24,51 +24,46 @@ struct MoodRankPickerView: View {
     let viewModel: ViewModel
     
     var body: some View {
-        HStack(spacing: CGFloat.Theme.Layout.normal) {
+        HStack(spacing: CGFloat.Theme.Layout.Normal) {
             Spacer()
             ForEach(0..<self.viewModel.moodRanks.count) { index in
-                Image(
-                        systemName: self.getImageNameForMood(
-                                for: self.viewModel.moodRanks[index],
-                                isSelected: self.viewModel.selectedMoodRankIndex == index
-                        )
-                )
+                self.getImageForMood(for: self.viewModel.moodRanks[index], isSelected: self.viewModel.selectedMoodRankIndex == index)
                     .resizable()
                     .foregroundColor(self.getIconColor(for: index))
-                    .frame(width: CGFloat.Theme.Font.largeIcon, height: CGFloat.Theme.Font.largeIcon)
+                    .frame(width: CGFloat.Theme.Font.LargeIcon, height: CGFloat.Theme.Font.LargeIcon)
                     .onTapGesture {
                         self.viewModel.onMoodRankTap?(index)
                     }
-                    .padding(CGFloat.Theme.Layout.normal)
+                    .padding(CGFloat.Theme.Layout.Normal)
             }
             Spacer()
         }
     }
     
-    private func getImageNameForMood(for moodRank: MoodRank, isSelected: Bool) -> String {
+    private func getImageForMood(for moodRank: MoodRank, isSelected: Bool) -> Image {
         switch moodRank {
         case .negative:
-            return isSelected ? "1.circle.fill" : "1.circle"
+            return isSelected ? Image.Icons.OneCircleFill : Image.Icons.OneCircle
         case .neutral:
-            return isSelected ? "2.circle.fill" : "2.circle"
+            return isSelected ? Image.Icons.TwoCircleFill : Image.Icons.TwoCircle
         case .positive:
-            return isSelected ? "3.circle.fill" : "3.circle"
+            return isSelected ? Image.Icons.ThreeCircleFill : Image.Icons.ThreeCircle
         }
     }
 
     private func getIconColor(for index: Int) -> Color {
         return viewModel.selectedMoodRankIndex == index ?
-                getSelectedIconColor(for: viewModel.moodRanks[index]) : Color.Theme.grayscalePrimary
+                getSelectedIconColor(for: viewModel.moodRanks[index]) : Color.Theme.GrayscalePrimary
     }
     
     private func getSelectedIconColor(for moodRank: MoodRank) -> Color {
         switch moodRank {
         case .negative:
-            return Color.Theme.negative
+            return Color.Theme.Negative
         case .neutral:
-            return Color.Theme.neutral
+            return Color.Theme.Neutral
         case .positive:
-            return Color.Theme.positive
+            return Color.Theme.Positive
         }
     }
     

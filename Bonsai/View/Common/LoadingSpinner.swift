@@ -21,7 +21,7 @@ struct LoadingSpinner: View {
     let size: Size
     
     init(size: Size = .normal) {
-        self.spinnerColor = Color.Theme.primary
+        self.spinnerColor = Color.Theme.Primary
         self.size = size
     }
     
@@ -30,8 +30,8 @@ struct LoadingSpinner: View {
             .trim(from: 0.0, to: 0.6)
             .stroke(self.spinnerColor, lineWidth: size == .normal ? 5.0 : 2.5)
             .frame(
-                    width: size == .normal ? CGFloat.Theme.Misc.spinnerSizeNormal : CGFloat.Theme.Misc.spinnerSizeSmall,
-                    height: size == .normal ? CGFloat.Theme.Misc.spinnerSizeNormal : CGFloat.Theme.Misc.spinnerSizeSmall)
+                    width: size == .normal ? CGFloat.Theme.Misc.SpinnerSizeNormal : CGFloat.Theme.Misc.SpinnerSizeSmall,
+                    height: size == .normal ? CGFloat.Theme.Misc.SpinnerSizeNormal : CGFloat.Theme.Misc.SpinnerSizeSmall)
             .rotationEffect(Angle(degrees: degrees))
             .onAppear(perform: {self.start()})
     }

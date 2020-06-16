@@ -9,116 +9,50 @@
 import SwiftUI
 import Combine
 
-struct ContentViewContainer: View {
-
-    @EnvironmentObject var store: AppStore
-
-    struct ViewModel {
-        var showCreateLogModal: Bool = false
-        var tabIndex: Int = 0
-    }
-
-    @State(initialValue: ViewModel()) private var viewModel: ViewModel
-
-    var body: some View {
-        ContentView(viewModel: getContentViewModel())
-    }
-
-    func getContentViewModel() -> ContentView.ViewModel {
-        return ContentView.ViewModel(
-            showCreateLogModal: $viewModel.showCreateLogModal,
-            tabIndex: $viewModel.tabIndex,
-            tabBarViewModel: getTabBarViewModel()
-        )
-    }
-
-    func getTabBarViewModel() -> TabBarView.ViewModel {
-        return TabBarView.ViewModel(
-            tabIndex: $viewModel.tabIndex,
-            onCreateLogPressed: {
-                self.store.send(.createLog(action: .resetCreateLogState))
-                self.viewModel.showCreateLogModal.toggle()
-            }
-        )
-    }
-}
-
 struct ContentView: View {
 
     @EnvironmentObject var store: AppStore
 
-    struct ViewModel {
-        @Binding var showCreateLogModal: Bool
-        @Binding var tabIndex: Int
-        let tabBarViewModel: TabBarView.ViewModel
-
-        init(showCreateLogModal: Binding<Bool>, tabIndex: Binding<Int>, tabBarViewModel: TabBarView.ViewModel) {
-            self._showCreateLogModal = showCreateLogModal
-            self._tabIndex = tabIndex
-            self.tabBarViewModel = tabBarViewModel
-        }
+    @State private var tabIndex: Int = 0
+    private var tabBarVm: TabBarView.ViewModel {
+        TabBarView.ViewModel(
+            tabIndex: self.$tabIndex,
+            onCreateLogPressed: self.onCreateLogPressed
+        )
     }
 
-    private var viewModel: ViewModel
-
-    init(viewModel: ViewModel) {
-        self.viewModel = viewModel
-    }
-
+    // MARK: Main View
     var body: some View {
+        // Main view with
         VStack(spacing: 0) {
-            if viewModel.tabIndex == 0 {
-                // TODO: Make viewmodel init inside the container itself
-                HomeTabContainer(viewModel: getHomeTabViewModel())
+            if self.tabIndex == 0 {
+                HomeTabView()
             } else {
                 ViewLogsTabContainer()
             }
-            TabBarView(viewModel: viewModel.tabBarViewModel)
+            TabBarView(viewModel: self.tabBarVm)
         }
         .edgesIgnoringSafeArea(.bottom)
-        .sheet(
-            isPresented: viewModel.$showCreateLogModal
-        ) {
-            CreateLogView(
-                viewModel: self.getCreateLogViewModel()
-            ).environmentObject(self.store)
-        }
-        .onReceive(self.store.$showCreateLogModal) {
-            self.viewModel.showCreateLogModal = $0
+        .sheet(isPresented: $store.state.global.showCreateLogModal) {
+            CreateLogView()
+                .environmentObject(self.store)
         }
     }
 
-    private func getCreateLogViewModel() -> CreateLogView.ViewModel {
-        return CreateLogView.ViewModel(
-            showModal: viewModel.$showCreateLogModal,
-            state: store.state.createLog
-        )
+    // MARK: Actions
+    private func onCreateLogPressed() {
+        self.store.send(.createLog(action: .resetCreateLogState))
+        self.store.send(.global(action: .changeCreateLogModalDisplay(shouldDisplay: true)))
     }
-
-    private func getHomeTabViewModel() -> HomeTabContainer.ViewModel {
-        let isLoading = store.state.homeScreen.isLoading
-        let loadError = store.state.homeScreen.initFailure != nil
-        return HomeTabContainer.ViewModel(
-            isLoading: isLoading,
-            loadError: loadError,
-            showCreateLogModal: viewModel.$showCreateLogModal,
-            homeTabDidAppear: onShowHomeTab
-        )
-    }
-
-    private func onShowHomeTab() {
-        self.store.send(.homeScreen(action: .screenDidShow))
-    }
-
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            ContentViewContainer()
+            ContentView()
                 .environment(\.colorScheme, .dark)
-            ContentViewContainer()
+            ContentView()
         }
-            .environmentObject(PreviewRedux.initialStore)
+        .environmentObject(PreviewRedux.initialStore)
     }
 }

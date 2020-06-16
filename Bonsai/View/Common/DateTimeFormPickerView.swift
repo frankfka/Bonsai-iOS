@@ -96,7 +96,7 @@ struct DateTimeFormPickerView: View {
                     .labelsHidden()
             }
         }
-        .background(Color.Theme.backgroundSecondary)
+        .background(Color.Theme.BackgroundSecondary)
     }
 
     // Helper to get the correct Datepicker

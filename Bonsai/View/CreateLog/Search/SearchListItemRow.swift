@@ -26,10 +26,10 @@ struct ListItemRow: View {
     var body: some View {
         HStack {
             Text(viewModel.name)
-                .font(Font.Theme.normalText)
+                .font(Font.Theme.NormalText)
             Spacer()
         }
-        .padding(.all, CGFloat.Theme.Layout.small)
+        .padding(.all, CGFloat.Theme.Layout.Small)
         // Allow taps on Spacer
         .contentShape(Rectangle())
         .onTapGesture {

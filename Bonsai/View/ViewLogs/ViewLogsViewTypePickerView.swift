@@ -39,8 +39,8 @@ struct ViewLogsViewTypePickerView: View {
         }
         .padding(ViewModel.buttonPadding)
         .background(
-            RoundedRectangle(cornerRadius: CGFloat.Theme.Layout.cornerRadius)
-                .foregroundColor(Color.Theme.backgroundPrimary)
+            RoundedRectangle(cornerRadius: CGFloat.Theme.Layout.CornerRadius)
+                .foregroundColor(Color.Theme.BackgroundPrimary)
         )
     }
 
@@ -49,14 +49,14 @@ struct ViewLogsViewTypePickerView: View {
             onTap?()
         }, label: {
             Text(text)
-                .font(Font.Theme.subtext)
-                .foregroundColor(Color.Theme.textDark)
-                .padding(CGFloat.Theme.Layout.small)
+                .font(Font.Theme.SmallText)
+                .foregroundColor(Color.Theme.Text)
+                .padding(CGFloat.Theme.Layout.Small)
                 .frame(minWidth: 0, maxWidth: .infinity)
                 .background(
                     isActive ?
-                        RoundedRectangle(cornerRadius: CGFloat.Theme.Layout.cornerRadius)
-                                .foregroundColor(Color.Theme.backgroundSecondary).eraseToAnyView()
+                        RoundedRectangle(cornerRadius: CGFloat.Theme.Layout.CornerRadius)
+                                .foregroundColor(Color.Theme.BackgroundSecondary).eraseToAnyView()
                         : EmptyView().eraseToAnyView()
                 )
         }).eraseToAnyView()

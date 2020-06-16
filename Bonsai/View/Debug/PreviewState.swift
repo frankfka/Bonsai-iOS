@@ -6,7 +6,8 @@
 import Foundation
 
 struct PreviewRedux {
-    static let initialStore = AppStore(initialState: AppState(), reducer: AppReducer.reduce)
+    private static let services: AppServices = try! AppServicesImpl() // TODO: Mock app services
+    static let initialStore = AppStore(initialState: AppState(), reducer: AppReducer.reduce, services: services)
     static var filledStore: AppStore {
         // Log Details
         var logDetailsState = LogDetailState()
@@ -18,6 +19,6 @@ struct PreviewRedux {
         var appState = AppState()
         appState.logDetails = logDetailsState
         appState.logReminderDetails = logReminderDetailsState
-        return AppStore(initialState: appState, reducer: AppReducer.reduce)
+        return AppStore(initialState: appState, reducer: AppReducer.reduce, services: services)
     }
 }

@@ -14,6 +14,9 @@ struct GlobalReducer {
             return initSuccess(state: state, user: user)
         case let .initFailure(error):
             return initFailure(state: state, error: error)
+        // Navigation
+        case let .changeCreateLogModalDisplay(shouldDisplay):
+            return changeCreateLogModalDisplay(state: state, shouldDisplay: shouldDisplay)
         // Permissions
         case let .notificationPermissionsDidChange(isEnabled):
             return notificationPermissionsDidChange(state: state, isEnabled: isEnabled)
@@ -45,6 +48,16 @@ struct GlobalReducer {
         newState.global.initError = error
         return newState
     }
+
+    // MARK: Navigation
+
+    static private func changeCreateLogModalDisplay(state: AppState, shouldDisplay: Bool) -> AppState {
+        var newState = state
+        newState.global.showCreateLogModal = shouldDisplay
+        return newState
+    }
+
+    // MARK: Notification
 
     static private func notificationPermissionsDidChange(state: AppState, isEnabled: Bool) -> AppState {
         var newState = state

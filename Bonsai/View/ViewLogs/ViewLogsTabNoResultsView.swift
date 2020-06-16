@@ -13,8 +13,8 @@ struct ViewLogsTabNoResultsView: View {
         VStack(alignment: .center) {
             Spacer()
             Text("No Logs Found")
-                    .font(Font.Theme.heading)
-                    .foregroundColor(Color.Theme.textDark)
+                    .font(Font.Theme.Heading)
+                    .foregroundColor(Color.Theme.Text)
             Spacer()
         }.frame(minWidth: 0, maxWidth: .infinity)
     }

@@ -128,7 +128,7 @@ struct LogReminderDetailView: View {
     // Main View
     var mainBody: some View {
         ScrollView {
-            VStack(spacing: CGFloat.Theme.Layout.normal) {
+            VStack(spacing: CGFloat.Theme.Layout.Normal) {
                 // Reminder Info
                 TitledSection(sectionTitle: "Reminder Details") {
                     VStack(spacing: 0) {
@@ -182,12 +182,12 @@ struct LogReminderDetailView: View {
                     }
                 }
             }
-            .padding(.vertical, CGFloat.Theme.Layout.normal)
+            .padding(.vertical, CGFloat.Theme.Layout.Normal)
         }
-        .background(Color.Theme.backgroundPrimary)
-        .onReceive(self.store.$state, perform: { _ in 
+        .background(Color.Theme.BackgroundPrimary)
+        .onReceive(self.store.$state, perform: { newState in
             // Update state vars to match that of store
-            self.updateState()
+            self.updateState(with: newState)
         })
     }
 
@@ -195,7 +195,7 @@ struct LogReminderDetailView: View {
     var body: some View {
         VStack {
             if viewModel.showErrorView {
-                ErrorView()
+                FullScreenErrorView()
             } else {
                 mainBody
             }
@@ -204,13 +204,13 @@ struct LogReminderDetailView: View {
             trailing: Button(action: {
                 self.onDeleteReminderTapped()
             }, label: {
-                Image(systemName: "trash")
+                Image.Icons.Trash
                     .resizable()
                     .aspectRatio(1, contentMode: .fit)
-                    .frame(height: CGFloat.Theme.Layout.navBarItemHeight)
+                    .frame(height: CGFloat.Theme.Layout.NavBarItemHeight)
                     .foregroundColor(
                         self.viewModel.disableDelete ?
-                            Color.Theme.grayscalePrimary : Color.Theme.primary
+                            Color.Theme.GrayscalePrimary : Color.Theme.Primary
                     )
             })
             .disabled(self.viewModel.disableDelete)
@@ -243,7 +243,6 @@ struct LogReminderDetailView: View {
 
     // MARK: Actions
     private func isPushNotificationEnabledDidChange(isEnabled: Bool) {
-        self.isPushNotificationEnabled = isEnabled
         store.send(.logReminderDetails(action: .isPushNotificationEnabledDidChange(isEnabled: isEnabled)))
     }
 
@@ -269,9 +268,10 @@ struct LogReminderDetailView: View {
         store.send(.logReminderDetails(action: .screenDidDismiss))
     }
 
-    // Updates state variables to reflect our centralized store
-    private func updateState() {
-        self.isPushNotificationEnabled = self.viewModel.isPushNotificationEnabled
+    // Update toggle state vars with state, this ensures that we have smooth toggling
+    // Unfortunately we can't grab these values from viewmodel, as that updates after
+    private func updateState(with appState: AppState) {
+        self.isPushNotificationEnabled = appState.logReminderDetails.isPushNotificationEnabled
     }
 }
 

@@ -11,6 +11,9 @@ enum GlobalAction: LoggableAction {
     case initSuccess(user: User)
     case initFailure(error: Error)
 
+    // Navigation
+    case changeCreateLogModalDisplay(shouldDisplay: Bool)
+
     // Permissions
     case notificationPermissionsInit(isEnabled: Bool) // Dispatched when we first check on app launch - this triggers scheduling of notifications, but otherwise has same effect
     case notificationPermissionsDidChange(isEnabled: Bool)

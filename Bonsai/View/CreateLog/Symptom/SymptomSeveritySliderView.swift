@@ -34,13 +34,13 @@ struct SymptomSeveritySliderView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            HStack(spacing: CGFloat.Theme.Layout.small) {
+            HStack(spacing: CGFloat.Theme.Layout.Small) {
                 Text("Severity:")
-                    .font(Font.Theme.normalBoldText)
-                    .foregroundColor(Color.Theme.textDark)
+                    .font(Font.Theme.NormalBoldText)
+                    .foregroundColor(Color.Theme.Text)
                 Text(viewModel.severityString)
-                    .font(Font.Theme.normalText)
-                    .foregroundColor(Color.Theme.text)
+                    .font(Font.Theme.NormalText)
+                    .foregroundColor(Color.Theme.SecondaryText)
             }
             Slider(
                 value: Binding<Double>(get: {
@@ -54,11 +54,11 @@ struct SymptomSeveritySliderView: View {
                 in: viewModel.sliderRange,
                 step: viewModel.sliderStep
             )
-                .accentColor(Color.Theme.primary)
-                .padding(.horizontal, CGFloat.Theme.Layout.small)
+                .accentColor(Color.Theme.Primary)
+                .padding(.horizontal, CGFloat.Theme.Layout.Small)
         }
-        .padding(CGFloat.Theme.Layout.normal)
-        .background(Color.Theme.backgroundSecondary)
+        .padding(CGFloat.Theme.Layout.Normal)
+        .background(Color.Theme.BackgroundSecondary)
     }
 }
 

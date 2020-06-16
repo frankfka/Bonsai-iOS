@@ -21,22 +21,22 @@ struct ToggleRowView: View {
 
     var body: some View {
         HStack {
-            VStack(alignment: .leading, spacing: CGFloat.Theme.Layout.small) {
+            VStack(alignment: .leading, spacing: CGFloat.Theme.Layout.Small) {
                 Text(viewModel.title)
                     .lineLimit(1)
-                    .font(Font.Theme.normalBoldText)
-                    .foregroundColor(Color.Theme.textDark)
+                    .font(Font.Theme.NormalBoldText)
+                    .foregroundColor(Color.Theme.Text)
                 viewModel.description.map {
                     Text($0)
                         .lineLimit(nil)
-                        .font(Font.Theme.subtext)
-                        .foregroundColor(Color.Theme.text)
+                        .font(Font.Theme.SmallText)
+                        .foregroundColor(Color.Theme.SecondaryText)
                 }
             }
-            Spacer(minLength: CGFloat.Theme.Layout.large)
+            Spacer(minLength: CGFloat.Theme.Layout.Large)
             Toggle(isOn: viewModel.$value, label: { EmptyView() }).labelsHidden()
         }
-        .foregroundColor(Color.Theme.primary)
+        .foregroundColor(Color.Theme.Primary)
         .modifier(FormRowModifier())
     }
 }

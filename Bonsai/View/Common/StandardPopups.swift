@@ -16,30 +16,30 @@ enum PopupType {
 extension View {
     func withStandardPopup(show: Binding<Bool>, type: PopupType, text: String? = nil, onDisappear: VoidCallback? = nil) -> some View {
 
-        let imageName: String
+        let image: Image
         switch type {
         case .success:
-            imageName = "checkmark.circle"
+            image = Image.Icons.CheckmarkCircle
         case .failure:
-            imageName = "xmark.circle"
+            image = Image.Icons.XMarkCircle
         case .info:
-            imageName = "info.circle"
+            image = Image.Icons.InfoCircle
         }
 
         return self.withPopup(show: show) {
             VStack {
-                Image(systemName: imageName)
-                .resizable()
-                .frame(
-                    width: CGFloat.Theme.Font.popupIcon,
-                    height: CGFloat.Theme.Font.popupIcon
-                )
-                .foregroundColor(Color.Theme.primary)
-                .padding(.bottom, CGFloat.Theme.Layout.small)
+                image
+                    .resizable()
+                    .frame(
+                        width: CGFloat.Theme.Font.PopupIcon,
+                        height: CGFloat.Theme.Font.PopupIcon
+                    )
+                .foregroundColor(Color.Theme.Primary)
+                .padding(.bottom, CGFloat.Theme.Layout.Small)
                 if text != nil {
                     Text(text!)
-                        .font(Font.Theme.normalText)
-                        .foregroundColor(Color.Theme.text)
+                        .font(Font.Theme.NormalText)
+                        .foregroundColor(Color.Theme.SecondaryText)
                 }
             }
             .onAppear() {

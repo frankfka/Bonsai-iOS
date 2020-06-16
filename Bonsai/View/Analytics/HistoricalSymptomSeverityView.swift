@@ -24,27 +24,27 @@ extension DateFormatter {
 struct HistoricalSymptomSeverityView: View {
 
     struct ViewModel {
-        static let minChartHeight: CGFloat = 200 // TODO: Somehow make this not a constant
+        static let minChartHeight: CGFloat = 200
         static let barChartStyle = BarChartStyle(
-                barColor: Color.Theme.positive.opacity(0.8),
-                barSpacing: CGFloat.Theme.Charts.barSpacing,
-                barRadius: CGFloat.Theme.Charts.barCornerRadius
+                barColor: Color.Theme.Positive.opacity(0.8),
+                barSpacing: CGFloat.Theme.Charts.BarSpacing,
+                barRadius: CGFloat.Theme.Charts.BarCornerRadius
         )
         static let barChartBackgroundStyle = BarChartStyle(
                 barColor: Color.white,
-                barSpacing: CGFloat.Theme.Charts.barSpacing,
-                barRadius: CGFloat.Theme.Charts.barCornerRadius
+                barSpacing: CGFloat.Theme.Charts.BarSpacing,
+                barRadius: CGFloat.Theme.Charts.BarCornerRadius
         )
         static let barChartPadding: CGFloat = 8
         static let averageLineChartStyle = LineChartStyle(
-                lineColor: Color.Theme.accent.opacity(0.8),
-                lineStrokeStyle: StrokeStyle(lineWidth: CGFloat.Theme.Charts.normalLineWidth),
+                lineColor: Color.Theme.Accent.opacity(0.8),
+                lineStrokeStyle: StrokeStyle(lineWidth: CGFloat.Theme.Charts.NormalLineWidth),
                 smoothed: false
         )
         // Used for background axis lines
         static let axisLineChartStyle = LineChartStyle(
-                lineColor: Color.Theme.grayscalePrimary.opacity(0.2),
-                lineStrokeStyle: StrokeStyle(lineWidth: CGFloat.Theme.Charts.thinLineWidth),
+                lineColor: Color.Theme.GrayscalePrimary.opacity(0.2),
+                lineStrokeStyle: StrokeStyle(lineWidth: CGFloat.Theme.Charts.ThinLineWidth),
                 smoothed: false
         )
 
@@ -66,7 +66,6 @@ struct HistoricalSymptomSeverityView: View {
 
         let axisLabels: [(fullDisplay: String, shortDisplay: String)]
         var useFullAxisLabels: Bool {
-            // TODO: Use width to determine this
             barChartData.count < 10
         }
         let barChartData: [BarChartDataPoint]
@@ -119,8 +118,8 @@ struct HistoricalSymptomSeverityView: View {
             if viewModel.showNoDataText {
                 // This should never occur, as symptom analytics will include at least one data point
                 Text("No Data Available")
-                        .font(Font.Theme.normalText)
-                        .foregroundColor(Color.Theme.text)
+                        .font(Font.Theme.NormalText)
+                        .foregroundColor(Color.Theme.SecondaryText)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 // Otherwise, show charts
@@ -155,8 +154,8 @@ struct HistoricalSymptomSeverityView: View {
             HStack {
                 ForEach(viewModel.axisLabels, id: \.fullDisplay) { label in
                     Text(self.viewModel.useFullAxisLabels ? label.fullDisplay : label.shortDisplay)
-                        .font(Font.Theme.subtext)
-                        .foregroundColor(Color.Theme.text)
+                        .font(Font.Theme.SmallText)
+                        .foregroundColor(Color.Theme.SecondaryText)
                         .frame(maxWidth: .infinity)
                 }
             }
@@ -169,11 +168,11 @@ struct HistoricalSymptomSeverityView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             HistoricalSymptomSeverityView(viewModel: HistoricalSymptomSeverityView.ViewModel(analytics: AnalyticsPreviews.HistoricalSeverityPastWeek))
-            .background(Color.Theme.backgroundSecondary)
+            .background(Color.Theme.BackgroundSecondary)
 
             
             HistoricalSymptomSeverityView(viewModel: HistoricalSymptomSeverityView.ViewModel(analytics: AnalyticsPreviews.HistoricalSeverityPastWeek))
-            .background(Color.Theme.backgroundSecondary)
+            .background(Color.Theme.BackgroundSecondary)
                 .colorScheme(.dark)
         }
         .frame(width: 500, height: 300)

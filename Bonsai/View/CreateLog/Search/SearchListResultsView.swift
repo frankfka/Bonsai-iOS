@@ -53,10 +53,10 @@ struct SearchInfoView: View {
     var body: some View {
         HStack(alignment: .center) {
             Text(viewModel.text)
-                .font(Font.Theme.normalText)
+                .font(Font.Theme.NormalText)
                 .multilineTextAlignment(.center)
-                .foregroundColor(Color.Theme.text)
-                .padding(CGFloat.Theme.Layout.normal)
+                .foregroundColor(Color.Theme.SecondaryText)
+                .padding(CGFloat.Theme.Layout.Normal)
         }
         .frame(minWidth: 0, maxWidth: .infinity)
     }

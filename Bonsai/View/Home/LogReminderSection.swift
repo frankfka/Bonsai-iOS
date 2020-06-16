@@ -14,14 +14,11 @@ struct LogReminderSection: View {
     struct ViewModel {
         static let numToShow = 5  // Number of reminders to show
         let reminders: [LogReminder]
-        @Binding var navigationState: HomeTab.NavigationState?
-        @Binding var showCreateLogModal: Bool
+        @Binding var navigationState: HomeTabScrollView.NavigationState?
 
-        init(logReminders: [LogReminder], navigationState: Binding<HomeTab.NavigationState?>,
-             showCreateLogModal: Binding<Bool>) {
+        init(logReminders: [LogReminder], navigationState: Binding<HomeTabScrollView.NavigationState?>) {
             self.reminders = Array(logReminders.prefix(ViewModel.numToShow))
             self._navigationState = navigationState
-            self._showCreateLogModal = showCreateLogModal
         }
     }
     
@@ -36,7 +33,7 @@ struct LogReminderSection: View {
             // Conditional pushing of navigation views, see RecentLogSection
             NavigationLink(
                     destination: LogReminderDetailView(),
-                    tag: HomeTab.NavigationState.logReminderDetail,
+                    tag: HomeTabScrollView.NavigationState.logReminderDetail,
                     selection: viewModel.$navigationState) {
                 EmptyView()
             }
@@ -65,12 +62,12 @@ struct LogReminderSection: View {
 
     private func onTodoTapped(_ logReminder: LogReminder) {
         store.send(.createLog(action: .beginInitFromLogReminder(logReminder: logReminder)))
-        viewModel.showCreateLogModal.toggle()
+        store.send(.global(action: .changeCreateLogModalDisplay(shouldDisplay: true)))
     }
 
     private func onLogRowTapped(_ logReminder: LogReminder) {
         store.send(.logReminderDetails(action: .initState(logReminder: logReminder)))
-        viewModel.navigationState = HomeTab.NavigationState.logReminderDetail
+        viewModel.navigationState = HomeTabScrollView.NavigationState.logReminderDetail
     }
 }
 
@@ -81,8 +78,7 @@ struct LogReminderSection_Previews: PreviewProvider {
                 PreviewLogReminders.overdue,
                 PreviewLogReminders.notOverdue,
             ],
-            navigationState: .constant(nil),
-            showCreateLogModal: .constant(false)
+            navigationState: .constant(nil)
     )
 
     static var previews: some View {
