@@ -78,6 +78,7 @@ struct SettingsView: View {
         store.send(.settings(action: .saveSettingsPressed))
     }
 
+    // TODO: To computed vars
     // MARK: View Model
     private func getViewModel() -> ViewModel {
         let showLoading = store.state.settings.isLoading

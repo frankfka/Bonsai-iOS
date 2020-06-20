@@ -16,10 +16,10 @@ struct RowPickerView: View {
     @State(initialValue: false) private var showPicker: Bool
     
     struct ViewModel {
-        let rowTitle: String
-        let rowValue: String
-        let values: [RowPickerValue]
-        let selectionIndex: Binding<Int>
+        let rowTitle: String // What to show as the row title
+        let rowValue: String // What to show as the row value - i.e. the "selected value" display
+        let values: [RowPickerValue] // Set of values for picker
+        let selectionIndex: Binding<Int> // Selected index for picker
     }
     private let viewModel: ViewModel
     private var rowViewModel: TappableRowView.ViewModel {

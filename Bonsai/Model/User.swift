@@ -19,12 +19,15 @@ struct User {
 
     struct Settings {
         static let DefaultAnalyticsMoodRankDays: Int = 7
+        static let DefaultAnalyticsSeverityDays: Int = 7
 
         // Analytics
         var analyticsMoodRankDays: Int
+        var analyticsSymptomSeverityDays: Int
 
-        init(analyticsMoodRankDays: Int? = nil) {
+        init(analyticsMoodRankDays: Int? = nil, analyticsSymptomSeverityDays: Int? = nil) {
             self.analyticsMoodRankDays = analyticsMoodRankDays ?? Settings.DefaultAnalyticsMoodRankDays
+            self.analyticsSymptomSeverityDays = analyticsSymptomSeverityDays ?? Settings.DefaultAnalyticsSeverityDays
         }
     }
 

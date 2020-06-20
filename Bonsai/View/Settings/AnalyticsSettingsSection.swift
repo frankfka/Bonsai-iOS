@@ -12,17 +12,13 @@ import Combine
 struct AnalyticsSettingsSection: View {
     @EnvironmentObject var store: AppStore
 
-    struct MoodRankDayPickerValue: RowPickerValue {
-        static let values = (5...12).map { MoodRankDayPickerValue(dayValue: $0) }
-        let dayValue: Int
-        var pickerDisplay: String {
-            "\(dayValue) Days"
-        }
-    }
-
+    // MARK: View model
     struct ViewModel {
         var analyticsMoodRankDays: Int {
             currentSettings.analyticsMoodRankDays
+        }
+        var analyticsSymptomSeverityDays: Int {
+            currentSettings.analyticsSymptomSeverityDays
         }
         let currentSettings: User.Settings
         let onSettingsChanged: SettingsChangedCallback?
@@ -38,32 +34,80 @@ struct AnalyticsSettingsSection: View {
         self.viewModel = viewModel
     }
 
-    var body: some View {
-        VStack {
-            RowPickerView(viewModel: getMoodRankDaysPickerViewModel())
-        }
-    }
-
-    // View Models
-    private func getMoodRankDaysPickerViewModel() -> RowPickerView.ViewModel {
-        let selectedIndex = MoodRankDayPickerValue.values
-                .firstIndex { $0.dayValue == viewModel.analyticsMoodRankDays } ?? 0
-        let rowValue = MoodRankDayPickerValue.values[selectedIndex].pickerDisplay
+    // MARK: Child view models
+    private var moodRankDaysPickerViewVm: RowPickerView.ViewModel {
+        // Find currently selected index
+        let selectedIndex = MoodRankDaysPickerValue.values
+            .firstIndex { $0.dayValue == viewModel.analyticsMoodRankDays } ?? 0
+        // Get the row display value
+        let rowValue = MoodRankDaysPickerValue.values[selectedIndex].pickerDisplay
+        // Create the binding
         let selectionIndexBinding = Binding<Int>(get: {
             return selectedIndex
         }, set: { newVal in
+            // Mutate the settings, and call callback
             var newSettings = self.viewModel.currentSettings
-            newSettings.analyticsMoodRankDays = MoodRankDayPickerValue.values[newVal].dayValue
+            newSettings.analyticsMoodRankDays = MoodRankDaysPickerValue.values[newVal].dayValue
             self.viewModel.onSettingsChanged?(newSettings)
         })
         return RowPickerView.ViewModel(
             rowTitle: "Mood Rank Days",
             rowValue: rowValue,
-            values: MoodRankDayPickerValue.values,
+            values: MoodRankDaysPickerValue.values,
             selectionIndex: selectionIndexBinding
         )
     }
 
+    private var symptomSeverityDaysPickerViewVm: RowPickerView.ViewModel {
+        // Find currently selected index
+        let selectedIndex = SymptomSeverityDaysPickerValue.values
+            .firstIndex { $0.dayValue == viewModel.analyticsSymptomSeverityDays } ?? 0
+        // Get the row display value
+        let rowValue = SymptomSeverityDaysPickerValue.values[selectedIndex].pickerDisplay
+        // Create the binding
+        let selectionIndexBinding = Binding<Int>(get: {
+            return selectedIndex
+        }, set: { newVal in
+            // Mutate the settings, and call callback
+            var newSettings = self.viewModel.currentSettings
+            newSettings.analyticsSymptomSeverityDays = SymptomSeverityDaysPickerValue.values[newVal].dayValue
+            self.viewModel.onSettingsChanged?(newSettings)
+        })
+        return RowPickerView.ViewModel(
+            rowTitle: "Symptom Severity Days",
+            rowValue: rowValue,
+            values: SymptomSeverityDaysPickerValue.values,
+            selectionIndex: selectionIndexBinding
+        )
+    }
+
+    // MARK: Main Body
+    var body: some View {
+        VStack {
+            RowPickerView(viewModel: self.moodRankDaysPickerViewVm)
+            RowPickerView(viewModel: self.symptomSeverityDaysPickerViewVm)
+        }
+    }
+}
+
+// MARK: Additional models
+extension AnalyticsSettingsSection {
+    // Values for Mood Rank days
+    struct MoodRankDaysPickerValue: RowPickerValue {
+        static let values = (5...12).map { MoodRankDaysPickerValue(dayValue: $0) }
+        let dayValue: Int
+        var pickerDisplay: String {
+            "\(dayValue) Days"
+        }
+    }
+    // Values for Symptom Severity days
+    struct SymptomSeverityDaysPickerValue: RowPickerValue {
+        static let values = (5...12).map { SymptomSeverityDaysPickerValue(dayValue: $0) }
+        let dayValue: Int
+        var pickerDisplay: String {
+            "\(dayValue) Days"
+        }
+    }
 }
 
 struct AnalyticsSettingsSection_Previews: PreviewProvider {

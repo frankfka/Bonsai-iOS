@@ -73,8 +73,7 @@ class AnalyticsServiceImpl: AnalyticsService {
     // MARK: Symptom Severity Analytics
     func getHistoricalSymptomSeverity(for user: User, with symptomLog: SymptomLog) -> ServicePublisher<SymptomSeverityAnalytics> {
         // Get logs up to the date of the log provided, we can customize this at a later time
-        // TODO: Get past logs date based on user settings
-        let daysToAnalyze: Int = 7
+        let daysToAnalyze: Int = user.settings.analyticsSymptomSeverityDays
         let toDate = symptomLog.dateCreated
         let fromDate = toDate.addingTimeInterval(-Double(daysToAnalyze) * TimeInterval.day).beginningOfDate
         return self.db.getLogs(
