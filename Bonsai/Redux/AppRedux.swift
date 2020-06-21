@@ -54,7 +54,7 @@ struct AppState {
     var settings: SettingsState
     // Create log
     var createLog: CreateLogState
-    // Create log reminder
+    // Create/Edit log reminder
     var createLogReminder: CreateLogReminderState
 
     init(

@@ -12,6 +12,8 @@ struct CreateLogReminderReducer {
             return state
         case .initCreateLogReminder(let template):
             return initCreateLogReminder(state: state, template: template)
+        case .initEditLogReminder(let existingReminder, let updateLogReminderDetailOnSuccess):
+            return initEditLogReminder(state: state, existingReminder: existingReminder, updateLogReminderDetailOnSuccess: updateLogReminderDetailOnSuccess)
         case .isRecurringDidChange(let isRecurring):
             return isRecurringDidChange(state: state, isRecurring: isRecurring)
         case .isPushNotificationEnabledDidChange(let isEnabled):
@@ -37,6 +39,20 @@ struct CreateLogReminderReducer {
         var newState = state
         var newCreateLogReminderState = CreateLogReminderState()
         newCreateLogReminderState.templateLog = template
+        newState.createLogReminder = newCreateLogReminderState
+        return newState
+    }
+
+    static private func initEditLogReminder(state: AppState, existingReminder: LogReminder, updateLogReminderDetailOnSuccess: Bool) -> AppState {
+        var newState = state
+        var newCreateLogReminderState = CreateLogReminderState()
+        newCreateLogReminderState.existingLogReminder = existingReminder
+        newCreateLogReminderState.updateLogReminderDetailOnSuccess = updateLogReminderDetailOnSuccess
+        newCreateLogReminderState.templateLog = existingReminder.templateLoggable
+        newCreateLogReminderState.isRecurring = existingReminder.isRecurring
+        newCreateLogReminderState.isPushNotificationEnabled = existingReminder.isPushNotificationEnabled
+        newCreateLogReminderState.reminderDate = existingReminder.reminderDate
+        newCreateLogReminderState.reminderInterval = existingReminder.reminderInterval ?? TimeInterval.day
         newState.createLogReminder = newCreateLogReminderState
         return newState
     }

@@ -110,6 +110,7 @@ struct HomeTabScrollView: View {
         }
     }
 
+    // TODO: To computed vars
     private func getLogReminderSectionViewModel() -> LogReminderSection.ViewModel {
         return LogReminderSection.ViewModel(
             logReminders: store.state.globalLogReminders.sortedLogReminders,

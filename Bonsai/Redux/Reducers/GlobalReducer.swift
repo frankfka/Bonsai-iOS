@@ -17,6 +17,8 @@ struct GlobalReducer {
         // Navigation
         case let .changeCreateLogModalDisplay(shouldDisplay):
             return changeCreateLogModalDisplay(state: state, shouldDisplay: shouldDisplay)
+        case let .changeCreateLogReminderModalDisplay(shouldDisplay):
+            return changeCreateLogReminderModalDisplay(state: state, shouldDisplay: shouldDisplay)
         // Permissions
         case let .notificationPermissionsDidChange(isEnabled):
             return notificationPermissionsDidChange(state: state, isEnabled: isEnabled)
@@ -54,6 +56,12 @@ struct GlobalReducer {
     static private func changeCreateLogModalDisplay(state: AppState, shouldDisplay: Bool) -> AppState {
         var newState = state
         newState.global.showCreateLogModal = shouldDisplay
+        return newState
+    }
+
+    static private func changeCreateLogReminderModalDisplay(state: AppState, shouldDisplay: Bool) -> AppState {
+        var newState = state
+        newState.global.showCreateLogReminderModal = shouldDisplay
         return newState
     }
 

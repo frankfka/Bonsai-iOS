@@ -84,7 +84,6 @@ struct LogReminderDetailView: View {
         let logTitle: String
         let logCategory: String
 
-
         init(state: AppState) {
             self.isLoading = state.logReminderDetails.isDeleting
             self.showDeleteSuccess = state.logReminderDetails.deleteSuccess
@@ -122,8 +121,17 @@ struct LogReminderDetailView: View {
             })
         )
     }
+    private var editReminderViewVm: RoundedButtonView.ViewModel {
+        RoundedButtonView.ViewModel(
+            text: "Edit Reminder",
+            textColor: self.viewModel.disableActions ? Color.Theme.SecondaryText : Color.Theme.Primary,
+            onTap: self.onEditReminderTapped
+        )
+    }
 
     // MARK: Views
+
+    // TODO: Need to break this down into smaller views
 
     // Main View
     var mainBody: some View {
@@ -181,6 +189,8 @@ struct LogReminderDetailView: View {
                         )
                     }
                 }
+                // Edit Reminder Button
+                RoundedButtonView(viewModel: self.editReminderViewVm)
             }
             .padding(.vertical, CGFloat.Theme.Layout.Normal)
         }
@@ -248,6 +258,16 @@ struct LogReminderDetailView: View {
 
     private func onDeleteReminderTapped() {
         showDeleteReminderConfirmation.toggle()
+    }
+
+    private func onEditReminderTapped() {
+        // Init edit log reminder state
+        store.send(.createLogReminder(action: .initEditLogReminder(
+            existingReminder: self.viewModel.logReminder,
+            updateLogReminderDetailOnSuccess: true
+        )))
+        // Show modal
+        store.send(.global(action: .changeCreateLogReminderModalDisplay(shouldDisplay: true)))
     }
 
     private func onDeleteReminderConfirmed() {

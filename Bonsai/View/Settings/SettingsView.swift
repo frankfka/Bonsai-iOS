@@ -45,7 +45,7 @@ struct SettingsView: View {
                     AnalyticsSettingsSection(viewModel: self.getAnalyticsSectionViewModel())
                 }
                 // Save Button
-                RoundedBorderButtonView(viewModel: self.getSaveButtonViewModel())
+                RoundedButtonView(viewModel: self.getSaveButtonViewModel())
                     .disabled(self.viewModel.saveButtonDisabled)
             }
         }
@@ -130,8 +130,8 @@ struct SettingsView: View {
         )
     }
 
-    private func getSaveButtonViewModel() -> RoundedBorderButtonView.ViewModel {
-        return RoundedBorderButtonView.ViewModel(
+    private func getSaveButtonViewModel() -> RoundedButtonView.ViewModel {
+        return RoundedButtonView.ViewModel(
                 text: "Save",
                 textColor: self.viewModel.saveButtonDisabled ? Color.Theme.SecondaryText : Color.Theme.Primary,
                 onTap: self.onSaveTapped

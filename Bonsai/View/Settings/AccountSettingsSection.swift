@@ -47,10 +47,10 @@ struct AccountSettingsSection: View {
             TappableRowView(viewModel: self.getSignedInGoogleAccountRowViewModel())
             VStack {
                 if self.viewModel.showSignInButton {
-                    RoundedBorderButtonView(viewModel: self.getLogInWithGoogleButtonViewModel())
+                    RoundedButtonView(viewModel: self.getLogInWithGoogleButtonViewModel())
                 }
                 if self.viewModel.showUnlinkButton {
-                    RoundedBorderButtonView(viewModel: self.getUnlinkButtonViewModel())
+                    RoundedButtonView(viewModel: self.getUnlinkButtonViewModel())
                 }
             }
             .padding(.top, CGFloat.Theme.Layout.Normal)
@@ -125,8 +125,8 @@ struct AccountSettingsSection: View {
         )
     }
 
-    private func getLogInWithGoogleButtonViewModel() -> RoundedBorderButtonView.ViewModel {
-        RoundedBorderButtonView.ViewModel(
+    private func getLogInWithGoogleButtonViewModel() -> RoundedButtonView.ViewModel {
+        RoundedButtonView.ViewModel(
             text: "Log In With Google",
             textColor: self.viewModel.interactionDisabled ? Color.Theme.SecondaryText : Color.Theme.Primary
         ) {
@@ -135,8 +135,8 @@ struct AccountSettingsSection: View {
         }
     }
 
-    private func getUnlinkButtonViewModel() -> RoundedBorderButtonView.ViewModel {
-        RoundedBorderButtonView.ViewModel(
+    private func getUnlinkButtonViewModel() -> RoundedButtonView.ViewModel {
+        RoundedButtonView.ViewModel(
             text: "Unlink Account",
             textColor: self.viewModel.interactionDisabled ? Color.Theme.SecondaryText : Color.Theme.Negative
         ) {

@@ -28,6 +28,7 @@ struct CreateLogTextField: View {
     }
 
     var body: some View {
+        // TODO: This is quite slow performance-wise, keep this in state & retrieve on save instead
         TextField(viewModel.label, text: viewModel.$input)
                 .textFieldStyle(DefaultTextFieldStyle())
                 .font(Font.Theme.NormalText)

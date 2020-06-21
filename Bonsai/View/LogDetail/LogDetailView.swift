@@ -80,12 +80,11 @@ struct LogDetailView: View {
                         .padding(.bottom, CGFloat.Theme.Layout.Normal)
                 Group {
                     // Quick Re-log button
-                    RoundedBorderButtonView(viewModel: getLogAgainButtonViewModel())
-                            .disabled(self.viewModel.disableActions)
+                    RoundedButtonView(viewModel: getLogAgainButtonViewModel())
                     // Create Reminder Button
-                    RoundedBorderButtonView(viewModel: getCreateLogReminderButtonViewModel())
+                    RoundedButtonView(viewModel: getCreateLogReminderButtonViewModel())
                 }
-                        .disabled(self.viewModel.disableActions)
+                .disabled(self.viewModel.disableActions)
             }
             .padding(.vertical, CGFloat.Theme.Layout.Normal)
         }
@@ -121,12 +120,6 @@ struct LogDetailView: View {
                 )
             )
         }
-        // Create Log Reminder Modal
-        .sheet(isPresented: $showCreateLogReminderModal) {
-            CreateLogReminderView(
-                viewModel: self.getCreateLogReminderModalViewModel()
-            ).environmentObject(self.store)
-        }
         // Popups
         .withLoadingPopup(show: .constant(self.viewModel.isLoading), text: self.viewModel.loadingMessage)
         .withStandardPopup(show: .constant(self.viewModel.showError), type: .failure, text: self.viewModel.errorMessage) {
@@ -149,7 +142,8 @@ struct LogDetailView: View {
     private func onCreateLogReminderTapped() {
         // Dispatch an action for creating a reminder with the given log
         store.send(.createLogReminder(action: .initCreateLogReminder(template: self.viewModel.loggable)))
-        showCreateLogReminderModal.toggle()
+        // Dispatch an action to show the modal
+        store.send(.global(action: .changeCreateLogReminderModalDisplay(shouldDisplay: true)))
     }
 
     private func onDeleteLogTapped() {
@@ -186,24 +180,20 @@ struct LogDetailView: View {
         return LogDetailNotesView.ViewModel(notes: self.viewModel.loggable.notes)
     }
 
-    private func getLogAgainButtonViewModel() -> RoundedBorderButtonView.ViewModel {
-        return RoundedBorderButtonView.ViewModel(
+    private func getLogAgainButtonViewModel() -> RoundedButtonView.ViewModel {
+        return RoundedButtonView.ViewModel(
                 text: "Log This Again",
                 textColor: self.viewModel.disableActions ? Color.Theme.SecondaryText : Color.Theme.Primary,
                 onTap: self.onLogAgainTapped
         )
     }
 
-    private func getCreateLogReminderButtonViewModel() -> RoundedBorderButtonView.ViewModel {
-        return RoundedBorderButtonView.ViewModel(
+    private func getCreateLogReminderButtonViewModel() -> RoundedButtonView.ViewModel {
+        return RoundedButtonView.ViewModel(
                 text: "Create Reminder",
                 textColor: self.viewModel.disableActions ? Color.Theme.SecondaryText : Color.Theme.Primary,
                 onTap: self.onCreateLogReminderTapped
         )
-    }
-
-    private func getCreateLogReminderModalViewModel() -> CreateLogReminderView.ViewModel {
-        return CreateLogReminderView.ViewModel(showModal: $showCreateLogReminderModal, state: store.state)
     }
 
     // MARK: Category-specific views
