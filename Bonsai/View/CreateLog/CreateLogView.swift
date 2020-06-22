@@ -12,7 +12,6 @@ struct CreateLogView: View {
     @EnvironmentObject var store: AppStore
     
     struct ViewModel {
-        @Binding var showModal: Bool
         private let isFormValid: Bool
         let isLoading: Bool
         let loadMessage: String
@@ -25,8 +24,7 @@ struct CreateLogView: View {
             isLoading || showSuccessDialog || showErrorDialog
         }
         
-        init(showModal: Binding<Bool>, state: CreateLogState) {
-            self._showModal = showModal
+        init(state: CreateLogState) {
             self.isFormValid = state.isValidated
             self.showSuccessDialog = state.createSuccess
             self.showErrorDialog = state.createError != nil
@@ -41,10 +39,7 @@ struct CreateLogView: View {
     @State(initialValue: false) private var showDatePicker
     @State(initialValue: false) private var showTimePicker
     private var viewModel: ViewModel {
-        ViewModel(
-            showModal: self.$store.state.global.showCreateLogModal,
-            state: self.store.state.createLog
-        )
+        ViewModel(state: self.store.state.createLog)
     }
     
     var body: some View {
@@ -98,7 +93,10 @@ struct CreateLogView: View {
     }
     
     private func onSaveSuccessPopupDismiss() {
-        self.viewModel.$showModal.wrappedValue.toggle()
+        // Dismiss the modal
+        store.send(.global(action: .changeCreateLogModalDisplay(shouldDisplay: false)))
+        // Reset view state
+        store.send(.createLog(action: .resetCreateLogState))
     }
     
     private func onSaveErrorPopupDismiss() {
@@ -106,7 +104,8 @@ struct CreateLogView: View {
     }
     
     private func onCancel() {
-        viewModel.showModal.toggle()
+        // Dismiss the modal
+        store.send(.global(action: .changeCreateLogModalDisplay(shouldDisplay: false)))
     }
     
     private func onSelectedCategoryChange(newVal: Int) {

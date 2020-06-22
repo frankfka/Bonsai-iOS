@@ -70,19 +70,117 @@ struct LogDetailView: View {
     @State(initialValue: false) var showCreateLogReminderModal: Bool
     @State(initialValue: false) var showDeleteLogConfirmation: Bool
 
+    // MARK: Child view models
+    private var basicDetailsViewVm: LogDetailBasicsView.ViewModel {
+        return LogDetailBasicsView.ViewModel(loggable: self.viewModel.loggable)
+    }
+
+    private var notesViewVm: LogDetailNotesView.ViewModel {
+        return LogDetailNotesView.ViewModel(notes: self.viewModel.loggable.notes)
+    }
+
+    private var logAgainButtonViewVm: RoundedButtonView.ViewModel {
+        return RoundedButtonView.ViewModel(
+            text: "Log This Again",
+            textColor: self.viewModel.disableActions ? Color.Theme.SecondaryText : Color.Theme.Primary,
+            onTap: self.onLogAgainTapped
+        )
+    }
+
+    private var createLogReminderButtonViewVm: RoundedButtonView.ViewModel {
+        return RoundedButtonView.ViewModel(
+            text: "Create Reminder",
+            textColor: self.viewModel.disableActions ? Color.Theme.SecondaryText : Color.Theme.Primary,
+            onTap: self.onCreateLogReminderTapped
+        )
+    }
+
+    // MARK: Child views
+
+    // Leaving as a function for now, as switch is not supported if we have return type as some View
+    private func getCategorySpecificView() -> AnyView {
+        switch self.viewModel.loggable.category {
+        case .symptom:
+            guard let symptomVm = getSymptomDetailViewModel() else {
+                AppLogging.warn("Should be showing symptom log details but could not create view model")
+                break
+            }
+            return LogDetailSymptomView(viewModel: symptomVm).eraseToAnyView()
+        case .activity:
+            guard let activityVm = getActivityDetailViewModel() else {
+                AppLogging.warn("Should be showing activity log details but could not create view model")
+                break
+            }
+            return LogDetailActivityView(viewModel: activityVm).eraseToAnyView()
+        case .medication:
+            guard let medicationVm = getMedicationDetailViewModel() else {
+                AppLogging.warn("Should be showing medication log details but could not create view model")
+                break
+            }
+            return LogDetailMedicationView(viewModel: medicationVm).eraseToAnyView()
+        case .nutrition:
+            guard let nutritionVm = getNutritionDetailViewModel() else {
+                AppLogging.warn("Should be showing nutrition log details but could not create view model")
+                break
+            }
+            return LogDetailNutritionView(viewModel: nutritionVm).eraseToAnyView()
+        default:
+            break
+        }
+        return EmptyView().eraseToAnyView()
+    }
+    private func getSymptomDetailViewModel() -> LogDetailSymptomView.ViewModel? {
+        let loggable = viewModel.loggable
+        guard loggable.category == .symptom, let symptomLog = loggable as? SymptomLog else {
+            return nil
+        }
+        let symptomName = symptomLog.selectedSymptom?.name ?? "Unknown"
+        let severityAnalytics = store.state.logDetails.symptomSeverityAnalytics
+        return LogDetailSymptomView.ViewModel(
+            name: symptomName,
+            severity: symptomLog.severity.displayValue(),
+            severityAnalytics: severityAnalytics
+        )
+    }
+    private func getActivityDetailViewModel() -> LogDetailActivityView.ViewModel? {
+        let loggable = viewModel.loggable
+        guard loggable.category == .activity, let activityLog = loggable as? ActivityLog else {
+            return nil
+        }
+        let activityName = activityLog.selectedActivity?.name ?? "Unknown"
+        return LogDetailActivityView.ViewModel(name: activityName, duration: activityLog.duration)
+    }
+    private func getMedicationDetailViewModel() -> LogDetailMedicationView.ViewModel? {
+        let loggable = viewModel.loggable
+        guard loggable.category == .medication, let medicationLog = loggable as? MedicationLog else {
+            return nil
+        }
+        let medicationName = medicationLog.selectedMedication?.name ?? "Unknown"
+        return LogDetailMedicationView.ViewModel(name: medicationName, dosage: medicationLog.dosage)
+    }
+    private func getNutritionDetailViewModel() -> LogDetailNutritionView.ViewModel? {
+        let loggable = viewModel.loggable
+        guard loggable.category == .nutrition, let nutritionLog = loggable as? NutritionLog else {
+            return nil
+        }
+        let nutritionItemName = nutritionLog.selectedNutritionItem?.name ?? "Unknown"
+        return LogDetailNutritionView.ViewModel(name: nutritionItemName, amount: nutritionLog.amount)
+    }
+
+    // MARK: Main body view
     var body: some View {
         ScrollView {
             VStack(spacing: CGFloat.Theme.Layout.Normal) {
                 // Detail Views
-                LogDetailBasicsView(viewModel: getBasicDetailsViewModel())
+                LogDetailBasicsView(viewModel: basicDetailsViewVm)
                 getCategorySpecificView()
-                LogDetailNotesView(viewModel: getNotesViewModel())
+                LogDetailNotesView(viewModel: notesViewVm)
                         .padding(.bottom, CGFloat.Theme.Layout.Normal)
                 Group {
                     // Quick Re-log button
-                    RoundedButtonView(viewModel: getLogAgainButtonViewModel())
+                    RoundedButtonView(vm: logAgainButtonViewVm)
                     // Create Reminder Button
-                    RoundedButtonView(viewModel: getCreateLogReminderButtonViewModel())
+                    RoundedButtonView(vm: createLogReminderButtonViewVm)
                 }
                 .disabled(self.viewModel.disableActions)
             }
@@ -170,106 +268,6 @@ struct LogDetailView: View {
         store.send(.logDetails(action: .screenDidDismiss))
         self.presentationMode.wrappedValue.dismiss()
     }
-
-    // MARK: Rendered for all logs
-    private func getBasicDetailsViewModel() -> LogDetailBasicsView.ViewModel {
-        return LogDetailBasicsView.ViewModel(loggable: self.viewModel.loggable)
-    }
-
-    private func getNotesViewModel() -> LogDetailNotesView.ViewModel {
-        return LogDetailNotesView.ViewModel(notes: self.viewModel.loggable.notes)
-    }
-
-    private func getLogAgainButtonViewModel() -> RoundedButtonView.ViewModel {
-        return RoundedButtonView.ViewModel(
-                text: "Log This Again",
-                textColor: self.viewModel.disableActions ? Color.Theme.SecondaryText : Color.Theme.Primary,
-                onTap: self.onLogAgainTapped
-        )
-    }
-
-    private func getCreateLogReminderButtonViewModel() -> RoundedButtonView.ViewModel {
-        return RoundedButtonView.ViewModel(
-                text: "Create Reminder",
-                textColor: self.viewModel.disableActions ? Color.Theme.SecondaryText : Color.Theme.Primary,
-                onTap: self.onCreateLogReminderTapped
-        )
-    }
-
-    // MARK: Category-specific views
-    private func getCategorySpecificView() -> AnyView {
-        switch self.viewModel.loggable.category {
-        case .symptom:
-            guard let symptomVm = getSymptomDetailViewModel() else {
-                AppLogging.warn("Should be showing symptom log details but could not create view model")
-                break
-            }
-            return LogDetailSymptomView(viewModel: symptomVm).eraseToAnyView()
-        case .activity:
-            guard let activityVm = getActivityDetailViewModel() else {
-                AppLogging.warn("Should be showing activity log details but could not create view model")
-                break
-            }
-            return LogDetailActivityView(viewModel: activityVm).eraseToAnyView()
-        case .medication:
-            guard let medicationVm = getMedicationDetailViewModel() else {
-                AppLogging.warn("Should be showing medication log details but could not create view model")
-                break
-            }
-            return LogDetailMedicationView(viewModel: medicationVm).eraseToAnyView()
-        case .nutrition:
-            guard let nutritionVm = getNutritionDetailViewModel() else {
-                AppLogging.warn("Should be showing nutrition log details but could not create view model")
-                break
-            }
-            return LogDetailNutritionView(viewModel: nutritionVm).eraseToAnyView()
-        default:
-            break
-        }
-        return EmptyView().eraseToAnyView()
-    }
-
-    func getSymptomDetailViewModel() -> LogDetailSymptomView.ViewModel? {
-        let loggable = viewModel.loggable
-        guard loggable.category == .symptom, let symptomLog = loggable as? SymptomLog else {
-            return nil
-        }
-        let symptomName = symptomLog.selectedSymptom?.name ?? "Unknown"
-        let severityAnalytics = store.state.logDetails.symptomSeverityAnalytics
-        return LogDetailSymptomView.ViewModel(
-            name: symptomName,
-            severity: symptomLog.severity.displayValue(),
-            severityAnalytics: severityAnalytics
-        )
-    }
-
-    func getActivityDetailViewModel() -> LogDetailActivityView.ViewModel? {
-        let loggable = viewModel.loggable
-        guard loggable.category == .activity, let activityLog = loggable as? ActivityLog else {
-            return nil
-        }
-        let activityName = activityLog.selectedActivity?.name ?? "Unknown"
-        return LogDetailActivityView.ViewModel(name: activityName, duration: activityLog.duration)
-    }
-
-    func getMedicationDetailViewModel() -> LogDetailMedicationView.ViewModel? {
-        let loggable = viewModel.loggable
-        guard loggable.category == .medication, let medicationLog = loggable as? MedicationLog else {
-            return nil
-        }
-        let medicationName = medicationLog.selectedMedication?.name ?? "Unknown"
-        return LogDetailMedicationView.ViewModel(name: medicationName, dosage: medicationLog.dosage)
-    }
-
-    func getNutritionDetailViewModel() -> LogDetailNutritionView.ViewModel? {
-        let loggable = viewModel.loggable
-        guard loggable.category == .nutrition, let nutritionLog = loggable as? NutritionLog else {
-            return nil
-        }
-        let nutritionItemName = nutritionLog.selectedNutritionItem?.name ?? "Unknown"
-        return LogDetailNutritionView.ViewModel(name: nutritionItemName, amount: nutritionLog.amount)
-    }
-
 }
 
 

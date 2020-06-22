@@ -6,7 +6,6 @@ struct CreateLogReminderView: View {
 
     struct ViewModel {
         // View States
-        @Binding var showModal: Bool
         private let isFormValid: Bool
         private let hasNotificationPermissions: Bool
         let isEditing: Bool // If we're editing a log reminder rather than creating one - we default to creating
@@ -28,10 +27,9 @@ struct CreateLogReminderView: View {
         let recurringTimeInterval: TimeInterval
         let reminderDate: Date
 
-        init(showModal: Binding<Bool>, state: AppState) {
+        init(state: AppState) {
             // View States
             self.isEditing = state.createLogReminder.existingLogReminder != nil
-            self._showModal = showModal
             self.isFormValid = state.createLogReminder.isValidated
             self.showSuccessDialog = state.createLogReminder.saveSuccess
             self.showErrorDialog = state.createLogReminder.saveError != nil
@@ -45,10 +43,7 @@ struct CreateLogReminderView: View {
         }
     }
     private var viewModel: ViewModel {
-        ViewModel(
-            showModal: self.$store.state.global.showCreateLogReminderModal,
-            state: self.store.state
-        )
+        ViewModel(state: self.store.state)
     }
     @State(initialValue: false) private var showIntervalPicker
     @State(initialValue: false) private var showDatePicker
@@ -178,8 +173,9 @@ struct CreateLogReminderView: View {
     }
 
     private func onSaveSuccessPopupDismiss() {
-        // TODO: Do this through redux
-        self.viewModel.$showModal.wrappedValue.toggle()
+        // Dismiss the modal
+        store.send(.global(action: .changeCreateLogReminderModalDisplay(shouldDisplay: false)))
+        // Reset view state
         store.send(.createLogReminder(action: .resetState))
     }
 
@@ -188,7 +184,8 @@ struct CreateLogReminderView: View {
     }
 
     private func onCancel() {
-        viewModel.showModal.toggle()
+        // Dismiss the modal
+        store.send(.global(action: .changeCreateLogReminderModalDisplay(shouldDisplay: false)))
     }
 
     // Update toggle state vars with state, this ensures that we have smooth toggling
@@ -200,12 +197,6 @@ struct CreateLogReminderView: View {
 }
 
 struct CreateLogReminderView_Previews: PreviewProvider {
-
-    static let viewModel = CreateLogReminderView.ViewModel(
-        showModal: .constant(true),
-        state: PreviewRedux.initialStore.state
-    )
-
     static var previews: some View {
         Group {
             CreateLogReminderView()

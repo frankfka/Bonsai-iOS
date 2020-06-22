@@ -84,48 +84,8 @@ struct HomeTabScrollView: View {
         )
     }
 
-    @State(initialValue: nil) var navigationState: NavigationState? // Allows conditional pushing of navigation views
-    enum NavigationState {
-        case logDetail
-        case logReminderDetail
-    }
-
-    // MARK: Main View
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: CGFloat.Theme.Layout.Large) {
-                if viewModel.showReminders {
-                    RoundedBorderTitledSection(sectionTitle: "Reminders") {
-                        LogReminderSection(viewModel: self.getLogReminderSectionViewModel())
-                    }
-                }
-                RoundedBorderTitledSection(sectionTitle: "Recent") {
-                    RecentLogSection(viewModel: self.getRecentLogSectionViewModel())
-                }
-                RoundedBorderTitledSection(sectionTitle: "Your Mood") {
-                    MoodAnalyticsSection(viewModel: self.getMoodAnalyticsSectionViewModel())
-                }
-            }
-            .padding(.all, CGFloat.Theme.Layout.Normal)
-        }
-    }
-
-    // TODO: To computed vars
-    private func getLogReminderSectionViewModel() -> LogReminderSection.ViewModel {
-        return LogReminderSection.ViewModel(
-            logReminders: store.state.globalLogReminders.sortedLogReminders,
-            navigationState: self.$navigationState
-        )
-    }
-
-    private func getRecentLogSectionViewModel() -> RecentLogSection.ViewModel {
-        return RecentLogSection.ViewModel(
-            recentLogs: store.state.globalLogs.sortedLogs,
-            navigationState: $navigationState
-        )
-    }
-
-    private func getMoodAnalyticsSectionViewModel() -> MoodAnalyticsSection.ViewModel {
+    // MARK: View models
+    private var moodAnalyticsSectionViewVm: MoodAnalyticsSection.ViewModel {
         let pastWeekChartViewModel: HistoricalMoodChartView.ViewModel?
         if let moodRankAnalytics = store.state.globalLogs.analytics?.historicalMoodRank {
             pastWeekChartViewModel = HistoricalMoodChartView.ViewModel(analytics: moodRankAnalytics)
@@ -139,6 +99,45 @@ struct HomeTabScrollView: View {
             isLoading: isLoading,
             loadError: loadError
         )
+    }
+
+    private var logReminderSectionViewVm: LogReminderSection.ViewModel {
+        LogReminderSection.ViewModel(
+            logReminders: store.state.globalLogReminders.sortedLogReminders,
+            navigationState: self.$navigationState
+        )
+    }
+
+    private var recentLogSectionViewVm: RecentLogSection.ViewModel {
+        RecentLogSection.ViewModel(
+            recentLogs: store.state.globalLogs.sortedLogs,
+            navigationState: $navigationState
+        )
+    }
+    @State(initialValue: nil) private var navigationState: NavigationState? // Allows conditional pushing of navigation views
+    enum NavigationState {
+        case logDetail
+        case logReminderDetail
+    }
+
+    // MARK: Main View
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: CGFloat.Theme.Layout.Large) {
+                if viewModel.showReminders {
+                    RoundedBorderTitledSection(sectionTitle: "Reminders") {
+                        LogReminderSection(viewModel: self.logReminderSectionViewVm)
+                    }
+                }
+                RoundedBorderTitledSection(sectionTitle: "Recent") {
+                    RecentLogSection(viewModel: self.recentLogSectionViewVm)
+                }
+                RoundedBorderTitledSection(sectionTitle: "Your Mood") {
+                    MoodAnalyticsSection(viewModel: self.moodAnalyticsSectionViewVm)
+                }
+            }
+            .padding(.all, CGFloat.Theme.Layout.Normal)
+        }
     }
 
 }

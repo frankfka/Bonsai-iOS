@@ -56,7 +56,7 @@ struct GenericErrorView: View {
                     .font(Font.Theme.NormalText)
                     .foregroundColor(Color.Theme.SecondaryText)
                 if self.onRetryTapped != nil {
-                    RoundedButtonView(viewModel: self.retryButtonViewModel)
+                    RoundedButtonView(vm: self.retryButtonViewModel)
                 }
             }.padding(CGFloat.Theme.Layout.Normal)
         }

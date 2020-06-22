@@ -47,10 +47,10 @@ struct AccountSettingsSection: View {
             TappableRowView(viewModel: self.getSignedInGoogleAccountRowViewModel())
             VStack {
                 if self.viewModel.showSignInButton {
-                    RoundedButtonView(viewModel: self.getLogInWithGoogleButtonViewModel())
+                    RoundedButtonView(vm: self.getLogInWithGoogleButtonViewModel())
                 }
                 if self.viewModel.showUnlinkButton {
-                    RoundedButtonView(viewModel: self.getUnlinkButtonViewModel())
+                    RoundedButtonView(vm: self.getUnlinkButtonViewModel())
                 }
             }
             .padding(.top, CGFloat.Theme.Layout.Normal)

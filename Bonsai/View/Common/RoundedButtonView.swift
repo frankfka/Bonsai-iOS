@@ -31,8 +31,8 @@ struct RoundedButtonView: View {
     
     private let viewModel: ViewModel
     
-    init(viewModel: ViewModel) {
-        self.viewModel = viewModel
+    init(vm: ViewModel) {
+        self.viewModel = vm
     }
     
     var body: some View {
@@ -58,7 +58,7 @@ struct RoundedButtonView_Previews: PreviewProvider {
     
     static var previews: some View {
         Group {
-            RoundedButtonView(viewModel: viewModel)
+            RoundedButtonView(vm: viewModel)
                 .previewLayout(.sizeThatFits)
         }
         .padding()
