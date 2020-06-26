@@ -20,8 +20,13 @@ struct MedicationLogView: View {
             self._dosage = dosage
         }
     }
+    @Binding private var medicationDosageText: String
     private var viewModel: ViewModel {
         getViewModel()
+    }
+
+    init(medicationDosageTextBinding: Binding<String>) {
+        self._medicationDosageText = medicationDosageTextBinding
     }
 
     var body: some View {
@@ -52,17 +57,15 @@ struct MedicationLogView: View {
         let medicationLogState = store.state.createLog.medication
         let titleText = medicationLogState.selectedMedication?.name ?? "Select a \(LogCategory.medication.displayValue())"
         return ViewModel(
-                selectMedicationRowTitle: .constant(titleText),
-                dosage: Binding<String>(get: {
-                    medicationLogState.dosage
-                }, set: { newDosage in
-                    self.store.send(.createLog(action: .medicationDosageDidChange(newDosage: newDosage)))
-                })
+            selectMedicationRowTitle: .constant(titleText),
+            dosage: self.$medicationDosageText
         )
     }
 
     func getDosageViewModel() -> CreateLogTextField.ViewModel {
-        return CreateLogTextField.ViewModel(label: "Dosage", input: viewModel.$dosage)
+        return CreateLogTextField.ViewModel(label: "Dosage", input: viewModel.$dosage) {
+            self.store.send(.createLog(action: .medicationDosageDidChange(newDosage: self.viewModel.dosage)))
+        }
     }
 
 }
