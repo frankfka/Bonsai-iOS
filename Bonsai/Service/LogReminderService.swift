@@ -38,7 +38,9 @@ class LogReminderServiceImpl: LogReminderService {
         if let recurringInterval = logReminder.reminderInterval {
             // Update the log reminder
             var newLogReminder = logReminder
-            newLogReminder.reminderDate = newLogReminder.reminderDate.addingTimeInterval(recurringInterval)
+            // Calculate the next reminder time (in the future)
+            let nextReminderDateMultiplier = floor(abs(newLogReminder.reminderDate.timeIntervalSinceNow) / recurringInterval) + 1
+            newLogReminder.reminderDate = newLogReminder.reminderDate.addingTimeInterval(nextReminderDateMultiplier * recurringInterval)
             return (self.saveOrUpdateLogReminder(logReminder: newLogReminder), false)
         } else {
             // Not recurring, just delete
