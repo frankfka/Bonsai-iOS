@@ -59,6 +59,10 @@ struct CreateLogView: View {
             .keyboardAwarePadding()
             .padding(.bottom, CGFloat.Theme.Layout.Normal) // Bottom padding for safe area
         }
+        .onAppear {
+            // Update state vars to match that of store on initial appear
+            self.updateState(with: self.store.state)
+        }
         .disabled(self.viewModel.isFormDisabled)
         .navigationBarTitle("Add Log")
         .navigationBarItems(
@@ -88,10 +92,6 @@ struct CreateLogView: View {
         .withStandardPopup(show: .constant(self.viewModel.showErrorDialog), type: .failure, text: "Something Went Wrong") {
             self.onSaveErrorPopupDismiss()
         }
-        .onReceive(self.store.$state, perform: { newState in
-            // Update state vars to match that of store
-            self.updateState(with: newState)
-        })
     }
 
     private func updateState(with newState: AppState) {
