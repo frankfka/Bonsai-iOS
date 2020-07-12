@@ -6,9 +6,9 @@ struct CreateLogReminderView: View {
 
     struct ViewModel {
         // View States
-        @Binding var showModal: Bool
         private let isFormValid: Bool
         private let hasNotificationPermissions: Bool
+        let isEditing: Bool // If we're editing a log reminder rather than creating one - we default to creating
         let isLoading: Bool
         let showSuccessDialog: Bool
         let showErrorDialog: Bool
@@ -27,9 +27,9 @@ struct CreateLogReminderView: View {
         let recurringTimeInterval: TimeInterval
         let reminderDate: Date
 
-        init(showModal: Binding<Bool>, state: AppState) {
+        init(state: AppState) {
             // View States
-            self._showModal = showModal
+            self.isEditing = state.createLogReminder.existingLogReminder != nil
             self.isFormValid = state.createLogReminder.isValidated
             self.showSuccessDialog = state.createLogReminder.saveSuccess
             self.showErrorDialog = state.createLogReminder.saveError != nil
@@ -42,6 +42,9 @@ struct CreateLogReminderView: View {
             self.hasNotificationPermissions = state.global.hasNotificationPermissions
         }
     }
+    private var viewModel: ViewModel {
+        ViewModel(state: self.store.state)
+    }
     @State(initialValue: false) private var showIntervalPicker
     @State(initialValue: false) private var showDatePicker
     @State(initialValue: false) private var showTimePicker
@@ -49,11 +52,6 @@ struct CreateLogReminderView: View {
     // Use state vars for toggle to animate nicely. These are updated in `updateState` on AppState change
     @State(initialValue: false) private var isRecurring
     @State(initialValue: false) private var isPushNotificationEnabled
-    private var viewModel: ViewModel
-
-    init(viewModel: ViewModel) {
-        self.viewModel = viewModel
-    }
 
     // MARK: Child view models
     private var dateTimeFormPickerViewVm: DateTimeFormPickerView.ViewModel {
@@ -118,7 +116,7 @@ struct CreateLogReminderView: View {
             }
             .disabled(self.viewModel.isFormDisabled)
             .background(Color.Theme.BackgroundPrimary)
-            .navigationBarTitle("Create Reminder")
+            .navigationBarTitle("\(self.viewModel.isEditing ? "Edit" : "Create") Reminder")
             .navigationBarItems(
                 leading: Button(action: {
                     self.onCancel()
@@ -175,7 +173,9 @@ struct CreateLogReminderView: View {
     }
 
     private func onSaveSuccessPopupDismiss() {
-        self.viewModel.$showModal.wrappedValue.toggle()
+        // Dismiss the modal
+        store.send(.global(action: .changeCreateLogReminderModalDisplay(shouldDisplay: false)))
+        // Reset view state
         store.send(.createLogReminder(action: .resetState))
     }
 
@@ -184,7 +184,8 @@ struct CreateLogReminderView: View {
     }
 
     private func onCancel() {
-        viewModel.showModal.toggle()
+        // Dismiss the modal
+        store.send(.global(action: .changeCreateLogReminderModalDisplay(shouldDisplay: false)))
     }
 
     // Update toggle state vars with state, this ensures that we have smooth toggling
@@ -196,18 +197,12 @@ struct CreateLogReminderView: View {
 }
 
 struct CreateLogReminderView_Previews: PreviewProvider {
-
-    static let viewModel = CreateLogReminderView.ViewModel(
-        showModal: .constant(true),
-        state: PreviewRedux.initialStore.state
-    )
-
     static var previews: some View {
         Group {
-            CreateLogReminderView(viewModel: viewModel)
+            CreateLogReminderView()
                 .environmentObject(PreviewRedux.initialStore)
 
-            CreateLogReminderView(viewModel: viewModel)
+            CreateLogReminderView()
                 .environmentObject(PreviewRedux.initialStore)
                 .environment(\.colorScheme, .dark)
         }

@@ -12,7 +12,6 @@ struct CreateLogView: View {
     @EnvironmentObject var store: AppStore
     
     struct ViewModel {
-        @Binding var showModal: Bool
         private let isFormValid: Bool
         let isLoading: Bool
         let loadMessage: String
@@ -25,8 +24,7 @@ struct CreateLogView: View {
             isLoading || showSuccessDialog || showErrorDialog
         }
         
-        init(showModal: Binding<Bool>, state: CreateLogState) {
-            self._showModal = showModal
+        init(state: CreateLogState) {
             self.isFormValid = state.isValidated
             self.showSuccessDialog = state.createSuccess
             self.showErrorDialog = state.createError != nil
@@ -40,11 +38,12 @@ struct CreateLogView: View {
     }
     @State(initialValue: false) private var showDatePicker
     @State(initialValue: false) private var showTimePicker
+    // Text states - using Redux for every EditText change impacts performance
+    @State(initialValue: "") private var notesText
+    @State(initialValue: "") private var nutritionAmountText
+    @State(initialValue: "") private var medicationDosageText
     private var viewModel: ViewModel {
-        ViewModel(
-            showModal: self.$store.state.global.showCreateLogModal,
-            state: self.store.state.createLog
-        )
+        ViewModel(state: self.store.state.createLog)
     }
     
     var body: some View {
@@ -59,6 +58,10 @@ struct CreateLogView: View {
             }
             .keyboardAwarePadding()
             .padding(.bottom, CGFloat.Theme.Layout.Normal) // Bottom padding for safe area
+        }
+        .onAppear {
+            // Update state vars to match that of store on initial appear
+            self.updateState(with: self.store.state)
         }
         .disabled(self.viewModel.isFormDisabled)
         .navigationBarTitle("Add Log")
@@ -90,15 +93,30 @@ struct CreateLogView: View {
             self.onSaveErrorPopupDismiss()
         }
     }
+
+    private func updateState(with newState: AppState) {
+        self.notesText = newState.createLog.notes
+        self.nutritionAmountText = newState.createLog.nutrition.amount
+        self.medicationDosageText = newState.createLog.medication.dosage
+    }
     
     private func onSave() {
         // Hide the keyboard
         UIApplication.shared.hideKeyboard()
+        // Update all the textboxes
+        self.updateNoteTextInState()
+        self.updateNutritionAmountTextInState()
+        self.updateMedicationDosageTextInState()
+
+        // Begin saving
         self.store.send(.createLog(action: .onSavePressed))
     }
     
     private func onSaveSuccessPopupDismiss() {
-        self.viewModel.$showModal.wrappedValue.toggle()
+        // Dismiss the modal
+        store.send(.global(action: .changeCreateLogModalDisplay(shouldDisplay: false)))
+        // Reset view state
+        store.send(.createLog(action: .resetCreateLogState))
     }
     
     private func onSaveErrorPopupDismiss() {
@@ -106,7 +124,8 @@ struct CreateLogView: View {
     }
     
     private func onCancel() {
-        viewModel.showModal.toggle()
+        // Dismiss the modal
+        store.send(.global(action: .changeCreateLogModalDisplay(shouldDisplay: false)))
     }
     
     private func onSelectedCategoryChange(newVal: Int) {
@@ -116,11 +135,18 @@ struct CreateLogView: View {
     private func onLogDateChange(newDate: Date) {
         self.store.send(.createLog(action: .dateDidChange(newDate: newDate)))
     }
-    
-    private func notesDidChange(note: String) {
-        self.store.send(.createLog(action: .noteDidUpdate(note: note)))
+
+    // Text fields
+    private func updateNoteTextInState() {
+        self.store.send(.createLog(action: .noteDidUpdate(note: self.notesText)))
     }
-    
+    private func updateNutritionAmountTextInState() {
+        self.store.send(.createLog(action: .nutritionAmountDidChange(newAmount: self.nutritionAmountText)))
+    }
+    private func updateMedicationDosageTextInState() {
+        self.store.send(.createLog(action: .medicationDosageDidChange(newDosage: self.medicationDosageText)))
+    }
+
     func getCategorySpecificView() -> AnyView {
         
         switch store.state.createLog.selectedCategory {
@@ -129,13 +155,13 @@ struct CreateLogView: View {
         case .symptom:
             return SymptomLogView().eraseToAnyView()
         case .nutrition:
-            return NutritionLogView().eraseToAnyView()
+            return NutritionLogView(nutritionAmountTextBinding: self.$nutritionAmountText).eraseToAnyView()
         case .activity:
             return ActivityLogView().eraseToAnyView()
         case .mood:
             return MoodLogView().eraseToAnyView()
         case .medication:
-            return MedicationLogView().eraseToAnyView()
+            return MedicationLogView(medicationDosageTextBinding: self.$medicationDosageText).eraseToAnyView()
         }
     }
 
@@ -173,11 +199,12 @@ struct CreateLogView: View {
     }
     
     private func getNotesViewModel() -> CreateLogTextField.ViewModel {
-        return CreateLogTextField.ViewModel(label: "Notes", input: Binding(get: {
-            return self.store.state.createLog.notes
-        }) { (newNote) in
-            self.notesDidChange(note: newNote)
-        })
+        // Use state instead of redux store to improve performance
+        return CreateLogTextField.ViewModel(
+            label: "Notes",
+            input: self.$notesText,
+            onTextCommit: { self.updateNoteTextInState() }
+        )
     }
     
 }

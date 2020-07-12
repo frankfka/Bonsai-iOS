@@ -10,7 +10,7 @@ struct GlobalLogReminderState {
     var logReminders: Set<LogReminder> = []
     // All log reminders sorted by chronological order (earliest reminder first)
     var sortedLogReminders: [LogReminder] {
-        logReminders.sorted { one, other in
+        return logReminders.sorted { one, other in
             one.reminderDate < other.reminderDate
         }
     }

@@ -23,7 +23,9 @@ struct LogReminderSection: View {
     }
     
     let viewModel: ViewModel
-    
+
+    // TODO: Some very weird behavior here, if a reminder date changes, viewModel changes but the computed reminder row
+    // does not - we need to invalidate the view somehow?
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
     }

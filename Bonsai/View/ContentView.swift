@@ -20,6 +20,18 @@ struct ContentView: View {
             onCreateLogPressed: self.onCreateLogPressed
         )
     }
+    
+    // MARK: Modal View
+    private var modalView: some View {
+        Group {
+            if self.store.state.global.showCreateLogModal {
+                CreateLogView()
+            } else if self.store.state.global.showCreateLogReminderModal {
+                CreateLogReminderView()
+            }
+        }
+        .environmentObject(self.store)
+    }
 
     // MARK: Main View
     var body: some View {
@@ -33,9 +45,8 @@ struct ContentView: View {
             TabBarView(viewModel: self.tabBarVm)
         }
         .edgesIgnoringSafeArea(.bottom)
-        .sheet(isPresented: $store.state.global.showCreateLogModal) {
-            CreateLogView()
-                .environmentObject(self.store)
+        .sheet(isPresented: $store.state.global.showModal) {
+            self.modalView
         }
     }
 

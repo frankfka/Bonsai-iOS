@@ -32,55 +32,7 @@ struct SettingsView: View {
         }
 
     }
-    private var viewModel: ViewModel { getViewModel() }
-    
-    var body: some View {
-        ScrollView {
-            VStack(spacing: CGFloat.Theme.Layout.Normal) {
-                TitledSection(sectionTitle: "Account") {
-                    AccountSettingsSection(viewModel: self.getAccountSectionViewModel())
-                }
-                .padding(.top, CGFloat.Theme.Layout.Normal)
-                TitledSection(sectionTitle: "Analytics") {
-                    AnalyticsSettingsSection(viewModel: self.getAnalyticsSectionViewModel())
-                }
-                // Save Button
-                RoundedBorderButtonView(viewModel: self.getSaveButtonViewModel())
-                    .disabled(self.viewModel.saveButtonDisabled)
-            }
-        }
-        // TODO: Declaring background breaks scrollview collapse navigation title behavior
-        .background(Color.Theme.BackgroundPrimary)
-        .withLoadingPopup(show: .constant(viewModel.showLoading), text: "Loading")
-        .withStandardPopup(show: .constant(viewModel.showSuccess), type: .success, text: viewModel.successMessage) {
-            self.successPopupShown()
-        }
-        .withStandardPopup(show: .constant(viewModel.showError), type: .failure, text: viewModel.errorMessage) {
-            self.errorPopupShown()
-        }
-        .navigationBarTitle("Settings")
-    }
-
-    // MARK: Actions
-    private func successPopupShown() {
-        store.send(.settings(action: .successPopupShown))
-    }
-
-    private func errorPopupShown() {
-        store.send(.settings(action: .errorPopupShown))
-    }
-
-    private func onSettingsChanged(newSettings: User.Settings) {
-        store.send(.settings(action: .settingsDidChange(newSettings: newSettings)))
-    }
-
-    private func onSaveTapped() {
-        store.send(.settings(action: .saveSettingsPressed))
-    }
-
-    // TODO: To computed vars
-    // MARK: View Model
-    private func getViewModel() -> ViewModel {
+    private var viewModel: ViewModel {
         let showLoading = store.state.settings.isLoading
         // Create success message
         var successMessage = ""
@@ -112,7 +64,8 @@ struct SettingsView: View {
         )
     }
 
-    private func getAccountSectionViewModel() -> AccountSettingsSection.ViewModel {
+    // MARK: Child view models
+    private var accountSectionViewVm: AccountSettingsSection.ViewModel {
         let googleSignInEmail = store.state.global.user?.linkedFirebaseGoogleAccount?.email
         let showRestoreDialog = store.state.settings.existingUserWithLinkedGoogleAccount != nil
         return AccountSettingsSection.ViewModel(
@@ -123,21 +76,65 @@ struct SettingsView: View {
         )
     }
 
-    private func getAnalyticsSectionViewModel() -> AnalyticsSettingsSection.ViewModel {
+    private var analyticsSectionViewVm: AnalyticsSettingsSection.ViewModel {
         return AnalyticsSettingsSection.ViewModel(
             settings: store.state.settings.settings,
             onSettingsChanged: self.onSettingsChanged
         )
     }
 
-    private func getSaveButtonViewModel() -> RoundedBorderButtonView.ViewModel {
-        return RoundedBorderButtonView.ViewModel(
-                text: "Save",
-                textColor: self.viewModel.saveButtonDisabled ? Color.Theme.SecondaryText : Color.Theme.Primary,
-                onTap: self.onSaveTapped
+    private var saveButtonViewVm: RoundedButtonView.ViewModel {
+        return RoundedButtonView.ViewModel(
+            text: "Save",
+            textColor: self.viewModel.saveButtonDisabled ? Color.Theme.SecondaryText : Color.Theme.Primary,
+            onTap: self.onSaveTapped
         )
     }
 
+    // MARK: Main view
+    var body: some View {
+        ScrollView {
+            VStack(spacing: CGFloat.Theme.Layout.Normal) {
+                TitledSection(sectionTitle: "Account") {
+                    AccountSettingsSection(viewModel: self.accountSectionViewVm)
+                }
+                .padding(.top, CGFloat.Theme.Layout.Normal)
+                TitledSection(sectionTitle: "Analytics") {
+                    AnalyticsSettingsSection(viewModel: self.analyticsSectionViewVm)
+                }
+                // Save Button
+                RoundedButtonView(vm: saveButtonViewVm)
+                    .disabled(self.viewModel.saveButtonDisabled)
+            }
+        }
+        // TODO: Declaring background breaks scrollview collapse navigation title behavior
+        .background(Color.Theme.BackgroundPrimary)
+        .withLoadingPopup(show: .constant(viewModel.showLoading), text: "Loading")
+        .withStandardPopup(show: .constant(viewModel.showSuccess), type: .success, text: viewModel.successMessage) {
+            self.successPopupShown()
+        }
+        .withStandardPopup(show: .constant(viewModel.showError), type: .failure, text: viewModel.errorMessage) {
+            self.errorPopupShown()
+        }
+        .navigationBarTitle("Settings")
+    }
+
+    // MARK: Actions
+    private func successPopupShown() {
+        store.send(.settings(action: .successPopupShown))
+    }
+
+    private func errorPopupShown() {
+        store.send(.settings(action: .errorPopupShown))
+    }
+
+    private func onSettingsChanged(newSettings: User.Settings) {
+        store.send(.settings(action: .settingsDidChange(newSettings: newSettings)))
+    }
+
+    private func onSaveTapped() {
+        store.send(.settings(action: .saveSettingsPressed))
+    }
 }
 
 struct SettingsView_Previews: PreviewProvider {

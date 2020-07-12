@@ -27,8 +27,8 @@ struct FullScreenErrorView: View {
 
 struct GenericErrorView: View {
     private let onRetryTapped: VoidCallback?
-    private var retryButtonViewModel: RoundedBorderButtonView.ViewModel {
-        RoundedBorderButtonView.ViewModel(
+    private var retryButtonViewModel: RoundedButtonView.ViewModel {
+        RoundedButtonView.ViewModel(
             text: "Try Again",
             textColor: Color.white,
             fillColor: Color.Theme.Primary,
@@ -56,7 +56,7 @@ struct GenericErrorView: View {
                     .font(Font.Theme.NormalText)
                     .foregroundColor(Color.Theme.SecondaryText)
                 if self.onRetryTapped != nil {
-                    RoundedBorderButtonView(viewModel: self.retryButtonViewModel)
+                    RoundedButtonView(vm: self.retryButtonViewModel)
                 }
             }.padding(CGFloat.Theme.Layout.Normal)
         }

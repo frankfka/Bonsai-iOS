@@ -1,5 +1,5 @@
 //
-//  RoundedBorderButtonView.swift
+//  RoundedButtonView.swift
 //  Bonsai
 //
 //  Created by Frank Jia on 2020-01-29.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct RoundedBorderButtonView: View {
+struct RoundedButtonView: View {
     
     struct ViewModel {
         let text: String
@@ -31,8 +31,8 @@ struct RoundedBorderButtonView: View {
     
     private let viewModel: ViewModel
     
-    init(viewModel: ViewModel) {
-        self.viewModel = viewModel
+    init(vm: ViewModel) {
+        self.viewModel = vm
     }
     
     var body: some View {
@@ -52,13 +52,13 @@ struct RoundedBorderButtonView: View {
     }
 }
 
-struct RoundedBorderButtonView_Previews: PreviewProvider {
+struct RoundedButtonView_Previews: PreviewProvider {
     
-    static private var viewModel = RoundedBorderButtonView.ViewModel(text: "Log This Again", textColor: Color.Theme.Primary)
+    static private var viewModel = RoundedButtonView.ViewModel(text: "Log This Again", textColor: Color.Theme.Primary)
     
     static var previews: some View {
         Group {
-            RoundedBorderButtonView(viewModel: viewModel)
+            RoundedButtonView(vm: viewModel)
                 .previewLayout(.sizeThatFits)
         }
         .padding()

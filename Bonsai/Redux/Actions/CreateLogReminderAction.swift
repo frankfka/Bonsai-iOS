@@ -7,6 +7,8 @@ import Foundation
 
 enum CreateLogReminderAction: LoggableAction {
     case initCreateLogReminder(template: Loggable)
+    // Second argument true if we want to update the state of log reminder detail when we finish editing
+    case initEditLogReminder(existingReminder: LogReminder, updateLogReminderDetailOnSuccess: Bool)
     case screenDidShow
     // User Edit Actions
     case isRecurringDidChange(isRecurring: Bool)

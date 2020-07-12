@@ -71,6 +71,9 @@ struct AppInitMiddleware {
             switch action {
             case .global(action: .appDidLaunch):
                 notificationService.removeAllDeliveredNotifications()
+            case .homeScreen(action: .screenDidShow):
+                // Sometimes app is open/already initialized, remove all notifications when home screen shows
+                notificationService.removeAllDeliveredNotifications()
             default:
                 break
             }

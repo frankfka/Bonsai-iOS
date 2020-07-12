@@ -13,10 +13,14 @@ struct CreateLogTextField: View {
     struct ViewModel {
         let label: String
         @Binding var input: String
+        let onIsEditingChanged: BoolCallback?
+        let onTextCommit: VoidCallback?
 
-        init(label: String, input: Binding<String>) {
+        init(label: String, input: Binding<String>, onIsEditingChanged: BoolCallback? = nil, onTextCommit: VoidCallback? = nil) {
             self.label = label
             self._input = input
+            self.onIsEditingChanged = onIsEditingChanged
+            self.onTextCommit = onTextCommit
         }
     }
 
@@ -28,11 +32,16 @@ struct CreateLogTextField: View {
     }
 
     var body: some View {
-        TextField(viewModel.label, text: viewModel.$input)
-                .textFieldStyle(DefaultTextFieldStyle())
-                .font(Font.Theme.NormalText)
-                .padding(CGFloat.Theme.Layout.Normal)
-                .background(Color.Theme.BackgroundSecondary)
+        TextField(
+            viewModel.label,
+            text: viewModel.$input,
+            onEditingChanged: viewModel.onIsEditingChanged ?? { _ in },
+            onCommit: viewModel.onTextCommit ?? {}
+        )
+        .textFieldStyle(DefaultTextFieldStyle())
+        .font(Font.Theme.NormalText)
+        .padding(CGFloat.Theme.Layout.Normal)
+        .background(Color.Theme.BackgroundSecondary)
     }
 }
 

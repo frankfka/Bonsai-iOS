@@ -12,7 +12,8 @@ struct CreateLogReminderMiddleware {
         return [
             checkPushNotificationPermissionsOnScreenShowMiddleware(notificationService: services.notificationService),
             promptForPermissionsOnEnablingReminderNotifications(notificationService: services.notificationService),
-            createLogReminderFromLogReminderStateMiddleware(logReminderService: services.logReminderService)
+            createLogReminderFromLogReminderStateMiddleware(logReminderService: services.logReminderService),
+            updateLogReminderDetailOnEditLogReminderSuccessMiddleware()
         ]
     }
 
@@ -64,7 +65,7 @@ struct CreateLogReminderMiddleware {
     // MARK: Create log reminder from state
     private static func createLogReminderFromLogReminderStateMiddleware
             (logReminderService: LogReminderService) -> Middleware<AppState> {
-        return { state, action, cancellables, send in
+        { state, action, cancellables, send in
             switch action {
             case .createLogReminder(action: .onSavePressed):
                 // Get log reminder from state
@@ -77,9 +78,9 @@ struct CreateLogReminderMiddleware {
                 // Perform save - this will schedule all the required notifications as well
                 logReminderService.saveOrUpdateLogReminder(logReminder: logReminder)
                     .map { savedLogReminder in
-                        return AppAction.createLogReminder(action: .onSaveSuccess(logReminder: savedLogReminder))
+                        AppAction.createLogReminder(action: .onSaveSuccess(logReminder: savedLogReminder))
                     }.catch { (err) -> Just<AppAction> in
-                        return Just(AppAction.createLogReminder(action: .onSaveFailure(error: err)))
+                        Just(AppAction.createLogReminder(action: .onSaveFailure(error: err)))
                     }
                     .sink(receiveValue: { newAction in
                         send(newAction)
@@ -95,13 +96,29 @@ struct CreateLogReminderMiddleware {
         guard let templateLog = state.templateLog else {
             return nil
         }
+        // Get ID from existing reminder (if editing) or generate a new one
+        let reminderId = state.existingLogReminder?.id ?? UUID().uuidString
         return LogReminder(
-            id: UUID().uuidString,
+            id: reminderId,
             reminderDate: state.reminderDate,
             reminderInterval: state.isRecurring ? state.reminderInterval : nil,
             templateLoggable: templateLog,
             isPushNotificationEnabled: state.isPushNotificationEnabled
         )
+    }
+
+    private static func updateLogReminderDetailOnEditLogReminderSuccessMiddleware() -> Middleware<AppState> {
+        { state, action, cancellables, send in
+            switch action {
+            case .createLogReminder(action: .onSaveSuccess(let updatedReminder)):
+                if state.createLogReminder.existingLogReminder != nil && state.createLogReminder.updateLogReminderDetailOnSuccess {
+                    // Update the log reminder detail state
+                    send(.logReminderDetails(action: .initState(logReminder: updatedReminder)))
+                }
+            default:
+                break
+            }
+        }
     }
 
 }
