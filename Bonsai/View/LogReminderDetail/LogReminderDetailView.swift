@@ -33,7 +33,7 @@ struct LogReminderDetailView: View {
             logReminder.isRecurring
         }
         var disableActions: Bool {
-            isLoading || showDeleteSuccess || showErrorPopup
+            isLoading || showDeleteSuccess || showSkipSuccess || showErrorPopup
         }
         var disableDelete: Bool {
             // Don't allow deletes if we're loading or if there is no log reminder
