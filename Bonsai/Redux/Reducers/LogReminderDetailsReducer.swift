@@ -7,6 +7,14 @@ struct LogReminderDetailsReducer {
             return initState(state: state, logReminder: logReminder)
         case let .isPushNotificationEnabledDidChange(isEnabled):
             return isPushNotificationEnabledDidChange(state: state, isEnabled: isEnabled)
+        case .skipReminder:
+            return skipReminder(state: state)
+        case .skipReminderSuccess(let newReminder):
+            return skipReminderSuccess(state: state, newReminder: newReminder)
+        case .skipReminderSuccessShown:
+            return skipReminderSuccessShown(state: state)
+        case .skipReminderError(let error):
+            return skipReminderError(state: state, error: error)
         case .deleteCurrentReminder:
             return deleteReminder(state: state)
         case .deleteSuccess:
@@ -35,6 +43,33 @@ struct LogReminderDetailsReducer {
     static private func isPushNotificationEnabledDidChange(state: AppState, isEnabled: Bool) -> AppState {
         var newState = state
         newState.logReminderDetails.isPushNotificationEnabled = isEnabled
+        return newState
+    }
+
+    static private func skipReminder(state: AppState) -> AppState {
+        var newState = state
+        newState.logReminderDetails.isSkipping = true
+        return newState
+    }
+
+    static private func skipReminderSuccess(state: AppState, newReminder: LogReminder) -> AppState {
+        // Create a new state with the updated reminder
+        var newState = initState(state: state, logReminder: newReminder)
+        newState.logReminderDetails.skipSuccess = true
+        return newState
+    }
+
+    static private func skipReminderSuccessShown(state: AppState) -> AppState {
+        var newState = state
+        newState.logReminderDetails.skipSuccess = false
+        return newState
+    }
+
+    static private func skipReminderError(state: AppState, error: Error) -> AppState {
+        AppLogging.error("Failure Action: \(error)")
+        var newState = state
+        newState.logReminderDetails.isSkipping = false
+        newState.logReminderDetails.skipError = error
         return newState
     }
 

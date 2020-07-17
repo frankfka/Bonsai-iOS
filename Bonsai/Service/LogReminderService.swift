@@ -9,6 +9,8 @@ import Combine
 protocol LogReminderService {
     func getLogReminder(with id: String) -> ServicePublisher<LogReminder?>
     func getLogReminders() -> ServicePublisher<[LogReminder]>
+    // Called when user skips a log reminder
+    func skipLogReminder(logReminder: LogReminder) -> ServicePublisher<LogReminder>
     // Called when user completes a log reminder
     func completeLogReminder(logReminder: LogReminder) -> (publisher: ServicePublisher<LogReminder>, didDelete: Bool)
     func saveOrUpdateLogReminder(logReminder: LogReminder) -> ServicePublisher<LogReminder>
@@ -34,17 +36,19 @@ class LogReminderServiceImpl: LogReminderService {
         return self.db.getLogReminders()
     }
 
+    func skipLogReminder(logReminder: LogReminder) -> ServicePublisher<LogReminder> {
+        guard let nextReminderDate = self.getNextReminderDate(for: logReminder) else {
+            return Fail(outputType: LogReminder.self, failure: ServiceError(message: "Not a recurring reminder")).eraseToAnyPublisher()
+        }
+        var newReminder = logReminder
+        newReminder.reminderDate = nextReminderDate
+        return self.saveOrUpdateLogReminder(logReminder: newReminder)
+    }
+
     func completeLogReminder(logReminder: LogReminder) -> (publisher: ServicePublisher<LogReminder>, didDelete: Bool) {
-        if let recurringInterval = logReminder.reminderInterval {
+        if let nextReminderDate = self.getNextReminderDate(for: logReminder) {
             // Update the log reminder
             var newLogReminder = logReminder
-            // Calculate the next reminder time (in the future)
-            var nextReminderDate = logReminder.reminderDate.addingTimeInterval(recurringInterval)
-            let now = Date()
-            // Make sure the next reminder time is in the future
-            while nextReminderDate < now {
-                nextReminderDate.addTimeInterval(recurringInterval)  // We can make this more performant with smart calculations
-            }
             newLogReminder.reminderDate = nextReminderDate
             return (self.saveOrUpdateLogReminder(logReminder: newLogReminder), false)
         } else {
@@ -72,6 +76,23 @@ class LogReminderServiceImpl: LogReminderService {
                 return deletedReminder // Passthrough
             }
             .eraseToAnyPublisher()
+    }
+
+    // Gives the next reminder date in the future, or nil if log reminder is not recurring
+    // If overdue -> schedules for next day in the future
+    // If not overdue -> delays reminder by given time interval
+    private func getNextReminderDate(for logReminder: LogReminder) -> Date? {
+        if let recurringInterval = logReminder.reminderInterval {
+            // Calculate the next reminder time (in the future)
+            var nextReminderDate = logReminder.reminderDate.addingTimeInterval(recurringInterval)
+            let now = Date()
+            // Make sure the next reminder time is in the future
+            while nextReminderDate < now {
+                nextReminderDate.addTimeInterval(recurringInterval)  // We can make this more performant with smart calculations
+            }
+            return nextReminderDate
+        }
+        return nil
     }
 
     // Either schedules or delete notifications for the log reminder

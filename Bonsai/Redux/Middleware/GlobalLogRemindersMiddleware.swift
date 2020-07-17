@@ -28,6 +28,8 @@ struct GlobalLogRemindersMiddleware {
                 send(.globalLogReminder(action: .remove(deletedReminder)))
             case .logReminderDetails(action: let .updateLogReminder(logReminder)):
                 send(.globalLogReminder(action: .addOrUpdate(logReminder)))
+            case .logReminderDetails(action: let .skipReminderSuccess(logReminder)):
+                send(.globalLogReminder(action: .addOrUpdate(logReminder)))
             // Create Log
             case .createLog(action: let .onLogReminderComplete(updatedReminder, didDelete)):
                 if didDelete {

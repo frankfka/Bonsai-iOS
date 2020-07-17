@@ -13,6 +13,7 @@ struct LogReminderDetailView: View {
     @EnvironmentObject var store: AppStore
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State(initialValue: false) private var showDeleteReminderConfirmation: Bool
+    @State(initialValue: false) private var showSkipReminderConfirmation: Bool
     @State(initialValue: false) private var isPushNotificationEnabled: Bool
     
     struct ViewModel {
@@ -24,11 +25,15 @@ struct LogReminderDetailView: View {
             templateLoggable: NoteLog(id: "", title: "", dateCreated: Date(),notes: "")
         )
         let isLoading: Bool
+        let showSkipSuccess: Bool
         let showDeleteSuccess: Bool
-        let showDeleteError: Bool
+        let showErrorPopup: Bool
         let showErrorView: Bool
+        var showSkipReminder: Bool {
+            logReminder.isRecurring
+        }
         var disableActions: Bool {
-            isLoading || showDeleteSuccess || showDeleteError
+            isLoading || showDeleteSuccess || showSkipSuccess || showErrorPopup
         }
         var disableDelete: Bool {
             // Don't allow deletes if we're loading or if there is no log reminder
@@ -37,10 +42,11 @@ struct LogReminderDetailView: View {
         let logReminder: LogReminder
 
         init(state: AppState) {
-            self.isLoading = state.logReminderDetails.isDeleting
+            self.isLoading = state.logReminderDetails.isDeleting || state.logReminderDetails.isSkipping
             self.showDeleteSuccess = state.logReminderDetails.deleteSuccess
+            self.showSkipSuccess = state.logReminderDetails.skipSuccess
             let logReminder = state.logReminderDetails.logReminder
-            self.showDeleteError = state.logReminderDetails.deleteError != nil
+            self.showErrorPopup = state.logReminderDetails.deleteError != nil || state.logReminderDetails.skipError != nil
             self.showErrorView = logReminder == nil
             self.logReminder = logReminder ?? ViewModel.EmptyLogReminder
         }
@@ -68,15 +74,60 @@ struct LogReminderDetailView: View {
             onTap: self.onEditReminderTapped
         )
     }
+    private var skipReminderViewVm: RoundedButtonView.ViewModel {
+        RoundedButtonView.ViewModel(
+            text: "Skip Reminder",
+            textColor: self.viewModel.disableActions ? Color.Theme.SecondaryText : Color.Theme.Primary,
+            onTap: self.onSkipReminderTapped
+        )
+    }
+
+    // Dialogs
+    private var skipReminderAlert: Alert {
+        Alert(
+            title: Text("Skip Reminder"),
+            message: Text("This will schedule the reminder for the next reminder date."),
+            primaryButton: .default(
+                Text("Confirm"),
+                action: {
+                    self.onSkipReminderConfirmed()
+                }),
+            secondaryButton: .cancel(
+                Text("Cancel")
+            )
+        )
+    }
+    private var deleteReminderAlert: Alert {
+        Alert(
+            title: Text("Delete Reminder"),
+            message: Text("Are you sure you want to delete this reminder?"),
+            primaryButton: .destructive(
+                Text("Confirm"),
+                action: {
+                    self.onDeleteReminderConfirmed()
+                }),
+            secondaryButton: .cancel(
+                Text("Cancel")
+            )
+        )
+    }
 
     // Main View
-    var mainBody: some View {
+    private var mainBody: some View {
         ScrollView {
             VStack(spacing: CGFloat.Theme.Layout.Normal) {
                 // Reminder Info
                 LogReminderDetailSectionView(vm: self.logReminderDetailSectionViewVm)
                 // Loggable info
                 LogReminderLogDetailSectionView(vm: self.logReminderLogDetailSectionViewVm)
+                if self.viewModel.showSkipReminder {
+                    // Skip Reminder Button
+                    RoundedButtonView(vm: self.skipReminderViewVm)
+                        // Skip Reminder Confirmation
+                        .alert(isPresented: $showSkipReminderConfirmation) {
+                            self.skipReminderAlert
+                        }
+                }
                 // Edit Reminder Button
                 RoundedButtonView(vm: self.editReminderViewVm)
             }
@@ -112,30 +163,22 @@ struct LogReminderDetailView: View {
                     )
             })
             .disabled(self.viewModel.disableDelete)
+            // Delete Reminder Confirmation
+            .alert(isPresented: $showDeleteReminderConfirmation) {
+                self.deleteReminderAlert
+            }
         )
         .navigationBarTitle("Reminder Details", displayMode: .inline)
-        // Delete Reminder Confirmation
-        .alert(isPresented: $showDeleteReminderConfirmation) {
-            Alert(
-                title: Text("Delete Reminder"),
-                message: Text("Are you sure you want to delete this reminder?"),
-                primaryButton: .destructive(
-                    Text("Confirm"),
-                    action: {
-                        self.onDeleteReminderConfirmed()
-                    }),
-                secondaryButton: .cancel(
-                    Text("Cancel")
-                )
-            )
-        }
         // Popups
-        .withLoadingPopup(show: .constant(self.viewModel.isLoading), text: "Deleting")
-        .withStandardPopup(show: .constant(self.viewModel.showDeleteError), type: .failure, text: "Something Went Wrong") {
+        .withLoadingPopup(show: .constant(self.viewModel.isLoading), text: "Loading")
+        .withStandardPopup(show: .constant(self.viewModel.showErrorPopup), type: .failure, text: "Something Went Wrong") {
             self.onErrorPopupDismiss()
         }
         .withStandardPopup(show: .constant(self.viewModel.showDeleteSuccess), type: .success, text: "Deleted Successfully") {
             self.onDeleteSuccessPopupDismiss()
+        }
+        .withStandardPopup(show: .constant(self.viewModel.showSkipSuccess), type: .success, text: "Skipped Successfully") {
+            self.onSkipSuccessPopupDismiss()
         }
     }
 
@@ -156,6 +199,18 @@ struct LogReminderDetailView: View {
         )))
         // Show modal
         store.send(.global(action: .changeCreateLogReminderModalDisplay(shouldDisplay: true)))
+    }
+    
+    private func onSkipReminderTapped() {
+        self.showSkipReminderConfirmation = true
+    }
+
+    private func onSkipReminderConfirmed() {
+        store.send(.logReminderDetails(action: .skipReminder))
+    }
+
+    private func onSkipSuccessPopupDismiss() {
+        store.send(.logReminderDetails(action: .skipReminderSuccessShown))
     }
 
     private func onDeleteReminderConfirmed() {
