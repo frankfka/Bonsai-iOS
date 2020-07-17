@@ -11,6 +11,7 @@ struct LogReminderDetailMiddleware {
     static func middleware(services: AppServices) -> [Middleware<AppState>] {
         return [
             changePushNotificationPreferencesMiddleware(logReminderService: services.logReminderService, notificationService: services.notificationService),
+            skipLogReminderMiddleware(logReminderService: services.logReminderService),
             deleteLogReminderMiddleware(logReminderService: services.logReminderService)
         ]
     }
@@ -43,6 +44,36 @@ struct LogReminderDetailMiddleware {
                     .catch { err in
                         // Failed to save - update state back to original reminder
                         Just(AppAction.logReminderDetails(action: .updateLogReminder(logReminder: logReminder)))
+                    }
+                    .sink(receiveValue: { newAction in
+                        send(newAction)
+                    })
+                    .store(in: &cancellables)
+            default:
+                break
+            }
+        }
+    }
+
+    private static func skipLogReminderMiddleware(logReminderService: LogReminderService) -> Middleware<AppState> {
+        return { state, action, cancellables, send in
+            switch action {
+            case .logReminderDetails(action: .skipReminder):
+                // Get log reminder from state
+                guard let logReminder = state.logReminderDetails.logReminder else {
+                    send(AppAction.logReminderDetails(action: .skipReminderError(error: ServiceError(message: "No log reminder in state"))))
+                    return
+                }
+                guard logReminder.isRecurring else {
+                    send(AppAction.logReminderDetails(action: .skipReminderError(error: ServiceError(message: "Log reminder is not recurring, so can't skip"))))
+                    return
+                }
+                // Perform skip
+                logReminderService.skipLogReminder(logReminder: logReminder)
+                    .map { updatedReminder in
+                        AppAction.logReminderDetails(action: .skipReminderSuccess(newReminder: updatedReminder))
+                    }.catch { (err) -> Just<AppAction> in
+                        Just(AppAction.logReminderDetails(action: .skipReminderError(error: err)))
                     }
                     .sink(receiveValue: { newAction in
                         send(newAction)
