@@ -102,10 +102,7 @@ struct HomeTabScrollView: View {
     }
 
     private var logReminderSectionViewVm: LogReminderSection.ViewModel {
-        LogReminderSection.ViewModel(
-            logReminders: store.state.globalLogReminders.sortedLogReminders,
-            navigationState: self.$navigationState
-        )
+        LogReminderSection.ViewModel(navigationState: self.$navigationState)
     }
 
     private var recentLogSectionViewVm: RecentLogSection.ViewModel {

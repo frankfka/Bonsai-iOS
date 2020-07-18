@@ -13,19 +13,27 @@ struct LogReminderSection: View {
     
     struct ViewModel {
         static let numToShow = 5  // Number of reminders to show
-        let reminders: [LogReminder]
         @Binding var navigationState: HomeTabScrollView.NavigationState?
 
-        init(logReminders: [LogReminder], navigationState: Binding<HomeTabScrollView.NavigationState?>) {
-            self.reminders = Array(logReminders.prefix(ViewModel.numToShow))
+        init(navigationState: Binding<HomeTabScrollView.NavigationState?>) {
             self._navigationState = navigationState
         }
     }
-    
-    let viewModel: ViewModel
+    private let viewModel: ViewModel
+    private var logReminderViewModels: [LogReminderRow.ViewModel] {
+        return store.state.globalLogReminders.sortedLogReminders.prefix(ViewModel.numToShow).map { logReminder in
+            LogReminderRow.ViewModel(
+                logReminder: logReminder,
+                onTodoTapped: {
+                    self.onTodoTapped(logReminder)
+                },
+                onRowTapped: {
+                    self.onLogRowTapped(logReminder)
+                }
+            )
+        }
+    }
 
-    // TODO: Some very weird behavior here, if a reminder date changes, viewModel changes but the computed reminder row
-    // does not - we need to invalidate the view somehow?
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
     }
@@ -39,10 +47,10 @@ struct LogReminderSection: View {
                     selection: viewModel.$navigationState) {
                 EmptyView()
             }
-            ForEach(viewModel.reminders) { reminder in
+            ForEach(self.logReminderViewModels) { reminderVm in
                 Group {
-                    LogReminderRow(viewModel: self.getLogReminderViewModel(from: reminder))
-                    if ViewHelpers.showDivider(after: reminder, in: self.viewModel.reminders) {
+                    LogReminderRow(viewModel: reminderVm)
+                    if ViewHelpers.showDivider(after: reminderVm, in: self.logReminderViewModels) {
                         Divider()
                     }
                 }
@@ -76,16 +84,13 @@ struct LogReminderSection: View {
 struct LogReminderSection_Previews: PreviewProvider {
 
     static private let viewModel: LogReminderSection.ViewModel = LogReminderSection.ViewModel(
-            logReminders: [
-                PreviewLogReminders.overdue,
-                PreviewLogReminders.notOverdue,
-            ],
             navigationState: .constant(nil)
     )
 
     static var previews: some View {
         Group {
             LogReminderSection(viewModel: viewModel)
+                .environmentObject(PreviewRedux.filledStore)
         }.previewLayout(.sizeThatFits)
     }
 }

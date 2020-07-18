@@ -31,9 +31,10 @@ struct LogReminderRow: View {
         let onTodoTapped: VoidCallback?
         let onRowTapped: VoidCallback?
         
-        internal let id = UUID()
+        internal let id: String
         
         init(logReminder: LogReminder, onTodoTapped: VoidCallback? = nil, onRowTapped: VoidCallback? = nil) {
+            self.id = logReminder.id
             self.title = logReminder.templateLoggable.title
             self.reminderDate = DateFormatter.stringForLogReminderRowDate(from: logReminder.reminderDate)
             self.isOverdue = logReminder.isOverdue
