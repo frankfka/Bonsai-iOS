@@ -29,24 +29,30 @@ struct LogReminderDetailMiddleware {
                 // In case we haven't prompted for notifications, do this first before saving
                 notificationService.checkAndPromptForNotificationPermission()
                     .receive(on: DispatchQueue.main) // Updating realm object, so must use main thread
-                    .flatMap { _ -> ServicePublisher<AppAction> in
-                        // Whether we actually have permission doesn't matter, we can still save the log reminder
+                    .flatMap { hasPermissions -> ServicePublisher<[AppAction]> in
                         // Construct a new log reminder
                         var newLogReminder = logReminder
                         newLogReminder.isPushNotificationEnabled = isEnabled
                         return logReminderService.saveOrUpdateLogReminder(logReminder: newLogReminder)
                             .map { savedReminder in
-                                // Reinit state with the new reminder
-                                AppAction.logReminderDetails(action: .updateLogReminder(logReminder: savedReminder))
+                                [
+                                    // Reinit state with the new reminder
+                                    AppAction.logReminderDetails(action: .updateLogReminder(logReminder: savedReminder)),
+                                    // Update global log reminder permissions
+                                    AppAction.global(action: .notificationPermissionsDidChange(isEnabled: hasPermissions))
+                                ]
                             }
                             .eraseToAnyPublisher()
                     }
                     .catch { err in
                         // Failed to save - update state back to original reminder
-                        Just(AppAction.logReminderDetails(action: .updateLogReminder(logReminder: logReminder)))
+                        // Use an array of actions for types to match
+                        Just([AppAction.logReminderDetails(action: .updateLogReminder(logReminder: logReminder))])
                     }
-                    .sink(receiveValue: { newAction in
-                        send(newAction)
+                    .sink(receiveValue: { newActions in
+                        for action in newActions {
+                            send(action)
+                        }
                     })
                     .store(in: &cancellables)
             default:
