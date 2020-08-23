@@ -36,7 +36,6 @@ struct AppInitMiddleware {
     }
 
     private static func initUser(userService: UserService) -> AnyPublisher<AppAction, Never> {
-    UserDefaults.standard.set("5E020C40-EC2D-4FC2-AC39-7C16871EE27E", forKey: UserConstants.UserDefaultsUserIdKey)
         if let userId = UserDefaults.standard.string(forKey: UserConstants.UserDefaultsUserIdKey) {
             AppLogging.info("Retrieved user ID \(userId) from local")
             return userService.get(userId: userId)
