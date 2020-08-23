@@ -40,6 +40,7 @@ struct RecentLogSection: View {
             }
         }
 
+        // Bottom "Show more" button
         struct BottomButtonViewModel {
             let showButton: Bool
             let text: String

@@ -43,6 +43,7 @@
 		11B7651323CEDA5F00BC08CB /* LogDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B7651223CEDA5F00BC08CB /* LogDetailView.swift */; };
 		11B7651523CEDAA100BC08CB /* LogDetailSymptomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B7651423CEDAA100BC08CB /* LogDetailSymptomView.swift */; };
 		11B7651923CF6D7100BC08CB /* LogDetailNotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B7651823CF6D7100BC08CB /* LogDetailNotesView.swift */; };
+		11D2BA4424F2D5AD00050366 /* AllLogRemindersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D2BA4324F2D5AD00050366 /* AllLogRemindersView.swift */; };
 		11E521982414A05F00990945 /* DateTimeFormPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E521972414A05F00990945 /* DateTimeFormPickerView.swift */; };
 		11E5219A2414B8ED00990945 /* LogReminderIntervalPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E521992414B8ED00990945 /* LogReminderIntervalPickerView.swift */; };
 		11EBB8E623DD39E400575CA1 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EBB8E523DD39E400575CA1 /* SettingsView.swift */; };
@@ -213,6 +214,7 @@
 		11B7651223CEDA5F00BC08CB /* LogDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDetailView.swift; sourceTree = "<group>"; };
 		11B7651423CEDAA100BC08CB /* LogDetailSymptomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDetailSymptomView.swift; sourceTree = "<group>"; };
 		11B7651823CF6D7100BC08CB /* LogDetailNotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDetailNotesView.swift; sourceTree = "<group>"; };
+		11D2BA4324F2D5AD00050366 /* AllLogRemindersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllLogRemindersView.swift; sourceTree = "<group>"; };
 		11E521972414A05F00990945 /* DateTimeFormPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimeFormPickerView.swift; sourceTree = "<group>"; };
 		11E521992414B8ED00990945 /* LogReminderIntervalPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogReminderIntervalPickerView.swift; sourceTree = "<group>"; };
 		11EBB8E523DD39E400575CA1 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -367,6 +369,7 @@
 		110C63A9239D5DBB00D904DE /* View */ = {
 			isa = PBXGroup;
 			children = (
+				11D2BA4524F2D5C100050366 /* AllLogReminders */,
 				11EBB8E423DD398400575CA1 /* Settings */,
 				11B7651123CEDA4900BC08CB /* LogDetail */,
 				11EDE0E623C6D13900A54673 /* ViewLogs */,
@@ -509,6 +512,14 @@
 				9E04B6982A1B96DB0D1B6D6F /* LogDetailActivityView.swift */,
 			);
 			path = LogDetail;
+			sourceTree = "<group>";
+		};
+		11D2BA4524F2D5C100050366 /* AllLogReminders */ = {
+			isa = PBXGroup;
+			children = (
+				11D2BA4324F2D5AD00050366 /* AllLogRemindersView.swift */,
+			);
+			path = AllLogReminders;
 			sourceTree = "<group>";
 		};
 		11EBB8E423DD398400575CA1 /* Settings */ = {
@@ -1077,6 +1088,7 @@
 				9E04B50598E3E5F85D218185 /* Activity.swift in Sources */,
 				1120F7BC23C24BF900287337 /* ActivityLogDurationPickerView.swift in Sources */,
 				9E04B43BF70AF74B23CE5CA1 /* Note.swift in Sources */,
+				11D2BA4424F2D5AD00050366 /* AllLogRemindersView.swift in Sources */,
 				9E04BEB7D91AD8C615C84D77 /* ActivityLogView.swift in Sources */,
 				9E04B548CF6C4197ED8E871C /* ActivityLogDurationRowView.swift in Sources */,
 				9E04BEAB2820AE84A00779F5 /* ViewLogsState.swift in Sources */,

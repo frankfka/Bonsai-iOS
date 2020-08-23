@@ -8,34 +8,47 @@
 
 import SwiftUI
 
+typealias LogReminderCallback = (LogReminder) -> ()
+
 struct LogReminderSection: View {
     @EnvironmentObject var store: AppStore
     
     struct ViewModel {
         static let numToShow = 5  // Number of reminders to show
         @Binding var navigationState: HomeTabScrollView.NavigationState?
+        var logReminderViewModels: [LogReminderRow.ViewModel]
+        var showViewAllLogReminders: Bool
 
-        init(navigationState: Binding<HomeTabScrollView.NavigationState?>) {
-            self._navigationState = navigationState
+        init(store: AppStore, navigationStateBinding: Binding<HomeTabScrollView.NavigationState?>,
+             onTodoTapped: @escaping LogReminderCallback, onRowTapped: @escaping LogReminderCallback) {
+            self._navigationState = navigationStateBinding
+            self.logReminderViewModels = store.state.globalLogReminders.sortedLogReminders.prefix(ViewModel.numToShow).map { logReminder in
+                LogReminderRow.ViewModel(
+                    logReminder: logReminder,
+                    onTodoTapped: {
+                        onTodoTapped(logReminder)
+                    },
+                    onRowTapped: {
+                        onRowTapped(logReminder)
+                    }
+                )
+            }
+            self.showViewAllLogReminders = store.state.globalLogReminders.sortedLogReminders.count > ViewModel.numToShow
         }
     }
-    private let viewModel: ViewModel
-    private var logReminderViewModels: [LogReminderRow.ViewModel] {
-        return store.state.globalLogReminders.sortedLogReminders.prefix(ViewModel.numToShow).map { logReminder in
-            LogReminderRow.ViewModel(
-                logReminder: logReminder,
-                onTodoTapped: {
-                    self.onTodoTapped(logReminder)
-                },
-                onRowTapped: {
-                    self.onLogRowTapped(logReminder)
-                }
-            )
-        }
+
+    // Navigation state, initialized by superview
+    let navigationStateBinding: Binding<HomeTabScrollView.NavigationState?>
+    // Main view model
+    private var viewModel: ViewModel {
+        ViewModel(
+            store: store, navigationStateBinding: navigationStateBinding,
+            onTodoTapped: self.onTodoTapped, onRowTapped: self.onLogReminderRowTapped
+        )
     }
 
-    init(viewModel: ViewModel) {
-        self.viewModel = viewModel
+    init(navigationStateBinding: Binding<HomeTabScrollView.NavigationState?>) {
+        self.navigationStateBinding = navigationStateBinding
     }
     
     var body: some View {
@@ -47,27 +60,29 @@ struct LogReminderSection: View {
                     selection: viewModel.$navigationState) {
                 EmptyView()
             }
-            ForEach(self.logReminderViewModels) { reminderVm in
+            ForEach(self.viewModel.logReminderViewModels) { reminderVm in
                 Group {
                     LogReminderRow(viewModel: reminderVm)
-                    if ViewHelpers.showDivider(after: reminderVm, in: self.logReminderViewModels) {
+                    if ViewHelpers.showDivider(after: reminderVm, in: self.viewModel.logReminderViewModels) {
                         Divider()
                     }
                 }
             }
-        }
-    }
-
-    private func getLogReminderViewModel(from logReminder: LogReminder) -> LogReminderRow.ViewModel {
-        return LogReminderRow.ViewModel(
-                logReminder: logReminder,
-                onTodoTapped: {
-                    self.onTodoTapped(logReminder)
-                },
-                onRowTapped: {
-                    self.onLogRowTapped(logReminder)
+            if self.viewModel.showViewAllLogReminders {
+                // Navigation to all log reminders view
+                NavigationLink(destination: {
+                    AllLogRemindersView()
+                        .environmentObject(self.store)
+                }()
+                ) {
+                    Text("View All")
+                        .font(Font.Theme.NormalText)
+                        .foregroundColor(Color.Theme.Primary)
+                        .padding(.vertical, CGFloat.Theme.Layout.ExtraSmall)
+                        .padding(.horizontal, CGFloat.Theme.Layout.Normal)
                 }
-        )
+            }
+        }
     }
 
     private func onTodoTapped(_ logReminder: LogReminder) {
@@ -75,21 +90,16 @@ struct LogReminderSection: View {
         store.send(.global(action: .changeCreateLogModalDisplay(shouldDisplay: true)))
     }
 
-    private func onLogRowTapped(_ logReminder: LogReminder) {
+    private func onLogReminderRowTapped(_ logReminder: LogReminder) {
         store.send(.logReminderDetails(action: .initState(logReminder: logReminder)))
         viewModel.navigationState = HomeTabScrollView.NavigationState.logReminderDetail
     }
 }
 
 struct LogReminderSection_Previews: PreviewProvider {
-
-    static private let viewModel: LogReminderSection.ViewModel = LogReminderSection.ViewModel(
-            navigationState: .constant(nil)
-    )
-
     static var previews: some View {
         Group {
-            LogReminderSection(viewModel: viewModel)
+            LogReminderSection(navigationStateBinding: .constant(nil))
                 .environmentObject(PreviewRedux.filledStore)
         }.previewLayout(.sizeThatFits)
     }
