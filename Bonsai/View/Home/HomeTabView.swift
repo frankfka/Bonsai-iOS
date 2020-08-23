@@ -101,10 +101,6 @@ struct HomeTabScrollView: View {
         )
     }
 
-    private var logReminderSectionViewVm: LogReminderSection.ViewModel {
-        LogReminderSection.ViewModel(navigationState: self.$navigationState)
-    }
-
     private var recentLogSectionViewVm: RecentLogSection.ViewModel {
         RecentLogSection.ViewModel(
             recentLogs: store.state.globalLogs.sortedLogs,
@@ -123,7 +119,7 @@ struct HomeTabScrollView: View {
             VStack(alignment: .leading, spacing: CGFloat.Theme.Layout.Large) {
                 if viewModel.showReminders {
                     RoundedBorderTitledSection(sectionTitle: "Reminders") {
-                        LogReminderSection(viewModel: self.logReminderSectionViewVm)
+                        LogReminderSection(navigationStateBinding: self.$navigationState)
                     }
                 }
                 RoundedBorderTitledSection(sectionTitle: "Recent") {
